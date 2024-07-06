@@ -1,0 +1,35 @@
+
+  .generate-results-group {
+    margin-bottom: 15px;
+  }
+  
+  .generate-results-label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+    font-weight: bold;
+  }
+  
+  .generate-results-input,
+  .generate-results-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  .generate-results-button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .generate-results-button:hover {
+    background: #0056b3;
+  }
+  

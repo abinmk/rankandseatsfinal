@@ -18,13 +18,20 @@ import Dashboard from "./container/pages/dashboard/dashboard.jsx";
 import Allotments from "./container/pages/allotments/Allotmentsbackup.jsx";
 import Colleges from "./container/pages/allotments/Colleges";
 import Courses from "./container/pages/allotments/Courses";
-
+import GenerateResults from "./container/pages/generate-data/GenerateResults.jsx";
+import Upload from "./container/pages/generate-data/Upload.jsx";
+import UploadRound from "./container/pages/generate-data/UploadRound";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.Fragment>
     <BrowserRouter>
       <Scrolltop />
       <React.Suspense>
+        <Routes>
+        <Route path="upload" element={<Upload/>}/>
+        <Route path="upload/round" element={<UploadRound/>}/>
+
+        </Routes>
         <Routes>
           <Route path={`${import.meta.env.BASE_URL}`} element={<Auth />}>
             <Route index element={<Login />} />

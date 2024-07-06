@@ -1,0 +1,34 @@
+
+  .upload-course-group {
+    margin-bottom: 15px;
+  }
+  
+  .upload-course-label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+    font-weight: bold;
+  }
+  
+  .upload-course-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  .upload-course-button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .upload-course-button:hover {
+    background: #0056b3;
+  }
+  

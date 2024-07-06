@@ -1,0 +1,46 @@
+.manage-datasets-container {
+  padding: 20px;
+}
+
+.manage-datasets-container ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.manage-datasets-container ul li {
+  padding: 10px;
+  margin: 5px 0;
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+.manage-datasets-container ul li:hover {
+  background-color: #e0e0e0;
+}
+
+.dataset-details {
+  margin-top: 20px;
+}
+
+.dataset-details label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.dataset-details input {
+  padding: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.dataset-details button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.dataset-details button:hover {
+  background-color: #0056b3;
+}

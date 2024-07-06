@@ -26,6 +26,7 @@
     "@simonwep/pickr": "^1.9.0",
     "@types/dragula": "^3.7.4",
     "apexcharts": "^3.47.0",
+    "axios": "^1.7.2",
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.2",
     "d3-geo": "^3.1.1",
