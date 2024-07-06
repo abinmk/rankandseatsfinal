@@ -1,0 +1,32 @@
+@import "./assets/css/styles.css";
+@import "./assets/css/icons.css";
+
+@import "gridjs/dist/theme/mermaid.css";
+@import "react-tabulator/lib/styles.css"; // default theme
+@import "react-tabulator/css/bootstrap/tabulator_bootstrap.min.css"; // use Theme(s)
+@import "react-tabulator/lib/css/bootstrap/tabulator_bootstrap.min.css";
+@import 'react-quill/dist/quill.snow.css'; // Import Quill styles
+@import 'react-quill/dist/quill.bubble.css'; // Import Quill Bubble theme styles
+@import 'filepond/dist/filepond.min.css'; // filepond
+@import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"; // filepond
+@import "react-datepicker/dist/react-datepicker.css"; //datepicker
+@import 'simplebar-react/dist/simplebar.min.css'; //simplebar
+@import "@simonwep/pickr/dist/themes/classic.min.css"; //simonwep colorpicker
+@import "@simonwep/pickr/dist/themes/monolith.min.css"; //simonwep colorpicker
+@import "@simonwep/pickr/dist/themes/nano.min.css"; //simonwep colorpicker
+
+// Import Swiper styles
+
+@import "swiper/css";
+@import "swiper/css/pagination";
+@import "swiper/css/navigation";
+@import "swiper/css/effect-coverflow";
+@import "swiper/css/thumbs";
+@import "swiper/css/effect-flip";
+@import "swiper/css/effect-fade";
+@import "swiper/css/effect-cube";
+@import "swiper/css/scrollbar";
+@import "swiper/css/free-mode";
+
+@import 'rodal/lib/rodal.css';
+

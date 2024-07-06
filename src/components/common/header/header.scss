@@ -1,0 +1,46 @@
+.header-content-left {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Add space between elements */
+}
+
+.header-content-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header-logo img {
+    width: 220px; /* Adjust size as needed */
+    border-radius: 10px;
+    color: aliceblue;
+}
+
+.header-element h2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0; /* Remove default margin */
+}
+
+.header-element h3 {
+    font-size: 18px;
+    font-weight: normal;
+    margin: 0; /* Remove default margin */
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+}
+
+.header-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#selectedTab {
+    color: whitesmoke;
+    font-family: Arial, Helvetica, sans-serif;
+}
