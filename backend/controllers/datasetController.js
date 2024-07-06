@@ -112,22 +112,28 @@ exports.getAllotmentData = async (req, res) => {
     }
 };
 
-// Function to list all generated datasets
 exports.listAvailableDatasets = async (req, res) => {
-    try {
-      const { examName, year, round } = req.query;
-      let query = {};
-      if (examName) query.displayName = { $regex: new RegExp(`^${examName}`) };
-      if (year) query.displayName = { $regex: new RegExp(`${year}`) };
-    //   if (round) query.displayName = { $regex: new RegExp(`${round}`) };
-  
-      const datasets = await GeneratedDataset.find(query);
-      res.json(datasets);
-    } catch (error) {
-      console.error('Error listing datasets:', error);
-      res.status(500).send('Failed to list datasets.');
-    }
-  };
+  try {
+    const { examName, year } = req.query;
+    let query = {};
+    if (examName) query.displayName = { $regex: new RegExp(`^${examName}`) };
+    if (year) query.displayName = { $regex: new RegExp(`${year}`) };
+
+    console.log('Query:', query);
+
+    const datasets = await GeneratedDataset.find(query);
+    console.log('Datasets:', datasets);
+
+    res.json({ availableDataSets: datasets });
+  } catch (error) {
+    console.error('Error listing datasets:', error);
+    res.status(500).send('Failed to list datasets.');
+  }
+};
+
+
+
+
   
 
 

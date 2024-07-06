@@ -13,7 +13,7 @@ const roundRoutes = require('./routes/roundRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const authRoutes = require('./routes/auth');
 const collegeRoutes = require('./routes/collegeRoutes');
-const uploadCollegeRoutes = require('./routes/uploadCollege');
+// const uploadCollegeRoutes = require('./routes/uploadCollege');
 const courseRoutes = require('./routes/courseRoutes');
 const allotmentRoutes = require('./routes/allotmentRoutes');
 const datasetRoutes = require('./routes/datasetRoutes');
@@ -313,7 +313,7 @@ mongoose.connect(db, {
     app.use('/api', adminRoutes);
     app.use('/api/auth', authRoutes);
     app.use('/api', collegeRoutes);
-    app.use('/api', uploadCollegeRoutes);
+    // app.use('/api', uploadCollegeRoutes);
     app.use('/api', courseRoutes);
     app.use('/api', allotmentRoutes);
     app.use('/api', datasetRoutes);
