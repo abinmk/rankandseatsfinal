@@ -15,7 +15,7 @@ import Landinglayout from "./pages/landinglayout.jsx";
 import Landing from "./container/pages/landing/landing.jsx";
 import Scrolltop from "./components/common/scrolltop/scrolltop.jsx";
 import Dashboard from "./container/pages/dashboard/dashboard.jsx";
-import Allotments from "./container/pages/allotments/Allotmentsbackup.jsx";
+import Allotments from "./container/pages/allotments/allotments.jsx";
 import Colleges from "./container/pages/allotments/Colleges";
 import Courses from "./container/pages/allotments/Courses";
 import GenerateResults from "./container/pages/generate-data/GenerateResults.jsx";
@@ -42,10 +42,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path={`${import.meta.env.BASE_URL}`} element={<App />}>
             <Route path="dashboards" element={<Dashboard />}/>
 			<Route path="allotments" element={<Allotments />} />
-            <Route path="courses" element={<Courses />} />
-            <Route path="institutes" element={<Colleges />} />
-            <Route path="fees" element={<Dashboard />} />
 			<Route path="lastrank" element={<Dashboard />} />
+      <Route path="courses" element={<Courses />} />
+      <Route path="institutes" element={<Colleges />} />
+      <Route path="fees" element={<Dashboard />} />
 			<Route path="fees" element={<Dashboard />} />
 			<Route path="wishlist" element={<Dashboard />} />
           </Route>

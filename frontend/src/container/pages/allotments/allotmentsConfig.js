@@ -25,7 +25,7 @@ export const allotmentsColumns = [
     accessor: 'state',
   },
   {
-    Header: 'Institute (Name)',
+    Header: 'Institute',
     accessor: 'instituteName',
   },
   {
@@ -33,7 +33,7 @@ export const allotmentsColumns = [
     accessor: 'instituteType',
   },
   {
-    Header: 'University (Name)',
+    Header: 'University',
     accessor: 'universityName',
   },
   {
@@ -73,19 +73,19 @@ export const allotmentsColumns = [
     accessor: 'category',
   },
   {
-    Header: 'Bond (From – to)',
+    Header: 'Bond',
     accessor: 'bond',
   },
   {
-    Header: 'Bond Penalty (From – to)',
+    Header: 'Bond Penalty',
     accessor: 'bondPenalty',
   },
   {
-    Header: 'Beds (No. of hospital beds)',
+    Header: 'Beds',
     accessor: 'beds',
   },
   {
-    Header: 'Rank (From – to)',
+    Header: 'Rank',
     accessor: 'rank',
   },
 ];
@@ -93,7 +93,19 @@ export const allotmentsColumns = [
 export const allotmentsFiltersConfig = {
   state: '',
   instituteName: '',
-  rank: 0,
-  beds: 0,
-  quota: ''
+  instituteType: '',
+  universityName: '',
+  course: '',
+  courseType: '',
+  courseCategory: '',
+  degreeType: '',
+  courseFees: '',
+  quota: '',
+  year: '',
+  round: '',
+  category: '',
+  bond: '',
+  bondPenalty: '',
+  beds: '',
+  rank: ''
 };

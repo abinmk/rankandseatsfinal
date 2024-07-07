@@ -2,6 +2,7 @@ import React from 'react';
 import GenericTable from './GenericTable';
 import { allotmentsData, allotmentsColumns, allotmentsFiltersConfig } from './allotmentsConfig';
 import './GenericTable.scss';
+import './Allotments.scss';
 
 const Allotments = () => {
   return (

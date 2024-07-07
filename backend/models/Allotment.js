@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const DatasetSchema = new mongoose.Schema({
+const AllotmentSchema = new mongoose.Schema({
   examName: String,
   year: Number,
   round: String,
@@ -12,4 +12,4 @@ const DatasetSchema = new mongoose.Schema({
   candidateCategory: String,
 }, { strict: false });
 
-module.exports = mongoose.model('Dataset', DatasetSchema);
+module.exports = mongoose.model('Allotment', AllotmentSchema);

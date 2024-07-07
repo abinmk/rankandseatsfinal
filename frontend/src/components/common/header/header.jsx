@@ -508,7 +508,7 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
 								</Link>
 							</div>
 						</div>
-					<div class="header-content-left d-flex align-items-center">
+					<div className="header-content-left d-flex align-items-center">
                         <Link to="/home" className="header-logo">
                             <img src={desktoplogo} alt="logo" className="desktop-logo" />
                         </Link>

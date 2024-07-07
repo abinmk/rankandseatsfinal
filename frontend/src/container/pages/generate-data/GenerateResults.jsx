@@ -1,47 +1,47 @@
-// src/components/GenerateResults.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './GenerateResults.css';
 
 function GenerateResults() {
-  const [examName, setExamName] = useState('');
+  const [exam, setExam] = useState('');
+  const [examType, setExamType] = useState('');
   const [year, setYear] = useState('');
   const [resultName, setResultName] = useState('');
-  const [availableDataSets, setAvailableDataSets] = useState([]);
-  const [selectedDataSets, setSelectedDataSets] = useState([]);
+  const [availableAllotments, setAvailableAllotments] = useState([]);
+  const [selectedAllotments, setSelectedAllotments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (examName && year) {
-      fetchAvailableDataSets(examName, year);
+    if (exam && year) {
+      fetchAvailableAllotments(exam, year, examType);
     }
-  }, [examName, year]);
+  }, [exam, year, examType]);
 
-  const fetchAvailableDataSets = async (exam, year) => {
+  const fetchAvailableAllotments = async (exam, year, type) => {
     try {
-      const response = await axios.get('http://localhost:5001/api/available-datasets', {
-        params: { examName: exam, year: year },
+      const response = await axios.get('http://localhost:5001/api/list-available-allotments', {
+        params: { examName: `${exam}_${type}`, year: year },
       });
-      setAvailableDataSets(response.data.availableDataSets || []);
+      setAvailableAllotments(response.data.allotments || []);
     } catch (error) {
-      console.error('Error fetching available data sets', error);
-      setAvailableDataSets([]);
+      console.error('Error fetching available allotments', error);
+      setAvailableAllotments([]);
     }
   };
 
   const onGenerateResults = async () => {
-    if (!examName || !resultName || !year || selectedDataSets.length === 0) {
-      alert('Please fill exam name, result name, year, and select data sets.');
+    if (!exam || !examType || !resultName || !year || selectedAllotments.length === 0) {
+      alert('Please fill all fields.');
       return;
     }
 
     setIsLoading(true);
     try {
-      await axios.post('http://localhost:5001/api/generate', {
-        examName,
-        resultName,
+      await axios.post('http://localhost:5001/api/generate-combined-dataset', {
+        examName: `${exam}_${examType}`,
         year,
-        selectedDataSets,
+        rounds: selectedAllotments,
+        resultName
       });
       alert('Combined results generated successfully');
     } catch (error) {
@@ -55,13 +55,20 @@ function GenerateResults() {
   return (
     <form className="generate-results-container">
       <div className="generate-results-group">
-        <label className="generate-results-label" htmlFor="examName">Exam Name</label>
-        <select className="generate-results-select" id="examName" value={examName} onChange={(e) => setExamName(e.target.value)}>
+        <label className="generate-results-label" htmlFor="exam">Exam</label>
+        <select className="generate-results-select" id="exam" value={exam} onChange={(e) => setExam(e.target.value)}>
           <option value="">Select Exam</option>
-          <option value="NEET_PG_ALL_INDIA">NEET_PG_ALL_INDIA</option>
-          <option value="NEET_PG_STATE">NEET_PG_STATE</option>
-          <option value="INI_CET">INI_CET</option>
+          <option value="NEET_PG">NEET_PG</option>
           <option value="NEET_SS">NEET_SS</option>
+          <option value="INI_CET">INI_CET</option>
+        </select>
+      </div>
+      <div className="generate-results-group">
+        <label className="generate-results-label" htmlFor="examType">Exam Type</label>
+        <select className="generate-results-select" id="examType" value={examType} onChange={(e) => setExamType(e.target.value)}>
+          <option value="">Select Exam Type</option>
+          <option value="ALL_INDIA">ALL_INDIA</option>
+          <option value="STATE">STATE</option>
         </select>
       </div>
       <div className="generate-results-group">
@@ -76,17 +83,17 @@ function GenerateResults() {
         </select>
       </div>
       <div className="generate-results-group">
-        <label className="generate-results-label" htmlFor="availableDataSets">Available Data Sets</label>
+        <label className="generate-results-label" htmlFor="availableAllotments">Available Allotments</label>
         <select
           className="generate-results-select"
-          id="availableDataSets"
+          id="availableAllotments"
           multiple
-          value={selectedDataSets}
-          onChange={(e) => setSelectedDataSets(Array.from(e.target.selectedOptions, option => option.value))}
+          value={selectedAllotments}
+          onChange={(e) => setSelectedAllotments(Array.from(e.target.selectedOptions, option => option.value))}
         >
-          {availableDataSets.map((dataSet) => (
-            <option key={dataSet} value={dataSet}>
-              {dataSet}
+          {availableAllotments.map((allotment) => (
+            <option key={allotment} value={allotment}>
+              {allotment}
             </option>
           ))}
         </select>

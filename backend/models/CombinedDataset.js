@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const DatasetSchema = new mongoose.Schema({
+const CombinedDatasetSchema = new mongoose.Schema({
   examName: String,
   year: Number,
   round: String,
@@ -10,6 +10,9 @@ const DatasetSchema = new mongoose.Schema({
   course: String,
   allottedCategory: String,
   candidateCategory: String,
+  collegeDetails: Object,
+  courseDetails: Object,
+  feeDetails: Object,
 }, { strict: false });
 
-module.exports = mongoose.model('Dataset', DatasetSchema);
+module.exports = mongoose.model('CombinedDataset', CombinedDatasetSchema);

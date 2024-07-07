@@ -13,9 +13,7 @@ const collegeSchema = new mongoose.Schema({
   nearestRailwayStation: String,
   distanceFromRailwayStation: String,
   nearestAirport: String,
-  distanceFromAirport: String
+  distanceFromAirport: String,
 });
 
-const College = mongoose.model('College', collegeSchema);
-
-module.exports = College;
+module.exports = mongoose.model('College', collegeSchema);

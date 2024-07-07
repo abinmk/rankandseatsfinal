@@ -3,6 +3,7 @@ import { Tabs, Tab } from 'react-bootstrap';
 import UploadRound from './UploadRound';
 import UploadCourse from './UploadCourse';
 import UploadCollege from './UploadCollege';
+import UploadFee from './UploadFee'; // Import the UploadFee component
 import GenerateResults from './GenerateResults';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -19,6 +20,9 @@ const Upload = () => {
         </Tab>
         <Tab eventKey="college" title="Upload College">
           <UploadCollege />
+        </Tab>
+        <Tab eventKey="fee" title="Upload Fee"> {/* Add a new Tab for UploadFee */}
+          <UploadFee />
         </Tab>
         <Tab eventKey="generate" title="Generate Data">
           <GenerateResults />

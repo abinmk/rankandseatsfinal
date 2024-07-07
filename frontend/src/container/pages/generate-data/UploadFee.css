@@ -1,0 +1,37 @@
+.upload-fee-container {
+    padding: 20px;
+  }
+  
+  .upload-fee-group {
+    margin-bottom: 15px;
+  }
+  
+  .upload-fee-label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+    font-weight: bold;
+  }
+  
+  .upload-fee-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  .upload-fee-button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .upload-fee-button:hover {
+    background: #0056b3;
+  }
+  

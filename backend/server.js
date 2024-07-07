@@ -9,13 +9,8 @@ const bodyParser = require('body-parser');
 
 require('dotenv').config();
 
-const roundRoutes = require('./routes/roundRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const authRoutes = require('./routes/auth');
-const collegeRoutes = require('./routes/collegeRoutes');
-// const uploadCollegeRoutes = require('./routes/uploadCollege');
-const courseRoutes = require('./routes/courseRoutes');
-const allotmentRoutes = require('./routes/allotmentRoutes');
 const datasetRoutes = require('./routes/datasetRoutes');
 
 const app = express();
@@ -28,7 +23,6 @@ app.use(cors({
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true
 }));
-
 
 const db = process.env.MONGO_URI;
 if (!db) {
@@ -104,6 +98,24 @@ mongoose.connect(db, {
     } catch (error) {
       if (error.name === 'MissingSchemaError') {
         College = mongoose.model('colleges', collegeSchema);
+      } else {
+        throw error;
+      }
+    }
+
+    const feeSchema = new mongoose.Schema({
+      collegeName: String,
+      courseName: String,
+      feeAmount: Number,
+      otherFeeDetails: String
+    });
+
+    let Fee;
+    try {
+      Fee = mongoose.model('fees');
+    } catch (error) {
+      if (error.name === 'MissingSchemaError') {
+        Fee = mongoose.model('fees', feeSchema);
       } else {
         throw error;
       }
@@ -306,18 +318,11 @@ mongoose.connect(db, {
     app.use(bodyParser.json());
     // Register other middlewares after AdminBro setup
     app.use(bodyParser.urlencoded({ extended: true }));
-    
 
     // Register routes
-    app.use('/api', roundRoutes);
     app.use('/api', adminRoutes);
     app.use('/api/auth', authRoutes);
-    app.use('/api', collegeRoutes);
-    // app.use('/api', uploadCollegeRoutes);
-    app.use('/api', courseRoutes);
-    app.use('/api', allotmentRoutes);
     app.use('/api', datasetRoutes);
-    
 
     app.use((err, req, res, next) => {
       console.error(err.stack);
@@ -329,4 +334,3 @@ mongoose.connect(db, {
     });
   })
   .catch(err => console.error('MongoDB connection error:', err));
-

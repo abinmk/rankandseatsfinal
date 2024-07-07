@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const GeneratedDataset = require('../models/GeneratedDataset');
+const GeneratedDataset = require('../models/CombinedDataset');
 
 // Get all generated datasets
 router.get('/generated-datasets', async (req, res) => {
