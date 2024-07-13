@@ -34,7 +34,7 @@ function Landingswitcher({ local_varaiable, ThemeChanger }) {
 			ThemeChanger({
 				...theme,
 				"dataNavStyle": "",
-				"dataNavLayout": `${localStorage.velvetlayout == "horizontal" ? "horizontal" : "vertical"}`
+				"dataNavLayout": `${localStorage.velvetlayout == "horizontal" ? "horizontal" : "horizontal"}`
 			});
 		};
 	}, []);

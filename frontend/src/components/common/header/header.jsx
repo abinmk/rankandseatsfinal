@@ -34,20 +34,10 @@ import png11 from "../../../assets/images/ecommerce/png/11.png";
 const Header = ({ local_varaiable, ThemeChanger }) => {
 
 	const [startDatei, setStartDatei] = useState(new Date());
-	const [show, setShow] = useState(false);
-
-	const handleClose = () => setShow(false);
-	const handleShow = () => setShow(true);
 
 	const [show1, setShow1] = useState(false);
 
 	const handleClose1 = () => setShow1(false);
-	const handleShow1 = () => setShow1(true);
-
-	const [show3, setShow3] = useState(false);
-
-	const handleClose3 = () => setShow3(false);
-	const handleShow3 = () => setShow3(true);
 
 	const location = useLocation();
     const [selectedTab, setSelectedTab] = useState("Allotments");
@@ -87,7 +77,7 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
 			...local_varaiable,
 			"dataThemeMode": local_varaiable.dataThemeMode == "dark" ? "light" : "dark",
 			"dataHeaderStyles": local_varaiable.dataThemeMode == "dark" ? "light" : "gradient",
-			"dataMenuStyles": local_varaiable.dataNavLayout == "horizontal" ? local_varaiable.dataThemeMode == "dark" ? "gradient" : "dark" : "dark"
+			"dataMenuStyles": "horizontal" ? local_varaiable.dataThemeMode == "dark" ? "gradient" : "dark" : "dark"
 
 		});
 		
@@ -519,7 +509,7 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
 					</div>
 
 					<div className="header-content-right">
-						<div className="header-element header-theme-mode">
+						{/* <div className="header-element header-theme-mode">
 							<Link aria-label="anchor" to="#" className="header-link layout-setting" onClick={() => ToggleDark()}>
 
 								<i className="bx bx-sun bx-flip-horizontal header-link-icon ionicon  dark-layout"></i>
@@ -527,7 +517,7 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
 								<i className="bx bx-moon bx-flip-horizontal header-link-icon ionicon light-layout"></i>
 
 							</Link>
-						</div>
+						</div> */}
 
 						<Dropdown className="header-element notifications-dropdown" autoClose="outside">
 							<Dropdown.Toggle variant='' className="header-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" id="messageDropdown" aria-expanded="false">
@@ -636,11 +626,11 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
 						</Dropdown>
 
 					   {/* settings */}
-						<div className="header-element">
+						{/* <div className="header-element">
 							<Link aria-label="anchor" to="#" className="header-link switcher-icon ms-1" data-bs-toggle="offcanvas" data-bs-target="#switcher-canvas" onClick={() => Switchericon()}>
 								<i className="bx bx-cog bx-spin header-link-icon"></i>
 							</Link>
-						</div>
+						</div> */}
 
 					</div>
 

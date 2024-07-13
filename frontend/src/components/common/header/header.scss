@@ -44,3 +44,23 @@
     color: whitesmoke;
     font-family: Arial, Helvetica, sans-serif;
 }
+
+.main-header-container,.app-header{
+    background-color: rgb(9, 85, 215);
+    width: 100%;
+    display: flex;
+}
+
+.header-content-right .header-element .header-link-icon {
+    color: white;
+    justify-content: space-around;
+}
+
+.header-content-right .header-element .header-link {
+    color: white;
+}
+
+.header-content-right .header-element .header-link:hover,
+.header-content-right .header-element .header-link:focus {
+    color: rgb(255, 254, 254);
+}
