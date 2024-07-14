@@ -24,7 +24,7 @@ const Home = () => {
 	};
 	const navigate = useNavigate();
 	const routeChange = () => {
-		const path = `${import.meta.env.BASE_URL}dashboards/sales/`;
+		const path = `${import.meta.env.BASE_URL}dashboards`;
 		navigate(path);
 	};
 
@@ -58,7 +58,7 @@ const Home = () => {
 				<div className="row justify-content-center align-items-center authentication authentication-basic h-100">
 					<Col xxl={4} xl={5} lg={5} md={6} sm={8} className="col-12">
 						<div className="my-5 d-flex justify-content-center">
-							<Link to={`${import.meta.env.BASE_URL}dashboards/sales`}>
+							<Link to={`${import.meta.env.BASE_URL}dashboards`}>
 								<img src={desktoplogo} alt="logo" className="desktop-logo" />
 								<img src={desktopdark} alt="logo" className="desktop-dark" />
 							</Link>
@@ -184,7 +184,7 @@ const Home = () => {
 													</div>
 												</div>
 												<div className="col-xl-12 d-grid mt-2">
-													<Link to={`${import.meta.env.BASE_URL}dashboards/sales`} className="btn btn-lg btn-primary" onClick={Login}>Sign In</Link>
+													<Link to={`${import.meta.env.BASE_URL}dashboards`} className="btn btn-lg btn-primary" onClick={Login}>Sign In</Link>
 												</div>
 											</div>
 											<div className="text-center">

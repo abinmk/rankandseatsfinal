@@ -1,13 +1,16 @@
 const mongoose = require('mongoose');
+const multer = require('multer');
+const path = require('path');
+const readExcelFile = require('read-excel-file/node');
+
+// Define Mongoose models (replace with your actual model definitions)
 const Allotment = require('../models/Allotment');
 const College = require('../models/College');
 const Course = require('../models/Course');
 const Fee = require('../models/Fee');
-const multer = require('multer');
-const path = require('path');
 const CombinedDataset = require('../models/CombinedDataset');
-const readExcelFile = require('read-excel-file/node');
 
+// Multer configuration for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'uploads/');
@@ -85,11 +88,11 @@ exports.uploadCollege = (req, res) => {
     readExcelFile(filePath).then((rows) => {
       rows.shift(); // Remove header row
       const colleges = rows.map((row) => ({
-        collegeShortName: row[0],
-        collegeAddress: row[1],
-        collegeName: row[2],
-        universityName: row[3],
-        state: row[4],
+        collegeName: row[0],
+        HospitalNameWithPlace:row[1],
+        HospitaNameWithAddress:row[2],
+        state: row[3],
+        universityName: row[4],
         instituteType: row[5],
         yearOfEstablishment: row[6],
         totalHospitalBeds: row[7],
@@ -97,7 +100,9 @@ exports.uploadCollege = (req, res) => {
         nearestRailwayStation: row[9],
         distanceFromRailwayStation: row[10],
         nearestAirport: row[11],
-        distanceFromAirport: row[12]
+        distanceFromAirport: row[12],
+        phoneNumber: row[13],
+        website: row[14],
       }));
 
       College.insertMany(colleges)
@@ -125,13 +130,14 @@ exports.uploadCourse = (req, res) => {
     readExcelFile(filePath).then((rows) => {
       rows.shift(); // Remove header row
       const courses = rows.map((row) => ({
-        course: row[1],
-        courseCode: row[0],
-        duration: row[2],
-        courseCategory: row[3],
-        courseType: row[4],
-        degreeType: row[5],
-        description: row[6]
+        collegeName: row[0],
+        courseCode: row[1],
+        courseName: row[2],
+        duration: row[3],
+        courseCategory: row[4],
+        courseType: row[5],
+        degreeType: row[6],
+        description: row[7]
       }));
 
       Course.insertMany(courses)
@@ -164,7 +170,6 @@ exports.uploadFee = (req, res) => {
         collegeName: row[0],
         courseName: row[1],
         feeAmount: row[2],
-        // Add other relevant fields
       }));
 
       Fee.insertMany(fees)
@@ -180,55 +185,7 @@ exports.uploadFee = (req, res) => {
   });
 };
 
-// // Generate Combined Dataset with Multiple Allotments
-// exports.generateCombinedDataset = async (req, res) => {
-//   try {
-//     const { examName, year, rounds } = req.body; // rounds is an array of selected allotments
-
-//     let combinedAllotments = [];
-
-//     for (let round of rounds) {
-//       const collectionName = `${examName}_${year}_${round}`;
-//       const AllotmentModel = mongoose.model(collectionName, new mongoose.Schema({}, { strict: false }), collectionName);
-//       const allotments = await AllotmentModel.find({}).lean();
-//       combinedAllotments = combinedAllotments.concat(allotments);
-//     }
-
-//     const colleges = await College.find({}).lean();
-//     const courses = await Course.find({}).lean();
-//     const fees = await Fee.find({}).lean();
-
-//     const collegeMap = colleges.reduce((acc, college) => {
-//       acc[college.collegeName] = college;
-//       return acc;
-//     }, {});
-
-//     const courseMap = courses.reduce((acc, course) => {
-//       acc[course.course] = course;
-//       return acc;
-//     }, {});
-
-//     const feeMap = fees.reduce((acc, fee) => {
-//       acc[`${fee.collegeName}_${fee.courseName}`] = fee;
-//       return acc;
-//     }, {});
-
-//     const combinedData = combinedAllotments.map(allotment => ({
-//       ...allotment,
-//       collegeDetails: collegeMap[allotment.allottedInstitute],
-//       courseDetails: courseMap[allotment.course],
-//       feeDetails: feeMap[`${allotment.allottedInstitute}_${allotment.course}`]
-//     }));
-
-//     await CombinedDataset.insertMany(combinedData);
-
-//     res.json({ combinedData });
-//   } catch (error) {
-//     console.error('Error generating combined dataset:', error);
-//     res.status(500).send('Failed to generate combined dataset.');
-//   }
-// };
-
+// Generate Combined Dataset with Multiple Allotments
 const getModel = (modelName) => {
   if (mongoose.models[modelName]) {
     return mongoose.models[modelName];
@@ -262,12 +219,15 @@ exports.generateCombinedDataset = async (req, res) => {
 
     const colleges = await College.find({}).lean();
     console.log(`Colleges found: ${colleges.length}`);
+    console.log(colleges);
 
     const courses = await Course.find({}).lean();
     console.log(`Courses found: ${courses.length}`);
+    console.log(courses);
 
     const fees = await Fee.find({}).lean();
     console.log(`Fees found: ${fees.length}`);
+    console.log(fees);
 
     const collegeMap = colleges.reduce((acc, college) => {
       acc[college.collegeName] = college;
@@ -275,7 +235,7 @@ exports.generateCombinedDataset = async (req, res) => {
     }, {});
 
     const courseMap = courses.reduce((acc, course) => {
-      acc[course.course] = course;
+      acc[course.courseName] = course;
       return acc;
     }, {});
 
@@ -284,10 +244,19 @@ exports.generateCombinedDataset = async (req, res) => {
       return acc;
     }, {});
 
+    console.log('College Map:', collegeMap);
+    console.log('Course Map:', courseMap);
+    console.log('Fee Map:', feeMap);
+
     const combinedData = combinedAllotments.map(allotment => {
       const college = collegeMap[allotment.allottedInstitute];
       const course = courseMap[allotment.course];
       const fee = feeMap[`${allotment.allottedInstitute}_${allotment.course}`];
+
+      console.log('Allotment:', allotment);
+      console.log('College:', college);
+      console.log('Course:', course);
+      console.log('Fee:', fee);
 
       return {
         _id: mongoose.Types.ObjectId(), // Generate a new ObjectId to avoid conflicts
@@ -303,18 +272,20 @@ exports.generateCombinedDataset = async (req, res) => {
         state: college?.state,
         instituteType: college?.instituteType,
         universityName: college?.universityName,
-        courseType: course?.courseType,
-        courseCategory: course?.courseCategory,
-        degreeType: course?.degreeType,
-        feeAmount: fee?.feeAmount,
+        yearOfEstablishment: college?.yearOfEstablishment,
         totalHospitalBeds: college?.totalHospitalBeds,
-        bond: course?.bond,
-        bondPenalty: course?.bondPenalty,
+        locationMapLink: college?.locationMapLink,
         nearestRailwayStation: college?.nearestRailwayStation,
         distanceFromRailwayStation: college?.distanceFromRailwayStation,
         nearestAirport: college?.nearestAirport,
         distanceFromAirport: college?.distanceFromAirport,
-        description: course?.description
+        phoneNumber: college?.phoneNumber,
+        website: college?.website,
+        courseType: course?.courseType,
+        courseCategory: course?.courseCategory,
+        degreeType: course?.degreeType,
+        feeAmount: fee?.feeAmount,
+        description: course?.description,
       };
     });
 
@@ -339,8 +310,7 @@ exports.generateCombinedDataset = async (req, res) => {
   }
 };
 
-
-
+// List Available Allotments
 exports.listAvailableAllotments = async (req, res) => {
   try {
     const { examName, year } = req.query;
@@ -358,7 +328,7 @@ exports.listAvailableAllotments = async (req, res) => {
   }
 };
 
-
+// Get Generated Data
 exports.getGeneratedData = async (req, res) => {
   try {
     const { examName, year, resultName } = req.query;
@@ -373,3 +343,4 @@ exports.getGeneratedData = async (req, res) => {
     res.status(500).send('Failed to fetch generated data.');
   }
 };
+

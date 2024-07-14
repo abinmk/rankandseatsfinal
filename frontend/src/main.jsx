@@ -20,7 +20,6 @@ import Courses from "./container/pages/allotments/Courses";
 import GenerateResults from "./container/pages/generate-data/GenerateResults.jsx";
 import Upload from "./container/pages/generate-data/Upload.jsx";
 import UploadRound from "./container/pages/generate-data/UploadRound";
-import Allot from "./container/pages/component/allot.js";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -38,7 +37,6 @@ root.render(
         <Route path="/" element={<App />}>
           <Route path="dashboards" element={<Dashboard />} />
           <Route path="allotments" element={<Allotments />} />
-          <Route path="allot" element={<Allot />} />
           <Route path="lastrank" element={<Dashboard />} />
           <Route path="courses" element={<Courses />} />
           <Route path="institutes" element={<Colleges />} />

@@ -11,6 +11,7 @@ const GenericTable = ({ data, columns, filtersConfig, headerTitle }) => {
   const [showRowModal, setShowRowModal] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [filters, setFilters] = useState(filtersConfig);
+  const [filteredData, setFilteredData] = useState(data);
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
@@ -24,6 +25,26 @@ const GenericTable = ({ data, columns, filtersConfig, headerTitle }) => {
       resultsSection.style.width = '100vw';
     }
   }, [showFilters]);
+
+  useEffect(() => {
+    applyFilters();
+  }, [filters]);
+
+  const applyFilters = () => {
+    let filtered = data;
+
+    Object.keys(filters).forEach(filterKey => {
+      if (filters[filterKey].length > 0) {
+        if (Array.isArray(filters[filterKey])) {
+          filtered = filtered.filter(item => filters[filterKey].includes(item[filterKey]));
+        } else {
+          filtered = filtered.filter(item => item[filterKey] >= filters[filterKey].min && item[filterKey] <= filters[filterKey].max);
+        }
+      }
+    });
+
+    setFilteredData(filtered);
+  };
 
   const {
     getTableProps,
@@ -45,7 +66,7 @@ const GenericTable = ({ data, columns, filtersConfig, headerTitle }) => {
   } = useTable(
     {
       columns,
-      data,
+      data: filteredData,
       initialState: { pageIndex: 0 },
     },
     useFilters,
