@@ -10,34 +10,35 @@ const Allotments = () => {
   const [filterOptions, setFilterOptions] = useState({});
   const [filters, setFilters] = useState({});
   const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [filterLoading, setFilterLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get('http://localhost:5001/api/allotments', {
-          params: {
-            examName: 'NEET_PG_ALL_INDIA',
-            year: 2015,
-            page,
-            limit: 10,
-            ...filters
-          }
-        });
-        setData(response.data.data);
-        setPage(response.data.currentPage);
-        setTotalPages(response.data.totalPages);
-      } catch (error) {
-        console.error('Error fetching allotment data:', error);
-      }
-      setLoading(false);
-    };
+  const fetchData = async (page, pageSize, filters) => {
+    setLoading(true);
+    try {
+      const response = await axios.get('http://localhost:5001/api/allotments', {
+        params: {
+          examName: 'NEET_PG_ALL_INDIA',
+          year: 2015,
+          page,
+          limit: pageSize,
+          ...filters
+        }
+      });
+      setData(response.data.data);
+      setPage(response.data.currentPage);
+      setTotalPages(response.data.totalPages);
+    } catch (error) {
+      console.error('Error fetching allotment data:', error);
+    }
+    setLoading(false);
+  };
 
-    fetchData();
-  }, [filters, page]);
+  useEffect(() => {
+    fetchData(page, pageSize, filters);
+  }, [filters, page, pageSize]);
 
   useEffect(() => {
     const fetchFilterOptions = async () => {
@@ -75,6 +76,9 @@ const Allotments = () => {
       filterOptions={filterOptions}
       loading={loading}
       filterLoading={filterLoading}
+      fetchData={fetchData} // Pass fetchData
+      pageSize={pageSize} // Pass pageSize
+      setPageSize={setPageSize} // Pass setPageSize
     />
   );
 };

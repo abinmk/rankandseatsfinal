@@ -1,14 +1,15 @@
 .filters-section {
-  width: 300px;
-  transition: transform 0.3s ease;
-  background-color: #fff;
-  padding: 20px;
+  width: 310px; /* Adjusted width */
+  transition: transform 0.5s ease;
   position: fixed;
-  left: 10px;
-  height: calc(100vh - 140px);
+  left: 20px;
+  height: calc(100vh - 170px) !important;
+  margin-top: auto;
+  margin-bottom: auto;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+  padding: 10px;
   border-radius: 20px;
   z-index: 1000;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
 
   &.hide {
@@ -21,15 +22,20 @@
   }
 
   .filters-header {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 10;
+    padding: 15px 10px;
+    border-bottom: 1px solid #e0e0e0;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
 
     span {
-      font-size: 18px;
-      font-weight: 600;
-      color: #333;
+      font-size: 18px; /* Adjusted font size */
+      font-weight: 600; /* Adjusted font weight */
+      color: #333; /* Adjusted font color */
     }
 
     .close-btn {
@@ -89,22 +95,6 @@
   }
 }
 
-.accordion-button {
-  background-color: #fff;
-  color: #333;
-  font-weight: 600;
-  border-bottom: 1px solid #ddd;
-}
-
-.accordion-button:focus {
-  box-shadow: none;
-}
-
-.accordion-button:not(.collapsed) {
-  color: #007bff;
-  background-color: #e9f5ff;
-}
-
 .modal-content {
   max-height: calc(100vh - 200px);
   overflow-y: auto;
@@ -129,7 +119,7 @@
 
 .results-section {
   flex-grow: 1;
-  margin-left: 300px;
+  margin-left: 330px;
   padding: 20px;
   transition: margin-left 0.3s ease;
 
@@ -152,7 +142,6 @@
     cursor: pointer;
     transform: rotate(-90deg);
     transform-origin: left top;
-
     &:hover {
       background-color: #0056b3;
     }
@@ -191,4 +180,17 @@
 
 .column-toggle-btn {
   margin-left: 20px;
+}
+
+.filter-item-container {
+  padding: 10px; /* Removed padding to eliminate the border-like appearance */
+}
+
+.accordion-button {
+  background-color: transparent; /* Remove background color for accordion header */
+  border: none; /* Remove border for accordion header */
+  &:not(.collapsed) {
+    color: #007bff; /* Change text color when expanded */
+    background-color: transparent; /* Ensure no background color when expanded */
+  }
 }

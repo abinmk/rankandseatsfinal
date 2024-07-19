@@ -1,55 +1,81 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Accordion, Button, Modal } from 'react-bootstrap';
+import './FilterItem.scss';
 
-const FilterItem = ({ title, options, filterName, filters, handleFilterChange, eventKey }) => {
-  const [showMore, setShowMore] = useState(false);
+const FilterItem = ({ title, options, filterName, filters, handleFilterChange, eventKey, viewMore, appliedFiltersCount }) => {
   const [showModal, setShowModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const handleShowMore = () => setShowModal(true);
-  const handleCloseModal = () => setShowModal(false);
+  useEffect(() => {
+    setSearchTerm('');
+  }, [showModal]);
 
-  const displayedOptions = options.slice(0, 4);
-  const selectedCount = filters[filterName]?.length || 0;
+  const filteredOptions = options.filter(option =>
+    option.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleModalClose = () => setShowModal(false);
+  const handleModalOpen = () => setShowModal(true);
+
+  const handleCheckboxChange = (option, checked) => {
+    handleFilterChange(option, checked, filterName);
+  };
 
   return (
     <>
       <Accordion.Item eventKey={eventKey}>
-        <Accordion.Header>{title} ({selectedCount})</Accordion.Header>
+        <Accordion.Header>
+          {title} ({appliedFiltersCount})
+        </Accordion.Header>
         <Accordion.Body>
-          {displayedOptions.map(option => (
+          <Form.Control
+            type="text"
+            placeholder={`Search ${title}`}
+            className="filter-search"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          {filteredOptions.slice(0, 4).map(option => (
             <Form.Check
               key={option}
               type="checkbox"
               label={option}
               checked={filters[filterName]?.includes(option)}
-              onChange={(e) => handleFilterChange(option, e.target.checked, filterName)}
+              onChange={(e) => handleCheckboxChange(option, e.target.checked)}
             />
           ))}
-          {options.length > 4 && (
-            <Button variant="link" className="view-more-btn" onClick={handleShowMore}>
+          {viewMore && (
+            <Button variant="link" className="view-more-btn" onClick={handleModalOpen}>
               View More
             </Button>
           )}
         </Accordion.Body>
       </Accordion.Item>
 
-      <Modal show={showModal} onHide={handleCloseModal}>
+      <Modal show={showModal} onHide={handleModalClose} centered>
         <Modal.Header closeButton>
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {options.map(option => (
+          <Form.Control
+            type="text"
+            placeholder={`Search ${title}`}
+            className="filter-search"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          {filteredOptions.map(option => (
             <Form.Check
               key={option}
               type="checkbox"
               label={option}
               checked={filters[filterName]?.includes(option)}
-              onChange={(e) => handleFilterChange(option, e.target.checked, filterName)}
+              onChange={(e) => handleCheckboxChange(option, e.target.checked)}
             />
           ))}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
+          <Button variant="secondary" onClick={handleModalClose}>
             Close
           </Button>
         </Modal.Footer>

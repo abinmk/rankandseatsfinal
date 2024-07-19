@@ -19,7 +19,10 @@ const GenericTable = ({
   setTotalPages,
   filterOptions,
   loading,
-  filterLoading
+  filterLoading,
+  fetchData, // Ensure fetchData is passed
+  pageSize, // Ensure pageSize is passed
+  setPageSize // Ensure setPageSize is passed
 }) => {
   const [showFilters, setShowFilters] = useState(true);
   const [showColumnModal, setShowColumnModal] = useState(false);
@@ -44,6 +47,10 @@ const GenericTable = ({
   useEffect(() => {
     applyFilters();
   }, [filters, data]);
+
+  useEffect(() => {
+    fetchData(page, pageSize, filters); // Trigger fetchData whenever page or pageSize changes
+  }, [page, pageSize, filters]);
 
   const getFilterParamName = (filterKey) => {
     const filterMapping = {
@@ -131,12 +138,11 @@ const GenericTable = ({
     prepareRow,
     allColumns,
     setHiddenColumns,
-    state: { pageIndex, pageSize },
+    state: { pageIndex },
     page: currentPage,
     gotoPage,
     previousPage,
     nextPage,
-    setPageSize,
     canPreviousPage,
     canNextPage,
     pageCount,
@@ -144,7 +150,9 @@ const GenericTable = ({
     {
       columns,
       data: filteredData,
-      initialState: { pageIndex: 0 },
+      initialState: { pageIndex: page - 1 }, // Set initial page index based on current page
+      manualPagination: true, // Inform React Table that we'll handle pagination on our own
+      pageCount: totalPages,
     },
     useFilters,
     useSortBy,
@@ -167,7 +175,7 @@ const GenericTable = ({
     for (let number = 0; number < pageCount; number++) {
       if (number === pageIndex || number === pageIndex - 1 || number === pageIndex + 1 || number === 0 || number === pageCount - 1) {
         paginationItems.push(
-          <Pagination.Item key={number} active={number === pageIndex} onClick={() => gotoPage(number)}>
+          <Pagination.Item key={number} active={number === pageIndex} onClick={() => setPage(number + 1)}>
             {number + 1}
           </Pagination.Item>
         );
@@ -284,11 +292,11 @@ const GenericTable = ({
             </Form.Group>
             <div className="pagination-controls">
               <Pagination className="mb-0">
-                <Pagination.First onClick={() => gotoPage(0)} disabled={!canPreviousPage} />
-                <Pagination.Prev onClick={() => previousPage()} disabled={!canPreviousPage} />
+                <Pagination.First onClick={() => setPage(1)} disabled={!canPreviousPage} />
+                <Pagination.Prev onClick={() => setPage((prev) => prev - 1)} disabled={!canPreviousPage} />
                 {renderPaginationItems()}
-                <Pagination.Next onClick={() => nextPage()} disabled={!canNextPage} />
-                <Pagination.Last onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage} />
+                <Pagination.Next onClick={() => setPage((prev) => prev + 1)} disabled={!canNextPage} />
+                <Pagination.Last onClick={() => setPage(pageCount)} disabled={!canNextPage} />
               </Pagination>
             </div>
           </div>

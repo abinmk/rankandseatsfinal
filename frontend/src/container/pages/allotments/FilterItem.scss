@@ -1,0 +1,29 @@
+.view-more-btn {
+    display: block;
+    margin-top: 10px;
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: underline;
+  
+    &:hover {
+      color: #0056b3;
+    }
+  }
+  
+  .filter-search {
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .modal-content {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+  }
+  
+  .filter-modal-body {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+  
