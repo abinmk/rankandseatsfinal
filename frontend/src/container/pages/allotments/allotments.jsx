@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import GenericTable from './GenericTable';
 import { allotmentsColumns, allotmentsFiltersConfig } from './allotmentsConfig';
@@ -9,13 +9,13 @@ const Allotments = () => {
   const [data, setData] = useState([]);
   const [filterOptions, setFilterOptions] = useState({});
   const [filters, setFilters] = useState({});
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(1); // page index should start from 1 for API
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [filterLoading, setFilterLoading] = useState(true);
 
-  const fetchData = async (page, pageSize, filters) => {
+  const fetchData = useCallback(async (page, pageSize, filters) => {
     setLoading(true);
     try {
       const response = await axios.get('http://localhost:5001/api/allotments', {
@@ -34,11 +34,11 @@ const Allotments = () => {
       console.error('Error fetching allotment data:', error);
     }
     setLoading(false);
-  };
+  }, []);
 
   useEffect(() => {
     fetchData(page, pageSize, filters);
-  }, [filters, page, pageSize]);
+  }, [fetchData, filters, page, pageSize]);
 
   useEffect(() => {
     const fetchFilterOptions = async () => {

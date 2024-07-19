@@ -3,7 +3,7 @@ import { Form, Accordion, Button, Spinner } from 'react-bootstrap';
 import FilterItem from './FilterItem';
 import './FilterSection.scss';
 
-const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, filterOptions, loading, getFilterParamName }) => {
+const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, filterOptions, loading, getFilterParamName, clearAllFilters }) => {
   const handleFilterChange = (value, checked, filterName) => {
     const filterParamName = getFilterParamName(filterName);
     setFilters((prevFilters) => {
@@ -20,21 +20,17 @@ const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, filter
     return (filters[filterParamName] || []).length;
   };
 
-  const clearAllFilters = () => {
-    setFilters({});
-  };
-
   return (
     <div className={`filters-section ${showFilters ? 'show' : 'hide'}`}>
       <div className="filters-header">
-        <span>Filters</span>
+        <span>Filters ({Object.keys(filters).reduce((total, key) => total + filters[key].length, 0)})</span>
+        <Button variant="link" className="clear-all-btn" onClick={clearAllFilters}>
+          Clear All
+        </Button>
         <a className="close-btn" onClick={toggleFilters}>
           X
         </a>
       </div>
-      <Button variant="link" className="clear-all-btn" onClick={clearAllFilters}>
-        Clear All Filters
-      </Button>
       {loading ? (
         <Spinner animation="border" />
       ) : (
@@ -50,7 +46,6 @@ const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, filter
               handleFilterChange={handleFilterChange}
               viewMore={filterOptions[filterName].length > 4}
               appliedFiltersCount={appliedFiltersCount(filterName)}
-              clearAllFilters={clearAllFilters}
               getFilterParamName={getFilterParamName}
             />
           ))}

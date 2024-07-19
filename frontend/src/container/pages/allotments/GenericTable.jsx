@@ -48,10 +48,6 @@ const GenericTable = ({
     applyFilters();
   }, [filters, data]);
 
-  useEffect(() => {
-    fetchData(page, pageSize, filters); // Trigger fetchData whenever page or pageSize changes
-  }, [page, pageSize, filters]);
-
   const getFilterParamName = (filterKey) => {
     const filterMapping = {
       quotas: 'allottedQuota',
@@ -150,7 +146,7 @@ const GenericTable = ({
     {
       columns,
       data: filteredData,
-      initialState: { pageIndex: 0 },
+      initialState: { pageIndex: page - 1 }, // Set initial page
       manualPagination: true, // Inform React Table that we'll handle pagination on our own
       pageCount: totalPages,
     },
@@ -159,6 +155,12 @@ const GenericTable = ({
     usePagination,
     useColumnOrder
   );
+
+  useEffect(() => {
+    if (gotoPage) {
+      gotoPage(page - 1);
+    }
+  }, [page, gotoPage]);
 
   const handleRowClick = (row) => {
     setSelectedRowData(row.original);
@@ -175,7 +177,7 @@ const GenericTable = ({
     for (let number = 0; number < pageCount; number++) {
       if (number === pageIndex || number === pageIndex - 1 || number === pageIndex + 1 || number === 0 || number === pageCount - 1) {
         paginationItems.push(
-          <Pagination.Item key={number} active={number === pageIndex} onClick={() => gotoPage(number)}>
+          <Pagination.Item key={number} active={number === pageIndex} onClick={() => setPage(number + 1)}>
             {number + 1}
           </Pagination.Item>
         );
@@ -231,9 +233,7 @@ const GenericTable = ({
                       return (
                         <th key={key} {...rest}>
                           {column.render('Header')}
-                          <span>
-                            {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
-                          </span>
+                          <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
                         </th>
                       );
                     })}
@@ -248,7 +248,7 @@ const GenericTable = ({
                       <td>
                         <FaHeart
                           onClick={(e) => {
-                            e.stopPropagation(); // prevent row click
+                            e.stopPropagation();
                             toggleWishlist(row.original.id);
                           }}
                           style={{ color: wishlist.has(row.original.id) ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5em' }}
@@ -257,7 +257,9 @@ const GenericTable = ({
                       {row.cells.map((cell) => {
                         const { key, ...rest } = cell.getCellProps();
                         return (
-                          <td key={key} {...rest}>{cell.render('Cell')}</td>
+                          <td key={key} {...rest}>
+                            {cell.render('Cell')}
+                          </td>
                         );
                       })}
                     </tr>
@@ -290,18 +292,18 @@ const GenericTable = ({
                 min="1"
                 max={pageCount}
                 value={pageIndex + 1}
-                onChange={(e) => gotoPage(Number(e.target.value) - 1)}
+                onChange={(e) => setPage(Number(e.target.value))}
                 className="me-3"
                 style={{ width: '70px' }}
               />
             </Form.Group>
             <div className="pagination-controls">
               <Pagination className="mb-0">
-                <Pagination.First onClick={() => gotoPage(0)} disabled={!canPreviousPage} />
-                <Pagination.Prev onClick={() => previousPage()} disabled={!canPreviousPage} />
+                <Pagination.First onClick={() => setPage(1)} disabled={!canPreviousPage} />
+                <Pagination.Prev onClick={() => setPage(page - 1)} disabled={!canPreviousPage} />
                 {renderPaginationItems()}
-                <Pagination.Next onClick={() => nextPage()} disabled={!canNextPage} />
-                <Pagination.Last onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage} />
+                <Pagination.Next onClick={() => setPage(page + 1)} disabled={!canNextPage} />
+                <Pagination.Last onClick={() => setPage(pageCount)} disabled={!canNextPage} />
               </Pagination>
             </div>
           </div>

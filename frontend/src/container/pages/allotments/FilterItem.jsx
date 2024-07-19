@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Accordion, Button, Modal } from 'react-bootstrap';
 import './FilterItem.scss';
 
-const FilterItem = ({ title, options, filterName, filters, handleFilterChange, eventKey, viewMore, appliedFiltersCount, clearAllFilters, getFilterParamName }) => {
+const FilterItem = ({ title, options, filterName, filters, handleFilterChange, eventKey, viewMore, appliedFiltersCount, getFilterParamName }) => {
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const filterParamName = getFilterParamName(filterName);
@@ -49,14 +49,16 @@ const FilterItem = ({ title, options, filterName, filters, handleFilterChange, e
               onChange={(e) => handleCheckboxChange(option, e.target.checked)}
             />
           ))}
-          {viewMore && (
-            <Button variant="link" className="view-more-btn" onClick={handleModalOpen}>
-              View More
+          <div className="filter-actions">
+            {viewMore && (
+              <Button variant="link" className="view-more-btn" onClick={handleModalOpen}>
+                View More
+              </Button>
+            )}
+            <Button variant="link" className="clear-btn" onClick={clearFilterCategory}>
+              Clear
             </Button>
-          )}
-          <Button variant="link" className="clear-category-btn" onClick={clearFilterCategory}>
-            Clear
-          </Button>
+          </div>
         </Accordion.Body>
       </Accordion.Item>
 
