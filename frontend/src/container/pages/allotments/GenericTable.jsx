@@ -150,7 +150,7 @@ const GenericTable = ({
     {
       columns,
       data: filteredData,
-      initialState: { pageIndex: page - 1 }, // Set initial page index based on current page
+      initialState: { pageIndex: 0 },
       manualPagination: true, // Inform React Table that we'll handle pagination on our own
       pageCount: totalPages,
     },
@@ -175,7 +175,7 @@ const GenericTable = ({
     for (let number = 0; number < pageCount; number++) {
       if (number === pageIndex || number === pageIndex - 1 || number === pageIndex + 1 || number === 0 || number === pageCount - 1) {
         paginationItems.push(
-          <Pagination.Item key={number} active={number === pageIndex} onClick={() => setPage(number + 1)}>
+          <Pagination.Item key={number} active={number === pageIndex} onClick={() => gotoPage(number)}>
             {number + 1}
           </Pagination.Item>
         );
@@ -185,6 +185,10 @@ const GenericTable = ({
     }
 
     return paginationItems;
+  };
+
+  const clearAllFilters = () => {
+    setFilters({});
   };
 
   return (
@@ -198,6 +202,7 @@ const GenericTable = ({
         filterOptions={filterOptions}
         loading={filterLoading}
         getFilterParamName={getFilterParamName} // Pass this function to FilterSection
+        clearAllFilters={clearAllFilters}
       />
       <div className={`results-section ${showFilters ? "" : "full-width"}`}>
         <button className={`show-filters-btn ${showFilters ? "hidden" : ""}`} onClick={toggleFilters} id='view-btn'>
@@ -292,11 +297,11 @@ const GenericTable = ({
             </Form.Group>
             <div className="pagination-controls">
               <Pagination className="mb-0">
-                <Pagination.First onClick={() => setPage(1)} disabled={!canPreviousPage} />
-                <Pagination.Prev onClick={() => setPage((prev) => prev - 1)} disabled={!canPreviousPage} />
+                <Pagination.First onClick={() => gotoPage(0)} disabled={!canPreviousPage} />
+                <Pagination.Prev onClick={() => previousPage()} disabled={!canPreviousPage} />
                 {renderPaginationItems()}
-                <Pagination.Next onClick={() => setPage((prev) => prev + 1)} disabled={!canNextPage} />
-                <Pagination.Last onClick={() => setPage(pageCount)} disabled={!canNextPage} />
+                <Pagination.Next onClick={() => nextPage()} disabled={!canNextPage} />
+                <Pagination.Last onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage} />
               </Pagination>
             </div>
           </div>

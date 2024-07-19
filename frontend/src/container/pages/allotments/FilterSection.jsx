@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Form, Accordion, Spinner } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Form, Accordion, Button, Spinner } from 'react-bootstrap';
 import FilterItem from './FilterItem';
 import './FilterSection.scss';
 
@@ -20,6 +20,10 @@ const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, filter
     return (filters[filterParamName] || []).length;
   };
 
+  const clearAllFilters = () => {
+    setFilters({});
+  };
+
   return (
     <div className={`filters-section ${showFilters ? 'show' : 'hide'}`}>
       <div className="filters-header">
@@ -28,6 +32,9 @@ const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, filter
           X
         </a>
       </div>
+      <Button variant="link" className="clear-all-btn" onClick={clearAllFilters}>
+        Clear All Filters
+      </Button>
       {loading ? (
         <Spinner animation="border" />
       ) : (
@@ -43,6 +50,8 @@ const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, filter
               handleFilterChange={handleFilterChange}
               viewMore={filterOptions[filterName].length > 4}
               appliedFiltersCount={appliedFiltersCount(filterName)}
+              clearAllFilters={clearAllFilters}
+              getFilterParamName={getFilterParamName}
             />
           ))}
         </Accordion>

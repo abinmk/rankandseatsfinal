@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Form, Accordion, Button, Modal } from 'react-bootstrap';
 import './FilterItem.scss';
 
-const FilterItem = ({ title, options, filterName, filters, handleFilterChange, eventKey, viewMore, appliedFiltersCount }) => {
+const FilterItem = ({ title, options, filterName, filters, handleFilterChange, eventKey, viewMore, appliedFiltersCount, clearAllFilters, getFilterParamName }) => {
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const filterParamName = getFilterParamName(filterName);
 
   useEffect(() => {
     setSearchTerm('');
@@ -19,6 +20,10 @@ const FilterItem = ({ title, options, filterName, filters, handleFilterChange, e
 
   const handleCheckboxChange = (option, checked) => {
     handleFilterChange(option, checked, filterName);
+  };
+
+  const clearFilterCategory = () => {
+    options.forEach(option => handleFilterChange(option, false, filterName));
   };
 
   return (
@@ -40,7 +45,7 @@ const FilterItem = ({ title, options, filterName, filters, handleFilterChange, e
               key={option}
               type="checkbox"
               label={option}
-              checked={filters[filterName]?.includes(option)}
+              checked={filters[filterParamName]?.includes(option)}
               onChange={(e) => handleCheckboxChange(option, e.target.checked)}
             />
           ))}
@@ -49,6 +54,9 @@ const FilterItem = ({ title, options, filterName, filters, handleFilterChange, e
               View More
             </Button>
           )}
+          <Button variant="link" className="clear-category-btn" onClick={clearFilterCategory}>
+            Clear
+          </Button>
         </Accordion.Body>
       </Accordion.Item>
 
@@ -69,10 +77,13 @@ const FilterItem = ({ title, options, filterName, filters, handleFilterChange, e
               key={option}
               type="checkbox"
               label={option}
-              checked={filters[filterName]?.includes(option)}
+              checked={filters[filterParamName]?.includes(option)}
               onChange={(e) => handleCheckboxChange(option, e.target.checked)}
             />
           ))}
+          <Button variant="link" className="clear-category-btn" onClick={clearFilterCategory}>
+            Clear
+          </Button>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleModalClose}>
