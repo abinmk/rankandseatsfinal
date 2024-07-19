@@ -1,8 +1,8 @@
 .filters-section {
-  width: 300px; /* Adjusted width */
+  width: 300px;
   transition: transform 0.3s ease;
   background-color: #fff;
-  padding: 20px; /* Adjusted padding */
+  padding: 20px;
   position: fixed;
   left: 10px;
   height: calc(100vh - 140px);
@@ -25,11 +25,11 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-  
+
     span {
-      font-size: 18px; /* Adjusted font size */
-      font-weight: 600; /* Adjusted font weight */
-      color: #333; /* Adjusted font color */
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
     }
 
     .close-btn {
@@ -40,7 +40,7 @@
       padding: 5px 10px;
       border-radius: 50px;
       transition: background-color 0.3s, color 0.3s;
-  
+
       &:hover {
         background-color: #f0f0f0;
         color: #333;
@@ -50,13 +50,13 @@
 
   .filter-item {
     margin-bottom: 15px;
-  
+
     .filter-label {
       font-weight: 600;
       color: #333;
       margin-bottom: 5px;
     }
-  
+
     .filter-control {
       width: 100%;
       padding: 5px 10px;
@@ -70,7 +70,7 @@
     justify-content: space-between;
     align-items: center;
     margin-top: 10px;
-  
+
     input {
       width: 45%;
     }
@@ -82,11 +82,27 @@
     color: #007bff;
     cursor: pointer;
     text-decoration: underline;
-  
+
     &:hover {
       color: #0056b3;
     }
   }
+}
+
+.accordion-button {
+  background-color: #fff;
+  color: #333;
+  font-weight: 600;
+  border-bottom: 1px solid #ddd;
+}
+
+.accordion-button:focus {
+  box-shadow: none;
+}
+
+.accordion-button:not(.collapsed) {
+  color: #007bff;
+  background-color: #e9f5ff;
 }
 
 .modal-content {
@@ -136,6 +152,7 @@
     cursor: pointer;
     transform: rotate(-90deg);
     transform-origin: left top;
+
     &:hover {
       background-color: #0056b3;
     }
