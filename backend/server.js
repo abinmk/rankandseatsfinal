@@ -12,6 +12,7 @@ require('dotenv').config();
 const adminRoutes = require('./routes/adminRoutes');
 const authRoutes = require('./routes/auth');
 const datasetRoutes = require('./routes/datasetRoutes');
+const allotmentsRoute = require('./routes/allotmentsRoutes');
 
 const app = express();
 const port = process.env.PORT || 5001;
@@ -323,6 +324,7 @@ mongoose.connect(db, {
     app.use('/api', adminRoutes);
     app.use('/api/auth', authRoutes);
     app.use('/api', datasetRoutes);
+    app.use('/api',allotmentsRoute);
 
     app.use((err, req, res, next) => {
       console.error(err.stack);

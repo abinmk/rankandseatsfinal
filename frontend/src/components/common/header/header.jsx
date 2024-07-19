@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 import { ThemeChanger } from "../../../redux/action";
 import "./header.scss"
 //IMAGES
-import desktoplogo from "../../../assets/images/brand-logos/desktop-logo.png";
+import desktoplogo from "../../../assets/images/brand-logos/desktop-dark.png";
 import media34 from "../../../assets/images/media/media-34.jpg";
 import media35 from "../../../assets/images/media/media-35.jpg";
 import media36 from "../../../assets/images/media/media-36.jpg";
@@ -297,14 +297,6 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
 		};
 	}, []);
 
-	const Switchericon = () => {
-		document.querySelector(".offcanvas-end")?.classList.toggle("show");
-		if (document.querySelector(".switcher-backdrop")?.classList.contains("d-none")) {
-			document.querySelector(".switcher-backdrop")?.classList.add("d-block");
-			document.querySelector(".switcher-backdrop")?.classList.remove("d-none");
-		}
-	};
-
 	const cartProduct = [
 		{
 			id: 1,
@@ -351,14 +343,6 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
 		},
 	];
 
-	const [cartItems, setCartItems] = useState([...cartProduct]);
-	const [cartItemCount, setCartItemCount] = useState(cartProduct.length);
-
-	const handleRemove = (itemId) => {
-		const updatedCart = cartItems.filter((item) => item.id !== itemId);
-		setCartItems(updatedCart);
-		setCartItemCount(updatedCart.length);
-	};
 
 	const img1 = <img src={faces2} alt="" />;
 	const img2 = <img src={faces8} alt="" />;
@@ -400,68 +384,6 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
 			document.body.removeEventListener("click", handleClick);
 		};
 	}, []);
-
-	//// search Functionality
-	const [showa, setShowa] = useState(false);
-	const [InputValue, setInputValue] = useState("");
-	const [show2, setShow2] = useState(false);
-	const [searchcolor, setsearchcolor] = useState("text-dark");
-	const [searchval, setsearchval] = useState("Type something");
-	const [NavData, setNavData] = useState([]);
-
-	const myfunction = (inputvalue) => {
-		document.querySelector(".search-result")?.classList.remove("d-none");
-
-		const i = [];
-		const allElement2 = [];
-
-		MENUITEMS.forEach((mainLevel) => {
-			if (mainLevel.children) {
-				setShowa(true);
-				mainLevel.children.forEach((subLevel) => {
-					i.push(subLevel);
-					if (subLevel.children) {
-						subLevel.children.forEach((subLevel1) => {
-							i.push(subLevel1);
-							if (subLevel1.children) {
-								subLevel1.children.forEach((subLevel2) => {
-									i.push(subLevel2);
-								});
-							}
-						});
-					}
-				});
-			}
-		});
-
-		for (const allElement of i) {
-			if (allElement.title.toLowerCase().includes(inputvalue.toLowerCase())) {
-				if (allElement.title.toLowerCase().startsWith(inputvalue.toLowerCase())) {
-					setShow2(true);
-
-					// Check if the element has a path and doesn't already exist in allElement2 before pushing
-					if (allElement.path && !allElement2.some((el) => el.title === allElement.title)) {
-						allElement2.push(allElement);
-					}
-				}
-			}
-		}
-
-		if (!allElement2.length || inputvalue === "") {
-			if (inputvalue === "") {
-				setShow2(false);
-				setsearchval("Type something");
-				setsearchcolor("text-dark");
-			}
-			if (!allElement2.length) {
-				setShow2(false);
-				setsearchcolor("text-danger");
-				setsearchval("There is no component with this name");
-			}
-		}
-		setNavData(allElement2);
-
-	};
 
 	//   sticky-pin
 	const Topup = () => {
@@ -637,7 +559,7 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
 				</div>
 
 			</header>
-			<Offcanvas placement='end' show={show1} onHide={handleClose1} className="sidebar offcanvas offcanvas-end" tabIndex={-1} id="sidebar-right">
+			<Offcanvas placement='end' show={show1} onHide={handleClose1} className="sidebar offcanvas offcanvas-end"  tabIndex={-1} id="sidebar-right">
 				<Tab.Container defaultActiveKey="first">
 					<Offcanvas.Header closeButton>
 						<div>

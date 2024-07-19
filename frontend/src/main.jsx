@@ -37,11 +37,11 @@ root.render(
         <Route path="/" element={<App />}>
           <Route path="dashboards" element={<Dashboard />} />
           <Route path="allotments" element={<Allotments />} />
-          <Route path="lastrank" element={<Dashboard />} />
-          <Route path="courses" element={<Courses />} />
-          <Route path="institutes" element={<Colleges />} />
-          <Route path="fees" element={<Dashboard />} />
-          <Route path="wishlist" element={<Dashboard />} />
+          <Route path="lastrank" element={<Allotments />} />
+          <Route path="courses" element={<Allotments />} />
+          <Route path="institutes" element={<Allotments />} />
+          <Route path="fees" element={<Allotments />} />
+          <Route path="wishlist" element={<Allotments />} />
         </Route>
         <Route path="/" element={<Authenticationlayout />}>
           <Route path="authentication/signup/signupbasic" element={<Signupbasic />} />

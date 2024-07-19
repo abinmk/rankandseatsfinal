@@ -4,14 +4,29 @@ import FilterSection from './FilterSection';
 import { Table, Modal, Button, Form, Pagination } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './GenericTable.scss';
+import { FaHeart } from 'react-icons/fa'; // import heart icon
 
-const GenericTable = ({ data, columns, filtersConfig, headerTitle }) => {
+const GenericTable = ({
+  data,
+  columns,
+  filtersConfig,
+  headerTitle,
+  filters,
+  setFilters,
+  page,
+  setPage,
+  totalPages,
+  setTotalPages,
+  filterOptions,
+  loading,
+  filterLoading
+}) => {
   const [showFilters, setShowFilters] = useState(true);
   const [showColumnModal, setShowColumnModal] = useState(false);
   const [showRowModal, setShowRowModal] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
-  const [filters, setFilters] = useState(filtersConfig);
   const [filteredData, setFilteredData] = useState(data);
+  const [wishlist, setWishlist] = useState(new Set()); // track wishlist items
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
@@ -20,7 +35,7 @@ const GenericTable = ({ data, columns, filtersConfig, headerTitle }) => {
   useEffect(() => {
     const resultsSection = document.querySelector('.results-section');
     if (showFilters) {
-      resultsSection.style.width = 'calc(100vw - 340px)'; // Account for filter width and padding
+      resultsSection.style.width = 'calc(100vw - 290px)'; // Account for filter width and padding
     } else {
       resultsSection.style.width = '100vw';
     }
@@ -28,22 +43,84 @@ const GenericTable = ({ data, columns, filtersConfig, headerTitle }) => {
 
   useEffect(() => {
     applyFilters();
-  }, [filters]);
+  }, [filters, data]);
+
+  const getFilterParamName = (filterKey) => {
+    const filterMapping = {
+      quotas: 'allottedQuota',
+      institutes: 'allottedInstitute',
+      courses: 'course',
+      allottedCategories: 'allottedCategory',
+      candidateCategories: 'candidateCategory',
+      examNames: 'examName',
+      years: 'year',
+      rounds: 'round',
+      states: 'state',
+      instituteTypes: 'instituteType',
+      universityNames: 'universityName',
+      yearsOfEstablishment: 'yearOfEstablishment',
+      totalHospitalBeds: 'totalHospitalBeds',
+      locationMapLinks: 'locationMapLink',
+      nearestRailwayStations: 'nearestRailwayStation',
+      distancesFromRailwayStation: 'distanceFromRailwayStation',
+      nearestAirports: 'nearestAirport',
+      distancesFromAirport: 'distanceFromAirport',
+      courseTypes: 'courseType',
+      degreeTypes: 'degreeType',
+      feeAmounts: 'feeAmount',
+      nriFees: 'nriFee',
+      stipendYear1: 'stipendYear1',
+      stipendYear2: 'stipendYear2',
+      stipendYear3: 'stipendYear3',
+      bondYears: 'bondYear',
+      bondPenalties: 'bondPenality',
+    };
+    
+    return filterMapping[filterKey] || filterKey;
+  };
 
   const applyFilters = () => {
     let filtered = data;
 
     Object.keys(filters).forEach(filterKey => {
-      if (filters[filterKey].length > 0) {
-        if (Array.isArray(filters[filterKey])) {
-          filtered = filtered.filter(item => filters[filterKey].includes(item[filterKey]));
-        } else {
-          filtered = filtered.filter(item => item[filterKey] >= filters[filterKey].min && item[filterKey] <= filters[filterKey].max);
-        }
+      if (filters[filterKey] && filters[filterKey].length > 0) {
+        filtered = filtered.filter(item => {
+          const itemValue = item[filterKey];
+
+          if (Array.isArray(filters[filterKey])) {
+            return filters[filterKey].includes(itemValue);
+          }
+
+          if (filters[filterKey].min !== undefined && filters[filterKey].max !== undefined) {
+            return itemValue >= filters[filterKey].min && itemValue <= filters[filterKey].max;
+          }
+
+          return itemValue === filters[filterKey];
+        });
       }
     });
 
     setFilteredData(filtered);
+  };
+
+  const toggleWishlist = (id) => {
+    setWishlist(prevWishlist => {
+      const newWishlist = new Set(prevWishlist);
+      if (newWishlist.has(id)) {
+        newWishlist.delete(id);
+      } else {
+        newWishlist.add(id);
+      }
+      return newWishlist;
+    });
+  };
+
+  const toggleAllWishlist = () => {
+    if (wishlist.size === filteredData.length) {
+      setWishlist(new Set());
+    } else {
+      setWishlist(new Set(filteredData.map(row => row.id)));
+    }
   };
 
   const {
@@ -55,7 +132,7 @@ const GenericTable = ({ data, columns, filtersConfig, headerTitle }) => {
     allColumns,
     setHiddenColumns,
     state: { pageIndex, pageSize },
-    page,
+    page: currentPage,
     gotoPage,
     previousPage,
     nextPage,
@@ -104,12 +181,18 @@ const GenericTable = ({ data, columns, filtersConfig, headerTitle }) => {
 
   return (
     <div className="allotments-container">
-      <FilterSection showFilters={showFilters} toggleFilters={toggleFilters} filters={filters} setFilters={setFilters} data={data} />
+      <FilterSection
+        showFilters={showFilters}
+        toggleFilters={toggleFilters}
+        filters={filters}
+        setFilters={setFilters}
+        data={data}
+        filterOptions={filterOptions}
+        loading={filterLoading}
+        getFilterParamName={getFilterParamName} // Pass this function to FilterSection
+      />
       <div className={`results-section ${showFilters ? "" : "full-width"}`}>
-        <button
-          className={`show-filters-btn ${showFilters ? "hidden" : ""}`}
-          onClick={toggleFilters} id='view-btn'
-        >
+        <button className={`show-filters-btn ${showFilters ? "hidden" : ""}`} onClick={toggleFilters} id='view-btn'>
           <i className="bi bi-funnel"></i> All Filters
         </button>
         <div className="table-container">
@@ -124,29 +207,46 @@ const GenericTable = ({ data, columns, filtersConfig, headerTitle }) => {
               <thead>
                 {headerGroups.map((headerGroup) => (
                   <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
-                    {headerGroup.headers.map((column) => (
-                      <th key={column.id} {...column.getHeaderProps(column.getSortByToggleProps())}>
-                        {column.render('Header')}
-                        <span>
-                          {column.isSorted
-                            ? column.isSortedDesc
-                              ? ' 🔽'
-                              : ' 🔼'
-                            : ''}
-                        </span>
-                      </th>
-                    ))}
+                    <th>
+                      <FaHeart
+                        onClick={toggleAllWishlist}
+                        style={{ color: wishlist.size === filteredData.length ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5em' }}
+                      />
+                    </th>
+                    {headerGroup.headers.map((column) => {
+                      const { key, ...rest } = column.getHeaderProps(column.getSortByToggleProps());
+                      return (
+                        <th key={key} {...rest}>
+                          {column.render('Header')}
+                          <span>
+                            {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
+                          </span>
+                        </th>
+                      );
+                    })}
                   </tr>
                 ))}
               </thead>
               <tbody {...getTableBodyProps()}>
-                {page.map((row) => {
+                {currentPage.map((row) => {
                   prepareRow(row);
                   return (
                     <tr key={row.id} {...row.getRowProps()} onClick={() => handleRowClick(row)}>
-                      {row.cells.map((cell) => (
-                        <td key={cell.id} {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                      ))}
+                      <td>
+                        <FaHeart
+                          onClick={(e) => {
+                            e.stopPropagation(); // prevent row click
+                            toggleWishlist(row.original.id);
+                          }}
+                          style={{ color: wishlist.has(row.original.id) ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5em' }}
+                        />
+                      </td>
+                      {row.cells.map((cell) => {
+                        const { key, ...rest } = cell.getCellProps();
+                        return (
+                          <td key={key} {...rest}>{cell.render('Cell')}</td>
+                        );
+                      })}
                     </tr>
                   );
                 })}
@@ -215,9 +315,10 @@ const GenericTable = ({ data, columns, filtersConfig, headerTitle }) => {
           </Button>
         </Modal.Footer>
       </Modal>
+
       <Modal show={showRowModal} onHide={() => setShowRowModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Row Data</Modal.Title>
+          <Modal.Title>Row Details</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {selectedRowData && (

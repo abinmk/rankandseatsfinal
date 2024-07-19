@@ -1,4 +1,3 @@
-// x// controllers/filtersController.js
 // const mongoose = require('mongoose');
 
 // exports.getFilterOptions = async (req, res) => {

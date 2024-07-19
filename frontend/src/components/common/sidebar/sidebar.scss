@@ -1,47 +1,70 @@
-// Increase header size and add styles for selected menu item
+/* Increase header size and add styles for selected menu item */
 .category-name {
-    font-size: 1.2rem; // Increase font size
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 0.5rem;
+  font-size: 1.3rem !important; /* Increase font size */
+  font-weight: bold !important;
+  color: #333 !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.side-menu__item {
+  font-size: 1.1rem !important; /* Increase font size */
+  padding: 0.85rem 1.1rem !important; /* Adjust padding */
+  color: #555 !important;
+  display: flex !important;
+  align-items: center !important;
+  transition: background-color 0.3s, color 0.3s !important;
+
+  &.active {
+      color: #007bff !important; /* Change text color for active item */
+
   }
-  
-  .side-menu__item {
-    font-size: 1rem;
-    padding: 0.75rem 1rem;
-    color: #555;
-  
-    &.active {
-      background-color: #f0f0f0; // Change background color for active item
-      color: #007bff; // Change text color for active item
-      border-left: 4px solid #007bff; // Add left border for active item
-    }
-  
-    &:hover {
-      background-color: #e0e0e0; // Change background color on hover
-    }
+  &:hover {
+    color: #007bff !important; /* Change text color for active item */
   }
-  
-  .side-menu__icon {
-    margin-right: 0.5rem;
-    font-size: 1.25rem; // Increase icon size
+}
+
+.side-menu__icon {
+  margin-right: .5rem !important;
+  font-size: 1.2rem !important; /* Increase icon size */
+  display: flex !important;
+  align-items: center !important;
+  &.active {
+    color: #007bff !important; /* Change text color for active item */
   }
-  
-  .side-menu__label {
-    flex-grow: 1;
-  }
-  
-  .main-menu-container {
-    .main-menu {
+
+&:hover {
+  color: #007bff !important; /* Change text color for active item */
+}
+}
+
+.side-menu__label {
+  flex-grow: 1 !important;
+  font-size: 1.1rem !important; /* Increase label font size */
+  display: flex !important;
+  align-items: center !important;
+}
+
+.main-menu-container {
+  .main-menu {
       .slide__category {
-        padding: 1rem 1rem 0.5rem; // Adjust padding
+          padding: 1.1rem 1.1rem 0.6rem !important; /* Adjust padding */
       }
-  
+
       .slide {
-        &.has-sub > .side-menu__item {
-          font-weight: 600;
-        }
+          &.has-sub > .side-menu__item {
+              font-weight: 600 !important;
+          }
       }
-    }
   }
-  
+}
+
+.main-menu .side-menu__item {
+  font-size: 19px !important; /* Increase the font size */
+  padding: 16px 21px !important; /* Increase padding */
+  color: #131575 !important; /* Set color to black or your preferred color */
+}
+
+.main-menu .side-menu__item.active {
+  font-size: 24px !important; /* Increase font size */
+  color:  #007bff !important; /* Add a left border to the active item */
+}

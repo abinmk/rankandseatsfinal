@@ -10,6 +10,8 @@ import logo4 from "../../../assets/images/brand-logos/toggle-dark.png";
 import SimpleBar from "simplebar-react";
 import { MENUITEMS } from "./sidemenu";
 import Menuloop from "./menuloop";
+import "./sidebar.scss"; // Ensure you have this import for the CSS file
+
 
 const Sidebar = ({ local_varaiable, ThemeChanger }) => {
 	const [menuitems, setMenuitems] = useState(MENUITEMS);

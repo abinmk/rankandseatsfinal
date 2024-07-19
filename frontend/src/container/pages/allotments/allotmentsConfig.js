@@ -1,23 +1,4 @@
-export const allotmentsData = Array.from({ length: 100 }, (_, index) => ({
-  id: index,
-  state: ["Andaman and Nicobar Islands", "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar"][index % 5],
-  instituteName: `Institute ${String.fromCharCode(65 + (index % 26))}`,
-  instituteType: ["Private", "Government"][index % 2],
-  universityName: `University ${String.fromCharCode(65 + (index % 10))}`,
-  course: `Course ${String.fromCharCode(88 + (index % 3))}`,
-  courseType: ["Full-time", "Part-time"][index % 2],
-  courseCategory: ["Category 1", "Category 2", "Category 3"][index % 3],
-  degreeType: ["Degree 1", "Degree 2", "Degree 3"][index % 3],
-  courseFees: `${(index + 1) * 1000}`,
-  quota: ["All India", "State Quota", "Management Quota"][index % 3],
-  year: 2020 + (index % 5),
-  round: `R${index % 4 + 1}`,
-  category: ["GEN", "OBC", "SC", "ST", "EWS", "PWD"][index % 6],
-  bond: `${index * 2}-${index * 3}`,
-  bondPenalty: `${index * 5}-${index * 10}`,
-  beds: `${index * 10} beds`,
-  rank: `${index * 5}-${(index + 1) * 5}`,
-}));
+
 
 export const allotmentsColumns = [
   {
@@ -26,7 +7,7 @@ export const allotmentsColumns = [
   },
   {
     Header: 'Institute',
-    accessor: 'instituteName',
+    accessor: 'allottedInstitute',
   },
   {
     Header: 'Institute Type',
@@ -54,11 +35,11 @@ export const allotmentsColumns = [
   },
   {
     Header: 'Course Fees',
-    accessor: 'courseFees',
+    accessor: 'feeAmount',
   },
   {
     Header: 'Quota',
-    accessor: 'quota',
+    accessor: 'allottedQuota',
   },
   {
     Header: 'Year',
@@ -70,19 +51,19 @@ export const allotmentsColumns = [
   },
   {
     Header: 'Category',
-    accessor: 'category',
+    accessor: 'candidateCategory',
   },
   {
     Header: 'Bond',
-    accessor: 'bond',
+    accessor: 'bondYear',
   },
   {
     Header: 'Bond Penalty',
-    accessor: 'bondPenalty',
+    accessor: 'bondPenality',
   },
   {
     Header: 'Beds',
-    accessor: 'beds',
+    accessor: 'totalHospitalBeds',
   },
   {
     Header: 'Rank',

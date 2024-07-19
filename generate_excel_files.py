@@ -32,21 +32,26 @@ colleges_data = {
 
 # Sample data for courses with the specified columns
 courses_data = {
-    'College Name': ['Seth GS, MUMBAI', 'PGIMER, DR. RML Hospital', 'KEM Hospital, PUNE', 'AIIMS, New Delhi'],
-    'Course Code': ['RD101', 'GM102', 'OR103', 'SU104'],
-    'Course Name': ['RADIO DIAGNOSIS', 'GENERAL MEDICINE', 'ORTHOPEDICS', 'SURGERY'],
-    'Duration': ['3 years', '3 years', '3 years', '3 years'],
-    'Course Category': ['Medical', 'Medical', 'Medical', 'Medical'],
-    'Course Type': ['Full-time', 'Full-time', 'Full-time', 'Full-time'],
-    'Degree Type': ['MD', 'MD', 'MD', 'MD'],
-    'Description': ['Radiology course', 'General Medicine course', 'Orthopedics course', 'Surgery course']
+    'slNo': [1, 2, 3, 4],
+    'courseName': ['RADIO DIAGNOSIS', 'GENERAL MEDICINE', 'ORTHOPEDICS', 'SURGERY'],
+    'duration': ['3 years', '3 years', '3 years', '3 years'],
+    'clinicalType': ['Clinical', 'Clinical', 'Clinical', 'Clinical'],
+    'degreeType': ['MD', 'MD', 'MD', 'MD'],
+    'courseType': ['Full-time', 'Full-time', 'Full-time', 'Full-time'],
 }
 
 # Sample data for fees with the specified columns
 fees_data = {
     'College Name': ['Seth GS, MUMBAI', 'PGIMER, DR. RML Hospital', 'KEM Hospital, PUNE', 'AIIMS, New Delhi'],
     'Course Name': ['RADIO DIAGNOSIS', 'GENERAL MEDICINE', 'ORTHOPEDICS', 'SURGERY'],
-        'Fee Amount': ['50000', '60000', '55000', '65000']
+    'Fee Amount': [50000, 60000, 55000, 65000],
+    'NRI Fee': [100000, 120000, 110000, 130000],
+    'Stipend Year 1': [20000, 22000, 21000, 23000],
+    'Stipend Year 2': [25000, 27000, 26000, 28000],
+    'Stipend Year 3': [30000, 32000, 31000, 33000],
+    'Bond Year': [2, 3, 2, 3],
+    'Bond Penalty': [200000, 300000, 250000, 350000],
+    'Seat Leaving Penalty': [100000, 150000, 120000, 170000]
 }
 
 # Creating DataFrames
@@ -62,4 +67,3 @@ courses_df.to_excel('courses_sample.xlsx', index=False, sheet_name='Sheet1')
 fees_df.to_excel('fees_sample.xlsx', index=False, sheet_name='Sheet6')
 
 print("Files generated successfully")
-

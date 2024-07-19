@@ -4,7 +4,7 @@ import FilterItem from './FilterItem';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './FilterSection.scss';
 
-const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, data }) => {
+const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, filterOptions, getFilterParamName }) => {
   const [showModal, setShowModal] = useState(false);
   const [modalFilterName, setModalFilterName] = useState('');
   const [filterCount, setFilterCount] = useState(0);
@@ -14,10 +14,11 @@ const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, data }
   }, [filters]);
 
   const handleFilterChange = (value, checked, filterName) => {
+    const filterParamName = getFilterParamName(filterName);
     setFilters(prevFilters => {
-      const prevValues = prevFilters[filterName] || [];
+      const prevValues = prevFilters[filterParamName] || [];
       const newValues = checked ? [...prevValues, value] : prevValues.filter(v => v !== value);
-      return { ...prevFilters, [filterName]: newValues };
+      return { ...prevFilters, [filterParamName]: newValues };
     });
   };
 
@@ -32,14 +33,6 @@ const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, data }
     setShowModal(true);
   };
 
-  const getUniqueOptions = (key) => {
-    return Array.from(new Set(data.map(item => item[key])));
-  };
-
-  const limitedOptions = (options) => {
-    return options.slice(0, 6);
-  };
-
   return (
     <div className={`filters-section ${showFilters ? 'show' : 'hide'}`}>
       <div className="filters-header">
@@ -50,123 +43,18 @@ const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, data }
       </div>
       <Form>
         <Accordion defaultActiveKey={['0']} alwaysOpen>
-          <FilterItem
-            eventKey="0"
-            title="State"
-            options={limitedOptions(getUniqueOptions('state'))}
-            filterName="state"
-            filters={filters}
-            handleFilterChange={handleFilterChange}
-            handleModalShow={handleModalShow}
-          />
-          <FilterItem
-            eventKey="1"
-            title="Institute"
-            options={limitedOptions(getUniqueOptions('allottedInstitute'))}
-            filterName="allottedInstitute"
-            filters={filters}
-            handleFilterChange={handleFilterChange}
-            handleModalShow={handleModalShow}
-          />
-          <FilterItem
-            eventKey="2"
-            title="Institute Type"
-            options={limitedOptions(getUniqueOptions('instituteType'))}
-            filterName="instituteType"
-            filters={filters}
-            handleFilterChange={handleFilterChange}
-            handleModalShow={handleModalShow}
-          />
-          <FilterItem
-            eventKey="3"
-            title="University"
-            options={limitedOptions(getUniqueOptions('universityName'))}
-            filterName="universityName"
-            filters={filters}
-            handleFilterChange={handleFilterChange}
-            handleModalShow={handleModalShow}
-          />
-          <FilterItem
-            eventKey="4"
-            title="Course"
-            options={limitedOptions(getUniqueOptions('course'))}
-            filterName="course"
-            filters={filters}
-            handleFilterChange={handleFilterChange}
-            handleModalShow={handleModalShow}
-          />
-          <FilterItem
-            eventKey="5"
-            title="Course Type"
-            options={limitedOptions(getUniqueOptions('courseType'))}
-            filterName="courseType"
-            filters={filters}
-            handleFilterChange={handleFilterChange}
-            handleModalShow={handleModalShow}
-          />
-          <FilterItem
-            eventKey="6"
-            title="Course Category"
-            options={limitedOptions(getUniqueOptions('courseCategory'))}
-            filterName="courseCategory"
-            filters={filters}
-            handleFilterChange={handleFilterChange}
-            handleModalShow={handleModalShow}
-          />
-          <FilterItem
-            eventKey="7"
-            title="Degree Type"
-            options={limitedOptions(getUniqueOptions('degreeType'))}
-            filterName="degreeType"
-            filters={filters}
-            handleFilterChange={handleFilterChange}
-            handleModalShow={handleModalShow}
-          />
-          <FilterItem
-            eventKey="8"
-            title="Course Fees"
-            options={limitedOptions(getUniqueOptions('courseFees'))}
-            filterName="courseFees"
-            filters={filters}
-            handleFilterChange={handleFilterChange}
-            handleModalShow={handleModalShow}
-          />
-          <FilterItem
-            eventKey="9"
-            title="Quota"
-            options={limitedOptions(getUniqueOptions('allottedQuota'))}
-            filterName="allottedQuota"
-            filters={filters}
-            handleFilterChange={handleFilterChange}
-            handleModalShow={handleModalShow}
-          />
-          <FilterItem
-            eventKey="10"
-            title="Year"
-            options={limitedOptions(getUniqueOptions('year'))}
-            filterName="year"
-            filters={filters}
-            handleFilterChange={handleFilterChange}
-            handleModalShow={handleModalShow}
-          />
-          <FilterItem
-            eventKey="11"
-            title="Round"
-            options={limitedOptions(getUniqueOptions('round'))}
-            filterName="round"
-            filters={filters}
-            handleFilterChange={handleFilterChange}
-            handleModalShow={handleModalShow}
-          />
-          <FilterItem
-            eventKey="12"
-            title="Category"
-            options={limitedOptions(getUniqueOptions('allottedCategory'))}
-            filterName="allottedCategory"
-            filters={filters}
-            handleFilterChange={handleFilterChange}
-            handleModalShow={handleModalShow}
-          />
+          {Object.keys(filterOptions).map((filterName, index) => (
+            <FilterItem
+              key={filterName}
+              eventKey={index.toString()}
+              title={filterName.charAt(0).toUpperCase() + filterName.slice(1).replace(/([A-Z])/g, ' $1')}
+              options={filterOptions[filterName]} // Show all options
+              filterName={filterName}
+              filters={filters}
+              handleFilterChange={handleFilterChange}
+              handleModalShow={handleModalShow}
+            />
+          ))}
         </Accordion>
         <Form.Group controlId="filterRank" className="filter-item">
           <Form.Label className="filter-label">Rank</Form.Label>
@@ -176,7 +64,7 @@ const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, data }
             min="0"
             max="1000"
             value={filters.rank || 0}
-            onChange={(e) => handleFilterChange(e, 'rank')}
+            onChange={(e) => handleFilterChange(e.target.value, true, 'rank')}
           />
           <div className="range-inputs">
             <Form.Control
@@ -184,7 +72,7 @@ const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, data }
               min="0"
               max="1000"
               value={filters.rank || 0}
-              onChange={(e) => handleFilterChange(e, 'rank')}
+              onChange={(e) => handleFilterChange(e.target.value, true, 'rank')}
             />
           </div>
         </Form.Group>
@@ -195,13 +83,13 @@ const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, data }
               type="number"
               placeholder="Min"
               value={filters.bondFrom || ''}
-              onChange={(e) => handleFilterChange(e, 'bondFrom')}
+              onChange={(e) => handleFilterChange(e.target.value, true, 'bondFrom')}
             />
             <Form.Control
               type="number"
               placeholder="Max"
               value={filters.bondTo || ''}
-              onChange={(e) => handleFilterChange(e, 'bondTo')}
+              onChange={(e) => handleFilterChange(e.target.value, true, 'bondTo')}
             />
           </div>
         </Form.Group>
@@ -212,13 +100,13 @@ const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, data }
               type="number"
               placeholder="Min"
               value={filters.bondPenaltyFrom || ''}
-              onChange={(e) => handleFilterChange(e, 'bondPenaltyFrom')}
+              onChange={(e) => handleFilterChange(e.target.value, true, 'bondPenaltyFrom')}
             />
             <Form.Control
               type="number"
               placeholder="Max"
               value={filters.bondPenaltyTo || ''}
-              onChange={(e) => handleFilterChange(e, 'bondPenaltyTo')}
+              onChange={(e) => handleFilterChange(e.target.value, true, 'bondPenaltyTo')}
             />
           </div>
         </Form.Group>
@@ -230,7 +118,7 @@ const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, data }
             min="0"
             max="1000"
             value={filters.beds || 0}
-            onChange={(e) => handleFilterChange(e, 'beds')}
+            onChange={(e) => handleFilterChange(e.target.value, true, 'beds')}
           />
           <div className="range-inputs">
             <Form.Control
@@ -238,7 +126,7 @@ const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, data }
               min="0"
               max="1000"
               value={filters.beds || 0}
-              onChange={(e) => handleFilterChange(e, 'beds')}
+              onChange={(e) => handleFilterChange(e.target.value, true, 'beds')}
             />
           </div>
         </Form.Group>
@@ -251,7 +139,7 @@ const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, data }
           {modalFilterName && (
             <FilterItem
               title={modalFilterName}
-              options={getUniqueOptions(modalFilterName)}
+              options={filterOptions[modalFilterName]}
               filterName={modalFilterName}
               filters={filters}
               handleFilterChange={handleFilterChange}

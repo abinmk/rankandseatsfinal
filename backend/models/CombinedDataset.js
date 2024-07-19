@@ -10,9 +10,18 @@ const CombinedDatasetSchema = new mongoose.Schema({
   course: String,
   allottedCategory: String,
   candidateCategory: String,
-  collegeDetails: Object,
-  courseDetails: Object,
-  feeDetails: Object,
+  collegeDetails: {
+    type: Object,
+    default: {}
+  },
+  courseDetails: {
+    type: Object,
+    default: {}
+  },
+  feeDetails: {
+    type: Object,
+    default: {}
+  },
 }, { strict: false });
 
 module.exports = mongoose.model('CombinedDataset', CombinedDatasetSchema);

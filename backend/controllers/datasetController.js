@@ -119,6 +119,7 @@ exports.uploadCollege = (req, res) => {
 };
 
 // Upload Courses
+// Upload Courses
 exports.uploadCourse = (req, res) => {
   upload(req, res, function (err) {
     if (err instanceof multer.MulterError || err) {
@@ -130,14 +131,12 @@ exports.uploadCourse = (req, res) => {
     readExcelFile(filePath).then((rows) => {
       rows.shift(); // Remove header row
       const courses = rows.map((row) => ({
-        collegeName: row[0],
-        courseCode: row[1],
-        courseName: row[2],
-        duration: row[3],
-        courseCategory: row[4],
+        slNo: row[0],
+        courseName: row[1],
+        duration: row[2],
+        clinicalType: row[3],
+        degreeType: row[4],
         courseType: row[5],
-        degreeType: row[6],
-        description: row[7]
       }));
 
       Course.insertMany(courses)
@@ -152,6 +151,7 @@ exports.uploadCourse = (req, res) => {
     });
   });
 };
+
 
 // Upload Fees
 exports.uploadFee = (req, res) => {
@@ -169,7 +169,15 @@ exports.uploadFee = (req, res) => {
       const fees = rows.map((row) => ({
         collegeName: row[0],
         courseName: row[1],
-        feeAmount: row[2],
+        noOfSeats: row[2],
+        courseFee: row[3],
+        nriFee: row[4],
+        stipendYear1: row[5],
+        stipendYear2: row[6],
+        stipendYear3: row[7],
+        bondYear: row[8],
+        bondPenality: row[9],
+        seatLeavingPenality:row[10]
       }));
 
       Fee.insertMany(fees)
@@ -284,7 +292,14 @@ exports.generateCombinedDataset = async (req, res) => {
         courseType: course?.courseType,
         courseCategory: course?.courseCategory,
         degreeType: course?.degreeType,
-        feeAmount: fee?.feeAmount,
+        feeAmount: fee?.courseFee,  // Assuming feeAmount is courseFee from Fee model
+        nriFee: fee?.nriFee,  // Adding NRI Fee
+        stipendYear1: fee?.stipendYear1,
+        stipendYear2: fee?.stipendYear2,
+        stipendYear3: fee?.stipendYear3,
+        bondYear: fee?.bondYear,
+        bondPenality: fee?.bondPenality,
+        seatLeavingPenality: fee?.seatLeavingPenality,
         description: course?.description,
       };
     });
@@ -309,6 +324,7 @@ exports.generateCombinedDataset = async (req, res) => {
     res.status(500).send('Failed to generate combined dataset.');
   }
 };
+
 
 // List Available Allotments
 exports.listAvailableAllotments = async (req, res) => {

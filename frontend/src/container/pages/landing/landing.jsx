@@ -53,16 +53,6 @@ const Landing = () => {
 		return () => window.removeEventListener("resize", handleResize);
 	}, []);
 
-	function handleClick1() {
-		const theme = store.getState();
-		ThemeChanger({ ...theme, "toggled": "open", "dataNavLayout": "horizontal" });
-		ThemeChanger({ ...theme, "toggled": "close", "dataNavLayout": "horizontal" });
-
-		if (document.querySelector(".offcanvas-end")?.classList.contains("show")) {
-			document.querySelector(".offcanvas-end")?.classList.remove("show");
-		}
-	}
-
 	useEffect(() => {
 		const rootDiv = document.getElementById("root");
 		if (rootDiv) {
@@ -277,31 +267,105 @@ const Landing = () => {
 								<img src={landing4} alt="img" className="banner-png2" />
 								<img src={landing6} alt="img" className="banner-png3" />
 								<div className="row justify-content-center">
-									<div className="col-xxl-9 col-xl-8 col-lg-12 col-md-12">
-										<div className="py-lg-5 text-center">
-											<p className="landing-banner-heading text-fixed-white mb-1">Best theme ends here with <span className="">Velvet !</span></p>
-											<div className="fs-16 mb-4 text-fixed-white op-8 px-4">Velvet - Now you can use this admin template to design stunning, good and well well-structured dashboards that will wow your target viewers or users to no end.</div>
-											<Link to={`${import.meta.env.BASE_URL}dashboards/sales`} className="m-1 btn btn-lg btn-success" target="_blank"> Get Started <i className="ri-arrow-right-line ms-2 align-middle"></i> </Link>
-											<Link to={`${import.meta.env.BASE_URL}dashboards/sales`} className="m-1 btn btn-lg btn-light" target="_blank"> View Demos <i className="ri-eye-line ms-2 align-middle"></i> </Link>
-										</div>
+								<div className="col-xxl-9 col-xl-8 col-lg-12 col-md-12">
+									<div className="py-lg-5 text-center">
+										<p className="landing-banner-heading text-fixed-white mb-1">Achieve your dreams with <span className="">us!</span></p>
+										<div className="fs-16 mb-4 text-fixed-white op-8 px-4">Your gateway to accurate rankings and seat allotments</div>
+										<Link to={`${import.meta.env.BASE_URL}rankings`} className="m-1 btn btn-lg btn-success" target="_blank"> Explore Rankings <i className="ri-arrow-right-line ms-2 align-middle"></i> </Link>
+										<Link to={`${import.meta.env.BASE_URL}seat-allotments`} className="m-1 btn btn-lg btn-light" target="_blank"> View Seat Allotments <i className="ri-eye-line ms-2 align-middle"></i> </Link>
 									</div>
 								</div>
 							</div>
+							</div>
 						</section>
 					</div>
+					<section className="section section-background section-style" id="exam-prep">
+    <div className="container text-center">
+        <p className="fs-12 fw-semibold text-primary mb-1"><span className="landing-section-heading">PREPARE WITH US</span></p>
+        <h4 className="fw-semibold mb-2">Your Path to Success Starts Here</h4>
+        <div className="row justify-content-center">
+            <Col xl={6}>
+                <p className="text-muted fs-15 mb-5 fw-normal">Our consultancy provides unparalleled support to help you navigate your exam preparations. Explore our specialized support services for each exam category below.</p>
+            </Col>
+        </div>
+        <div className="row justify-content-center">
+            <Col xl={3} lg={4} md={6} sm={12} className="mb-3">
+                <div className="card custom-card text-center border">
+                    <Card.Body>
+                        <div className="features-icon mb-2 m-auto bg-primary-transparent">
+                            <i className="bx bx-book fs-24 text-primary animate__animated animate__bounce"></i>
+                        </div>
+                        <h6 className="fw-semibold">NEET PG</h6>
+                        <p className="text-muted">Benefit from our expert support and guidance tailored for NEET PG aspirants.</p>
+                        <Button variant="primary" size="lg" className="w-100 animate__animated animate__pulse">Get Support for NEET PG</Button>
+                    </Card.Body>
+                </div>
+            </Col>
+            <Col xl={3} lg={4} md={6} sm={12} className="mb-3">
+                <div className="card custom-card text-center border">
+                    <Card.Body>
+                        <div className="features-icon mb-2 m-auto bg-success-transparent">
+                            <i className="bx bx-medal fs-24 text-success animate__animated animate__shakeY"></i>
+                        </div>
+                        <h6 className="fw-semibold">NEET SS</h6>
+                        <p className="text-muted">Get the right support and guidance you need to succeed in NEET SS.</p>
+                        <Button variant="success" size="lg" className="w-100 animate__animated animate__pulse">Get Support for NEET SS</Button>
+                    </Card.Body>
+                </div>
+            </Col>
+            <Col xl={3} lg={4} md={6} sm={12} className="mb-3">
+                <div className="card custom-card text-center border">
+                    <Card.Body>
+                        <div className="features-icon mb-2 m-auto bg-info-transparent">
+                            <i className="bx bx-trophy fs-24 text-info animate__animated animate__rubberBand"></i>
+                        </div>
+                        <h6 className="fw-semibold">INI CET</h6>
+                        <p className="text-muted">Leverage our expertise to navigate your INI CET preparations with confidence.</p>
+                        <Button variant="info" size="lg" className="w-100 animate__animated animate__pulse">Get Support for INI CET</Button>
+                    </Card.Body>
+                </div>
+            </Col>
+        </div>
+    </div>
+</section>
+
+
+					{/* <section className="section section-background section-style" id="exam-categories">
+    <div className="container text-center">
+        <p className="fs-12 fw-semibold text-primary mb-1"><span className="landing-section-heading">EXAM CATEGORIES</span></p>
+        <h4 className="fw-semibold mb-2">Choose Your Exam Category</h4>
+        <div className="row justify-content-center">
+            <Col xl={6}>
+                <p className="text-muted fs-15 mb-5 fw-normal">Select the category of exams to explore resources, guidance, and support tailored to your needs.</p>
+            </Col>
+        </div>
+        <div className="row justify-content-center">
+            <Col xl={3} lg={4} md={6} sm={12} className="mb-3">
+                <Button variant="primary" size="lg" className="w-100 mb-2">NEET PG</Button>
+            </Col>
+            <Col xl={3} lg={4} md={6} sm={12} className="mb-3">
+                <Button variant="success" size="lg" className="w-100 mb-2">NEET SS</Button>
+            </Col>
+            <Col xl={3} lg={4} md={6} sm={12} className="mb-3">
+                <Button variant="info" size="lg" className="w-100 mb-2">INI CET</Button>
+            </Col>
+        </div>
+    </div>
+</section> */}
+
 					<section className="section section-background section-style " id="features">
 						<div className="container text-center">
 							<p className="fs-12 fw-semibold text-primary mb-1"><span className="landing-section-heading">FEATURES</span></p>
-							<h4 className="fw-semibold mb-2">Velvet is packed with many advanced features.</h4>
+							<h4 className="fw-semibold mb-2">Our consultancy offers numerous advanced features.</h4>
 							<div className="row justify-content-center">
 								<Col xl={6}>
-									<p className="text-muted fs-15 mb-5 fw-normal">Most advanced features in Velvet along with only javascript dependability and zeo jquery boosts the performance of your project.</p>
+									<p className="text-muted fs-15 mb-5 fw-normal">Our services include the most advanced features to enhance your educational journey, ensuring optimal performance and success.</p>
 								</Col>
 							</div>
 							<div className="row text-start">
 								<div className="col-12 col-md-3">
 									<div className="card custom-card card-style-angle border">
-										<div className="card-body rounded m-2  text-center">
+										<div className="card-body rounded m-2 text-center">
 											<div className="features-icon m-auto mb-2 bg-primary-transparent">
 												<svg className="svg-primary shadow-lg" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 24 24">
 													<path
@@ -311,17 +375,17 @@ const Landing = () => {
 												</svg>
 											</div>
 											<h6 className="fw-semibold mx-1">
-												Quality &amp; Clean Code
+												Expert Guidance
 											</h6>
 											<p className="text-muted mb-2 mx-1">
-												In Velvet code is maintained very clean and well-structured &amp; Properly Commented.
+												Our team provides expert guidance to help you navigate your educational journey.
 											</p>
 											<Link className="fs-12 mx-1 text-primary" to="#">Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
 										</div>
 									</div>
 								</div>
 								<div className="col-12 col-md-3">
-									<div className="card custom-card border card-style-angle ">
+									<div className="card custom-card border card-style-angle">
 										<div className="card-body text-center rounded m-2">
 											<div className="features-icon mb-2 m-auto bg-secondary-transparent">
 												<svg className="svg-secondary shadow-lg" xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 24 24" viewBox="0 0 24 24">
@@ -332,19 +396,19 @@ const Landing = () => {
 												</svg>
 											</div>
 											<h6 className="fw-semibold mx-1">
-												Multiple Demos
+												Personalized Support
 											</h6>
 											<p className="text-muted mb-2 mx-1">
-												We included multiple demos to give a quick overview of our Velvet admin template..
+												Receive tailored guidance and support to navigate your educational journey.
 											</p>
 											<Link className="fs-12 mx-1 text-primary" to="#">Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
 										</div>
 									</div>
 								</div>
 								<div className="col-12 col-md-3">
-									<div className="card custom-card card-style-angle   border">
+									<div className="card custom-card card-style-angle border">
 										<div className="card-body text-center rounded m-2">
-											<div className="features-icon mb-2 m-auto  bg-warning-transparent">
+											<div className="features-icon mb-2 m-auto bg-warning-transparent">
 												<svg className="svg-warning shadow-lg" xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 24 24" viewBox="0 0 24 24">
 													<path
 														d="M16,11H8c-0.55197,0.00031-0.99969-0.44689-1-0.99886C7,10.00076,7,10.00038,7,10V6C6.99969,5.44803,7.44689,5.00031,7.99886,5C7.99924,5,7.99962,5,8,5h8c0.55197-0.00031,0.99969,0.44689,1,0.99886C17,5.99924,17,5.99962,17,6v4c0.00031,0.55197-0.44689,0.99969-0.99886,1C16.00076,11,16.00038,11,16,11z" />
@@ -359,10 +423,10 @@ const Landing = () => {
 												</svg>
 											</div>
 											<h6 className="fw-semibold mx-1">
-												React Bootstrap Framework
+												Responsive Design
 											</h6>
 											<p className="text-muted mb-2 mx-1">
-												Thanks to the  React Bootstrap  framework, because it gives us the ability to create responsive designs.
+												Our platform is built with a responsive design to ensure a seamless experience across all devices.
 											</p>
 											<Link className="fs-12 mx-1 text-primary" to="#">Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
 										</div>
@@ -370,7 +434,7 @@ const Landing = () => {
 								</div>
 								<div className="col-12 col-md-3">
 									<div className="card custom-card card-style-angle border">
-										<div className="card-body text-center  rounded m-2">
+										<div className="card-body text-center rounded m-2">
 											<div className="features-icon mb-2 m-auto bg-info-transparent">
 												<svg className="svg-info shadow-lg" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 24 24">
 													<path opacity=".3"
@@ -382,17 +446,17 @@ const Landing = () => {
 												</svg>
 											</div>
 											<h6 className="fw-semibold mx-1">
-												6 types of Icons
+												Diverse Resources
 											</h6>
 											<p className="text-muted mb-2 mx-1">
-												More than 4 types of best Icons are included in this template to enhance design standards.
+												Access a wide variety of resources to support your educational journey and success.
 											</p>
 											<Link className="fs-12 mx-1 text-primary" to="#">Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
 										</div>
 									</div>
 								</div>
 								<div className="col-12 col-md-3">
-									<div className="card custom-card  card-style-angle border">
+									<div className="card custom-card card-style-angle border">
 										<div className="card-body text-center rounded m-2">
 											<div className="features-icon mb-2 m-auto bg-pink-transparent">
 												<svg className="svg-pink shadow-lg" xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 24 24" viewBox="0 0 24 24">
@@ -405,17 +469,17 @@ const Landing = () => {
 												</svg>
 											</div>
 											<h6 className="fw-semibold mx-1">
-												Advanced Pages
+												Comprehensive Resources
 											</h6>
 											<p className="text-muted mb-2 mx-1">
-												More advanced pages are included in this template for easy development adn customization.
+												Access a wide range of resources and tools to support your educational journey and success.
 											</p>
 											<Link className="fs-12 mx-1 text-primary" to="#">Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
 										</div>
 									</div>
 								</div>
 								<div className="col-12 col-md-3">
-									<div className="card custom-card  card-style-angle  border">
+									<div className="card custom-card card-style-angle border">
 										<div className="card-body text-center rounded m-2">
 											<div className="features-icon mb-2 m-auto bg-purple-transparent">
 												<svg className="svg-purple shadow-lg" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 24 24">
@@ -433,10 +497,10 @@ const Landing = () => {
 												</svg>
 											</div>
 											<h6 className="fw-semibold mx-1">
-												Built for developers
+												Built for Students
 											</h6>
 											<p className="text-muted mb-2 mx-1">
-												Variables, elements, dashbords, documentation, and reusability are additional features.
+												Our platform is designed with students in mind, offering a wealth of resources and tools.
 											</p>
 											<Link className="fs-12 mx-1 text-primary" to="#">Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
 										</div>
@@ -444,7 +508,7 @@ const Landing = () => {
 								</div>
 								<div className="col-12 col-md-3">
 									<div className="card custom-card card-style-angle border">
-										<div className="card-body text-center  rounded m-2">
+										<div className="card-body text-center rounded m-2">
 											<div className="features-icon mb-2 m-auto bg-success-transparent">
 												<svg className="svg-success shadow-lg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path opacity=".3"
@@ -454,18 +518,18 @@ const Landing = () => {
 												</svg>
 											</div>
 											<h6 className="fw-semibold mx-1">
-												Documentation
+												Detailed Documentation
 											</h6>
 											<p className="text-muted mb-2 mx-1">
-												The documentation provides clear-cut material for the Velvet admin template user can understand .
+												Our documentation provides detailed guidance to help you make the most of our services.
 											</p>
 											<Link className="fs-12 mx-1 text-primary" to="#">Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
 										</div>
 									</div>
 								</div>
 								<div className="col-12 col-md-3">
-									<div className="card custom-card card-style-angle  border">
-										<div className="card-body  text-center rounded m-2">
+									<div className="card custom-card card-style-angle border">
+										<div className="card-body text-center rounded m-2">
 											<div className="features-icon mb-2 m-auto bg-danger-transparent">
 												<svg className="svg-danger shadow-lg" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 24 24">
 													<path opacity=".3"
@@ -475,10 +539,10 @@ const Landing = () => {
 												</svg>
 											</div>
 											<h6 className="fw-semibold mx-1">
-												3 Types Of Charts
+												Comprehensive Charts
 											</h6>
 											<p className="text-muted mb-2 mx-1">
-												We included three (3) types of the best possible chart options for your project..
+												Utilize our comprehensive charts to gain insights and make informed decisions.
 											</p>
 											<Link className="fs-12 mx-1 text-primary" to="#">Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
 										</div>
@@ -491,11 +555,11 @@ const Landing = () => {
 						<img src={landing4} alt="img" className="banner-png2 op-1" />
 						<img src={landing7} alt="img" className="banner-png4" />
 						<div className="container text-center">
-							<p className="fs-12 fw-semibold text-primary mb-1"><span className="landing-section-heading">CUSTOMIZATION</span></p>
-							<h4 className="fw-semibold mb-2">Designed with precision and well documented</h4>
+							<p className="fs-12 fw-semibold text-primary mb-1"><span className="landing-section-heading">ABOUT US</span></p>
+							<h4 className="fw-semibold mb-2">Empowering Your Educational Journey</h4>
 							<div className="row justify-content-center">
 								<Col xl={6}>
-									<p className="text-muted fs-15 mb-5 fw-normal">Velvet comes with multiple customization options that are very easy to implement,some of customizable options are shown below.</p>
+									<p className="text-muted fs-15 mb-5 fw-normal">Our consultancy offers tailored solutions and support to ensure your success. Discover the range of services we provide to help you achieve your academic goals.</p>
 								</Col>
 							</div>
 							<Row>
@@ -503,15 +567,15 @@ const Landing = () => {
 									<img src={landing1} alt="" className="custmize-img" />
 								</Col>
 								<Col lg={7} className="text-start">
-									<p className="h4 mb-0"> Get to Know what we do?</p>
+									<p className="h4 mb-0"> Get to Know Us</p>
 									<p className="mb-4 sub-text">Explore our diverse range of services and gain insight into our areas of specialization.</p>
 									<ul className="list-unstyled fw-500 mb-4">
 										<li className="list-item mb-2">
 											<div className="d-flex align-items-start">
 												<span className="me-1 text-primary op-8"><i className="bx bx-radio-circle-marked fs-20"></i></span>
 												<div>
-													<h6 className="fs-15">Creative Design</h6>
-													<p className="op-8">Sed ut persp iciatis unde omnis iste natus er ror sit eaque ipsa quae ab illo inventore verit atis et quasi architecto beatae vitae dicta sunt explicabo sit</p>
+													<h6 className="fs-15">Creative Solutions</h6>
+													<p className="op-8">We provide innovative solutions tailored to your educational needs.</p>
 												</div>
 											</div>
 										</li>
@@ -519,8 +583,8 @@ const Landing = () => {
 											<div className="d-flex align-items-start">
 												<span className="me-1 text-primary op-8"><i className="bx bx-radio-circle-marked fs-20"></i></span>
 												<div>
-													<h6 className="fs-15">Quality &amp; Clean Code</h6>
-													<p className="op-8 mb-0">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium volup tatum delen iti, atque corrupti quos dolores</p>
+													<h6 className="fs-15">Quality & Clean Code</h6>
+													<p className="op-8 mb-0">Our platform is built with quality and clean code to ensure a smooth and efficient experience.</p>
 												</div>
 											</div>
 										</li>
@@ -531,35 +595,37 @@ const Landing = () => {
 							</Row>
 						</div>
 					</section>
+
+
 					<section className="section landing-Features" id="statistics">
-						<div className="container text-center position-relative  text-fixed-white">
-							<p className="fs-12 fw-semibold text-primary mb-1  text-fixed-white"><span className="landing-section-heading">STATISTICS</span></p>
-							<h4 className="fw-semibold mb-2  text-fixed-white">More than 120+ projects completed.</h4>
+						<div className="container text-center position-relative text-fixed-white">
+							<p className="fs-12 fw-semibold text-primary mb-1 text-fixed-white"><span className="landing-section-heading">STATISTICS</span></p>
+							<h4 className="fw-semibold mb-2 text-fixed-white">Helping Students Achieve Their Dreams.</h4>
 							<div className="row justify-content-center">
 								<Col xl={6}>
-									<p className="op-7 fs-15 mb-5 fw-normal  text-fixed-white">We are proud to have top class clients and customers,which motivates us to work more on projects.</p>
+									<p className="op-7 fs-15 mb-5 fw-normal text-fixed-white">We take pride in guiding thousands of students towards successful college admissions, shaping their futures with our expertise.</p>
 								</Col>
 							</div>
 							<div className="row g-4 justify-content-evenly">
 								<Col xl={2} lg={4} md={6} sm={6} className="col-12 mb-3">
 									<div className="p-3 text-center rounded-2 bg-dark-transparent">
 										<span className="mb-3 avatar avatar-lg avatar-rounded bg-dark-transparent">
-											<i className="fs-24 bx bx-spreadsheet text-fixed-white"></i>
+											<i className="fs-24 bx bx-book text-fixed-white"></i>
 										</span>
-										<h3 className="fw-semibold mb-0 text-fixed-white">120+</h3>
+										<h3 className="fw-semibold mb-0 text-fixed-white">500+</h3>
 										<p className="mb-1 fs-14 op-7 text-fixed-white">
-											Projects
+											Successful Admissions
 										</p>
 									</div>
 								</Col>
 								<Col xl={2} lg={4} md={6} sm={6} className="col-12 mb-3">
 									<div className="p-3 text-center rounded-2 bg-dark-transparent">
 										<span className="mb-3 avatar avatar-lg avatar-rounded bg-dark-transparent">
-											<i className="fs-24 bx bx-user-plus text-fixed-white"></i>
+											<i className="fs-24 bx bx-graduation text-fixed-white"></i>
 										</span>
-										<h3 className="fw-semibold mb-0 text-fixed-white">20K+</h3>
+										<h3 className="fw-semibold mb-0 text-fixed-white">10K+</h3>
 										<p className="mb-1 fs-14 op-7 text-fixed-white">
-											Clients
+											Students Guided
 										</p>
 									</div>
 								</Col>
@@ -568,9 +634,9 @@ const Landing = () => {
 										<span className="mb-3 avatar avatar-lg avatar-rounded bg-dark-transparent">
 											<i className="fs-24 bx bx-money text-fixed-white"></i>
 										</span>
-										<h3 className="fw-semibold mb-0 text-fixed-white">$45.8M</h3>
+										<h3 className="fw-semibold mb-0 text-fixed-white">$15M</h3>
 										<p className="mb-1 fs-14 op-7 text-fixed-white">
-											Income Earned
+											Scholarships Secured
 										</p>
 									</div>
 								</Col>
@@ -579,9 +645,9 @@ const Landing = () => {
 										<span className="mb-3 avatar avatar-lg avatar-rounded bg-dark-transparent">
 											<i className="fs-24 bx bx-user-circle text-fixed-white"></i>
 										</span>
-										<h3 className="fw-semibold mb-0 text-fixed-white">854</h3>
+										<h3 className="fw-semibold mb-0 text-fixed-white">150</h3>
 										<p className="mb-1 fs-14 op-7 text-fixed-white">
-											Employees
+											Partner Colleges
 										</p>
 									</div>
 								</Col>
@@ -590,22 +656,23 @@ const Landing = () => {
 										<span className="mb-3 avatar avatar-lg avatar-rounded bg-dark-transparent">
 											<i className="fs-24 bx bx-calendar text-fixed-white"></i>
 										</span>
-										<h3 className="fw-semibold mb-0 text-fixed-white">5+</h3>
+										<h3 className="fw-semibold mb-0 text-fixed-white">8+</h3>
 										<p className="mb-1 fs-14 op-7 text-fixed-white">
-											Years of Experience
+											Years of Service
 										</p>
 									</div>
 								</Col>
 							</div>
 						</div>
 					</section>
+
 					<section className="section landing-testimonials section-background section-style " id="clients">
 						<div className="container text-center">
 							<p className="fs-12 fw-semibold text-primary mb-1"><span className="landing-section-heading">OUR TEAM</span></p>
-							<h4 className="fw-semibold mb-2">Great things in business are done by a team.</h4>
+							<h4 className="fw-semibold mb-2">Empowering Students Through Teamwork</h4>
 							<div className="row justify-content-center">
 								<Col xl={6}>
-									<p className="text-muted fs-15 mb-5 fw-normal">Success is best when it shared,our team consists of highly qulified employees that works hard to raise company standards.</p>
+									<p className="text-muted fs-15 mb-5 fw-normal">Our success is built on a foundation of teamwork, with each member bringing their expertise to help students achieve their academic goals.</p>
 								</Col>
 							</div>
 
@@ -635,7 +702,7 @@ const Landing = () => {
 											</span>
 											<p className="fw-semibold fs-15 mb-0 text-default mt-4">Samantha Taylor</p>
 											<span className="text-primary fs-12">Founder &amp; CEO</span>
-											<p className="text-muted px-1 mt-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+											<p className="text-muted px-1 mt-2">Leading with vision and passion to shape the future of education consultancy.</p>
 											<div className="mt-3">
 												<div className="btn-list">
 													<Button variant="" aria-label="button" type="button" className="btn btn-icon btn-primary-light btn-wave">
@@ -660,7 +727,7 @@ const Landing = () => {
 											</span>
 											<p className="fw-semibold fs-15 mb-0 text-default mt-4">Peter Parker</p>
 											<span className="text-primary fs-12">Director</span>
-											<p className="text-muted px-1 mt-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+											<p className="text-muted px-1 mt-2">Overseeing operations to ensure the highest quality of service for our clients.</p>
 											<div className="mt-3">
 												<div className="btn-list">
 													<Button variant="" type="button" aria-label="button" className="btn btn-icon btn-primary-light btn-wave">
@@ -683,9 +750,9 @@ const Landing = () => {
 											<span className="avatar avatar-xxl avatar-rounded mb-3 team-avatar">
 												<img src={faces12} alt="" />
 											</span>
-											<p className="fw-semibold fs-15 mb-0 text-default mt-4">Andrew garfield</p>
+											<p className="fw-semibold fs-15 mb-0 text-default mt-4">Andrew Garfield</p>
 											<span className="text-primary fs-12">Manager</span>
-											<p className="text-muted px-1 mt-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+											<p className="text-muted px-1 mt-2">Ensuring smooth operations and coordinating efforts across the team.</p>
 											<div className="mt-3">
 												<div className="btn-list">
 													<Button variant="" type="button" aria-label="button" className="btn btn-icon btn-primary-light btn-wave">
@@ -710,7 +777,7 @@ const Landing = () => {
 											</span>
 											<p className="fw-semibold fs-15 mb-0 text-default mt-4">Elizabeth Rose</p>
 											<span className="text-primary fs-12">HR</span>
-											<p className="text-muted px-1 mt-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+											<p className="text-muted px-1 mt-2">Managing human resources and fostering a collaborative work environment.</p>
 											<div className="mt-3">
 												<div className="btn-list">
 													<Button variant="" type="button" aria-label="button" className="btn btn-icon btn-primary-light btn-wave">
@@ -735,7 +802,7 @@ const Landing = () => {
 											</span>
 											<p className="fw-semibold fs-15 mb-0 text-default mt-4">Stuart Benny</p>
 											<span className="text-primary fs-12">Team Lead</span>
-											<p className="text-muted px-1 mt-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+											<p className="text-muted px-1 mt-2">Leading projects and ensuring timely delivery with high standards.</p>
 											<div className="mt-3">
 												<div className="btn-list">
 													<Button variant="" type="button" aria-label="button" className="btn btn-icon btn-primary-light btn-wave">
@@ -759,8 +826,8 @@ const Landing = () => {
 												<img src={faces2} alt="" />
 											</span>
 											<p className="fw-semibold fs-15 mb-0 text-default mt-4">Sasha Banks</p>
-											<span className="text-primary fs-12">Sr UI Developer</span>
-											<p className="text-muted px-1 mt-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+											<span className="text-primary fs-12">Senior Consultant</span>
+											<p className="text-muted px-1 mt-2">Providing expert advice and personalized support to students.</p>
 											<div className="mt-3">
 												<div className="btn-list">
 													<Button variant="" type="button" aria-label="button" className="btn btn-icon btn-primary-light btn-wave">
@@ -784,8 +851,8 @@ const Landing = () => {
 												<img src={faces8} alt="" />
 											</span>
 											<p className="fw-semibold fs-15 mb-0 text-default mt-4">Alicia Keys</p>
-											<span className="text-primary fs-12">Full Stack Developer</span>
-											<p className="text-muted px-1 mt-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+											<span className="text-primary fs-12">Admissions Specialist</span>
+											<p className="text-muted px-1 mt-2">Specializing in admissions processes to ensure student success.</p>
 											<div className="mt-3">
 												<div className="btn-list">
 													<Button variant="" type="button" aria-label="button" className="btn btn-icon btn-primary-light btn-wave">
@@ -806,112 +873,11 @@ const Landing = () => {
 									<div className="card custom-card text-center team-card border">
 										<Card.Body>
 											<span className="avatar avatar-xxl avatar-rounded mb-3 team-avatar">
-												<img src={faces9}
-													alt="" />
+												<img src={faces9} alt="" />
 											</span>
-											<p className="fw-semibold fs-15 mb-0 text-default mt-4 ">Jason Mama</p>
-											<span className="text-primary fs-12">React Developer</span>
-											<p className="text-muted px-1 mt-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-											<div className="mt-3">
-												<div className="btn-list">
-													<Button variant="" type="button" aria-label="button" className="btn btn-icon btn-primary-light btn-wave">
-														<i className="ri-facebook-line fw-bold"></i>
-													</Button>
-													<Button variant="" type="button" aria-label="button" className="btn btn-icon btn-primary-light btn-wave">
-														<i className="ri-twitter-line fw-bold"></i>
-													</Button>
-													<Button variant="" type="button" aria-label="button" className="btn btn-icon btn-primary-light btn-wave">
-														<i className="ri-instagram-line fw-bold"></i>
-													</Button>
-												</div>
-											</div>
-										</Card.Body>
-									</div>
-								</SwiperSlide>
-								<SwiperSlide>
-									<div className="card custom-card text-center team-card border">
-										<Card.Body>
-											<span className="avatar avatar-xxl avatar-rounded mb-3 team-avatar">
-												<img src={faces4} alt="" />
-											</span>
-											<p className="fw-semibold fs-15 mb-0 text-default mt-4">Samantha Taylor</p>
-											<span className="text-primary fs-12">Founder &amp; CEO</span>
-											<p className="text-muted px-1 mt-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-											<div className="mt-3">
-												<div className="btn-list">
-													<Button variant="" type="button" aria-label="button" className="btn btn-icon btn-primary-light btn-wave">
-														<i className="ri-facebook-line fw-bold"></i>
-													</Button>
-													<Button variant="" type="button" aria-label="button" className="btn btn-icon btn-primary-light btn-wave">
-														<i className="ri-twitter-line fw-bold"></i>
-													</Button>
-													<Button variant="" type="button" aria-label="button" className="btn btn-icon btn-primary-light btn-wave">
-														<i className="ri-instagram-line fw-bold"></i>
-													</Button>
-												</div>
-											</div>
-										</Card.Body>
-									</div>
-								</SwiperSlide>
-								<SwiperSlide>
-									<div className="card custom-card text-center team-card border">
-										<Card.Body>
-											<span className="avatar avatar-xxl avatar-rounded mb-3 team-avatar">
-												<img src={faces15} alt="" />
-											</span>
-											<p className="fw-semibold fs-15 mb-0 text-default mt-4">Peter Parker</p>
-											<span className="text-primary fs-12">Director</span>
-											<p className="text-muted px-1 mt-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-											<div className="mt-3">
-												<div className="btn-list">
-													<Button variant="" type="button" aria-label="button" className="btn btn-icon btn-primary-light btn-wave">
-														<i className="ri-facebook-line fw-bold"></i>
-													</Button>
-													<Button variant="" type="button" aria-label="button" className="btn btn-icon btn-primary-light btn-wave">
-														<i className="ri-twitter-line fw-bold"></i>
-													</Button>
-													<Button variant="" type="button" aria-label="button" className="btn btn-icon btn-primary-light btn-wave">
-														<i className="ri-instagram-line fw-bold"></i>
-													</Button>
-												</div>
-											</div>
-										</Card.Body>
-									</div>
-								</SwiperSlide>
-								<SwiperSlide>
-									<div className="card custom-card text-center team-card border">
-										<Card.Body>
-											<span className="avatar avatar-xxl avatar-rounded mb-3 team-avatar">
-												<img src={faces12} alt="" />
-											</span>
-											<p className="fw-semibold fs-15 mb-0 text-default mt-4">Andrew garfield</p>
-											<span className="text-primary fs-12">Manager</span>
-											<p className="text-muted px-1 mt-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-											<div className="mt-3">
-												<div className="btn-list">
-													<Button variant="" type="button" aria-label="button" className="btn btn-icon btn-primary-light btn-wave">
-														<i className="ri-facebook-line fw-bold"></i>
-													</Button>
-													<Button variant="" type="button" aria-label="button" className="btn btn-icon btn-primary-light btn-wave">
-														<i className="ri-twitter-line fw-bold"></i>
-													</Button>
-													<Button variant="" type="button" aria-label="button" className="btn btn-icon btn-primary-light btn-wave">
-														<i className="ri-instagram-line fw-bold"></i>
-													</Button>
-												</div>
-											</div>
-										</Card.Body>
-									</div>
-								</SwiperSlide>
-								<SwiperSlide>
-									<div className="card custom-card text-center team-card border">
-										<Card.Body>
-											<span className="avatar avatar-xxl avatar-rounded mb-3 team-avatar">
-												<img src={faces5} alt="" />
-											</span>
-											<p className="fw-semibold fs-15 mb-0 text-default mt-4">Elizabeth Rose</p>
-											<span className="text-primary fs-12">HR</span>
-											<p className="text-muted px-1 mt-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+											<p className="fw-semibold fs-15 mb-0 text-default mt-4">Jason Mama</p>
+											<span className="text-primary fs-12">Educational Consultant</span>
+											<p className="text-muted px-1 mt-2">Helping students navigate their educational journeys with personalized advice.</p>
 											<div className="mt-3">
 												<div className="btn-list">
 													<Button variant="" type="button" aria-label="button" className="btn btn-icon btn-primary-light btn-wave">
@@ -931,11 +897,12 @@ const Landing = () => {
 							</Swiper>
 							<div className="mt-4">
 								<div className="text-center">
-									<Link to="#" className="btn  text-primary text-decoration-underline">View all</Link>
+									<Link to="#" className="btn text-primary text-decoration-underline">View all</Link>
 								</div>
 							</div>
 						</div>
 					</section>
+
 					<section className="section" id="our-mission">
 						<img src={landing4} alt="img" className="banner-png2 op-2" />
 						<img src={landing7} alt="img" className="banner-png4" />
@@ -1184,494 +1151,351 @@ const Landing = () => {
 						</div>
 					</section>
 					<section className="section section-background section-style" id="pricing">
-						<div className="container text-center">
-							<Tab.Container defaultActiveKey="first">
-								<p className="fs-12 fw-semibold text-primary mb-1"><span className="landing-section-heading">PRICING</span></p>
-								<h4 className="fw-semibold mb-2">Velvet comes with most affordable pricing range.</h4>
-								<div className="row justify-content-center">
-									<Col xl={6}>
-										<p className="text-muted fs-15 mb-3 fw-normal">Our plans are most affordable and are mainly placed by focussing every category in the sector even basic plan helps better.</p>
-									</Col>
-									<div className="d-flex justify-content-center mt-2 mb-3">
-										<Nav className="nav nav-tabs mb-3 tab-style-6 bg-primary-transparent" id="myTab1" role="tablist">
-											<Nav.Item role="presentation">
-												<Nav.Link eventKey="first" className="" id="pricing-monthly1" data-bs-toggle="tab"
-													data-bs-target="#pricing-monthly1-pane" type="button" role="tab"
-													aria-controls="pricing-monthly1-pane" aria-selected="true">Monthly</Nav.Link>
-											</Nav.Item>
-											<Nav.Item role="presentation">
-												<Nav.Link eventKey="second" className="" id="pricing-yearly1" data-bs-toggle="tab"
-													data-bs-target="#pricing-yearly1-pane" type="button" role="tab"
-													aria-controls="pricing-yearly1-pane" aria-selected="false">Yearly</Nav.Link>
-											</Nav.Item>
-										</Nav>
-									</div>
-								</div>
-								<Col xl={12}>
-									<Tab.Content className="" id="myTabContent1">
-										<Tab.Pane eventKey="first" className="p-0 border-0" id="pricing-monthly1-pane" role="tabpanel" aria-labelledby="pricing-monthly1" tabIndex={0}>
-											<div className="row justify-content-center">
-												<div className="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12">
-													<div className="card custom-card overflow-hidden">
-														<div className="card-body p-0">
-															<div className="p-4">
-																<div className="d-flex justify-content-between align-items-center mb-3">
-																	<div className="d-flex">
-																		<i className="ti ti-free-rights fs-24 text-primary me-1"></i>
-																		<div className="fs-18 fw-semibold ">Free</div>
-																	</div>
-																	<div>
-																		<span className="badge bg-success-transparent">For Indivudials</span>
-																	</div>
-																</div>
-																<div className="fs-25 fw-bold mb-1">$0<sub className="text-muted fw-semibold fs-11">/ Per Month</sub></div>
-																<div className="mb-1 text-muted">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure quos debitis aliquam .</div>
-																<div className="fs-12 mb-3"><u>Billed Monthly</u></div>
-																<ul className="list-unstyled mb-0">
-																	<li className="d-flex align-items-center mb-3">
-																		<span className="me-2">
-																			<i className="ri-checkbox-circle-line fs-15 text-success"></i>
-																		</span>
-																		<span>
-																			<strong className="me-1 d-inline-block">2 Free</strong>Websites
-																		</span>
-																	</li>
-																	<li className="d-flex align-items-center mb-3">
-																		<span className="me-2">
-																			<i className="ri-checkbox-circle-line fs-15 text-success"></i>
-																		</span>
-																		<span>
-																			<strong className="me-1 d-inline-block">1 GB</strong>Hard disk storage
-																		</span>
-																	</li>
-																	<li className="d-flex align-items-center mb-3">
-																		<span className="me-2">
-																			<i className="ri-checkbox-circle-line fs-15 text-muted op-3"></i>
-																		</span>
-																		<span>
-																			<strong className="me-1 d-inline-block">1 Year</strong>Email support
-																		</span>
-																	</li>
-																	<li className="d-flex align-items-center mb-3">
-																		<span className="me-2">
-																			<i className="ri-checkbox-circle-line fs-15 text-muted op-3"></i>
-																		</span>
-																		<span>
-																			<strong className="me-1 d-inline-block">2</strong>Licenses
-																		</span>
-																	</li>
-																	<li className="d-flex align-items-center mb-3">
-																		<span className="me-2">
-																			<i className="ri-checkbox-circle-line fs-15 text-muted op-3"></i>
-																		</span>
-																		<span>
-																			Custom SEO optimizataion
-																		</span>
-																	</li>
-																	<li className="d-flex align-items-center mb-3">
-																		<span className="me-2">
-																			<i className="ri-checkbox-circle-line fs-15 text-muted op-3"></i>
-																		</span>
-																		<span>
-																			Chat Support
-																		</span>
-																	</li>
-																	<li className="d-grid">
-																		<Button variant="" type="button" aria-label="button" className="btn btn-light btn-wave waves-effect waves-light">Choose Plan</Button>
-																	</li>
-																</ul>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div className="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12">
-													<div className="card custom-card overflow-hidden">
-														<div className="card-body p-0">
-															<div className="p-4">
-																<div className="d-flex justify-content-between align-items-center mb-3">
-																	<div className="d-flex">
-																		<i className="ti ti-api-app  fs-24 text-primary me-1"></i>
-																		<div className="fs-18 fw-semibold">Team</div>
-																	</div>
-																	<div>
-																		<span className="badge bg-success-transparent">
-																			For Small Teams
-																		</span>
-																	</div>
-																</div>
-																<div className="fs-25 fw-bold mb-1">$149<sub className="text-muted fw-semibold fs-11">/ Per Month</sub></div>
-																<div className="mb-1 text-muted">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure quos debitis aliquam .</div>
-																<div className="fs-12 mb-3"><u>Billed Monthly</u></div>
-																<ul className="list-unstyled mb-0">
-																	<li className="d-flex align-items-center mb-3">
-																		<span className="me-2">
-																			<i className="ri-checkbox-circle-line fs-15 text-success"></i>
-																		</span>
-																		<span>
-																			<strong className="me-1 d-inline-block">5 Free</strong>Websites
-																		</span>
-																	</li>
-																	<li className="d-flex align-items-center mb-3">
-																		<span className="me-2">
-																			<i className="ri-checkbox-circle-line fs-15 text-success"></i>
-																		</span>
-																		<span>
-																			<strong className="me-1 d-inline-block">5 GB</strong>Hard disk storage
-																		</span>
-																	</li>
-																	<li className="d-flex align-items-center mb-3">
-																		<span className="me-2">
-																			<i className="ri-checkbox-circle-line fs-15 text-success"></i>
-																		</span>
-																		<span>
-																			<strong className="me-1 d-inline-block">2 Years</strong>Email support
-																		</span>
-																	</li>
-																	<li className="d-flex align-items-center mb-3">
-																		<span className="me-2">
-																			<i className="ri-checkbox-circle-line fs-15 text-success"></i>
-																		</span>
-																		<span>
-																			<strong className="me-1 d-inline-block">5</strong>Licenses
-																		</span>
-																	</li>
-																	<li className="d-flex align-items-center mb-3">
-																		<span className="me-2">
-																			<i className="ri-checkbox-circle-line fs-15 text-muted op-3"></i>
-																		</span>
-																		<span>
-																			Custom SEO optimizataion
-																		</span>
-																	</li>
-																	<li className="d-flex align-items-center mb-3">
-																		<span className="me-2">
-																			<i className="ri-checkbox-circle-line fs-15 text-muted op-3"></i>
-																		</span>
-																		<span>
-																			Chat Support
-																		</span>
-																	</li>
-																	<li className="d-grid">
-																		<Button variant="" type="button" aria-label="button" className="btn btn-light btn-wave waves-effect waves-light">Choose Plan</Button>
-																	</li>
-																</ul>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div className="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12">
-													<div className="custom-card  border border-primary rounded card">
-														<div className="d-flex flex-column p-0">
-															<div className="card-body p-0">
-																<div className="p-4">
-																	<div className="d-flex justify-content-between align-items-center mb-3">
-																		<div className="d-flex">
-																			<i className="ti ti-businessplan text-primary fs-24 me-1"></i>
-																			<div className="fs-18 fw-semibold">Business</div>
-																		</div>
-																		<div>
-																			<span className="badge bg-primary-transparent">
-																				For Business Purpose
-																			</span>
-																		</div>
-																	</div>
-																	<div className="fs-25 fw-bold mb-1">$1,299<sub className="text-muted fw-semibold fs-11">/ Per Month</sub></div>
-																	<div className="mb-1 text-muted">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure quos debitis aliquam .</div>
-																	<div className="fs-12 mb-3 text-primary"><u>Billed Monthly</u></div>
-																	<ul className="list-unstyled mb-0">
-																		<li className="d-flex align-items-center mb-3">
-																			<span className="me-2">
-																				<i className="ri-checkbox-circle-line fs-15 text-success"></i>
-																			</span>
-																			<span>
-																				<strong className="me-1 d-inline-block">10 Free</strong>Websites
-																			</span>
-																		</li>
-																		<li className="d-flex align-items-center mb-3">
-																			<span className="me-2">
-																				<i className="ri-checkbox-circle-line fs-15 text-success"></i>
-																			</span>
-																			<span>
-																				<strong className="me-1 d-inline-block">20 GB</strong>Hard disk storage
-																			</span>
-																		</li>
-																		<li className="d-flex align-items-center mb-3">
-																			<span className="me-2">
-																				<i className="ri-checkbox-circle-line fs-15 text-success"></i>
-																			</span>
-																			<span>
-																				<strong className="me-1 d-inline-block">3 Years</strong>Email support
-																			</span>
-																		</li>
-																		<li className="d-flex align-items-center mb-3">
-																			<span className="me-2">
-																				<i className="ri-checkbox-circle-line fs-15 text-success"></i>
-																			</span>
-																			<span>
-																				<strong className="me-1 d-inline-block">15</strong>Licenses
-																			</span>
-																		</li>
-																		<li className="d-flex align-items-center mb-3">
-																			<span className="me-2">
-																				<i className="ri-checkbox-circle-line fs-15 text-success"></i>
-																			</span>
-																			<span>
-																				Custom SEO optimizataion
-																			</span>
-																		</li>
-																		<li className="d-flex align-items-center mb-3">
-																			<span className="me-2">
-																				<i className="ri-checkbox-circle-line fs-15 text-muted op-3"></i>
-																			</span>
-																			<span>
-																				Chat Support
-																			</span>
-																		</li>
-																		<li className="d-grid">
-																			<Button variant="" type="button" aria-label="button" className="btn btn-primary btn-wave waves-effect waves-light">Choose Plan</Button>
-																		</li>
-																	</ul>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</Tab.Pane>
-										<Tab.Pane eventKey="second" className="p-0 border-0" id="pricing-yearly1-pane" role="tabpanel" aria-labelledby="pricing-yearly1" tabIndex={0}>
-											<div className="row justify-content-center">
-												<div className="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12">
-													<div className="card custom-card overflow-hidden">
-														<div className="card-body p-0">
-															<div className="p-4">
-																<div className="d-flex justify-content-between align-items-center mb-3">
-																	<div className="d-flex">
-																		<i className="ti ti-free-rights fs-24 text-primary me-1"></i>
-																		<div className="fs-18 fw-semibold ">Free</div>
-																	</div>
-																	<div>
-																		<span className="badge bg-success-transparent">For Indivudials</span>
-																	</div>
-																</div>
-																<div className="fs-25 fw-bold mb-1">$0<sub className="text-muted fw-semibold fs-11">/ Per year</sub></div>
-																<div className="mb-1 text-muted">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure quos debitis aliquam .</div>
-																<div className="fs-12 mb-3"><u>Billed yearly</u></div>
-																<ul className="list-unstyled mb-0">
-																	<li className="d-flex align-items-center mb-3">
-																		<span className="me-2">
-																			<i className="ri-checkbox-circle-line fs-15 text-success"></i>
-																		</span>
-																		<span>
-																			<strong className="me-1">2 Free</strong>Websites
-																		</span>
-																	</li>
-																	<li className="d-flex align-items-center mb-3">
-																		<span className="me-2">
-																			<i className="ri-checkbox-circle-line fs-15 text-success"></i>
-																		</span>
-																		<span>
-																			<strong className="me-1">1 GB</strong>Hard disk storage
-																		</span>
-																	</li>
-																	<li className="d-flex align-items-center mb-3">
-																		<span className="me-2">
-																			<i className="ri-checkbox-circle-line fs-15 text-muted op-3"></i>
-																		</span>
-																		<span>
-																			<strong className="me-1">1 Year</strong>Email support
-																		</span>
-																	</li>
-																	<li className="d-flex align-items-center mb-3">
-																		<span className="me-2">
-																			<i className="ri-checkbox-circle-line fs-15 text-muted op-3"></i>
-																		</span>
-																		<span>
-																			<strong className="me-1">2</strong>Licenses
-																		</span>
-																	</li>
-																	<li className="d-flex align-items-center mb-3">
-																		<span className="me-2">
-																			<i className="ri-checkbox-circle-line fs-15 text-muted op-3"></i>
-																		</span>
-																		<span>
-																			Custom SEO optimizataion
-																		</span>
-																	</li>
-																	<li className="d-flex align-items-center mb-3">
-																		<span className="me-2">
-																			<i className="ri-checkbox-circle-line fs-15 text-muted op-3"></i>
-																		</span>
-																		<span>
-																			Chat Support
-																		</span>
-																	</li>
-																	<li className="d-grid">
-																		<Button variant="" type="button" aria-label="button" className="btn btn-light btn-wave waves-effect waves-light">Choose Plan</Button>
-																	</li>
-																</ul>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div className="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12">
-													<div className="card custom-card overflow-hidden">
-														<div className="card-body p-0">
-															<div className="p-4">
-																<div className="d-flex justify-content-between align-items-center mb-3">
-																	<div className="d-flex">
-																		<i className="ti ti-api-app  fs-24 text-primary me-1"></i>
-																		<div className="fs-18 fw-semibold">Team</div>
-																	</div>
-																	<div>
-																		<span className="badge bg-success-transparent">
-																			For Small Teams
-																		</span>
-																	</div>
-																</div>
-																<div className="fs-25 fw-bold mb-1">$10,49<sub className="text-muted fw-semibold fs-11">/ Per year</sub></div>
-																<div className="mb-1 text-muted">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure quos debitis aliquam .</div>
-																<div className="fs-12 mb-3"><u>Billed yearly</u></div>
-																<ul className="list-unstyled mb-0">
-																	<li className="d-flex align-items-center mb-3">
-																		<span className="me-2">
-																			<i className="ri-checkbox-circle-line fs-15 text-success"></i>
-																		</span>
-																		<span>
-																			<strong className="me-1">5 Free</strong>Websites
-																		</span>
-																	</li>
-																	<li className="d-flex align-items-center mb-3">
-																		<span className="me-2">
-																			<i className="ri-checkbox-circle-line fs-15 text-success"></i>
-																		</span>
-																		<span>
-																			<strong className="me-1">5 GB</strong>Hard disk storage
-																		</span>
-																	</li>
-																	<li className="d-flex align-items-center mb-3">
-																		<span className="me-2">
-																			<i className="ri-checkbox-circle-line fs-15 text-success"></i>
-																		</span>
-																		<span>
-																			<strong className="me-1">2 Years</strong>Email support
-																		</span>
-																	</li>
-																	<li className="d-flex align-items-center mb-3">
-																		<span className="me-2">
-																			<i className="ri-checkbox-circle-line fs-15 text-success"></i>
-																		</span>
-																		<span>
-																			<strong className="me-1">5</strong>Licenses
-																		</span>
-																	</li>
-																	<li className="d-flex align-items-center mb-3">
-																		<span className="me-2">
-																			<i className="ri-checkbox-circle-line fs-15 text-muted op-3"></i>
-																		</span>
-																		<span>
-																			Custom SEO optimizataion
-																		</span>
-																	</li>
-																	<li className="d-flex align-items-center mb-3">
-																		<span className="me-2">
-																			<i className="ri-checkbox-circle-line fs-15 text-muted op-3"></i>
-																		</span>
-																		<span>
-																			Chat Support
-																		</span>
-																	</li>
-																	<li className="d-grid">
-																		<Button variant="" type="button" aria-label="button" className="btn btn-light btn-wave waves-effect waves-light">Choose Plan</Button>
-																	</li>
-																</ul>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div className="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12">
-													<div className="custom-card border border-primary rounded card">
-														<div className=" d-flex flex-column p-0">
-															<div className="card-body p-0">
-																<div className="p-4">
-																	<div className="d-flex justify-content-between align-items-center mb-3">
-																		<div className="d-flex">
-																			<i className="ti ti-businessplan text-primary fs-24 me-1"></i>
-																			<div className="fs-18 fw-semibold">Business</div>
-																		</div>
-																		<div>
-																			<span className="badge bg-primary-transparent">
-																				For Business Purpose
-																			</span>
-																		</div>
-																	</div>
-																	<div className="fs-25 fw-bold mb-1">$50,299<sub className="text-muted fw-semibold fs-11">/ Per year</sub></div>
-																	<div className="mb-1 text-muted">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure quos debitis aliquam .</div>
-																	<div className="fs-12 mb-3 text-primary"><u>Billed yearly</u></div>
-																	<ul className="list-unstyled mb-0">
-																		<li className="d-flex align-items-center mb-3">
-																			<span className="me-2">
-																				<i className="ri-checkbox-circle-line fs-15 text-success"></i>
-																			</span>
-																			<span>
-																				<strong className="me-1">10 Free</strong>Websites
-																			</span>
-																		</li>
-																		<li className="d-flex align-items-center mb-3">
-																			<span className="me-2">
-																				<i className="ri-checkbox-circle-line fs-15 text-success"></i>
-																			</span>
-																			<span>
-																				<strong className="me-1">20 GB</strong>Hard disk storage
-																			</span>
-																		</li>
-																		<li className="d-flex align-items-center mb-3">
-																			<span className="me-2">
-																				<i className="ri-checkbox-circle-line fs-15 text-success"></i>
-																			</span>
-																			<span>
-																				<strong className="me-1">3 Years</strong>Email support
-																			</span>
-																		</li>
-																		<li className="d-flex align-items-center mb-3">
-																			<span className="me-2">
-																				<i className="ri-checkbox-circle-line fs-15 text-success"></i>
-																			</span>
-																			<span>
-																				<strong className="me-1">15</strong>Licenses
-																			</span>
-																		</li>
-																		<li className="d-flex align-items-center mb-3">
-																			<span className="me-2">
-																				<i className="ri-checkbox-circle-line fs-15 text-success"></i>
-																			</span>
-																			<span>
-																				Custom SEO optimizataion
-																			</span>
-																		</li>
-																		<li className="d-flex align-items-center mb-3">
-																			<span className="me-2">
-																				<i className="ri-checkbox-circle-line fs-15 text-muted op-3"></i>
-																			</span>
-																			<span>
-																				Chat Support
-																			</span>
-																		</li>
-																		<li className="d-grid">
-																			<Button variant="" type="button" aria-label="button" className="btn btn-primary btn-wave waves-effect waves-light">Choose Plan</Button>
-																		</li>
-																	</ul>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</Tab.Pane>
-									</Tab.Content>
-								</Col>
-							</Tab.Container>
-						</div>
-					</section>
+    <div className="container text-center">
+        <Tab.Container defaultActiveKey="first">
+            <p className="fs-12 fw-semibold text-primary mb-1"><span className="landing-section-heading">PRICING</span></p>
+            <h4 className="fw-semibold mb-2">Affordable Plans for Your Educational Needs</h4>
+            <div className="row justify-content-center">
+                <Col xl={6}>
+                    <p className="text-muted fs-15 mb-3 fw-normal">Choose a plan that suits your requirements. Our affordable plans ensure that you get the best value for your educational journey.</p>
+                </Col>
+                <div className="d-flex justify-content-center mt-2 mb-3">
+                    <Nav className="nav nav-tabs mb-3 tab-style-6 bg-primary-transparent" id="myTab1" role="tablist">
+                        <Nav.Item role="presentation">
+                            <Nav.Link eventKey="first" className="" id="pricing-monthly1" data-bs-toggle="tab"
+                                data-bs-target="#pricing-monthly1-pane" type="button" role="tab"
+                                aria-controls="pricing-monthly1-pane" aria-selected="true">Monthly</Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item role="presentation">
+                            <Nav.Link eventKey="second" className="" id="pricing-yearly1" data-bs-toggle="tab"
+                                data-bs-target="#pricing-yearly1-pane" type="button" role="tab"
+                                aria-controls="pricing-yearly1-pane" aria-selected="false">Yearly</Nav.Link>
+                        </Nav.Item>
+                    </Nav>
+                </div>
+            </div>
+            <Col xl={12}>
+                <Tab.Content className="" id="myTabContent1">
+                    <Tab.Pane eventKey="first" className="p-0 border-0" id="pricing-monthly1-pane" role="tabpanel" aria-labelledby="pricing-monthly1" tabIndex={0}>
+                        <div className="row justify-content-center">
+                            <div className="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div className="card custom-card overflow-hidden">
+                                    <div className="card-body p-0">
+                                        <div className="p-4">
+                                            <div className="d-flex justify-content-between align-items-center mb-3">
+                                                <div className="d-flex">
+                                                    <i className="ti ti-free-rights fs-24 text-primary me-1"></i>
+                                                    <div className="fs-18 fw-semibold ">Basic</div>
+                                                </div>
+                                                <div>
+                                                    <span className="badge bg-success-transparent">For Individuals</span>
+                                                </div>
+                                            </div>
+                                            <div className="fs-25 fw-bold mb-1">$0<sub className="text-muted fw-semibold fs-11">/ Per Month</sub></div>
+                                            <div className="mb-1 text-muted">Access essential features to start your educational journey.</div>
+                                            <div className="fs-12 mb-3"><u>Billed Monthly</u></div>
+                                            <ul className="list-unstyled mb-0">
+                                                <li className="d-flex align-items-center mb-3">
+                                                    <span className="me-2">
+                                                        <i className="ri-checkbox-circle-line fs-15 text-success"></i>
+                                                    </span>
+                                                    <span>
+                                                        <strong className="me-1 d-inline-block">Access to</strong>Basic Courses
+                                                    </span>
+                                                </li>
+                                                <li className="d-flex align-items-center mb-3">
+                                                    <span className="me-2">
+                                                        <i className="ri-checkbox-circle-line fs-15 text-success"></i>
+                                                    </span>
+                                                    <span>
+                                                        <strong className="me-1 d-inline-block">1 GB</strong>Cloud Storage
+                                                    </span>
+                                                </li>
+                                                <li className="d-flex align-items-center mb-3">
+                                                    <span className="me-2">
+                                                        <i className="ri-checkbox-circle-line fs-15 text-muted op-3"></i>
+                                                    </span>
+                                                    <span>
+                                                        <strong className="me-1 d-inline-block">Email</strong>Support
+                                                    </span>
+                                                </li>
+                                                <li className="d-grid">
+                                                    <Button variant="" type="button" aria-label="button" className="btn btn-light btn-wave waves-effect waves-light">Choose Plan</Button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div className="card custom-card overflow-hidden">
+                                    <div className="card-body p-0">
+                                        <div className="p-4">
+                                            <div className="d-flex justify-content-between align-items-center mb-3">
+                                                <div className="d-flex">
+                                                    <i className="ti ti-api-app  fs-24 text-primary me-1"></i>
+                                                    <div className="fs-18 fw-semibold">Pro</div>
+                                                </div>
+                                                <div>
+                                                    <span className="badge bg-success-transparent">
+                                                        For Small Teams
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="fs-25 fw-bold mb-1">$149<sub className="text-muted fw-semibold fs-11">/ Per Month</sub></div>
+                                            <div className="mb-1 text-muted">Enhanced features for small teams and collaborative learning.</div>
+                                            <div className="fs-12 mb-3"><u>Billed Monthly</u></div>
+                                            <ul className="list-unstyled mb-0">
+                                                <li className="d-flex align-items-center mb-3">
+                                                    <span className="me-2">
+                                                        <i className="ri-checkbox-circle-line fs-15 text-success"></i>
+                                                    </span>
+                                                    <span>
+                                                        <strong className="me-1 d-inline-block">Access to</strong>All Courses
+                                                    </span>
+                                                </li>
+                                                <li className="d-flex align-items-center mb-3">
+                                                    <span className="me-2">
+                                                        <i className="ri-checkbox-circle-line fs-15 text-success"></i>
+                                                    </span>
+                                                    <span>
+                                                        <strong className="me-1 d-inline-block">5 GB</strong>Cloud Storage
+                                                    </span>
+                                                </li>
+                                                <li className="d-flex align-items-center mb-3">
+                                                    <span className="me-2">
+                                                        <i className="ri-checkbox-circle-line fs-15 text-success"></i>
+                                                    </span>
+                                                    <span>
+                                                        <strong className="me-1 d-inline-block">Priority</strong>Email Support
+                                                    </span>
+                                                </li>
+                                                <li className="d-grid">
+                                                    <Button variant="" type="button" aria-label="button" className="btn btn-light btn-wave waves-effect waves-light">Choose Plan</Button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div className="custom-card border border-primary rounded card">
+                                    <div className="d-flex flex-column p-0">
+                                        <div className="card-body p-0">
+                                            <div className="p-4">
+                                                <div className="d-flex justify-content-between align-items-center mb-3">
+                                                    <div className="d-flex">
+                                                        <i className="ti ti-businessplan text-primary fs-24 me-1"></i>
+                                                        <div className="fs-18 fw-semibold">Enterprise</div>
+                                                    </div>
+                                                    <div>
+                                                        <span className="badge bg-primary-transparent">
+                                                            For Large Teams
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div className="fs-25 fw-bold mb-1">$1,299<sub className="text-muted fw-semibold fs-11">/ Per Month</sub></div>
+                                                <div className="mb-1 text-muted">Comprehensive solutions for large teams and businesses.</div>
+                                                <div className="fs-12 mb-3 text-primary"><u>Billed Monthly</u></div>
+                                                <ul className="list-unstyled mb-0">
+                                                    <li className="d-flex align-items-center mb-3">
+                                                        <span className="me-2">
+                                                            <i className="ri-checkbox-circle-line fs-15 text-success"></i>
+                                                        </span>
+                                                        <span>
+                                                            <strong className="me-1 d-inline-block">Unlimited</strong>Course Access
+                                                        </span>
+                                                    </li>
+                                                    <li className="d-flex align-items-center mb-3">
+                                                        <span className="me-2">
+                                                            <i className="ri-checkbox-circle-line fs-15 text-success"></i>
+                                                        </span>
+                                                        <span>
+                                                            <strong className="me-1 d-inline-block">20 GB</strong>Cloud Storage
+                                                        </span>
+                                                    </li>
+                                                    <li className="d-flex align-items-center mb-3">
+                                                        <span className="me-2">
+                                                            <i className="ri-checkbox-circle-line fs-15 text-success"></i>
+                                                        </span>
+                                                        <span>
+                                                            <strong className="me-1 d-inline-block">Dedicated</strong>Support
+                                                        </span>
+                                                    </li>
+                                                    <li className="d-grid">
+                                                        <Button variant="" type="button" aria-label="button" className="btn btn-primary btn-wave waves-effect waves-light">Choose Plan</Button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </Tab.Pane>
+                    <Tab.Pane eventKey="second" className="p-0 border-0" id="pricing-yearly1-pane" role="tabpanel" aria-labelledby="pricing-yearly1" tabIndex={0}>
+                        <div className="row justify-content-center">
+                            <div className="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div className="card custom-card overflow-hidden">
+                                    <div className="card-body p-0">
+                                        <div className="p-4">
+                                            <div className="d-flex justify-content-between align-items-center mb-3">
+                                                <div className="d-flex">
+                                                    <i className="ti ti-free-rights fs-24 text-primary me-1"></i>
+                                                    <div className="fs-18 fw-semibold ">Basic</div>
+                                                </div>
+                                                <div>
+                                                    <span className="badge bg-success-transparent">For Individuals</span>
+                                                </div>
+                                            </div>
+                                            <div className="fs-25 fw-bold mb-1">$0<sub className="text-muted fw-semibold fs-11">/ Per Year</sub></div>
+                                            <div className="mb-1 text-muted">Access essential features to start your educational journey.</div>
+                                            <div className="fs-12 mb-3"><u>Billed Yearly</u></div>
+                                            <ul className="list-unstyled mb-0">
+                                                <li className="d-flex align-items-center mb-3">
+                                                    <span className="me-2">
+                                                        <i className="ri-checkbox-circle-line fs-15 text-success"></i>
+                                                    </span>
+                                                    <span>
+                                                        <strong className="me-1">Access to</strong>Basic Courses
+                                                    </span>
+                                                </li>
+                                                <li className="d-flex align-items-center mb-3">
+                                                    <span className="me-2">
+                                                        <i className="ri-checkbox-circle-line fs-15 text-success"></i>
+                                                    </span>
+                                                    <span>
+                                                        <strong className="me-1">1 GB</strong>Cloud Storage
+                                                    </span>
+                                                </li>
+                                                <li className="d-flex align-items-center mb-3">
+                                                    <span className="me-2">
+                                                        <i className="ri-checkbox-circle-line fs-15 text-muted op-3"></i>
+                                                    </span>
+                                                    <span>
+                                                        <strong className="me-1">Email</strong>Support
+                                                    </span>
+                                                </li>
+                                                <li className="d-grid">
+                                                    <Button variant="" type="button" aria-label="button" className="btn btn-light btn-wave waves-effect waves-light">Choose Plan</Button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div className="card custom-card overflow-hidden">
+                                    <div className="card-body p-0">
+                                        <div className="p-4">
+                                            <div className="d-flex justify-content-between align-items-center mb-3">
+                                                <div className="d-flex">
+                                                    <i className="ti ti-api-app  fs-24 text-primary me-1"></i>
+                                                    <div className="fs-18 fw-semibold">Pro</div>
+                                                </div>
+                                                <div>
+                                                    <span className="badge bg-success-transparent">
+                                                        For Small Teams
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="fs-25 fw-bold mb-1">$1,049<sub className="text-muted fw-semibold fs-11">/ Per Year</sub></div>
+                                            <div className="mb-1 text-muted">Enhanced features for small teams and collaborative learning.</div>
+                                            <div className="fs-12 mb-3"><u>Billed Yearly</u></div>
+                                            <ul className="list-unstyled mb-0">
+                                                <li className="d-flex align-items-center mb-3">
+                                                    <span className="me-2">
+                                                        <i className="ri-checkbox-circle-line fs-15 text-success"></i>
+                                                    </span>
+                                                    <span>
+                                                        <strong className="me-1">Access to</strong>All Courses
+                                                    </span>
+                                                </li>
+                                                <li className="d-flex align-items-center mb-3">
+                                                    <span className="me-2">
+                                                        <i className="ri-checkbox-circle-line fs-15 text-success"></i>
+                                                    </span>
+                                                    <span>
+                                                        <strong className="me-1">5 GB</strong>Cloud Storage
+                                                    </span>
+                                                </li>
+                                                <li className="d-flex align-items-center mb-3">
+                                                    <span className="me-2">
+                                                        <i className="ri-checkbox-circle-line fs-15 text-success"></i>
+                                                    </span>
+                                                    <span>
+                                                        <strong className="me-1">Priority</strong>Email Support
+                                                    </span>
+                                                </li>
+                                                <li className="d-grid">
+                                                    <Button variant="" type="button" aria-label="button" className="btn btn-light btn-wave waves-effect waves-light">Choose Plan</Button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div className="custom-card border border-primary rounded card">
+                                    <div className="d-flex flex-column p-0">
+                                        <div className="card-body p-0">
+                                            <div className="p-4">
+                                                <div className="d-flex justify-content-between align-items-center mb-3">
+                                                    <div className="d-flex">
+                                                        <i className="ti ti-businessplan text-primary fs-24 me-1"></i>
+                                                        <div className="fs-18 fw-semibold">Enterprise</div>
+                                                    </div>
+                                                    <div>
+                                                        <span className="badge bg-primary-transparent">
+                                                            For Large Teams
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div className="fs-25 fw-bold mb-1">$5,299<sub className="text-muted fw-semibold fs-11">/ Per Year</sub></div>
+                                                <div className="mb-1 text-muted">Comprehensive solutions for large teams and businesses.</div>
+                                                <div className="fs-12 mb-3 text-primary"><u>Billed Yearly</u></div>
+                                                <ul className="list-unstyled mb-0">
+                                                    <li className="d-flex align-items-center mb-3">
+                                                        <span className="me-2">
+                                                            <i className="ri-checkbox-circle-line fs-15 text-success"></i>
+                                                        </span>
+                                                        <span>
+                                                            <strong className="me-1">Unlimited</strong>Course Access
+                                                        </span>
+                                                    </li>
+                                                    <li className="d-flex align-items-center mb-3">
+                                                        <span className="me-2">
+                                                            <i className="ri-checkbox-circle-line fs-15 text-success"></i>
+                                                        </span>
+                                                        <span>
+                                                            <strong className="me-1">20 GB</strong>Cloud Storage
+                                                        </span>
+                                                    </li>
+                                                    <li className="d-flex align-items-center mb-3">
+                                                        <span className="me-2">
+                                                            <i className="ri-checkbox-circle-line fs-15 text-success"></i>
+                                                        </span>
+                                                        <span>
+                                                            <strong className="me-1">Dedicated</strong>Support
+                                                        </span>
+                                                    </li>
+                                                    <li className="d-grid">
+                                                        <Button variant="" type="button" aria-label="button" className="btn btn-primary btn-wave waves-effect waves-light">Choose Plan</Button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </Tab.Pane>
+                </Tab.Content>
+            </Col>
+        </Tab.Container>
+    </div>
+</section>
+
 					<section className="section landing-Features">
 						<div className="container">
 							<div className="row justify-content-center">
@@ -2296,9 +2120,9 @@ const Landing = () => {
 					</section>
 
 					<div className="text-center landing-main-footer py-3">
-						<span className="text-muted fs-15"> Copyright © <span id="year">2024</span> <Link to="#" className="text-primary fw-semibold"><u>Velvet</u></Link>.
+						<span className="text-muted fs-15"> Copyright © <span id="year">2024</span> <Link to="#" className="text-primary fw-semibold"><u>Rank & Seats</u></Link>.
 							Designed with <span className="fa fa-heart text-danger"></span> by <Link to="#" className="text-primary fw-semibold"><u>
-								Spruko</u>
+								Sysbreeze</u>
 						</Link> All
 							rights
 							reserved
