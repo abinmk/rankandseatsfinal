@@ -17,7 +17,7 @@ const Allotments = () => {
   const fetchData = useCallback(async (page, pageSize, filters) => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:5001/api/allotments', {
+      const response = await axios.get('http://rankseatsbucket.s3-website-ap-southeast-2.amazonaws.com/api/allotments', {
         params: {
           examName: 'NEET_PG_ALL_INDIA',
           year: 2015,
@@ -43,7 +43,7 @@ const Allotments = () => {
     const fetchFilterOptions = async () => {
       setFilterLoading(true);
       try {
-        const response = await axios.get('http://localhost:5001/api/allotments/filters', {
+        const response = await axios.get('http://rankseatsbucket.s3-website-ap-southeast-2.amazonaws.com/allotments/filters', {
           params: {
             examName: 'NEET_PG',
             year: 2015,

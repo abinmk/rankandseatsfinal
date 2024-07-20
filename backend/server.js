@@ -20,7 +20,7 @@ const port = process.env.PORT || 5001;
 app.use('/static', express.static(path.join(__dirname, 'static')));
 
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:5173'],
+  origin: ['http://localhost:3000', 'http://localhost:5173','http://ec2-52-63-164-69.ap-southeast-2.compute.amazonaws.com:5001','http://rankseatsbucket.s3-website-ap-southeast-2.amazonaws.com','https://rankseatsbucket.s3-website-ap-southeast-2.amazonaws.com'],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true
 }));
