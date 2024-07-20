@@ -3,7 +3,7 @@ import { useTable, usePagination, useSortBy, useFilters, useColumnOrder } from '
 import FilterSection from './FilterSection';
 import { Table, Modal, Button, Form, Pagination } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './Allotments.scss';
+import './Colleges.scss';
 import { FaHeart } from 'react-icons/fa'; // import heart icon
 
 const GenericTable = ({

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import GenericTable from './GenericTable';
-import { allotmentsColumns, allotmentsFiltersConfig } from './allotmentsConfig';
-import './Allotments.scss';
+import { allotmentsColumns, allotmentsFiltersConfig } from './collegeConfig';
+import './Colleges.scss';
 
-const Allotments = () => {
+const Colleges = () => {
   const [data, setData] = useState([]);
   const [filterOptions, setFilterOptions] = useState({});
   const [filters, setFilters] = useState({});
@@ -65,7 +65,7 @@ const Allotments = () => {
       data={data}
       columns={allotmentsColumns}
       filtersConfig={allotmentsFiltersConfig}
-      headerTitle="Allotments"
+      headerTitle="Institutes"
       filters={filters}
       setFilters={setFilters}
       page={page}
@@ -82,4 +82,4 @@ const Allotments = () => {
   );
 };
 
-export default Allotments;
+export default Colleges;

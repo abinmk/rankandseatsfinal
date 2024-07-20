@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Accordion, Card, Form, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './FilterSection.scss';
 
 const AllotmentsFilter = ({ filters, setFilters }) => {
   const [stateFilter, setStateFilter] = useState(filters.state || '');

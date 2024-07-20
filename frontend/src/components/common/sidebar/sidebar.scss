@@ -24,8 +24,8 @@
 }
 
 .side-menu__icon {
-  margin-right: .8rem !important;
-  font-size: 1.6rem !important; /* Increase icon size */
+  margin-right: .4rem !important;
+  font-size: 1.4rem !important; /* Increase icon size */
   display: flex !important;
   align-items: center !important;
   &.active {
@@ -42,6 +42,12 @@
   font-size: 1.1rem !important; /* Increase label font size */
   display: flex !important;
   align-items: center !important;
+  &.active {
+    color: #007bff !important; /* Change text color for active item */
+  }
+  &:hover {
+    color: #007bff !important; /* Change text color for active item */
+  }
 }
 
 .main-menu-container {
@@ -61,7 +67,7 @@
 .main-menu .side-menu__item {
   font-size: 19px !important; /* Increase the font size */
   padding: 16px 21px !important; /* Increase padding */
-  color: #131575 !important; /* Set color to black or your preferred color */
+  color: #475476 !important; /* Set color to black or your preferred color */
 }
 
 .main-menu .side-menu__item.active {
