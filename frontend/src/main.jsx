@@ -16,7 +16,7 @@ import Scrolltop from "./components/common/scrolltop/scrolltop.jsx";
 import Dashboard from "./container/pages/dashboard/dashboard.jsx";
 import Allotments from "./container/pages/allotments/allotments.jsx";
 import Colleges from "./container/pages/college/colleges.jsx";
-import Courses from "./container/pages/allotments/Courses";
+import Courses from "./container/pages/course/courses";
 import GenerateResults from "./container/pages/generate-data/GenerateResults.jsx";
 import Upload from "./container/pages/generate-data/Upload.jsx";
 import UploadRound from "./container/pages/generate-data/UploadRound";
@@ -38,7 +38,7 @@ root.render(
           <Route path="dashboards" element={<Dashboard />} />
           <Route path="allotments" element={<Allotments />} />
           <Route path="lastrank" element={<Allotments />} />
-          <Route path="courses" element={<Allotments />} />
+          <Route path="courses" element={<Courses />} />
           <Route path="institutes" element={<Colleges />} />
           <Route path="fees" element={<Allotments />} />
           <Route path="wishlist" element={<Allotments />} />

@@ -13,11 +13,14 @@ const Allotments = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [filterLoading, setFilterLoading] = useState(true);
+  const [rankRange, setRankRange] = useState({ min: 0, max: 10000 });
+
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const fetchData = useCallback(async (page, pageSize, filters) => {
     setLoading(true);
     try {
-      const response = await axios.get('http://rankseatsbucket.s3-website-ap-southeast-2.amazonaws.com/api/allotments', {
+      const response = await axios.get(`${apiUrl}/allotments`, {
         params: {
           examName: 'NEET_PG_ALL_INDIA',
           year: 2015,
@@ -33,33 +36,49 @@ const Allotments = () => {
       console.error('Error fetching allotment data:', error);
     }
     setLoading(false);
-  }, []);
+  }, [apiUrl]);
+
+  const fetchRankRange = useCallback(async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/allotments/rank-range`, {
+        params: {
+          examName: 'NEET_PG_ALL_INDIA',
+          year: 2015,
+        }
+      });
+      setRankRange(response.data);
+    } catch (error) {
+      console.error('Error fetching rank range:', error);
+    }
+  }, [apiUrl]);
 
   useEffect(() => {
     fetchData(page, pageSize, filters);
-  }, [fetchData, filters, page, pageSize]);
+    fetchRankRange();
+  }, [fetchData, fetchRankRange, filters, page, pageSize]);
 
   useEffect(() => {
     const fetchFilterOptions = async () => {
       setFilterLoading(true);
       try {
-        const response = await axios.get('http://rankseatsbucket.s3-website-ap-southeast-2.amazonaws.com/allotments/filters', {
+        const response = await axios.get(`${apiUrl}/allotments/filters`, {
           params: {
             examName: 'NEET_PG',
             year: 2015,
             round: 'ALL_INDIA'
           }
         });
+        
         setFilterOptions(response.data);
       } catch (error) {
         console.error('Error fetching filter options:', error);
       }
       setFilterLoading(false);
     };
-
+  
     fetchFilterOptions();
-  }, []);
-
+  }, [apiUrl]);
+  
   return (
     <GenericTable
       data={data}
@@ -78,6 +97,7 @@ const Allotments = () => {
       fetchData={fetchData} // Pass fetchData
       pageSize={pageSize} // Pass pageSize
       setPageSize={setPageSize} // Pass setPageSize
+      rankRange={rankRange} // Pass rankRange
     />
   );
 };

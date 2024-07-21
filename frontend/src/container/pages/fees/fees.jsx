@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import GenericTable from './GenericTable';
-import { collegeColumns, collegeFiltersConfig } from './collegeConfig';
-import './Colleges.scss';
+import { courseColumns, courseFiltersConfig } from './feesConfig';
+import './Fees.scss';
 
-const Colleges = () => {
+const Fees = () => {
   const [data, setData] = useState([]);
   const [filterOptions, setFilterOptions] = useState({});
   const [filters, setFilters] = useState({});
@@ -18,7 +18,7 @@ const Colleges = () => {
   const fetchData = useCallback(async (page, pageSize, filters) => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:5001/api/colleges', {
+      const response = await axios.get('http://localhost:5001/api/courses', {
         params: {
           page,
           limit: pageSize,
@@ -44,7 +44,7 @@ const Colleges = () => {
     const fetchFilterOptions = async () => {
       setFilterLoading(true);
       try {
-        const response = await axios.get('http://localhost:5001/api/colleges/filters');
+        const response = await axios.get('http://localhost:5001/api/courses/filters');
         setFilterOptions(response.data);
       } catch (error) {
         console.error('Error fetching filter options:', error);
@@ -58,9 +58,9 @@ const Colleges = () => {
   return (
     <GenericTable
       data={data}
-      columns={collegeColumns}
-      filtersConfig={collegeFiltersConfig}
-      headerTitle="Institutes"
+      columns={courseColumns}
+      filtersConfig={courseFiltersConfig}
+      headerTitle="Courses"
       filters={filters}
       setFilters={setFilters}
       page={page}
@@ -76,4 +76,4 @@ const Colleges = () => {
   );
 };
 
-export default Colleges;
+export default Fees;

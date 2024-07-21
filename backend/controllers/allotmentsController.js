@@ -1,9 +1,39 @@
 const mongoose = require('mongoose');
 
-// Fetch allotment data with pagination and filters
+exports.getRankRange = async (req, res) => {
+  try {
+    const { examName, year } = req.query;
+    const collectionName = `GENERATED_${examName}_${year}_RESULT`;
+    let AllotmentModel;
+
+    try {
+      AllotmentModel = mongoose.model(collectionName);
+    } catch (error) {
+      if (error.name === 'MissingSchemaError') {
+        AllotmentModel = mongoose.model(collectionName, new mongoose.Schema({}, { strict: false }), collectionName);
+      } else {
+        throw error;
+      }
+    }
+
+    const minRank = await AllotmentModel.findOne().sort({ rank: 1 }).select('rank').lean();
+    const maxRank = await AllotmentModel.findOne().sort({ rank: -1 }).select('rank').lean();
+
+    res.json({
+      minRank: minRank ? minRank.rank : 0,
+      maxRank: maxRank ? maxRank.rank : 10000,
+    });
+  } catch (error) {
+    console.error('Error fetching rank range:', error);
+    res.status(500).send('Failed to fetch rank range.');
+  }
+};
+
+
+
 exports.getAllotmentData = async (req, res) => {
   try {
-    const { page = 1, limit = 10, ...filters } = req.query;
+    const { page = 1, limit = 10, rank, state, ...filters } = req.query;
     const collectionName = `GENERATED_NEET_PG_ALL_INDIA_2015_RESULT`;
     let AllotmentModel;
 
@@ -25,6 +55,24 @@ exports.getAllotmentData = async (req, res) => {
       }
     }
 
+    // Handle state filter (array)
+    if (state) {
+      query['state'] = { $in: Array.isArray(state) ? state : [state] };
+    }
+
+    // Handle rank filter (range)
+    if (rank) {
+      query['rank'] = {};
+      if (rank.min) {
+        query['rank'].$gte = Number(rank.min);
+      }
+      if (rank.max) {
+        query['rank'].$lte = Number(rank.max);
+      }
+    }
+
+    console.log('Query:', query); // Logging the query for debugging
+
     const data = await AllotmentModel.find(query)
       .skip((page - 1) * limit)
       .limit(Number(limit))
@@ -42,6 +90,7 @@ exports.getAllotmentData = async (req, res) => {
     res.status(500).send('Failed to fetch allotment data.');
   }
 };
+
 
 // Fetch filter options
 exports.getFilterOptions = async (req, res) => {

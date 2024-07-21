@@ -7,6 +7,9 @@ const courseSchema = new mongoose.Schema({
   clinicalType: String,
   degreeType: String,
   courseType: String,
-});
+  // Add other fields as necessary
+}, { collection: 'courses' }); // Specify the collection name
 
-module.exports = mongoose.model('Course', courseSchema);
+const Course = mongoose.model('Course', courseSchema);
+
+module.exports = Course;

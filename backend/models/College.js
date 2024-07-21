@@ -16,4 +16,4 @@ const collegeSchema = new mongoose.Schema({
   distanceFromAirport: String,
 });
 
-module.exports = mongoose.model('College', collegeSchema);
+module.exports = mongoose.model('College', collegeSchema, 'colleges'); // Explicitly specify the collection name

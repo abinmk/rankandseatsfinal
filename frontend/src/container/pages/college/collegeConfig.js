@@ -1,92 +1,83 @@
+// collegeConfig.js
 
-
-export const allotmentsColumns = [
+export const collegeColumns = [
+  {
+    Header: 'College Name',
+    accessor: 'collegeName',
+  },
   {
     Header: 'State',
     accessor: 'state',
   },
   {
-    Header: 'Institute',
-    accessor: 'allottedInstitute',
+    Header: 'University Name',
+    accessor: 'universityName',
   },
   {
     Header: 'Institute Type',
     accessor: 'instituteType',
   },
   {
-    Header: 'University',
-    accessor: 'universityName',
+    Header: 'Year of Establishment',
+    accessor: 'yearOfEstablishment',
   },
   {
-    Header: 'Course',
-    accessor: 'course',
-  },
-  {
-    Header: 'Course Type',
-    accessor: 'courseType',
-  },
-  {
-    Header: 'Course Category',
-    accessor: 'courseCategory',
-  },
-  {
-    Header: 'Degree Type',
-    accessor: 'degreeType',
-  },
-  {
-    Header: 'Course Fees',
-    accessor: 'feeAmount',
-  },
-  {
-    Header: 'Quota',
-    accessor: 'allottedQuota',
-  },
-  {
-    Header: 'Year',
-    accessor: 'year',
-  },
-  {
-    Header: 'Round',
-    accessor: 'round',
-  },
-  {
-    Header: 'Category',
-    accessor: 'candidateCategory',
-  },
-  {
-    Header: 'Bond',
-    accessor: 'bondYear',
-  },
-  {
-    Header: 'Bond Penalty',
-    accessor: 'bondPenality',
-  },
-  {
-    Header: 'Beds',
+    Header: 'Total Hospital Beds',
     accessor: 'totalHospitalBeds',
   },
   {
-    Header: 'Rank',
-    accessor: 'rank',
+    Header: 'Location Map Link',
+    accessor: 'locationMapLink',
+  },
+  {
+    Header: 'Nearest Railway Station',
+    accessor: 'nearestRailwayStation',
+  },
+  {
+    Header: 'Distance from Railway Station',
+    accessor: 'distanceFromRailwayStation',
+  },
+  {
+    Header: 'Nearest Airport',
+    accessor: 'nearestAirport',
+  },
+  {
+    Header: 'Distance from Airport',
+    accessor: 'distanceFromAirport',
   },
 ];
 
-export const allotmentsFiltersConfig = {
-  state: '',
-  instituteName: '',
-  instituteType: '',
-  universityName: '',
-  course: '',
-  courseType: '',
-  courseCategory: '',
-  degreeType: '',
-  courseFees: '',
-  quota: '',
-  year: '',
-  round: '',
-  category: '',
-  bond: '',
-  bondPenalty: '',
-  beds: '',
-  rank: ''
-};
+export const collegeFiltersConfig = [
+  {
+    id: 'state',
+    label: 'State',
+    type: 'select',
+    options: [],
+  },
+  {
+    id: 'instituteType',
+    label: 'Institute Type',
+    type: 'select',
+    options: [],
+  },
+  {
+    id: 'universityName',
+    label: 'University Name',
+    type: 'select',
+    options: [],
+  },
+  {
+    id: 'yearOfEstablishment',
+    label: 'Year of Establishment',
+    type: 'range',
+    min: 1900,
+    max: new Date().getFullYear(),
+  },
+  {
+    id: 'totalHospitalBeds',
+    label: 'Total Hospital Beds',
+    type: 'range',
+    min: 0,
+    max: 10000,
+  },
+];
