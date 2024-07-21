@@ -57,7 +57,7 @@
 
     .table-container {
       height: calc(100vh - 140px);
-      width: 95%;
+      min-width: 95%;
       overflow: hidden;
       box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
       background-color: #fff;
@@ -70,11 +70,11 @@
         overflow-y: auto;
         overflow-x: auto;
         height: 100%;
-        width: 100%;
+        min-width: 100%;
       }
 
       .tableCustom {
-        width: 100%;
+        min-width: 100%;
         border-collapse: collapse;
         table-layout: auto; /* Change to auto */
 

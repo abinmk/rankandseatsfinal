@@ -15,6 +15,7 @@ const datasetRoutes = require('./routes/datasetRoutes');
 const allotmentsRoute = require('./routes/allotmentsRoutes');
 const collegesRoutes = require('./routes/collegesRoutes');
 const coursesRoutes = require('./routes/coursesRoutes');
+const feesRoutes = require('./routes/feesRoutes');
 
 const app = express();
 const port = process.env.PORT || 5001;
@@ -329,6 +330,7 @@ mongoose.connect(db, {
     app.use('/api',allotmentsRoute);
     app.use('/api', collegesRoutes);
     app.use('/api', coursesRoutes);
+    app.use('/api', feesRoutes);
     
 
 

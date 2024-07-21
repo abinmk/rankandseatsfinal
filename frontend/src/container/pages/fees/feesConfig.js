@@ -1,58 +1,56 @@
-export const courseColumns = [
+export const feesColumns = [
   {
-    Header: 'Sl No',
-    accessor: 'slNo',
+    Header: 'College Name',
+    accessor: 'collegeName',
   },
   {
     Header: 'Course Name',
     accessor: 'courseName',
   },
   {
-    Header: 'Duration',
-    accessor: 'duration',
+    Header: 'Number of Seats',
+    accessor: 'noOfSeats',
   },
   {
-    Header: 'Clinical Type',
-    accessor: 'clinicalType',
+    Header: 'Course Fee',
+    accessor: 'courseFee',
   },
   {
-    Header: 'Degree Type',
-    accessor: 'degreeType',
+    Header: 'NRI Fee',
+    accessor: 'nriFee',
   },
   {
-    Header: 'Course Type',
-    accessor: 'courseType',
+    Header: 'Stipend Year 1',
+    accessor: 'stipendYear1',
+  },
+  {
+    Header: 'Stipend Year 2',
+    accessor: 'stipendYear2',
+  },
+  {
+    Header: 'Stipend Year 3',
+    accessor: 'stipendYear3',
+  },
+  {
+    Header: 'Bond Year',
+    accessor: 'bondYear',
+  },
+  {
+    Header: 'Bond Penalty',
+    accessor: 'bondPenality',
   },
 ];
 
-export const courseFiltersConfig = [
+export const feesFiltersConfig = [
   {
-    id: 'clinicalType',
-    label: 'Clinical Type',
-    type: 'select',
-    options: [],
-  },
-  {
-    id: 'degreeType',
-    label: 'Degree Type',
-    type: 'select',
-    options: [],
-  },
-  {
-    id: 'courseType',
-    label: 'Course Type',
-    type: 'select',
-    options: [],
-  },
-  {
-    id: 'duration',
-    label: 'Duration',
+    id: 'collegeName',
+    label: 'College Name',
     type: 'select',
     options: [],
   },
   {
     id: 'courseName',
-    label: 'Course Name',  // Add this filter configuration
+    label: 'Course Name',
     type: 'select',
     options: [],
   },

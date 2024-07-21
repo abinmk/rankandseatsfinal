@@ -59,7 +59,6 @@ const GenericTable = ({
       years: 'year',
       rounds: 'round',
       states: 'state',
-      courseName:'courseName',
       instituteTypes: 'instituteType',
       universityNames: 'universityName',
       yearsOfEstablishment: 'yearOfEstablishment',

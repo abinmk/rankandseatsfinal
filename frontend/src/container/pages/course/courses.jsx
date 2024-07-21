@@ -4,7 +4,9 @@ import GenericTable from './GenericTable';
 import { courseColumns, courseFiltersConfig } from './courseConfig';
 import './Courses.scss';
 
-const Colleges = () => {
+const apiUrl = import.meta.env.VITE_API_URL;
+
+const Courses = () => {
   const [data, setData] = useState([]);
   const [filterOptions, setFilterOptions] = useState({});
   const [filters, setFilters] = useState({});
@@ -18,7 +20,7 @@ const Colleges = () => {
   const fetchData = useCallback(async (page, pageSize, filters) => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:5001/api/courses', {
+      const response = await axios.get(`${apiUrl}/courses`, {
         params: {
           page,
           limit: pageSize,
@@ -76,4 +78,4 @@ const Colleges = () => {
   );
 };
 
-export default Colleges;
+export default Courses;

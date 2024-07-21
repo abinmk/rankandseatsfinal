@@ -26,10 +26,6 @@ export const collegeColumns = [
     accessor: 'totalHospitalBeds',
   },
   {
-    Header: 'Location Map Link',
-    accessor: 'locationMapLink',
-  },
-  {
     Header: 'Nearest Railway Station',
     accessor: 'nearestRailwayStation',
   },

@@ -17,9 +17,11 @@ import Dashboard from "./container/pages/dashboard/dashboard.jsx";
 import Allotments from "./container/pages/allotments/allotments.jsx";
 import Colleges from "./container/pages/college/colleges.jsx";
 import Courses from "./container/pages/course/courses";
+import Fees from "./container/pages/fees/fees.jsx";
 import GenerateResults from "./container/pages/generate-data/GenerateResults.jsx";
 import Upload from "./container/pages/generate-data/Upload.jsx";
 import UploadRound from "./container/pages/generate-data/UploadRound";
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -37,11 +39,11 @@ root.render(
         <Route path="/" element={<App />}>
           <Route path="dashboards" element={<Dashboard />} />
           <Route path="allotments" element={<Allotments />} />
-          <Route path="lastrank" element={<Allotments />} />
-          <Route path="courses" element={<Courses />} />
+          <Route path="lastrank" element={<></>} />
+          <Route path="courses" element={<Courses/>} />
           <Route path="institutes" element={<Colleges />} />
-          <Route path="fees" element={<Allotments />} />
-          <Route path="wishlist" element={<Allotments />} />
+          <Route path="fees" element={<></>} />
+          <Route path="wishlist" element={<></>} />
         </Route>
         <Route path="/" element={<Authenticationlayout />}>
           <Route path="authentication/signup/signupbasic" element={<Signupbasic />} />

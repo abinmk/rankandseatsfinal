@@ -27,6 +27,12 @@ export const courseColumns = [
 
 export const courseFiltersConfig = [
   {
+    id: 'courseName',
+    label: 'Course Name',  // Add this filter configuration
+    type: 'select',
+    options: [],
+  },
+  {
     id: 'clinicalType',
     label: 'Clinical Type',
     type: 'select',
@@ -50,10 +56,5 @@ export const courseFiltersConfig = [
     type: 'select',
     options: [],
   },
-  {
-    id: 'courseName',
-    label: 'Course Name',  // Add this filter configuration
-    type: 'select',
-    options: [],
-  },
+
 ];
