@@ -552,11 +552,10 @@
     margin-bottom: auto;
 
     &.full-width {
-      margin-left: 0;
+      margin-left: auto;
     }
 
     .table-container {
-      margin: 0%;
       height: calc(100vh - 170px);
       width: 95%;
       overflow: hidden;
@@ -565,6 +564,7 @@
       border-radius: 20px;
       padding: 20px;
       display: flex;
+      position: relative;
       flex-direction: column;
 
       .table-wrapper {

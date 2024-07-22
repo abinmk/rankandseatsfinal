@@ -4,6 +4,8 @@ import GenericTable from './GenericTable';
 import { feesColumns, feesFiltersConfig } from './feesConfig';
 import './Fees.scss';
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const Fees = () => {
   const [data, setData] = useState([]);
   const [filterOptions, setFilterOptions] = useState({});
@@ -14,48 +16,34 @@ const Fees = () => {
   const [loading, setLoading] = useState(true);
   const [filterLoading, setFilterLoading] = useState(true);
 
+  // Fetch data with filters and pagination
   const fetchData = useCallback(async (page, pageSize, filters) => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:5001/api/fees', {
-        params: {
-          page,
-          limit: pageSize,
-          ...filters
-        }
+      const response = await axios.get(`${apiUrl}/fees`, {
+        params: { page, limit: pageSize, ...filters }
       });
       setData(response.data.data);
       setPage(response.data.currentPage);
       setTotalPages(response.data.totalPages);
     } catch (error) {
-      console.error('Error fetching fees data:', error);
+      console.error('Error fetching fee data:', error);
     }
     setLoading(false);
   }, []);
 
+  // Fetch data on filters, page, or pageSize change
   useEffect(() => {
     fetchData(page, pageSize, filters);
   }, [fetchData, filters, page, pageSize]);
 
+  // Fetch filter options once on mount
   useEffect(() => {
     const fetchFilterOptions = async () => {
       setFilterLoading(true);
       try {
-        const response = await axios.get('http://localhost:5001/api/fees/filters');
-        const fetchedFilterOptions = response.data;
-        console.log('Fetched Filter Options:', fetchedFilterOptions); // Debugging line
-
-        const updatedFiltersConfig = feesFiltersConfig.map((filter) => {
-          if (filter.type === 'select') {
-            return {
-              ...filter,
-              options: fetchedFilterOptions[filter.id] || [],
-            };
-          }
-          return filter;
-        });
-
-        setFilterOptions(updatedFiltersConfig);
+        const response = await axios.get(`${apiUrl}/fees/filters`);
+        setFilterOptions(response.data);
       } catch (error) {
         console.error('Error fetching filter options:', error);
       }
@@ -69,7 +57,7 @@ const Fees = () => {
     <GenericTable
       data={data}
       columns={feesColumns}
-      filtersConfig={filterOptions}
+      filtersConfig={feesFiltersConfig}
       headerTitle="Fees"
       filters={filters}
       setFilters={setFilters}

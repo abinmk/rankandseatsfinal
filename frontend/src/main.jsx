@@ -42,7 +42,7 @@ root.render(
           <Route path="lastrank" element={<></>} />
           <Route path="courses" element={<Courses/>} />
           <Route path="institutes" element={<Colleges />} />
-          <Route path="fees" element={<></>} />
+          <Route path="fees" element={<Fees/>} />
           <Route path="wishlist" element={<></>} />
         </Route>
         <Route path="/" element={<Authenticationlayout />}>

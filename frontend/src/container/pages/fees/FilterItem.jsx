@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Accordion, Button, Modal } from 'react-bootstrap';
 import './Fees.scss';
-
 const FilterItem = ({ title, options, filterName, filters, handleFilterChange, eventKey, viewMore, appliedFiltersCount, getFilterParamName }) => {
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -11,8 +10,8 @@ const FilterItem = ({ title, options, filterName, filters, handleFilterChange, e
     setSearchTerm('');
   }, [showModal]);
 
-  const filteredOptions = options.filter(option =>
-    option.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredOptions = options.filter(option => 
+    typeof option === 'string' && option.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleModalClose = () => setShowModal(false);

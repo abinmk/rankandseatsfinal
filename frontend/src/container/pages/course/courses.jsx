@@ -46,7 +46,7 @@ const Courses = () => {
     const fetchFilterOptions = async () => {
       setFilterLoading(true);
       try {
-        const response = await axios.get('http://localhost:5001/api/courses/filters');
+        const response = await axios.get(`${apiUrl}/courses/filters`);
         setFilterOptions(response.data);
       } catch (error) {
         console.error('Error fetching filter options:', error);

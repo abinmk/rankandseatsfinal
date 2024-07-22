@@ -3,8 +3,8 @@ import { useTable, usePagination, useSortBy, useFilters, useColumnOrder } from '
 import FilterSection from './FilterSection';
 import { Table, Modal, Button, Form, Pagination } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { FaHeart } from 'react-icons/fa';
 import './Fees.scss';
-import { FaHeart } from 'react-icons/fa'; // import heart icon
 
 const GenericTable = ({
   data,
@@ -16,20 +16,19 @@ const GenericTable = ({
   page,
   setPage,
   totalPages,
-  setTotalPages,
   filterOptions,
   loading,
   filterLoading,
-  fetchData, // Ensure fetchData is passed
-  pageSize, // Ensure pageSize is passed
-  setPageSize // Ensure setPageSize is passed
+  fetchData,
+  pageSize,
+  setPageSize
 }) => {
   const [showFilters, setShowFilters] = useState(true);
   const [showColumnModal, setShowColumnModal] = useState(false);
   const [showRowModal, setShowRowModal] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [filteredData, setFilteredData] = useState(data);
-  const [wishlist, setWishlist] = useState(new Set()); // track wishlist items
+  const [wishlist, setWishlist] = useState(new Set());
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
@@ -38,7 +37,7 @@ const GenericTable = ({
   useEffect(() => {
     const resultsSection = document.querySelector('.results-section');
     if (showFilters) {
-      resultsSection.style.width = 'calc(100vw - 290px)'; // Account for filter width and padding
+      resultsSection.style.width = 'calc(100vw - 290px)';
     } else {
       resultsSection.style.width = '100vw';
     }
@@ -59,7 +58,6 @@ const GenericTable = ({
       years: 'year',
       rounds: 'round',
       states: 'state',
-      courseName:'courseName',
       instituteTypes: 'instituteType',
       universityNames: 'universityName',
       yearsOfEstablishment: 'yearOfEstablishment',
@@ -147,8 +145,8 @@ const GenericTable = ({
     {
       columns,
       data: filteredData,
-      initialState: { pageIndex: page - 1 }, // Set initial page
-      manualPagination: true, // Inform React Table that we'll handle pagination on our own
+      initialState: { pageIndex: page - 1 },
+      manualPagination: true,
       pageCount: totalPages,
     },
     useFilters,
@@ -204,7 +202,7 @@ const GenericTable = ({
         data={data}
         filterOptions={filterOptions}
         loading={filterLoading}
-        getFilterParamName={getFilterParamName} // Pass this function to FilterSection
+        getFilterParamName={getFilterParamName}
         clearAllFilters={clearAllFilters}
       />
       <div className={`results-section ${showFilters ? "" : "full-width"}`}>

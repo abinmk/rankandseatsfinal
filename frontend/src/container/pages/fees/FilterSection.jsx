@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Accordion, Button, Spinner } from 'react-bootstrap';
+import { Accordion, Spinner } from 'react-bootstrap';
 import FilterItem from './FilterItem';
 import './Fees.scss';
 

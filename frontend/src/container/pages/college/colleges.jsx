@@ -4,7 +4,7 @@ import GenericTable from './GenericTable';
 import { collegeColumns, collegeFiltersConfig } from './collegeConfig';
 import './Colleges.scss';
 
-const apiUrl = import.meta.env.VITE_API_URL;
+  const apiUrl = import.meta.env.VITE_API_URL;
 
 const Colleges = () => {
   const [data, setData] = useState([]);
@@ -46,7 +46,7 @@ const Colleges = () => {
     const fetchFilterOptions = async () => {
       setFilterLoading(true);
       try {
-        const response = await axios.get('http://localhost:5001/api/colleges/filters');
+        const response = await axios.get(`${apiUrl}/colleges/filters`);
         setFilterOptions(response.data);
       } catch (error) {
         console.error('Error fetching filter options:', error);
