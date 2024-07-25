@@ -17,10 +17,19 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
-  },
+  }
 });
 
 const upload = multer({ storage: storage }).single('file');
+
+// Helper function to get or create a model dynamically
+const getModel = (modelName) => {
+  if (mongoose.models[modelName]) {
+    return mongoose.models[modelName];
+  } else {
+    return mongoose.model(modelName, new mongoose.Schema({}, { strict: false }), modelName);
+  }
+};
 
 // Upload Allotments
 exports.uploadAllotment = (req, res) => {
@@ -58,7 +67,7 @@ exports.uploadAllotment = (req, res) => {
         candidateCategory: row[6],
         examName: examName,
         year: year,
-        round: round,
+        round: round
       }));
 
       AllotmentModel.insertMany(results)
@@ -74,12 +83,14 @@ exports.uploadAllotment = (req, res) => {
   });
 };
 
-// Upload Colleges
+
 exports.uploadCollege = (req, res) => {
   upload(req, res, function (err) {
-    if (err instanceof multer.MulterError || err) {
+    if (err instanceof multer.MulterError) {
+      console.error('Multer error:', err);
       return res.status(500).send({ message: err.message });
     } else if (err) {
+      console.error('Upload error:', err);
       return res.status(500).send({ message: err.message });
     }
 
@@ -87,26 +98,61 @@ exports.uploadCollege = (req, res) => {
 
     readExcelFile(filePath).then((rows) => {
       rows.shift(); // Remove header row
-      const colleges = rows.map((row) => ({
-        collegeName: row[0],
-        HospitalNameWithPlace:row[1],
-        HospitaNameWithAddress:row[2],
-        state: row[3],
-        universityName: row[4],
-        instituteType: row[5],
-        yearOfEstablishment: row[6],
-        totalHospitalBeds: row[7],
-        locationMapLink: row[8],
-        nearestRailwayStation: row[9],
-        distanceFromRailwayStation: row[10],
-        nearestAirport: row[11],
-        distanceFromAirport: row[12],
-        phoneNumber: row[13],
-        website: row[14],
-      }));
+
+      const colleges = rows.map((row, index) => {
+        if (row.length < 15) {
+          console.error(`Row ${index + 1} is missing required fields`);
+          return null;
+        }
+
+        const [
+          collegeName,
+          hospitalNameWithPlace,
+          hospitalNameWithAddress,
+          state,
+          universityName,
+          instituteType,
+          yearOfEstablishment,
+          totalHospitalBeds,
+          locationMapLink,
+          nearestRailwayStation,
+          distanceFromRailwayStation,
+          nearestAirport,
+          distanceFromAirport,
+          phoneNumber,
+          website
+        ] = row;
+
+        // Validate required fields
+        if (!collegeName || !hospitalNameWithPlace || !state || !universityName || !instituteType) {
+          console.error(`Validation error in row ${index + 1}: Missing required fields`);
+          return null;
+        }
+
+        return {
+          collegeName,
+          hospitalNameWithPlace,
+          hospitalNameWithAddress,
+          state,
+          universityName,
+          instituteType,
+          yearOfEstablishment,
+          totalHospitalBeds: parseInt(totalHospitalBeds, 10) || 0,
+          locationMapLink,
+          nearestRailwayStation,
+          distanceFromRailwayStation: parseFloat(distanceFromRailwayStation) || 0,
+          nearestAirport,
+          distanceFromAirport: parseFloat(distanceFromAirport) || 0,
+          phoneNumber,
+          website
+        };
+      }).filter(college => college !== null);
 
       College.insertMany(colleges)
-        .then(() => res.send('College details have been successfully saved to MongoDB.'))
+        .then(() => {
+          console.log('College details have been successfully saved to MongoDB.');
+          res.send('College details have been successfully saved to MongoDB.');
+        })
         .catch((err) => {
           console.error('MongoDB insertion error:', err);
           res.status(500).send('Failed to insert college details into MongoDB');
@@ -118,7 +164,7 @@ exports.uploadCollege = (req, res) => {
   });
 };
 
-// Upload Courses
+
 // Upload Courses
 exports.uploadCourse = (req, res) => {
   upload(req, res, function (err) {
@@ -136,7 +182,7 @@ exports.uploadCourse = (req, res) => {
         duration: row[2],
         clinicalType: row[3],
         degreeType: row[4],
-        courseType: row[5],
+        courseType: row[5]
       }));
 
       Course.insertMany(courses)
@@ -151,7 +197,6 @@ exports.uploadCourse = (req, res) => {
     });
   });
 };
-
 
 // Upload Fees
 exports.uploadFee = (req, res) => {
@@ -177,7 +222,7 @@ exports.uploadFee = (req, res) => {
         stipendYear3: row[7],
         bondYear: row[8],
         bondPenality: row[9],
-        seatLeavingPenality:row[10]
+        seatLeavingPenality: row[10]
       }));
 
       Fee.insertMany(fees)
@@ -194,14 +239,6 @@ exports.uploadFee = (req, res) => {
 };
 
 // Generate Combined Dataset with Multiple Allotments
-const getModel = (modelName) => {
-  if (mongoose.models[modelName]) {
-    return mongoose.models[modelName];
-  } else {
-    return mongoose.model(modelName, new mongoose.Schema({}, { strict: false }), modelName);
-  }
-};
-
 exports.generateCombinedDataset = async (req, res) => {
   try {
     const { examName, year, rounds, resultName } = req.body; // rounds is an array of selected allotments
@@ -300,7 +337,7 @@ exports.generateCombinedDataset = async (req, res) => {
         bondYear: fee?.bondYear,
         bondPenality: fee?.bondPenality,
         seatLeavingPenality: fee?.seatLeavingPenality,
-        description: course?.description,
+        description: course?.description
       };
     });
 
@@ -324,7 +361,6 @@ exports.generateCombinedDataset = async (req, res) => {
     res.status(500).send('Failed to generate combined dataset.');
   }
 };
-
 
 // List Available Allotments
 exports.listAvailableAllotments = async (req, res) => {
@@ -359,4 +395,3 @@ exports.getGeneratedData = async (req, res) => {
     res.status(500).send('Failed to fetch generated data.');
   }
 };
-

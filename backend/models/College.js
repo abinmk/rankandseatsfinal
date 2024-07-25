@@ -7,13 +7,13 @@ const collegeSchema = new mongoose.Schema({
   universityName: String,
   state: String,
   instituteType: String,
-  yearOfEstablishment: String,
-  totalHospitalBeds: String,
+  yearOfEstablishment: String,  // Assuming year is kept as String
+  totalHospitalBeds: Number,  // Corrected to Number
   locationMapLink: String,
   nearestRailwayStation: String,
-  distanceFromRailwayStation: String,
+  distanceFromRailwayStation: Number,  // Corrected to Number
   nearestAirport: String,
-  distanceFromAirport: String,
+  distanceFromAirport: Number  // Corrected to Number
 });
 
 module.exports = mongoose.model('College', collegeSchema, 'colleges'); // Explicitly specify the collection name

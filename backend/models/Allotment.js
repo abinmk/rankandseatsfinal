@@ -13,11 +13,11 @@ const allotmentSchema = new mongoose.Schema({
   state: String,
   instituteType: String,
   universityName: String,
-  totalHospitalBeds: String,
+  totalHospitalBeds: Number,  // Corrected to Number
   nearestRailwayStation: String,
-  distanceFromRailwayStation: String,
+  distanceFromRailwayStation: Number,  // Corrected to Number
   nearestAirport: String,
-  distanceFromAirport: String
+  distanceFromAirport: Number  // Corrected to Number
 });
 
 module.exports = mongoose.model('Allotment', allotmentSchema);

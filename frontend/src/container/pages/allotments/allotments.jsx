@@ -17,6 +17,27 @@ const Allotments = () => {
 
   const apiUrl = import.meta.env.VITE_API_URL;
 
+  const getFilterParamName = (filterKey) => {
+    const filterMapping = {
+      state: 'state',
+      institute: 'allottedInstitute',
+      instituteType: 'instituteType',
+      university: 'universityName',
+      course: 'course',
+      courseType: 'courseType',
+      degreeType: 'degreeType',
+      feeAmount: 'feeAmount',
+      quota: 'allottedQuota',
+      category: 'candidateCategory',
+      bondYear: 'bondYear',
+      bondPenality: 'bondPenality',
+      beds: 'totalHospitalBeds',
+      rank: 'rank'
+    };
+    
+    return filterMapping[filterKey] || filterKey;
+  };
+
   const fetchData = useCallback(async (page, pageSize, filters) => {
     setLoading(true);
     try {
@@ -68,37 +89,40 @@ const Allotments = () => {
             round: 'ALL_INDIA'
           }
         });
-        
+
         setFilterOptions(response.data);
       } catch (error) {
         console.error('Error fetching filter options:', error);
       }
       setFilterLoading(false);
     };
-  
+
     fetchFilterOptions();
   }, [apiUrl]);
-  
+
   return (
-    <GenericTable
-      data={data}
-      columns={allotmentsColumns}
-      filtersConfig={allotmentsFiltersConfig}
-      headerTitle="Allotments"
-      filters={filters}
-      setFilters={setFilters}
-      page={page}
-      setPage={setPage}
-      totalPages={totalPages}
-      setTotalPages={setTotalPages}
-      filterOptions={filterOptions}
-      loading={loading}
-      filterLoading={filterLoading}
-      fetchData={fetchData} // Pass fetchData
-      pageSize={pageSize} // Pass pageSize
-      setPageSize={setPageSize} // Pass setPageSize
-      rankRange={rankRange} // Pass rankRange
-    />
+    <div className="allotments-container">
+      <GenericTable
+        data={data}
+        columns={allotmentsColumns}
+        filtersConfig={allotmentsFiltersConfig}
+        headerTitle="Allotments"
+        filters={filters}
+        setFilters={setFilters}
+        page={page}
+        setPage={setPage}
+        totalPages={totalPages}
+        setTotalPages={setTotalPages}
+        filterOptions={filterOptions}
+        loading={loading}
+        filterLoading={filterLoading}
+        fetchData={fetchData} // Pass fetchData
+        pageSize={pageSize} // Pass pageSize
+        setPageSize={setPageSize} // Pass setPageSize
+        rankRange={rankRange} // Pass rankRange
+        getFilterParamName={getFilterParamName} // Pass getFilterParamName
+      />
+    </div>
   );
 };
 

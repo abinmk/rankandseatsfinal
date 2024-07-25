@@ -110,38 +110,55 @@ exports.getFilterOptions = async (req, res) => {
 
     const quotas = await AllotmentModel.distinct('allottedQuota');
     const institutes = await AllotmentModel.distinct('allottedInstitute');
-    const courses = await AllotmentModel.distinct('course');
-    const allottedCategories = await AllotmentModel.distinct('allottedCategory');
-    const candidateCategories = await AllotmentModel.distinct('candidateCategory');
-    const states = await AllotmentModel.distinct('state');
     const instituteTypes = await AllotmentModel.distinct('instituteType');
     const universityNames = await AllotmentModel.distinct('universityName');
-    const totalHospitalBeds = await AllotmentModel.distinct('totalHospitalBeds');
-    const nearestRailwayStations = await AllotmentModel.distinct('nearestRailwayStation');
-    const distanceFromRailwayStations = await AllotmentModel.distinct('distanceFromRailwayStation');
-    const nearestAirports = await AllotmentModel.distinct('nearestAirport');
-    const distanceFromAirports = await AllotmentModel.distinct('distanceFromAirport');
+    const courses = await AllotmentModel.distinct('course');
+    const courseTypes = await AllotmentModel.distinct('courseType');
+    const degreeTypes = await AllotmentModel.distinct('degreeType');
+    const states = await AllotmentModel.distinct('state');
+    const years = await AllotmentModel.distinct('year');
+    const rounds = await AllotmentModel.distinct('round');
+    const allottedCategories = await AllotmentModel.distinct('allottedCategory');
+    const feeAmountRange = await AllotmentModel.aggregate([
+      { $group: { _id: null, min: { $min: '$feeAmount' }, max: { $max: '$feeAmount' } } }
+    ]);
+    const bondYearRange = await AllotmentModel.aggregate([
+      { $group: { _id: null, min: { $min: '$bondYear' }, max: { $max: '$bondYear' } } }
+    ]);
+    const bondPenaltyRange = await AllotmentModel.aggregate([
+      { $group: { _id: null, min: { $min: '$bondPenality' }, max: { $max: '$bondPenality' } } }
+    ]);
+    const totalHospitalBedsRange = await AllotmentModel.aggregate([
+      { $group: { _id: null, min: { $min: '$totalHospitalBeds' }, max: { $max: '$totalHospitalBeds' } } }
+    ]);
+    const rankRange = await AllotmentModel.aggregate([
+      { $group: { _id: null, min: { $min: '$rank' }, max: { $max: '$rank' } } }
+    ]);
 
     res.json({
       quotas,
       institutes,
-      courses,
-      allottedCategories,
-      candidateCategories,
-      states,
       instituteTypes,
       universityNames,
-      totalHospitalBeds,
-      nearestRailwayStations,
-      distanceFromRailwayStations,
-      nearestAirports,
-      distanceFromAirports,
+      courses,
+      courseTypes,
+      degreeTypes,
+      states,
+      years,
+      rounds,
+      allottedCategories,
+      feeAmountRange: feeAmountRange[0],
+      bondYearRange: bondYearRange[0],
+      bondPenaltyRange: bondPenaltyRange[0],
+      totalHospitalBedsRange: totalHospitalBedsRange[0],
+      rankRange: rankRange[0]
     });
   } catch (error) {
     console.error('Error fetching filter options:', error);
     res.status(500).send('Failed to fetch filter options.');
   }
 };
+
 
 // Fetch all allotment data
 exports.getAllAllotmentData = async (req, res) => {

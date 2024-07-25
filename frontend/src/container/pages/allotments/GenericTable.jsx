@@ -77,6 +77,7 @@ const GenericTable = ({
       stipendYear3: 'stipendYear3',
       bondYears: 'bondYear',
       bondPenalties: 'bondPenality',
+      rank:'rank'
     };
     
     return filterMapping[filterKey] || filterKey;
