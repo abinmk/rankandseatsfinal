@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Accordion, Button, Modal, Row, Col } from 'react-bootstrap';
-import 'rc-slider/assets/index.css';
-import Slider from 'rc-slider';
-import './Allotments.scss';
+import Slider from '@mui/material/Slider';
+import './FilterItem.scss';
 
-const FilterItem = ({ title, options = [], filterName, filters, handleFilterChange, eventKey, viewMore, appliedFiltersCount, getFilterParamName }) => {
+const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChange, handleRangeChange, eventKey, viewMore, appliedFiltersCount, getFilterParamName }) => {
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [minValue, setMinValue] = useState(0);
-  const [maxValue, setMaxValue] = useState(10000); // Set the max range here
+  const [minValue, setMinValue] = useState(options.min || 0);
+  const [maxValue, setMaxValue] = useState(options.max || 10000);
   const filterParamName = getFilterParamName(filterName);
 
   useEffect(() => {
@@ -24,9 +23,12 @@ const FilterItem = ({ title, options = [], filterName, filters, handleFilterChan
     }
   }, [filters, filterParamName]);
 
-  const filteredOptions = Array.isArray(options) ? options.filter(option =>
-    option.toLowerCase().includes(searchTerm.toLowerCase())
-  ) : [];
+  const isRangeFilter = options && options.min !== undefined && options.max !== undefined;
+
+  const filteredOptions = Array.isArray(options) && typeof options[0] === 'string'
+    ? options.filter(option =>
+      option.toLowerCase().includes(searchTerm.toLowerCase())
+    ) : [];
 
   const handleModalClose = () => setShowModal(false);
   const handleModalOpen = () => setShowModal(true);
@@ -39,23 +41,22 @@ const FilterItem = ({ title, options = [], filterName, filters, handleFilterChan
     options.forEach(option => handleFilterChange(option, false, filterName));
   };
 
-  const handleSliderChange = (values) => {
-    const [min, max] = values;
-    setMinValue(min);
-    setMaxValue(max);
-    handleFilterChange({ min, max }, true, filterName);
+  const handleSliderChange = (event, newValue) => {
+    setMinValue(newValue[0]);
+    setMaxValue(newValue[1]);
+    handleRangeChange(newValue, filterName);
   };
 
   const handleMinInputChange = (e) => {
     const value = parseInt(e.target.value, 10);
     setMinValue(value);
-    handleFilterChange({ min: value, max: maxValue }, true, filterName);
+    handleRangeChange([value, maxValue], filterName);
   };
 
   const handleMaxInputChange = (e) => {
     const value = parseInt(e.target.value, 10);
     setMaxValue(value);
-    handleFilterChange({ min: minValue, max: value }, true, filterName);
+    handleRangeChange([minValue, value], filterName);
   };
 
   return (
@@ -65,7 +66,7 @@ const FilterItem = ({ title, options = [], filterName, filters, handleFilterChan
           {title} ({appliedFiltersCount})
         </Accordion.Header>
         <Accordion.Body>
-          {filterName === 'rank' ? (
+          {isRangeFilter ? (
             <>
               <Row>
                 <Col>
@@ -86,11 +87,12 @@ const FilterItem = ({ title, options = [], filterName, filters, handleFilterChan
                 </Col>
               </Row>
               <Slider
-                range
-                min={1}
-                max={10000}
+                getAriaLabel={() => 'Range'}
                 value={[minValue, maxValue]}
                 onChange={handleSliderChange}
+                valueLabelDisplay="auto"
+                min={options.min}
+                max={options.max}
               />
             </>
           ) : (

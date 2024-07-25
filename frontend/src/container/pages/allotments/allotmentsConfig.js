@@ -1,8 +1,6 @@
-
-
 export const allotmentsColumns = [
   {
-    Header: 'State',
+    Header: 'State Name',
     accessor: 'state',
   },
   {
@@ -85,8 +83,8 @@ export const allotmentsFiltersConfig = {
   year: '',
   round: '',
   category: '',
-  bond: '',
-  bondPenalty: '',
-  beds: '',
-  rank: ''
+  bondYear: [{ min: 0, max: 10 }],
+  bondPenality: [{ min: 0, max: 5000000 }],
+  beds: [{ min: 0, max: 1000 }],
+  rank: [{ min: 0, max: 10000 }],
 };

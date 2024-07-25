@@ -20,6 +20,7 @@ const GenericTable = ({
   filterOptions,
   loading,
   filterLoading,
+  rankRange,
   fetchData, // Ensure fetchData is passed
   pageSize, // Ensure pageSize is passed
   setPageSize // Ensure setPageSize is passed
@@ -186,6 +187,7 @@ const GenericTable = ({
         paginationItems.push(<Pagination.Ellipsis key={`ellipsis-${number}`} />);
       }
     }
+    
 
     return paginationItems;
   };

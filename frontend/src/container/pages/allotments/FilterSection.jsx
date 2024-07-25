@@ -1,7 +1,7 @@
 import React from 'react';
-import { Form, Accordion, Button, Spinner } from 'react-bootstrap';
+import { Form, Accordion, Spinner } from 'react-bootstrap';
 import FilterItem from './FilterItem';
-import './Allotments.scss';
+import './FilterSection.scss';
 
 const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, filterOptions, loading, getFilterParamName, clearAllFilters }) => {
   const handleFilterChange = (value, checked, filterName) => {
@@ -13,6 +13,14 @@ const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, filter
         : prevValues.filter((v) => v !== value);
       return { ...prevFilters, [filterParamName]: newValues };
     });
+  };
+
+  const handleRangeChange = (value, filterName) => {
+    const filterParamName = getFilterParamName(filterName);
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [filterParamName]: { min: value[0], max: value[1] }
+    }));
   };
 
   const appliedFiltersCount = (filterName) => {
@@ -28,7 +36,7 @@ const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, filter
           Clear All
         </span>
         <span className="close-btn" onClick={toggleFilters}>
-          X
+          x
         </span>
       </div>
       {loading ? (
@@ -44,7 +52,8 @@ const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, filter
               filterName={filterName}
               filters={filters}
               handleFilterChange={handleFilterChange}
-              viewMore={filterOptions[filterName].length > 4}
+              handleRangeChange={handleRangeChange}
+              viewMore={Array.isArray(filterOptions[filterName]) && filterOptions[filterName].length > 4}
               appliedFiltersCount={appliedFiltersCount(filterName)}
               getFilterParamName={getFilterParamName}
             />

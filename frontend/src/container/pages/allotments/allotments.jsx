@@ -59,46 +59,33 @@ const Allotments = () => {
     setLoading(false);
   }, [apiUrl]);
 
-  const fetchRankRange = useCallback(async () => {
+  const fetchFilterOptions = useCallback(async () => {
+    setFilterLoading(true);
     try {
-      const response = await axios.get(`${apiUrl}/allotments/rank-range`, {
+      const response = await axios.get(`${apiUrl}/allotments/filters`, {
         params: {
-          examName: 'NEET_PG_ALL_INDIA',
+          examName: 'NEET_PG',
           year: 2015,
+          round: 'ALL_INDIA'
         }
       });
-      setRankRange(response.data);
+
+      setFilterOptions(response.data);
+      console.log(response.data.rankRange);
+      setRankRange({min:response.data.rankRange.min , max:response.data.rankRange.max });
     } catch (error) {
-      console.error('Error fetching rank range:', error);
+      console.error('Error fetching filter options:', error);
     }
+    setFilterLoading(false);
   }, [apiUrl]);
 
   useEffect(() => {
     fetchData(page, pageSize, filters);
-    fetchRankRange();
-  }, [fetchData, fetchRankRange, filters, page, pageSize]);
+  }, [fetchData, filters, page, pageSize]);
 
   useEffect(() => {
-    const fetchFilterOptions = async () => {
-      setFilterLoading(true);
-      try {
-        const response = await axios.get(`${apiUrl}/allotments/filters`, {
-          params: {
-            examName: 'NEET_PG',
-            year: 2015,
-            round: 'ALL_INDIA'
-          }
-        });
-
-        setFilterOptions(response.data);
-      } catch (error) {
-        console.error('Error fetching filter options:', error);
-      }
-      setFilterLoading(false);
-    };
-
     fetchFilterOptions();
-  }, [apiUrl]);
+  }, [fetchFilterOptions]);
 
   return (
     <div className="allotments-container">
