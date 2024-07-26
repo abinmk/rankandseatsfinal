@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTable, usePagination, useSortBy, useFilters, useColumnOrder } from 'react-table';
 import FilterSection from './FilterSection';
 import { Table, Modal, Button, Form, Pagination } from 'react-bootstrap';
@@ -46,8 +46,12 @@ const GenericTable = ({
   }, [showFilters]);
 
   useEffect(() => {
-    applyFilters();
-  }, [filters, data]);
+    setFilteredData(data);
+  }, [data]);
+
+  useEffect(() => {
+    fetchData(page, pageSize, buildFilterParams());
+  }, [filters, page, pageSize]);
 
   const getFilterParamName = (filterKey) => {
     const filterMapping = {
@@ -78,34 +82,26 @@ const GenericTable = ({
       stipendYear3: 'stipendYear3',
       bondYears: 'bondYear',
       bondPenalties: 'bondPenality',
-      rank:'rank'
+      rank: 'rank'
     };
     
     return filterMapping[filterKey] || filterKey;
   };
 
-  const applyFilters = () => {
-    let filtered = data;
-
-    Object.keys(filters).forEach(filterKey => {
-      if (filters[filterKey] && filters[filterKey].length > 0) {
-        filtered = filtered.filter(item => {
-          const itemValue = item[filterKey];
-
-          if (Array.isArray(filters[filterKey])) {
-            return filters[filterKey].includes(itemValue);
-          }
-
-          if (filters[filterKey].min !== undefined && filters[filterKey].max !== undefined) {
-            return itemValue >= filters[filterKey].min && itemValue <= filters[filterKey].max;
-          }
-
-          return itemValue === filters[filterKey];
-        });
+  const buildFilterParams = () => {
+    const params = {};
+    Object.keys(filters).forEach((filterKey) => {
+      const filterValue = filters[filterKey];
+      if (typeof filterValue === 'object' && filterValue !== null) {
+        const paramKeyMin = `${filterKey}Min`;
+        const paramKeyMax = `${filterKey}Max`;
+        params[paramKeyMin] = filterValue.min;
+        params[paramKeyMax] = filterValue.max;
+      } else {
+        params[filterKey] = filterValue;
       }
     });
-
-    setFilteredData(filtered);
+    return params;
   };
 
   const toggleWishlist = (id) => {
@@ -203,7 +199,6 @@ const GenericTable = ({
         toggleFilters={toggleFilters}
         filters={filters}
         setFilters={setFilters}
-        data={data}
         filterOptions={filterOptions}
         loading={filterLoading}
         getFilterParamName={getFilterParamName} // Pass this function to FilterSection

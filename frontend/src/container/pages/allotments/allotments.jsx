@@ -8,7 +8,7 @@ const Allotments = () => {
   const [data, setData] = useState([]);
   const [filterOptions, setFilterOptions] = useState({});
   const [filters, setFilters] = useState({});
-  const [page, setPage] = useState(1); // page index should start from 1 for API
+  const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -34,7 +34,6 @@ const Allotments = () => {
       beds: 'totalHospitalBeds',
       rank: 'rank'
     };
-    
     return filterMapping[filterKey] || filterKey;
   };
 
@@ -69,10 +68,8 @@ const Allotments = () => {
           round: 'ALL_INDIA'
         }
       });
-
       setFilterOptions(response.data);
-      console.log(response.data.rankRange);
-      setRankRange({min:response.data.rankRange.min , max:response.data.rankRange.max });
+      setRankRange({min: response.data.rankRange.min, max: response.data.rankRange.max});
     } catch (error) {
       console.error('Error fetching filter options:', error);
     }
@@ -86,6 +83,22 @@ const Allotments = () => {
   useEffect(() => {
     fetchFilterOptions();
   }, [fetchFilterOptions]);
+
+  const countAppliedFilters = () => {
+    let count = 0;
+    for (const key in filters) {
+      if (Array.isArray(filters[key])) {
+        count += filters[key].length;
+      } else if (filters[key] && typeof filters[key] === 'object') {
+        if (filters[key].min !== undefined || filters[key].max !== undefined) {
+          count += 1;
+        }
+      } else if (filters[key]) {
+        count += 1;
+      }
+    }
+    return count;
+  };
 
   return (
     <div className="allotments-container">
@@ -103,11 +116,12 @@ const Allotments = () => {
         filterOptions={filterOptions}
         loading={loading}
         filterLoading={filterLoading}
-        fetchData={fetchData} // Pass fetchData
-        pageSize={pageSize} // Pass pageSize
-        setPageSize={setPageSize} // Pass setPageSize
-        rankRange={rankRange} // Pass rankRange
-        getFilterParamName={getFilterParamName} // Pass getFilterParamName
+        fetchData={fetchData}
+        pageSize={pageSize}
+        setPageSize={setPageSize}
+        rankRange={rankRange}
+        getFilterParamName={getFilterParamName}
+        appliedFiltersCount={countAppliedFilters()} // Pass applied filters count
       />
     </div>
   );

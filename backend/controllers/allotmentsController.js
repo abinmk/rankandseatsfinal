@@ -29,12 +29,10 @@ exports.getRankRange = async (req, res) => {
   }
 };
 
-
-
 exports.getAllotmentData = async (req, res) => {
   try {
-    const { page = 1, limit = 10, rank, state, ...filters } = req.query;
-    const collectionName = `GENERATED_NEET_PG_ALL_INDIA_2015_RESULT`;
+    const { page = 1, limit = 10, state, bondPenaltyRange, ...filters } = req.query;
+    const collectionName = 'GENERATED_NEET_PG_ALL_INDIA_2015_RESULT';
     let AllotmentModel;
 
     try {
@@ -47,28 +45,45 @@ exports.getAllotmentData = async (req, res) => {
       }
     }
 
-    // Remove empty filters
     const query = {};
-    for (const key in filters) {
-      if (filters[key]) {
-        query[key] = Array.isArray(filters[key]) ? { $in: filters[key] } : filters[key];
-      }
-    }
 
-    // Handle state filter (array)
+    // Process state filter if present
     if (state) {
       query['state'] = { $in: Array.isArray(state) ? state : [state] };
     }
 
-    // Handle rank filter (range)
-    if (rank) {
-      query['rank'] = {};
-      if (rank.min) {
-        query['rank'].$gte = Number(rank.min);
+    // Utility function to add range filters
+    const addRangeFilter = (field, range) => {
+      if (range) {
+        const rangeQuery = {};
+        if (range.min) {
+          rangeQuery.$gte = Number(range.min);
+        }
+        if (range.max) {
+          rangeQuery.$lte = Number(range.max);
+        }
+        if (Object.keys(rangeQuery).length > 0) {
+          query[field] = rangeQuery;
+        }
       }
-      if (rank.max) {
-        query['rank'].$lte = Number(rank.max);
+    };
+
+    // Process filters including range filters
+    for (const key in filters) {
+      if (filters[key]) {
+        if (key.endsWith('Range')) {
+          // Extract field name and range values
+          const field = key.replace('Range', '');
+          addRangeFilter(field, filters[key]);
+        } else {
+          query[key] = Array.isArray(filters[key]) ? { $in: filters[key] } : filters[key];
+        }
       }
+    }
+
+    // Specific handling for bondPenaltyRange
+    if (bondPenaltyRange) {
+      addRangeFilter('bondPenality', bondPenaltyRange);
     }
 
     console.log('Query:', query); // Logging the query for debugging
@@ -90,6 +105,10 @@ exports.getAllotmentData = async (req, res) => {
     res.status(500).send('Failed to fetch allotment data.');
   }
 };
+
+
+
+
 
 
 // Fetch filter options

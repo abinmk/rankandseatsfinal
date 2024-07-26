@@ -284,7 +284,7 @@
     top: 0;
     z-index: 5000;
     background-color: white;
-    padding: 10px 10px;
+    padding: 20px 10px;
     border-bottom: 10px solid #ffffff;
     display: flex;
     justify-content: space-between;
@@ -347,7 +347,7 @@
   }
 
   .filter-item {
-    padding: 10px;
+    padding: 50px;
     height: 50%;
     margin-bottom: 15px;
 
@@ -369,10 +369,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 10px;
 
     input {
-      width: 45%;
+      width: 65%;
     }
   }
 
@@ -385,6 +384,10 @@
     &:hover {
       color: var(--hover-color);
     }
+  }
+  .sliderFilter{
+    margin: 15px;
+    padding: 10px;
   }
 
   .filter-actions {
@@ -421,7 +424,7 @@
   }
 
   .accordion-body {
-    padding: 0 10px 10px 10px;
+    padding: 5px 10px 10px 10px;
 
     .filter-search {
       margin-top: 10px;
@@ -466,7 +469,7 @@
         background-color: transparent;
         border: none;
         cursor: pointer;
-        padding: 10;
+        padding: 20;
 
         &:hover {
           color: var(--hover-color);
@@ -476,11 +479,10 @@
   }
 
   .filter-category {
-    margin-top: 20px;
 
     .category-title {
       font-size: 0.875rem;
-      font-weight: bold;
+      font-weight: lighter;
       margin-bottom: 10px;
     }
 

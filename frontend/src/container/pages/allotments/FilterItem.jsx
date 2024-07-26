@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Accordion, Button, Modal, Row, Col } from 'react-bootstrap';
 import Slider from '@mui/material/Slider';
-import './FilterItem.scss';
 
 const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChange, handleRangeChange, eventKey, viewMore, appliedFiltersCount, getFilterParamName }) => {
   const [showModal, setShowModal] = useState(false);
@@ -17,11 +16,15 @@ const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChan
   useEffect(() => {
     if (filters[filterParamName]?.min !== undefined) {
       setMinValue(filters[filterParamName].min);
+    } else {
+      setMinValue(options.min || 0);
     }
     if (filters[filterParamName]?.max !== undefined) {
       setMaxValue(filters[filterParamName].max);
+    } else {
+      setMaxValue(options.max || 10000);
     }
-  }, [filters, filterParamName]);
+  }, [filters, filterParamName, options.min, options.max]);
 
   const isRangeFilter = options && options.min !== undefined && options.max !== undefined;
 
@@ -65,9 +68,17 @@ const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChan
         <Accordion.Header>
           {title} ({appliedFiltersCount})
         </Accordion.Header>
-        <Accordion.Body>
+        <Accordion.Body className='sliderFilter'>
           {isRangeFilter ? (
             <>
+              <Slider
+                getAriaLabel={() => 'Range'}
+                value={[minValue, maxValue]}
+                onChange={handleSliderChange}
+                valueLabelDisplay="auto"
+                min={options.min}
+                max={options.max}
+              />
               <Row>
                 <Col>
                   <Form.Label>Min:</Form.Label>
@@ -86,14 +97,6 @@ const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChan
                   />
                 </Col>
               </Row>
-              <Slider
-                getAriaLabel={() => 'Range'}
-                value={[minValue, maxValue]}
-                onChange={handleSliderChange}
-                valueLabelDisplay="auto"
-                min={options.min}
-                max={options.max}
-              />
             </>
           ) : (
             <>
