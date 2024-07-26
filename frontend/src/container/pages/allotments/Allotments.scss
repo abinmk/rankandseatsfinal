@@ -262,7 +262,7 @@
   transition: transform 0.5s ease;
   position: fixed;
   left: 15px;
-  height: calc(100vh - 170px) !important;
+  height: calc(100vh - 140px) !important;
   margin-top: 0px;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
   border-radius: 20px;
@@ -310,15 +310,15 @@
     .close-btn {
       color: var(--text-color);
       border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      padding: 10px;
-      background: #ffffff;
+      width: 40px;
+      height: 40px;
+      padding: 0px;
+      background: #f0f0f0;
       color: #010b12;
       text-align: center;
       font-weight: bold !important;
       transition: background-color 0.3s, color 0.3s;
-      font-size: 12px; /* Adjusted font size */
+      font-size: 18px; /* Adjusted font size */
       font-family: Arial, sans-serif;
       display: flex; /* To center the text both vertically and horizontally */
       align-items: center;
@@ -327,7 +327,7 @@
       cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
     
       &:hover {
-        background-color:#f1f1f1;
+        background-color:#ffffff;
         color: rgb(3, 47, 148);
       }
     
@@ -465,14 +465,14 @@
 
       .clear-btn {
         font-size: 0.875rem;
-        color: var(--primary-color);
+        color: var (--primary-color);
         background-color: transparent;
         border: none;
         cursor: pointer;
         padding: 20;
 
         &:hover {
-          color: var(--hover-color);
+          color: var (--hover-color);
         }
       }
     }
@@ -632,7 +632,7 @@
         left: 95vw;
         margin: 10px;
         z-index: 1000;
-        background-color:  --primary-color !important;
+        background-color: var(--primary-color) !important;
         color: white;
         border: none;
         border-radius: 5px;

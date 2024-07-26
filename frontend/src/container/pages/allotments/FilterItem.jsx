@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Accordion, Button, Modal, Row, Col } from 'react-bootstrap';
 import Slider from '@mui/material/Slider';
+import { debounce } from 'lodash';
 
-const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChange, handleRangeChange, eventKey, viewMore, appliedFiltersCount, getFilterParamName }) => {
+const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChange, handleRangeChange, eventKey, viewMore, appliedFiltersCount, getFilterParamName, loading }) => {
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [minValue, setMinValue] = useState(options.min || 0);
@@ -47,19 +48,32 @@ const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChan
   const handleSliderChange = (event, newValue) => {
     setMinValue(newValue[0]);
     setMaxValue(newValue[1]);
+  };
+
+  const debouncedHandleRangeChange = debounce((newValue) => {
     handleRangeChange(newValue, filterName);
+  }, 300);
+
+  const handleSliderChangeCommitted = (event, newValue) => {
+    debouncedHandleRangeChange(newValue);
   };
 
   const handleMinInputChange = (e) => {
     const value = parseInt(e.target.value, 10);
     setMinValue(value);
-    handleRangeChange([value, maxValue], filterName);
+    debouncedHandleRangeChange([value, maxValue]);
   };
 
   const handleMaxInputChange = (e) => {
     const value = parseInt(e.target.value, 10);
     setMaxValue(value);
-    handleRangeChange([minValue, value], filterName);
+    debouncedHandleRangeChange([minValue, value]);
+  };
+
+  const resetFilter = () => {
+    setMinValue(options.min || 0);
+    setMaxValue(options.max || 10000);
+    handleRangeChange([options.min || 0, options.max || 10000], filterName);
   };
 
   return (
@@ -75,9 +89,11 @@ const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChan
                 getAriaLabel={() => 'Range'}
                 value={[minValue, maxValue]}
                 onChange={handleSliderChange}
+                onChangeCommitted={handleSliderChangeCommitted}
                 valueLabelDisplay="auto"
                 min={options.min}
                 max={options.max}
+                disabled={loading}
               />
               <Row>
                 <Col>
@@ -86,6 +102,7 @@ const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChan
                     type="number"
                     value={minValue}
                     onChange={handleMinInputChange}
+                    disabled={loading}
                   />
                 </Col>
                 <Col>
@@ -94,6 +111,7 @@ const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChan
                     type="number"
                     value={maxValue}
                     onChange={handleMaxInputChange}
+                    disabled={loading}
                   />
                 </Col>
               </Row>

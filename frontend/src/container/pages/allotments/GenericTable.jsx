@@ -93,10 +93,8 @@ const GenericTable = ({
     Object.keys(filters).forEach((filterKey) => {
       const filterValue = filters[filterKey];
       if (typeof filterValue === 'object' && filterValue !== null) {
-        const paramKeyMin = `${filterKey}Min`;
-        const paramKeyMax = `${filterKey}Max`;
-        params[paramKeyMin] = filterValue.min;
-        params[paramKeyMax] = filterValue.max;
+        params[`${filterKey}Min`] = filterValue.min;
+        params[`${filterKey}Max`] = filterValue.max;
       } else {
         params[filterKey] = filterValue;
       }

@@ -58,6 +58,7 @@ const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, filter
               viewMore={Array.isArray(filterOptions[filterName]) && filterOptions[filterName].length > 4}
               appliedFiltersCount={appliedFiltersCount(filterName)}
               getFilterParamName={getFilterParamName}
+              loading={loading} // Pass the loading state
             />
           ))}
         </Accordion>
