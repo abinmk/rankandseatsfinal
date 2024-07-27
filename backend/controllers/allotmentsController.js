@@ -127,17 +127,17 @@ exports.getFilterOptions = async (req, res) => {
       }
     }
 
-    const quotas = await AllotmentModel.distinct('allottedQuota');
-    const institutes = await AllotmentModel.distinct('allottedInstitute');
-    const instituteTypes = await AllotmentModel.distinct('instituteType');
-    const universityNames = await AllotmentModel.distinct('universityName');
-    const courses = await AllotmentModel.distinct('course');
-    const courseTypes = await AllotmentModel.distinct('courseType');
-    const degreeTypes = await AllotmentModel.distinct('degreeType');
-    const states = await AllotmentModel.distinct('state');
-    const years = await AllotmentModel.distinct('year');
-    const rounds = await AllotmentModel.distinct('round');
-    const allottedCategories = await AllotmentModel.distinct('allottedCategory');
+    const quota = await AllotmentModel.distinct('allottedQuota');
+    const institute = await AllotmentModel.distinct('allottedInstitute');
+    const instituteType = await AllotmentModel.distinct('instituteType');
+    const university = await AllotmentModel.distinct('universityName');
+    const course = await AllotmentModel.distinct('course');
+    const courseType = await AllotmentModel.distinct('courseType');
+    const degreeType = await AllotmentModel.distinct('degreeType');
+    const state = await AllotmentModel.distinct('state');
+    const year = await AllotmentModel.distinct('year');
+    const round = await AllotmentModel.distinct('round');
+    const category = await AllotmentModel.distinct('allottedCategory');
     const feeAmountRange = await AllotmentModel.aggregate([
       { $group: { _id: null, min: { $min: '$feeAmount' }, max: { $max: '$feeAmount' } } }
     ]);
@@ -155,18 +155,18 @@ exports.getFilterOptions = async (req, res) => {
     ]);
 
     res.json({
-      quotas,
-      institutes,
-      instituteTypes,
-      universityNames,
-      courses,
-      courseTypes,
-      degreeTypes,
-      states,
-      years,
-      rounds,
-      allottedCategories,
+      state,
+      institute,
+      instituteType,
+      university,
+      course,
+      courseType,
+      degreeType,
       feeAmountRange: feeAmountRange[0],
+      quota,
+      year,
+      round,
+      category,
       bondYearRange: bondYearRange[0],
       bondPenaltyRange: bondPenaltyRange[0],
       totalHospitalBedsRange: totalHospitalBedsRange[0],

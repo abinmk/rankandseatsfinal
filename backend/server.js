@@ -12,10 +12,12 @@ require('dotenv').config();
 const adminRoutes = require('./routes/adminRoutes');
 const authRoutes = require('./routes/auth');
 const datasetRoutes = require('./routes/datasetRoutes');
-const allotmentsRoute = require('./routes/allotmentsRoutes');
+const allotmentsRoutes = require('./routes/allotmentsRoutes');
 const collegesRoutes = require('./routes/collegesRoutes');
 const coursesRoutes = require('./routes/coursesRoutes');
 const feesRoutes = require('./routes/feesRoutes');
+const wishlistRoutes = require('./routes/wishlist');
+const userRoutes = require('./routes/users');
 
 const app = express();
 const port = process.env.PORT || 5001;
@@ -23,7 +25,7 @@ const port = process.env.PORT || 5001;
 app.use('/static', express.static(path.join(__dirname, 'static')));
 
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:5173','http://ec2-52-63-164-69.ap-southeast-2.compute.amazonaws.com:5001','http://rankseatsbucket.s3-website-ap-southeast-2.amazonaws.com','https://rankseatsbucket.s3-website-ap-southeast-2.amazonaws.com'],
+  origin: ['http://localhost:3000', 'http://localhost:5173', 'http://ec2-52-63-164-69.ap-southeast-2.compute.amazonaws.com:5001', 'http://rankseatsbucket.s3-website-ap-southeast-2.amazonaws.com', 'https://rankseatsbucket.s3-website-ap-southeast-2.amazonaws.com'],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true
 }));
@@ -324,15 +326,15 @@ mongoose.connect(db, {
     app.use(bodyParser.urlencoded({ extended: true }));
 
     // Register routes
-    app.use('/api', adminRoutes);
     app.use('/api/auth', authRoutes);
-    app.use('/api', datasetRoutes);
-    app.use('/api',allotmentsRoute);
-    app.use('/api', collegesRoutes);
-    app.use('/api', coursesRoutes);
-    app.use('/api', feesRoutes);
-    
-
+    app.use('/api/users', userRoutes); // Add your user routes
+    app.use('/api/wishlist', wishlistRoutes);
+    app.use('/api/admin', adminRoutes);
+    app.use('/api/dataset', datasetRoutes);
+    app.use('/api/allotments', allotmentsRoutes);
+    app.use('/api/colleges', collegesRoutes);
+    app.use('/api/courses', coursesRoutes);
+    app.use('/api/fees', feesRoutes);
 
     app.use((err, req, res, next) => {
       console.error(err.stack);

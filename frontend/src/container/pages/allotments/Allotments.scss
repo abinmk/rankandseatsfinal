@@ -255,19 +255,21 @@
 /* Filter Section Styles */
 .filters-section {
   display: flex;
-  padding: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
   background-color: white;
   flex-direction: column;
   width: 300px; /* Adjusted width */
   transition: transform 0.5s ease;
   position: fixed;
   left: 15px;
-  height: calc(100vh - 140px) !important;
+  height: calc(100vh - 170px) !important;
   margin-top: 0px;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
   border-radius: 20px;
   z-index: 5000;
-  overflow-y: auto;
+  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-x: hidden; /* Hide horizontal overflow */
 
   &.hide {
     transform: translateX(-100%);
@@ -310,8 +312,8 @@
     .close-btn {
       color: var(--text-color);
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
+      width: 30px;
+      height: 30px;
       padding: 0px;
       background: #f0f0f0;
       color: #010b12;
@@ -327,8 +329,9 @@
       cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
     
       &:hover {
-        background-color:#ffffff;
-        color: rgb(3, 47, 148);
+        background-color:#e4e9f5;
+        color: rgb(11, 11, 11);
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1); /* Added shadow for a more elevated look */
       }
     
       &:active {
@@ -558,7 +561,7 @@
     }
 
     .table-container {
-      height: calc(100vh - 170px);
+      height: calc(100vh - 170px) !important;
       width: 95%;
       overflow: hidden;
       box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
@@ -693,8 +696,8 @@
             }
   
             &.active .page-link {
-              background-color: var(--primary-color) !important; /* Desired color for active page */
-              border-color: var(--primary-color) !important;
+              background-color: var (--primary-color) !important; /* Desired color for active page */
+              border-color: var (--primary-color) !important;
               color: white !important;
             }
           }

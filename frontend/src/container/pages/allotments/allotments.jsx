@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import axios from 'axios';
+import _ from 'lodash';
 import GenericTable from './GenericTable';
 import { allotmentsColumns, allotmentsFiltersConfig } from './allotmentsConfig';
 import './Allotments.scss';
@@ -17,7 +18,7 @@ const Allotments = () => {
 
   const apiUrl = import.meta.env.VITE_API_URL;
 
-  const getFilterParamName = (filterKey) => {
+  const getFilterParamName = useMemo(() => {
     const filterMapping = {
       state: 'state',
       institute: 'allottedInstitute',
@@ -34,29 +35,32 @@ const Allotments = () => {
       beds: 'totalHospitalBeds',
       rank: 'rank'
     };
-    return filterMapping[filterKey] || filterKey;
-  };
+    return (filterKey) => filterMapping[filterKey] || filterKey;
+  }, []);
 
-  const fetchData = useCallback(async (page, pageSize, filters) => {
-    setLoading(true);
-    try {
-      const response = await axios.get(`${apiUrl}/allotments`, {
-        params: {
-          examName: 'NEET_PG_ALL_INDIA',
-          year: 2015,
-          page,
-          limit: pageSize,
-          ...filters
-        }
-      });
-      setData(response.data.data);
-      setPage(response.data.currentPage);
-      setTotalPages(response.data.totalPages);
-    } catch (error) {
-      console.error('Error fetching allotment data:', error);
-    }
-    setLoading(false);
-  }, [apiUrl]);
+  const fetchData = useCallback(
+    _.debounce(async (page, pageSize, filters) => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`${apiUrl}/allotments`, {
+          params: {
+            examName: 'NEET_PG_ALL_INDIA',
+            year: 2015,
+            page,
+            limit: pageSize,
+            ...filters
+          }
+        });
+        setData(response.data.data);
+        setPage(response.data.currentPage);
+        setTotalPages(response.data.totalPages);
+      } catch (error) {
+        console.error('Error fetching allotment data:', error);
+      }
+      setLoading(false);
+    }, 500),
+    [apiUrl]
+  );
 
   const fetchFilterOptions = useCallback(async () => {
     setFilterLoading(true);
@@ -69,7 +73,7 @@ const Allotments = () => {
         }
       });
       setFilterOptions(response.data);
-      setRankRange({min: response.data.rankRange.min, max: response.data.rankRange.max});
+      setRankRange({ min: response.data.rankRange.min, max: response.data.rankRange.max });
     } catch (error) {
       console.error('Error fetching filter options:', error);
     }
@@ -78,6 +82,10 @@ const Allotments = () => {
 
   useEffect(() => {
     fetchData(page, pageSize, filters);
+    // Clean up debounce on unmount
+    return () => {
+      fetchData.cancel();
+    };
   }, [fetchData, filters, page, pageSize]);
 
   useEffect(() => {

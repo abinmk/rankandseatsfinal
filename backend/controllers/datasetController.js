@@ -31,61 +31,70 @@ const getModel = (modelName) => {
   }
 };
 
+const batchInsert = async (Model, data, batchSize = 1000) => {
+  const batches = [];
+  for (let i = 0; i < data.length; i += batchSize) {
+    batches.push(data.slice(i, i + batchSize));
+  }
+  for (const batch of batches) {
+    await Model.insertMany(batch, { ordered: false });
+  }
+};
+
+
 // Upload Allotments
-exports.uploadAllotment = (req, res) => {
-  upload(req, res, function (err) {
+const uploadAllotment = (req, res) => {
+  upload(req, res, async function (err) {
     if (err instanceof multer.MulterError || err) {
-      return res.status(500).send({ message: err.message });
-    } else if (err) {
       return res.status(500).send({ message: err.message });
     }
 
     const { examName, round, year } = req.body;
     const filePath = path.join(__dirname, '..', 'uploads', req.file.filename);
     const collectionName = `${examName}_${year}_${round}`;
-    const schema = new mongoose.Schema({}, { strict: false });
 
-    let AllotmentModel;
+    const schema = new mongoose.Schema({
+      rank: Number,
+      allottedQuota: String,
+      allottedInstitute: String,
+      course: String,
+      allottedCategory: String,
+      candidateCategory: String,
+      examName: String,
+      year: Number,
+      round: String
+    }, { strict: false });
+
+    const AllotmentModel = getModel(collectionName);
+
     try {
-      AllotmentModel = mongoose.model(collectionName);
-    } catch (error) {
-      if (error.name === 'MissingSchemaError') {
-        AllotmentModel = mongoose.model(collectionName, schema, collectionName);
-      } else {
-        throw error;
-      }
-    }
-
-    readExcelFile(filePath).then((rows) => {
+      const rows = await readExcelFile(filePath);
       rows.shift(); // Remove header row
-      const results = rows.map((row) => ({
+      const results = rows.map(row => ({
         rank: row[1],
         allottedQuota: row[2],
         allottedInstitute: row[3],
         course: row[4],
         allottedCategory: row[5],
         candidateCategory: row[6],
-        examName: examName,
-        year: year,
-        round: round
+        examName,
+        year,
+        round
       }));
 
-      AllotmentModel.insertMany(results)
-        .then(() => res.send('Allotments have been successfully saved to MongoDB.'))
-        .catch((err) => {
-          console.error('MongoDB insertion error:', err);
-          res.status(500).send('Failed to insert data into MongoDB');
-        });
-    }).catch((err) => {
-      console.error('Error reading Excel file:', err);
-      res.status(500).send('Failed to process file');
-    });
+      await batchInsert(AllotmentModel, results);
+      res.send('Allotments have been successfully saved to MongoDB.');
+    } catch (err) {
+      console.error('Error processing allotment upload:', err);
+      res.status(500).send('Failed to process allotment file.');
+    }
   });
 };
 
 
-exports.uploadCollege = (req, res) => {
-  upload(req, res, function (err) {
+
+const uploadCollege = (req, res) => {
+  upload(req, res, async function (err) {
     if (err instanceof multer.MulterError) {
       console.error('Multer error:', err);
       return res.status(500).send({ message: err.message });
@@ -96,9 +105,9 @@ exports.uploadCollege = (req, res) => {
 
     const filePath = path.join(__dirname, '..', 'uploads', req.file.filename);
 
-    readExcelFile(filePath).then((rows) => {
+    try {
+      const rows = await readExcelFile(filePath);
       rows.shift(); // Remove header row
-
       const colleges = rows.map((row, index) => {
         if (row.length < 15) {
           console.error(`Row ${index + 1} is missing required fields`);
@@ -123,12 +132,6 @@ exports.uploadCollege = (req, res) => {
           website
         ] = row;
 
-        // Validate required fields
-        if (!collegeName || !hospitalNameWithPlace || !state || !universityName || !instituteType) {
-          console.error(`Validation error in row ${index + 1}: Missing required fields`);
-          return null;
-        }
-
         return {
           collegeName,
           hospitalNameWithPlace,
@@ -148,35 +151,31 @@ exports.uploadCollege = (req, res) => {
         };
       }).filter(college => college !== null);
 
-      College.insertMany(colleges)
-        .then(() => {
-          console.log('College details have been successfully saved to MongoDB.');
-          res.send('College details have been successfully saved to MongoDB.');
-        })
-        .catch((err) => {
-          console.error('MongoDB insertion error:', err);
-          res.status(500).send('Failed to insert college details into MongoDB');
-        });
-    }).catch((err) => {
-      console.error('Error reading Excel file:', err);
-      res.status(500).send('Failed to process college file');
-    });
+      await batchInsert(College, colleges);
+      res.send('College details have been successfully saved to MongoDB.');
+    } catch (err) {
+      console.error('Error processing college upload:', err);
+      res.status(500).send({ message: 'Failed to process college file.', error: err.message });
+    }
   });
 };
 
 
+
+
 // Upload Courses
-exports.uploadCourse = (req, res) => {
-  upload(req, res, function (err) {
+const uploadCourse = (req, res) => {
+  upload(req, res, async function (err) {
     if (err instanceof multer.MulterError || err) {
       return res.status(500).send({ message: err.message });
     }
 
     const filePath = path.join(__dirname, '..', 'uploads', req.file.filename);
 
-    readExcelFile(filePath).then((rows) => {
+    try {
+      const rows = await readExcelFile(filePath);
       rows.shift(); // Remove header row
-      const courses = rows.map((row) => ({
+      const courses = rows.map(row => ({
         slNo: row[0],
         courseName: row[1],
         duration: row[2],
@@ -185,22 +184,18 @@ exports.uploadCourse = (req, res) => {
         courseType: row[5]
       }));
 
-      Course.insertMany(courses)
-        .then(() => res.send('Course details have been successfully saved to MongoDB.'))
-        .catch((err) => {
-          console.error('MongoDB insertion error:', err);
-          res.status(500).send('Failed to insert course details into MongoDB');
-        });
-    }).catch((err) => {
-      console.error('Error reading Excel file:', err);
-      res.status(500).send('Failed to process course file');
-    });
+      await batchInsert(Course, courses);
+      res.send('Course details have been successfully saved to MongoDB.');
+    } catch (err) {
+      console.error('Error processing course upload:', err);
+      res.status(500).send('Failed to process course file.');
+    }
   });
 };
 
 // Upload Fees
-exports.uploadFee = (req, res) => {
-  upload(req, res, function (err) {
+const uploadFee = (req, res) => {
+  upload(req, res, async function (err) {
     if (err instanceof multer.MulterError || err) {
       return res.status(500).send({ message: err.message });
     } else if (err) {
@@ -209,9 +204,10 @@ exports.uploadFee = (req, res) => {
 
     const filePath = path.join(__dirname, '..', 'uploads', req.file.filename);
 
-    readExcelFile(filePath, { sheet: 'Sheet6' }).then((rows) => {
+    try {
+      const rows = await readExcelFile(filePath, { sheet: 'Sheet6' });
       rows.shift(); // Remove header row
-      const fees = rows.map((row) => ({
+      const fees = rows.map(row => ({
         collegeName: row[0],
         courseName: row[1],
         noOfSeats: row[2],
@@ -225,21 +221,18 @@ exports.uploadFee = (req, res) => {
         seatLeavingPenality: row[10]
       }));
 
-      Fee.insertMany(fees)
-        .then(() => res.send('Fees details have been successfully saved to MongoDB.'))
-        .catch((err) => {
-          console.error('MongoDB insertion error:', err);
-          res.status(500).send('Failed to insert fees details into MongoDB');
-        });
-    }).catch((err) => {
-      console.error('Error reading Excel file:', err);
-      res.status(500).send('Failed to process fees file');
-    });
+      await batchInsert(Fee, fees);
+      res.send('Fees details have been successfully saved to MongoDB.');
+    } catch (err) {
+      console.error('Error processing fee upload:', err);
+      res.status(500).send('Failed to process fee file.');
+    }
   });
 };
 
+
 // Generate Combined Dataset with Multiple Allotments
-exports.generateCombinedDataset = async (req, res) => {
+const generateCombinedDataset = async (req, res) => {
   try {
     const { examName, year, rounds, resultName } = req.body; // rounds is an array of selected allotments
 
@@ -247,32 +240,17 @@ exports.generateCombinedDataset = async (req, res) => {
       return res.status(400).send('Result name is required.');
     }
 
-    console.log(`Exam Name: ${examName}`);
-    console.log(`Year: ${year}`);
-    console.log(`Rounds: ${rounds}`);
-    console.log(`Result Name: ${resultName}`);
-
     let combinedAllotments = [];
 
     for (let round of rounds) {
-      console.log(`Processing collection: ${round}`);
       const AllotmentModel = getModel(round);
       const allotments = await AllotmentModel.find({}).lean();
-      console.log(`Allotments found: ${allotments.length}`);
       combinedAllotments = combinedAllotments.concat(allotments);
     }
 
     const colleges = await College.find({}).lean();
-    console.log(`Colleges found: ${colleges.length}`);
-    console.log(colleges);
-
     const courses = await Course.find({}).lean();
-    console.log(`Courses found: ${courses.length}`);
-    console.log(courses);
-
     const fees = await Fee.find({}).lean();
-    console.log(`Fees found: ${fees.length}`);
-    console.log(fees);
 
     const collegeMap = colleges.reduce((acc, college) => {
       acc[college.collegeName] = college;
@@ -289,22 +267,13 @@ exports.generateCombinedDataset = async (req, res) => {
       return acc;
     }, {});
 
-    console.log('College Map:', collegeMap);
-    console.log('Course Map:', courseMap);
-    console.log('Fee Map:', feeMap);
-
     const combinedData = combinedAllotments.map(allotment => {
       const college = collegeMap[allotment.allottedInstitute];
       const course = courseMap[allotment.course];
       const fee = feeMap[`${allotment.allottedInstitute}_${allotment.course}`];
 
-      console.log('Allotment:', allotment);
-      console.log('College:', college);
-      console.log('Course:', course);
-      console.log('Fee:', fee);
-
       return {
-        _id: mongoose.Types.ObjectId(), // Generate a new ObjectId to avoid conflicts
+        _id: mongoose.Types.ObjectId(),
         rank: allotment.rank,
         allottedQuota: allotment.allottedQuota,
         allottedInstitute: allotment.allottedInstitute,
@@ -329,8 +298,8 @@ exports.generateCombinedDataset = async (req, res) => {
         courseType: course?.courseType,
         courseCategory: course?.courseCategory,
         degreeType: course?.degreeType,
-        feeAmount: fee?.courseFee,  // Assuming feeAmount is courseFee from Fee model
-        nriFee: fee?.nriFee,  // Adding NRI Fee
+        feeAmount: fee?.courseFee,
+        nriFee: fee?.nriFee,
         stipendYear1: fee?.stipendYear1,
         stipendYear2: fee?.stipendYear2,
         stipendYear3: fee?.stipendYear3,
@@ -341,29 +310,20 @@ exports.generateCombinedDataset = async (req, res) => {
       };
     });
 
-    console.log(`Combined data length: ${combinedData.length}`);
-
     const generatedCollectionName = `GENERATED_${examName}_${year}_${resultName}`;
-
-    // Define the model for the generated collection
     const GeneratedModel = getModel(generatedCollectionName);
 
-    try {
-      const result = await GeneratedModel.insertMany(combinedData, { ordered: false });
-      console.log('Data successfully inserted into MongoDB', result);
-      res.json({ combinedData });
-    } catch (insertError) {
-      console.error('Error inserting combined data into MongoDB:', insertError);
-      res.status(500).send('Failed to insert combined data into MongoDB.');
-    }
+    await batchInsert(GeneratedModel, combinedData);
+    res.json({ combinedData });
   } catch (error) {
     console.error('Error generating combined dataset:', error);
     res.status(500).send('Failed to generate combined dataset.');
   }
 };
 
+
 // List Available Allotments
-exports.listAvailableAllotments = async (req, res) => {
+const listAvailableAllotments = async (req, res) => {
   try {
     const { examName, year } = req.query;
     const regex = new RegExp(`^${examName}_${year}`, 'i');
@@ -380,8 +340,9 @@ exports.listAvailableAllotments = async (req, res) => {
   }
 };
 
+
 // Get Generated Data
-exports.getGeneratedData = async (req, res) => {
+const getGeneratedData = async (req, res) => {
   try {
     const { examName, year, resultName } = req.query;
     const combinedCollectionName = `GENERATED_${examName}_${year}_${resultName}`;
@@ -395,3 +356,15 @@ exports.getGeneratedData = async (req, res) => {
     res.status(500).send('Failed to fetch generated data.');
   }
 };
+
+
+module.exports = {
+  uploadAllotment,
+  uploadCollege,
+  uploadCourse,
+  uploadFee,
+  generateCombinedDataset,
+  listAvailableAllotments,
+  getGeneratedData
+};
+
