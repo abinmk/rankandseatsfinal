@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import App from "./pages/App.jsx";
-import Sales from "./container/dashboards/sales/sales.jsx";
 import Signupbasic from "./container/authentication/signup/signbasic/signbasic.jsx";
 import Signinbasic from "./container/authentication/signin/basic/signinbasic.jsx";
 import Twostepbasic from "./container/authentication/twostepverification/twostepbasic/twostepbasic.jsx";
@@ -15,10 +14,10 @@ import Landing from "./container/pages/landing/landing.jsx";
 import Scrolltop from "./components/common/scrolltop/scrolltop.jsx";
 import Dashboard from "./container/pages/dashboard/dashboard.jsx";
 import Allotments from "./container/pages/allotments/allotments.jsx";
-import Colleges from "./container/pages/college/colleges.jsx";
+import Colleges from "./container/pages/colleges/colleges.jsx";
 import Courses from "./container/pages/course/courses";
 import Fees from "./container/pages/fees/fees.jsx";
-import GenerateResults from "./container/pages/generate-data/GenerateResults.jsx";
+import LastRank from "./container/pages/lastRank/fees.jsx";
 import Upload from "./container/pages/generate-data/Upload.jsx";
 import UploadRound from "./container/pages/generate-data/UploadRound";
 
@@ -39,7 +38,7 @@ root.render(
         <Route path="/" element={<App />}>
           <Route path="dashboards" element={<Dashboard />} />
           <Route path="allotments" element={<Allotments />} />
-          <Route path="lastrank" element={<></>} />
+          <Route path="lastrank" element={<LastRank/>} />
           <Route path="courses" element={<Courses/>} />
           <Route path="institutes" element={<Colleges />} />
           <Route path="fees" element={<Fees/>} />

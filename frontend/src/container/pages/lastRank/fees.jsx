@@ -1,52 +1,48 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import GenericTable from './GenericTable';
-import { collegeColumns, collegeFiltersConfig } from './collegeConfig';
-import './Colleges.scss';
+import { feesColumns, feesFiltersConfig } from './feesConfig';
+import './Fees.scss';
 
-  const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl = import.meta.env.VITE_API_URL;
 
-const Colleges = () => {
+const Fees = () => {
   const [data, setData] = useState([]);
   const [filterOptions, setFilterOptions] = useState({});
   const [filters, setFilters] = useState({});
-  const [page, setPage] = useState(1); // page index should start from 1 for API
+  const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [filterLoading, setFilterLoading] = useState(true);
 
-  // Fetch college data with filters, pagination
+  // Fetch data with filters and pagination
   const fetchData = useCallback(async (page, pageSize, filters) => {
     setLoading(true);
     try {
-      const response = await axios.get(`${apiUrl}/colleges`, {
-        params: {
-          page,
-          limit: pageSize,
-          ...filters
-        }
+      const response = await axios.get(`${apiUrl}/fees`, {
+        params: { page, limit: pageSize, ...filters }
       });
       setData(response.data.data);
       setPage(response.data.currentPage);
       setTotalPages(response.data.totalPages);
     } catch (error) {
-      console.error('Error fetching college data:', error);
+      console.error('Error fetching fee data:', error);
     }
     setLoading(false);
   }, []);
 
-  // Fetch data when filters, page, or pageSize changes
+  // Fetch data on filters, page, or pageSize change
   useEffect(() => {
     fetchData(page, pageSize, filters);
   }, [fetchData, filters, page, pageSize]);
 
-  // Fetch filter options once on component mount
+  // Fetch filter options once on mount
   useEffect(() => {
     const fetchFilterOptions = async () => {
       setFilterLoading(true);
       try {
-        const response = await axios.get(`${apiUrl}/colleges/filters`);
+        const response = await axios.get(`${apiUrl}/fees/filters`);
         setFilterOptions(response.data);
       } catch (error) {
         console.error('Error fetching filter options:', error);
@@ -60,9 +56,9 @@ const Colleges = () => {
   return (
     <GenericTable
       data={data}
-      columns={collegeColumns}
-      filtersConfig={collegeFiltersConfig}
-      headerTitle="Institutes"
+      columns={feesColumns}
+      filtersConfig={feesFiltersConfig}
+      headerTitle="Last Rank"
       filters={filters}
       setFilters={setFilters}
       page={page}
@@ -71,11 +67,11 @@ const Colleges = () => {
       filterOptions={filterOptions}
       loading={loading}
       filterLoading={filterLoading}
-      fetchData={fetchData} // Pass fetchData
-      pageSize={pageSize} // Pass pageSize
-      setPageSize={setPageSize} // Pass setPageSize
+      fetchData={fetchData}
+      pageSize={pageSize}
+      setPageSize={setPageSize}
     />
   );
 };
 
-export default Colleges;
+export default Fees;

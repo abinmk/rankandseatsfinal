@@ -1,6 +1,22 @@
 export const allotmentsColumns = [
   {
-    Header: 'State Name',
+    Header: 'Year',
+    accessor: 'year',
+  },
+  {
+    Header: 'Round',
+    accessor: 'round',
+  },
+  {
+    Header: 'Rank',
+    accessor: 'rank',
+  }, 
+  {
+    Header: 'Allotted Quota',
+    accessor: 'allottedQuota',
+  },
+  {
+    Header: 'State',
     accessor: 'state',
   },
   {
@@ -12,44 +28,20 @@ export const allotmentsColumns = [
     accessor: 'instituteType',
   },
   {
-    Header: 'University',
-    accessor: 'universityName',
-  },
-  {
     Header: 'Course',
     accessor: 'course',
   },
   {
-    Header: 'Course Type',
-    accessor: 'courseType',
+    Header: 'Allotted Category',
+    accessor: 'candidateCategory',
   },
   {
-    Header: 'Course Category',
-    accessor: 'courseCategory',
-  },
-  {
-    Header: 'Degree Type',
-    accessor: 'degreeType',
-  },
-  {
-    Header: 'Course Fees',
+    Header: 'Fee',
     accessor: 'feeAmount',
   },
   {
-    Header: 'Quota',
-    accessor: 'allottedQuota',
-  },
-  {
-    Header: 'Year',
-    accessor: 'year',
-  },
-  {
-    Header: 'Round',
-    accessor: 'round',
-  },
-  {
-    Header: 'Category',
-    accessor: 'candidateCategory',
+    Header: 'Stipend Year 1',
+    accessor: 'stipendYear1',
   },
   {
     Header: 'Bond',
@@ -62,10 +54,6 @@ export const allotmentsColumns = [
   {
     Header: 'Beds',
     accessor: 'totalHospitalBeds',
-  },
-  {
-    Header: 'Rank',
-    accessor: 'rank',
   },
 ];
 

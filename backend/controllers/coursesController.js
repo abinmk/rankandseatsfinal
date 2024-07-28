@@ -32,11 +32,12 @@ exports.getCoursesData = async (req, res) => {
 exports.getFilterOptions = async (req, res) => {
   try {
     const filterOptions = {
+      courseName: await CourseModel.distinct('courseName'), // Add this line
       clinicalType: await CourseModel.distinct('clinicalType'),
       degreeType: await CourseModel.distinct('degreeType'),
       courseType: await CourseModel.distinct('courseType'),
       duration: await CourseModel.distinct('duration'),
-      courseName: await CourseModel.distinct('courseName'), // Add this line
+      
     };
 
     console.log('Filter Options:', filterOptions); // Debugging line

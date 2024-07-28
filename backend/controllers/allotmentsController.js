@@ -32,7 +32,7 @@ exports.getRankRange = async (req, res) => {
 exports.getAllotmentData = async (req, res) => {
   try {
     const { page = 1, limit = 10, state, bondPenaltyRange, ...filters } = req.query;
-    const collectionName = 'GENERATED_NEET_PG_ALL_INDIA_2015_RESULT';
+    const collectionName = 'GENERATED_NEET_PG_ALL_INDIA';
     let AllotmentModel;
 
     try {
@@ -114,7 +114,7 @@ exports.getAllotmentData = async (req, res) => {
 // Fetch filter options
 exports.getFilterOptions = async (req, res) => {
   try {
-    const collectionName = `GENERATED_NEET_PG_ALL_INDIA_2015_RESULT`;
+    const collectionName = `GENERATED_NEET_PG_ALL_INDIA`;
     let AllotmentModel;
 
     try {
@@ -127,7 +127,7 @@ exports.getFilterOptions = async (req, res) => {
       }
     }
 
-    const quota = await AllotmentModel.distinct('allottedQuota');
+    const allottedQuota = await AllotmentModel.distinct('allottedQuota');
     const institute = await AllotmentModel.distinct('allottedInstitute');
     const instituteType = await AllotmentModel.distinct('instituteType');
     const university = await AllotmentModel.distinct('universityName');
@@ -137,7 +137,7 @@ exports.getFilterOptions = async (req, res) => {
     const state = await AllotmentModel.distinct('state');
     const year = await AllotmentModel.distinct('year');
     const round = await AllotmentModel.distinct('round');
-    const category = await AllotmentModel.distinct('allottedCategory');
+    const allottedCategory = await AllotmentModel.distinct('allottedCategory');
     const feeAmountRange = await AllotmentModel.aggregate([
       { $group: { _id: null, min: { $min: '$feeAmount' }, max: { $max: '$feeAmount' } } }
     ]);
@@ -163,10 +163,10 @@ exports.getFilterOptions = async (req, res) => {
       courseType,
       degreeType,
       feeAmountRange: feeAmountRange[0],
-      quota,
+      allottedQuota,
       year,
       round,
-      category,
+      allottedCategory,
       bondYearRange: bondYearRange[0],
       bondPenaltyRange: bondPenaltyRange[0],
       totalHospitalBedsRange: totalHospitalBedsRange[0],

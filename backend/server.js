@@ -330,7 +330,7 @@ mongoose.connect(db, {
     app.use('/api/users', userRoutes); // Add your user routes
     app.use('/api/wishlist', wishlistRoutes);
     app.use('/api/admin', adminRoutes);
-    app.use('/api/dataset', datasetRoutes);
+    app.use('/api', datasetRoutes);
     app.use('/api/allotments', allotmentsRoutes);
     app.use('/api/colleges', collegesRoutes);
     app.use('/api/courses', coursesRoutes);

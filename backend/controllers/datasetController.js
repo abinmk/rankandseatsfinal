@@ -71,6 +71,7 @@ const uploadAllotment = (req, res) => {
       const rows = await readExcelFile(filePath);
       rows.shift(); // Remove header row
       const results = rows.map(row => ({
+        rollNumber: row[0],
         rank: row[1],
         allottedQuota: row[2],
         allottedInstitute: row[3],
@@ -234,11 +235,8 @@ const uploadFee = (req, res) => {
 // Generate Combined Dataset with Multiple Allotments
 const generateCombinedDataset = async (req, res) => {
   try {
-    const { examName, year, rounds, resultName } = req.body; // rounds is an array of selected allotments
+    const { examName,rounds} = req.body; // rounds is an array of selected allotments
 
-    if (!resultName) {
-      return res.status(400).send('Result name is required.');
-    }
 
     let combinedAllotments = [];
 
@@ -310,7 +308,7 @@ const generateCombinedDataset = async (req, res) => {
       };
     });
 
-    const generatedCollectionName = `GENERATED_${examName}_${year}_${resultName}`;
+    const generatedCollectionName = `GENERATED_${examName}`;
     const GeneratedModel = getModel(generatedCollectionName);
 
     await batchInsert(GeneratedModel, combinedData);
@@ -325,8 +323,8 @@ const generateCombinedDataset = async (req, res) => {
 // List Available Allotments
 const listAvailableAllotments = async (req, res) => {
   try {
-    const { examName, year } = req.query;
-    const regex = new RegExp(`^${examName}_${year}`, 'i');
+    const { examName } = req.query;
+    const regex = new RegExp(`^${examName}_`, 'i'); // Adjusted regex to match examName only
 
     const collections = await mongoose.connection.db.listCollections().toArray();
     const allotments = collections
@@ -339,6 +337,7 @@ const listAvailableAllotments = async (req, res) => {
     res.status(500).send('Failed to list allotments.');
   }
 };
+
 
 
 // Get Generated Data

@@ -28,7 +28,7 @@ const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, filter
           Clear All
         </span>
         <span className="close-btn" onClick={toggleFilters}>
-          X
+          x
         </span>
       </div>
       {loading ? (

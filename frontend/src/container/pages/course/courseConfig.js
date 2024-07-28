@@ -1,10 +1,6 @@
 export const courseColumns = [
   {
-    Header: 'Sl No',
-    accessor: 'slNo',
-  },
-  {
-    Header: 'Course Name',
+    Header: 'Course',
     accessor: 'courseName',
   },
   {
@@ -23,11 +19,15 @@ export const courseColumns = [
     Header: 'Course Type',
     accessor: 'courseType',
   },
+  {
+    Header: 'Total Seats',
+    accessor: 'totalSeats',
+  },
 ];
 
 export const courseFiltersConfig = [
   {
-    id: 'courseName',
+    id: 'course',
     label: 'Course Name',  // Add this filter configuration
     type: 'select',
     options: [],

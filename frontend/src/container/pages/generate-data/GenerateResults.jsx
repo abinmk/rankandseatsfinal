@@ -12,15 +12,15 @@ function GenerateResults() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (exam && year) {
-      fetchAvailableAllotments(exam, year, examType);
+    if (exam) {
+      fetchAvailableAllotments(exam, examType);
     }
   }, [exam, year, examType]);
 
-  const fetchAvailableAllotments = async (exam, year, type) => {
+  const fetchAvailableAllotments = async (exam, type) => {
     try {
       const response = await axios.get('http://localhost:5001/api/list-available-allotments', {
-        params: { examName: `${exam}_${type}`, year: year },
+        params: { examName: `${exam}_${type}`},
       });
       setAvailableAllotments(response.data.allotments || []);
     } catch (error) {
@@ -30,7 +30,7 @@ function GenerateResults() {
   };
 
   const onGenerateResults = async () => {
-    if (!exam || !examType || !resultName || !year || selectedAllotments.length === 0) {
+    if (!exam || !examType || selectedAllotments.length === 0) {
       alert('Please fill all fields.');
       return;
     }
@@ -39,9 +39,7 @@ function GenerateResults() {
     try {
       await axios.post('http://localhost:5001/api/generate-combined-dataset', {
         examName: `${exam}_${examType}`,
-        year,
         rounds: selectedAllotments,
-        resultName
       });
       alert('Combined results generated successfully');
     } catch (error) {
@@ -71,7 +69,7 @@ function GenerateResults() {
           <option value="STATE">STATE</option>
         </select>
       </div>
-      <div className="generate-results-group">
+      {/* <div className="generate-results-group">
         <label className="generate-results-label" htmlFor="year">Year</label>
         <select className="generate-results-select" id="year" value={year} onChange={(e) => setYear(e.target.value)}>
           <option value="">Select Year</option>
@@ -81,7 +79,7 @@ function GenerateResults() {
             </option>
           ))}
         </select>
-      </div>
+      </div> */}
       <div className="generate-results-group">
         <label className="generate-results-label" htmlFor="availableAllotments">Available Allotments</label>
         <select
@@ -98,10 +96,10 @@ function GenerateResults() {
           ))}
         </select>
       </div>
-      <div className="generate-results-group">
+      {/* <div className="generate-results-group">
         <label className="generate-results-label" htmlFor="resultName">Result Name</label>
         <input className="generate-results-input" type="text" id="resultName" value={resultName} onChange={(e) => setResultName(e.target.value)} />
-      </div>
+      </div> */}
       <button className="generate-results-button" type="button" onClick={onGenerateResults} disabled={isLoading}>
         {isLoading ? 'Generating Results...' : 'Generate Results'}
       </button>
