@@ -1,19 +1,35 @@
 export const feesColumns = [
   {
-    Header: 'College Name',
-    accessor: 'collegeName',
+    Header: 'State',
+    accessor: 'state',
   },
   {
-    Header: 'Course Name',
-    accessor: 'courseName',
+    Header: 'Institute',
+    accessor: 'allottedInstitute',
   },
   {
-    Header: 'Number of Seats',
+    Header: 'Institute Type',
+    accessor: 'instituteType',
+  },
+  {
+    Header: 'Course',
+    accessor: 'course',
+  },
+  {
+    Header: 'Quota',
+    accessor: 'allottedQuota',
+  },
+  {
+    Header: 'No. of Seats',
     accessor: 'noOfSeats',
   },
   {
+    Header: 'Hosp Beds',
+    accessor: 'totalHospitalBeds',
+  },
+  {
     Header: 'Course Fee',
-    accessor: 'courseFee',
+    accessor: 'feeAmount',
   },
   {
     Header: 'NRI Fee',
@@ -32,11 +48,11 @@ export const feesColumns = [
     accessor: 'stipendYear3',
   },
   {
-    Header: 'Bond Year',
+    Header: 'Bond',
     accessor: 'bondYear',
   },
   {
-    Header: 'Bond Penalty',
+    Header: 'Bond Penality',
     accessor: 'bondPenality',
   },
 ];

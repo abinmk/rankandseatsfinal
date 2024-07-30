@@ -22,15 +22,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage }).single('file');
 
-// Helper function to get or create a model dynamically
-const getModel = (modelName) => {
-  if (mongoose.models[modelName]) {
-    return mongoose.models[modelName];
-  } else {
-    return mongoose.model(modelName, new mongoose.Schema({}, { strict: false }), modelName);
-  }
-};
-
+// Utility function for batch inserting data
 const batchInsert = async (Model, data, batchSize = 1000) => {
   const batches = [];
   for (let i = 0; i < data.length; i += batchSize) {
@@ -41,6 +33,15 @@ const batchInsert = async (Model, data, batchSize = 1000) => {
   }
 };
 
+// Function to dynamically get or create a model
+const getModel = (modelName) => {
+  if (mongoose.models[modelName]) {
+    return mongoose.models[modelName];
+  } else {
+    const schema = new mongoose.Schema({}, { strict: false });
+    return mongoose.model(modelName, schema, modelName);
+  }
+};
 
 // Upload Allotments
 const uploadAllotment = (req, res) => {
@@ -52,18 +53,6 @@ const uploadAllotment = (req, res) => {
     const { examName, round, year } = req.body;
     const filePath = path.join(__dirname, '..', 'uploads', req.file.filename);
     const collectionName = `${examName}_${year}_${round}`;
-
-    const schema = new mongoose.Schema({
-      rank: Number,
-      allottedQuota: String,
-      allottedInstitute: String,
-      course: String,
-      allottedCategory: String,
-      candidateCategory: String,
-      examName: String,
-      year: Number,
-      round: String
-    }, { strict: false });
 
     const AllotmentModel = getModel(collectionName);
 
@@ -83,6 +72,9 @@ const uploadAllotment = (req, res) => {
         round
       }));
 
+      // Delete existing data
+      await AllotmentModel.deleteMany({});
+
       await batchInsert(AllotmentModel, results);
       res.send('Allotments have been successfully saved to MongoDB.');
     } catch (err) {
@@ -92,8 +84,7 @@ const uploadAllotment = (req, res) => {
   });
 };
 
-
-
+// Upload Colleges
 const uploadCollege = (req, res) => {
   upload(req, res, async function (err) {
     if (err instanceof multer.MulterError) {
@@ -152,6 +143,9 @@ const uploadCollege = (req, res) => {
         };
       }).filter(college => college !== null);
 
+      // Delete existing data
+      await College.deleteMany({});
+
       await batchInsert(College, colleges);
       res.send('College details have been successfully saved to MongoDB.');
     } catch (err) {
@@ -160,9 +154,6 @@ const uploadCollege = (req, res) => {
     }
   });
 };
-
-
-
 
 // Upload Courses
 const uploadCourse = (req, res) => {
@@ -184,6 +175,9 @@ const uploadCourse = (req, res) => {
         degreeType: row[4],
         courseType: row[5]
       }));
+
+      // Delete existing data
+      await Course.deleteMany({});
 
       await batchInsert(Course, courses);
       res.send('Course details have been successfully saved to MongoDB.');
@@ -222,6 +216,9 @@ const uploadFee = (req, res) => {
         seatLeavingPenality: row[10]
       }));
 
+      // Delete existing data
+      await Fee.deleteMany({});
+
       await batchInsert(Fee, fees);
       res.send('Fees details have been successfully saved to MongoDB.');
     } catch (err) {
@@ -231,12 +228,10 @@ const uploadFee = (req, res) => {
   });
 };
 
-
 // Generate Combined Dataset with Multiple Allotments
 const generateCombinedDataset = async (req, res) => {
   try {
-    const { examName,rounds} = req.body; // rounds is an array of selected allotments
-
+    const { examName, rounds } = req.body; // rounds is an array of selected allotments
 
     let combinedAllotments = [];
 
@@ -311,14 +306,18 @@ const generateCombinedDataset = async (req, res) => {
     const generatedCollectionName = `GENERATED_${examName}`;
     const GeneratedModel = getModel(generatedCollectionName);
 
+    // Delete existing data in the generated collection
+    await GeneratedModel.deleteMany({});
+
+    // Insert the new combined data
     await batchInsert(GeneratedModel, combinedData);
+    
     res.json({ combinedData });
   } catch (error) {
     console.error('Error generating combined dataset:', error);
     res.status(500).send('Failed to generate combined dataset.');
   }
 };
-
 
 // List Available Allotments
 const listAvailableAllotments = async (req, res) => {
@@ -327,9 +326,44 @@ const listAvailableAllotments = async (req, res) => {
     const regex = new RegExp(`^${examName}_`, 'i'); // Adjusted regex to match examName only
 
     const collections = await mongoose.connection.db.listCollections().toArray();
-    const allotments = collections
+    let allotments = collections
       .map(collection => collection.name)
       .filter(name => regex.test(name));
+
+    // Helper function to extract the numeric and alphanumeric parts
+    const extractRound = (round) => {
+      const match = round.match(/(\d+|[^\d]+)/g);
+      return match ? match.map(part => (isNaN(part) ? part : Number(part))) : [];
+    };
+
+    // Helper function to sort alphanumeric rounds
+    const sortRounds = (roundA, roundB) => {
+      const partsA = extractRound(roundA);
+      const partsB = extractRound(roundB);
+
+      for (let i = 0; i < Math.max(partsA.length, partsB.length); i++) {
+        if (partsA[i] === undefined) return -1;
+        if (partsB[i] === undefined) return 1;
+        if (partsA[i] < partsB[i]) return -1;
+        if (partsA[i] > partsB[i]) return 1;
+      }
+      return 0;
+    };
+
+    // Sort the allotments array by year (descending) and round (custom alphanumeric sorting)
+    allotments.sort((a, b) => {
+      const partsA = a.split('_');
+      const partsB = b.split('_');
+      const yearA = partsA[partsA.length - 2];
+      const roundA = partsA[partsA.length - 1];
+      const yearB = partsB[partsB.length - 2];
+      const roundB = partsB[partsB.length - 1];
+
+      if (yearA !== yearB) {
+        return yearB - yearA; // Sort by year descending
+      }
+      return sortRounds(roundA, roundB); // Sort by round custom alphanumeric
+    });
 
     res.json({ allotments });
   } catch (error) {
@@ -337,8 +371,6 @@ const listAvailableAllotments = async (req, res) => {
     res.status(500).send('Failed to list allotments.');
   }
 };
-
-
 
 // Get Generated Data
 const getGeneratedData = async (req, res) => {
@@ -356,7 +388,6 @@ const getGeneratedData = async (req, res) => {
   }
 };
 
-
 module.exports = {
   uploadAllotment,
   uploadCollege,
@@ -366,4 +397,3 @@ module.exports = {
   listAvailableAllotments,
   getGeneratedData
 };
-

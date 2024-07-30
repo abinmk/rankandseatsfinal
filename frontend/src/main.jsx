@@ -20,7 +20,7 @@ import Fees from "./container/pages/fees/fees.jsx";
 import LastRank from "./container/pages/lastRank/fees.jsx";
 import Upload from "./container/pages/generate-data/Upload.jsx";
 import UploadRound from "./container/pages/generate-data/UploadRound";
-
+import Wishlist from "./container/pages/wishlist/wishList.jsx";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -42,7 +42,7 @@ root.render(
           <Route path="courses" element={<Courses/>} />
           <Route path="institutes" element={<Colleges />} />
           <Route path="fees" element={<Fees/>} />
-          <Route path="wishlist" element={<></>} />
+          <Route path="wishlist" element={<Wishlist/>} />
         </Route>
         <Route path="/" element={<Authenticationlayout />}>
           <Route path="authentication/signup/signupbasic" element={<Signupbasic />} />

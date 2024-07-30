@@ -1,8 +1,15 @@
 const mongoose = require('mongoose');
 
 const wishlistSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  items: [{ type: String }] // Adjust the type based on what your wishlist items are
+  username: { type: String, required: true },
+  items: [
+    {
+      allotmentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Allotment' },
+      addedAt: { type: Date, default: Date.now },
+    },
+  ],
 });
 
-module.exports = mongoose.model('Wishlist', wishlistSchema);
+const Wishlist = mongoose.model('Wishlist', wishlistSchema);
+
+module.exports = Wishlist;

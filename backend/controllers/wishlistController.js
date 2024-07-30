@@ -1,79 +1,61 @@
-// controllers/wishlistController.js
 const Wishlist = require('../models/Wishlist');
-const User = require('../models/User');
+const Allotment = require('../models/Allotment');
 
-// Add item to wishlist
-exports.addItem = async (req, res) => {
+// Add to Wishlist
+exports.addToWishlist = async (req, res) => {
   try {
-    const { username, itemId } = req.body;
-
-    const user = await User.findOne({ username });
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    let wishlist = await Wishlist.findOne({ userId: user._id });
+    const { username, allotmentId } = req.body;
+    let wishlist = await Wishlist.findOne({ username });
 
     if (!wishlist) {
-      wishlist = new Wishlist({ userId: user._id, items: [itemId] });
-    } else {
-      if (!wishlist.items.includes(itemId)) {
-        wishlist.items.push(itemId);
-      }
+      wishlist = new Wishlist({ username, items: [] });
+    }
+
+    // Fetch the allotment data to save in wishlist
+    const allotment = await Allotment.findById(allotmentId);
+    if (!allotment) {
+      return res.status(404).json({ message: 'Allotment not found' });
+    }
+
+    if (!wishlist.items.some(item => item.allotmentId.equals(allotmentId))) {
+      wishlist.items.push({ allotmentId, allotment });
     }
 
     await wishlist.save();
-
     res.status(200).json({ message: 'Item added to wishlist', wishlist });
   } catch (error) {
-    console.error('Error adding item to wishlist:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error('Error adding to wishlist:', error);
+    res.status(500).send('Failed to add to wishlist.');
   }
 };
 
-// Remove item from wishlist
-exports.removeItem = async (req, res) => {
+// Remove from Wishlist
+exports.removeFromWishlist = async (req, res) => {
   try {
-    const { username, itemId } = req.body;
-
-    const user = await User.findOne({ username });
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    const wishlist = await Wishlist.findOne({ userId: user._id });
+    const { username, allotmentId } = req.body;
+    const wishlist = await Wishlist.findOne({ username });
 
     if (wishlist) {
-      wishlist.items = wishlist.items.filter(item => item.toString() !== itemId);
+      wishlist.items = wishlist.items.filter(item => !item.allotmentId.equals(allotmentId));
       await wishlist.save();
     }
 
     res.status(200).json({ message: 'Item removed from wishlist', wishlist });
   } catch (error) {
-    console.error('Error removing item from wishlist:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error('Error removing from wishlist:', error);
+    res.status(500).send('Failed to remove from wishlist.');
   }
 };
 
-// Get user's wishlist
+// Get Wishlist
 exports.getWishlist = async (req, res) => {
   try {
-    const { username } = req.params;
+    const { username } = req.query;
+    const wishlist = await Wishlist.findOne({ username }).populate('items.allotmentId');
 
-    const user = await User.findOne({ username });
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    const wishlist = await Wishlist.findOne({ userId: user._id }).populate('items');
-
-    if (!wishlist) {
-      return res.status(404).json({ message: 'Wishlist not found' });
-    }
-
-    res.status(200).json(wishlist);
+    res.status(200).json({ wishlist });
   } catch (error) {
     console.error('Error fetching wishlist:', error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).send('Failed to fetch wishlist.');
   }
 };

@@ -6,6 +6,8 @@ const UploadCollege = () => {
   const [collegeFile, setCollegeFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL;  // Access the environment variable
+
   const onCollegeFileChange = (event) => {
     setCollegeFile(event.target.files[0]);
   };
@@ -22,7 +24,7 @@ const UploadCollege = () => {
     setIsLoading(true);
 
     try {
-      await axios.post('http://localhost:5001/api/upload-college', formData, {
+      await axios.post(`${API_URL}/upload-college`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

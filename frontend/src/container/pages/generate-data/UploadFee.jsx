@@ -4,6 +4,7 @@ import './UploadFee.css';
 
 const UploadFee = () => {
   const [file, setFile] = useState(null);
+  const API_URL = import.meta.env.VITE_API_URL;  // Access the environment variable
 
   const onFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -19,7 +20,7 @@ const UploadFee = () => {
     formData.append('file', file);
 
     try {
-      await axios.post('http://localhost:5001/api/upload-fee', formData, {
+      await axios.post(`${API_URL}/upload-fee`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

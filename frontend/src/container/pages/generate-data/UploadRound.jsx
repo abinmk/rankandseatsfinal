@@ -10,6 +10,8 @@ const UploadRound = () => {
   const [year, setYear] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL;  // Access the environment variable
+
   const onFileChange = (event) => {
     setFile(event.target.files[0]);
   };
@@ -45,7 +47,7 @@ const UploadRound = () => {
     setIsLoading(true);
 
     try {
-      await axios.post('http://localhost:5001/api/upload-round', formData, {
+      await axios.post(`${API_URL}/upload-round`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

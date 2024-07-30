@@ -11,6 +11,8 @@ function GenerateResults() {
   const [selectedAllotments, setSelectedAllotments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL;  // Access the environment variable
+
   useEffect(() => {
     if (exam) {
       fetchAvailableAllotments(exam, examType);
@@ -19,7 +21,7 @@ function GenerateResults() {
 
   const fetchAvailableAllotments = async (exam, type) => {
     try {
-      const response = await axios.get('http://localhost:5001/api/list-available-allotments', {
+      const response = await axios.get(`${API_URL}/list-available-allotments`, {
         params: { examName: `${exam}_${type}`},
       });
       setAvailableAllotments(response.data.allotments || []);
@@ -37,7 +39,7 @@ function GenerateResults() {
 
     setIsLoading(true);
     try {
-      await axios.post('http://localhost:5001/api/generate-combined-dataset', {
+      await axios.post(`${API_URL}/generate-combined-dataset`, {
         examName: `${exam}_${examType}`,
         rounds: selectedAllotments,
       });
@@ -69,17 +71,6 @@ function GenerateResults() {
           <option value="STATE">STATE</option>
         </select>
       </div>
-      {/* <div className="generate-results-group">
-        <label className="generate-results-label" htmlFor="year">Year</label>
-        <select className="generate-results-select" id="year" value={year} onChange={(e) => setYear(e.target.value)}>
-          <option value="">Select Year</option>
-          {Array.from({ length: 16 }, (_, i) => 2015 + i).map((year) => (
-            <option key={year} value={year}>
-              {year}
-            </option>
-          ))}
-        </select>
-      </div> */}
       <div className="generate-results-group">
         <label className="generate-results-label" htmlFor="availableAllotments">Available Allotments</label>
         <select
@@ -96,10 +87,6 @@ function GenerateResults() {
           ))}
         </select>
       </div>
-      {/* <div className="generate-results-group">
-        <label className="generate-results-label" htmlFor="resultName">Result Name</label>
-        <input className="generate-results-input" type="text" id="resultName" value={resultName} onChange={(e) => setResultName(e.target.value)} />
-      </div> */}
       <button className="generate-results-button" type="button" onClick={onGenerateResults} disabled={isLoading}>
         {isLoading ? 'Generating Results...' : 'Generate Results'}
       </button>

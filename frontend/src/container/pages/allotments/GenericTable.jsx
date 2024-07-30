@@ -4,7 +4,7 @@ import FilterSection from './FilterSection';
 import { Table, Modal, Button, Form, Pagination } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Allotments.scss';
-import { FaHeart } from 'react-icons/fa'; // import heart icon
+import { FaHeart } from 'react-icons/fa';
 
 const GenericTable = ({
   data,
@@ -21,16 +21,18 @@ const GenericTable = ({
   loading,
   filterLoading,
   rankRange,
-  fetchData, // Ensure fetchData is passed
-  pageSize, // Ensure pageSize is passed
-  setPageSize // Ensure setPageSize is passed
+  fetchData,
+  pageSize,
+  setPageSize,
+  wishlist,
+  addToWishlist,
+  removeFromWishlist,
 }) => {
   const [showFilters, setShowFilters] = useState(true);
   const [showColumnModal, setShowColumnModal] = useState(false);
   const [showRowModal, setShowRowModal] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [filteredData, setFilteredData] = useState(data);
-  const [wishlist, setWishlist] = useState(new Set()); // track wishlist items
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
@@ -39,7 +41,7 @@ const GenericTable = ({
   useEffect(() => {
     const resultsSection = document.querySelector('.results-section');
     if (showFilters) {
-      resultsSection.style.width = 'calc(100vw - 290px)'; // Account for filter width and padding
+      resultsSection.style.width = 'calc(100vw - 290px)';
     } else {
       resultsSection.style.width = '100vw';
     }
@@ -82,7 +84,7 @@ const GenericTable = ({
       stipendYear3: 'stipendYear3',
       bondYears: 'bondYear',
       bondPenalties: 'bondPenality',
-      rank: 'rank'
+      rank: 'rank',
     };
     
     return filterMapping[filterKey] || filterKey;
@@ -100,26 +102,6 @@ const GenericTable = ({
       }
     });
     return params;
-  };
-
-  const toggleWishlist = (id) => {
-    setWishlist(prevWishlist => {
-      const newWishlist = new Set(prevWishlist);
-      if (newWishlist.has(id)) {
-        newWishlist.delete(id);
-      } else {
-        newWishlist.add(id);
-      }
-      return newWishlist;
-    });
-  };
-
-  const toggleAllWishlist = () => {
-    if (wishlist.size === filteredData.length) {
-      setWishlist(new Set());
-    } else {
-      setWishlist(new Set(filteredData.map(row => row.id)));
-    }
   };
 
   const {
@@ -142,8 +124,8 @@ const GenericTable = ({
     {
       columns,
       data: filteredData,
-      initialState: { pageIndex: page - 1 }, // Set initial page
-      manualPagination: true, // Inform React Table that we'll handle pagination on our own
+      initialState: { pageIndex: page - 1 },
+      manualPagination: true,
       pageCount: totalPages,
     },
     useFilters,
@@ -182,7 +164,6 @@ const GenericTable = ({
       }
     }
     
-
     return paginationItems;
   };
 
@@ -199,7 +180,7 @@ const GenericTable = ({
         setFilters={setFilters}
         filterOptions={filterOptions}
         loading={filterLoading}
-        getFilterParamName={getFilterParamName} // Pass this function to FilterSection
+        getFilterParamName={getFilterParamName}
         clearAllFilters={clearAllFilters}
       />
       <div className={`results-section ${showFilters ? "" : "full-width"}`}>
@@ -220,8 +201,8 @@ const GenericTable = ({
                   <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
                     <th>
                       <FaHeart
-                        onClick={toggleAllWishlist}
-                        style={{ color: wishlist.size === filteredData.length ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5em' }}
+                        onClick={() => toggleAllWishlist()}
+                        style={{ color: wishlist.length === filteredData.length ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5em' }}
                       />
                     </th>
                     {headerGroup.headers.map((column) => {
@@ -245,9 +226,13 @@ const GenericTable = ({
                         <FaHeart
                           onClick={(e) => {
                             e.stopPropagation();
-                            toggleWishlist(row.original.id);
+                            if (wishlist.some(item => item.allotmentId === row.original._id)) {
+                              removeFromWishlist(row.original._id);
+                            } else {
+                              addToWishlist(row.original);
+                            }
                           }}
-                          style={{ color: wishlist.has(row.original.id) ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5em' }}
+                          style={{ color: wishlist.some(item => item.allotmentId === row.original._id) ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5em' }}
                         />
                       </td>
                       {row.cells.map((cell) => {

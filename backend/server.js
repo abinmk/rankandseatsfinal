@@ -16,7 +16,7 @@ const allotmentsRoutes = require('./routes/allotmentsRoutes');
 const collegesRoutes = require('./routes/collegesRoutes');
 const coursesRoutes = require('./routes/coursesRoutes');
 const feesRoutes = require('./routes/feesRoutes');
-const wishlistRoutes = require('./routes/wishlist');
+const wishlistRoutes = require('./routes/wishlistRoutes');
 const userRoutes = require('./routes/users');
 
 const app = express();
@@ -25,7 +25,11 @@ const port = process.env.PORT || 5001;
 app.use('/static', express.static(path.join(__dirname, 'static')));
 
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:5173', 'http://ec2-52-63-164-69.ap-southeast-2.compute.amazonaws.com:5001', 'http://rankseatsbucket.s3-website-ap-southeast-2.amazonaws.com', 'https://rankseatsbucket.s3-website-ap-southeast-2.amazonaws.com'],
+  origin: ['http://localhost:3000', 'http://localhost:5173',
+   'http://ec2-52-63-164-69.ap-southeast-2.compute.amazonaws.com:5001',
+   'https://ec2-52-63-164-69.ap-southeast-2.compute.amazonaws.com:5001',
+    'http://rankseatsbucket.s3-website-ap-southeast-2.amazonaws.com', 
+    'https://rankseatsbucket.s3-website-ap-southeast-2.amazonaws.com'],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true
 }));

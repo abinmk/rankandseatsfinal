@@ -15,8 +15,10 @@ const Allotments = () => {
   const [loading, setLoading] = useState(true);
   const [filterLoading, setFilterLoading] = useState(true);
   const [rankRange, setRankRange] = useState({ min: 0, max: 10000 });
+  const [wishlist, setWishlist] = useState([]);
 
   const apiUrl = import.meta.env.VITE_API_URL;
+  const username = 'dummyUser'; // Replace this with actual user data when available
 
   const getFilterParamName = useMemo(() => {
     const filterMapping = {
@@ -33,7 +35,7 @@ const Allotments = () => {
       bondYear: 'bondYear',
       bondPenality: 'bondPenality',
       totalHospitalBeds: 'totalHospitalBeds',
-      rank: 'rank'
+      rank: 'rank',
     };
     return (filterKey) => filterMapping[filterKey] || filterKey;
   }, []);
@@ -46,8 +48,8 @@ const Allotments = () => {
           params: {
             page,
             limit: pageSize,
-            ...filters
-          }
+            ...filters,
+          },
         });
         setData(response.data.data);
         setPage(response.data.currentPage);
@@ -72,17 +74,46 @@ const Allotments = () => {
     setFilterLoading(false);
   }, [apiUrl]);
 
+  const fetchWishlist = useCallback(async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/wishlist`, {
+        params: { username },
+      });
+      setWishlist(response.data.wishlist.items);
+    } catch (error) {
+      console.error('Error fetching wishlist:', error);
+    }
+  }, [apiUrl, username]);
+
   useEffect(() => {
     fetchData(page, pageSize, filters);
-    // Clean up debounce on unmount
+    fetchWishlist();
     return () => {
       fetchData.cancel();
     };
-  }, [fetchData, filters, page, pageSize]);
+  }, [fetchData, fetchWishlist, filters, page, pageSize]);
 
   useEffect(() => {
     fetchFilterOptions();
   }, [fetchFilterOptions]);
+
+  const addToWishlist = async (allotment) => {
+    try {
+      await axios.post(`${apiUrl}/wishlist/add`, { username, allotment });
+      fetchWishlist();
+    } catch (error) {
+      console.error('Error adding to wishlist:', error);
+    }
+  };
+
+  const removeFromWishlist = async (allotmentId) => {
+    try {
+      await axios.post(`${apiUrl}/wishlist/remove`, { username, allotmentId });
+      fetchWishlist();
+    } catch (error) {
+      console.error('Error removing from wishlist:', error);
+    }
+  };
 
   const countAppliedFilters = () => {
     let count = 0;
@@ -121,7 +152,10 @@ const Allotments = () => {
         setPageSize={setPageSize}
         rankRange={rankRange}
         getFilterParamName={getFilterParamName}
-        appliedFiltersCount={countAppliedFilters()} // Pass applied filters count
+        appliedFiltersCount={countAppliedFilters()}
+        wishlist={wishlist}
+        addToWishlist={addToWishlist}
+        removeFromWishlist={removeFromWishlist}
       />
     </div>
   );
