@@ -5,6 +5,8 @@ import { FaHeart } from 'react-icons/fa';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import './ChoiceList.scss'; // Import the new styles
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const ChoiceList = ({ username }) => {
   const [choiceList, setChoiceList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,7 +19,7 @@ const ChoiceList = ({ username }) => {
   const fetchChoiceList = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`http://localhost:5001/api/wishlist`, { params: { username } });
+      const response = await axios.get(`${apiUrl}/wishlist`, { params: { username } });
       console.log('API Response:', response.data); // Add console log
       if (response.data.wishlist && response.data.wishlist.items) {
         setChoiceList(response.data.wishlist.items);
@@ -32,7 +34,7 @@ const ChoiceList = ({ username }) => {
 
   const removeFromChoiceList = async (allotmentId) => {
     try {
-      await axios.post('http://localhost:5001/api/wishlist/remove', { username, allotmentId });
+      await axios.post(`${apiUrl}/wishlist/remove`, { username, allotmentId });
       fetchChoiceList();
     } catch (error) {
       console.error('Error removing from choice list:', error);
@@ -47,7 +49,7 @@ const ChoiceList = ({ username }) => {
     setChoiceList(items);
 
     try {
-      await axios.post('http://localhost:5001/api/wishlist/updateOrder', {
+      await axios.post(`${apiUrl}/wishlist/updateOrder`, {
         username,
         updatedOrder: items.map(item => item.allotmentId)
       });
