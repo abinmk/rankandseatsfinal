@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Table, Button } from 'react-bootstrap';
 import { FaHeart } from 'react-icons/fa';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 const Wishlist = ({ username }) => {
   const [wishlist, setWishlist] = useState([]);
@@ -31,6 +32,27 @@ const Wishlist = ({ username }) => {
     }
   };
 
+  const reorder = (list, startIndex, endIndex) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+    return result;
+  };
+
+  const onDragEnd = (result) => {
+    if (!result.destination) {
+      return;
+    }
+
+    const reorderedWishlist = reorder(
+      wishlist,
+      result.source.index,
+      result.destination.index
+    );
+
+    setWishlist(reorderedWishlist);
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -38,32 +60,43 @@ const Wishlist = ({ username }) => {
   return (
     <div>
       <h1>Wishlist</h1>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Institute</th>
-            <th>Course</th>
-            <th>Category</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {wishlist.map((item, index) => (
-            <tr key={item._id}>
-              <td>{index + 1}</td>
-              <td>{item.allotment.allottedInstitute}</td>
-              <td>{item.allotment.course}</td>
-              <td>{item.allotment.allottedCategory}</td>
-              <td>
-                <Button variant="danger" onClick={() => removeFromWishlist(item.allotment._id)}>
-                  <FaHeart />
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="wishlist">
+          {(provided) => (
+            <Table striped bordered hover {...provided.droppableProps} ref={provided.innerRef}>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Institute</th>
+                  <th>Course</th>
+                  <th>Category</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {wishlist.map((item, index) => (
+                  <Draggable key={item.allotment._id} draggableId={item.allotment._id} index={index}>
+                    {(provided) => (
+                      <tr ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                        <td>{index + 1}</td>
+                        <td>{item.allotment.allottedInstitute}</td>
+                        <td>{item.allotment.course}</td>
+                        <td>{item.allotment.allottedCategory}</td>
+                        <td>
+                          <Button variant="danger" onClick={() => removeFromWishlist(item.allotment._id)}>
+                            <FaHeart />
+                          </Button>
+                        </td>
+                      </tr>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </tbody>
+            </Table>
+          )}
+        </Droppable>
+      </DragDropContext>
     </div>
   );
 };

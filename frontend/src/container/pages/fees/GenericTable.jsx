@@ -3,8 +3,6 @@ import { useTable, usePagination, useSortBy, useFilters, useColumnOrder } from '
 import FilterSection from './FilterSection';
 import { Table, Modal, Button, Form, Pagination } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { FaHeart } from 'react-icons/fa';
-import './Fees.scss';
 
 const GenericTable = ({
   data,
@@ -28,7 +26,6 @@ const GenericTable = ({
   const [showRowModal, setShowRowModal] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [filteredData, setFilteredData] = useState(data);
-  const [wishlist, setWishlist] = useState(new Set());
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
@@ -81,48 +78,33 @@ const GenericTable = ({
     return filterMapping[filterKey] || filterKey;
   };
 
+  const handleSliderChange = (filterKey, newValue) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [filterKey]: JSON.stringify({ min: newValue[0], max: newValue[1] })
+    }));
+  };
+
   const applyFilters = () => {
     let filtered = data;
 
     Object.keys(filters).forEach(filterKey => {
-      if (filters[filterKey] && filters[filterKey].length > 0) {
-        filtered = filtered.filter(item => {
-          const itemValue = item[filterKey];
-
-          if (Array.isArray(filters[filterKey])) {
-            return filters[filterKey].includes(itemValue);
-          }
-
-          if (filters[filterKey].min !== undefined && filters[filterKey].max !== undefined) {
-            return itemValue >= filters[filterKey].min && itemValue <= filters[filterKey].max;
-          }
-
-          return itemValue === filters[filterKey];
-        });
+      const filterParamName = getFilterParamName(filterKey);
+      const filterValue = filters[filterKey];
+      if (filterValue && filterValue.length > 0) {
+        if (filterValue.includes('min') && filterValue.includes('max')) {
+          const { min, max } = JSON.parse(filterValue);
+          filtered = filtered.filter(item => item[filterParamName] >= min && item[filterParamName] <= max);
+        } else {
+          filtered = filtered.filter(item => {
+            const itemValue = item[filterParamName];
+            return Array.isArray(filterValue) ? filterValue.includes(itemValue) : itemValue === filterValue;
+          });
+        }
       }
     });
 
     setFilteredData(filtered);
-  };
-
-  const toggleWishlist = (id) => {
-    setWishlist(prevWishlist => {
-      const newWishlist = new Set(prevWishlist);
-      if (newWishlist.has(id)) {
-        newWishlist.delete(id);
-      } else {
-        newWishlist.add(id);
-      }
-      return newWishlist;
-    });
-  };
-
-  const toggleAllWishlist = () => {
-    if (wishlist.size === filteredData.length) {
-      setWishlist(new Set());
-    } else {
-      setWishlist(new Set(filteredData.map(row => row.id)));
-    }
   };
 
   const {
@@ -204,6 +186,7 @@ const GenericTable = ({
         loading={filterLoading}
         getFilterParamName={getFilterParamName}
         clearAllFilters={clearAllFilters}
+        handleSliderChange={handleSliderChange} // Pass the handler to FilterSection
       />
       <div className={`results-section ${showFilters ? "" : "full-width"}`}>
         <button className={`show-filters-btn ${showFilters ? "hidden" : ""}`} onClick={toggleFilters} id='view-btn'>
@@ -221,12 +204,6 @@ const GenericTable = ({
               <thead>
                 {headerGroups.map((headerGroup) => (
                   <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
-                    <th>
-                      <FaHeart
-                        onClick={toggleAllWishlist}
-                        style={{ color: wishlist.size === filteredData.length ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5em' }}
-                      />
-                    </th>
                     {headerGroup.headers.map((column) => {
                       const { key, ...rest } = column.getHeaderProps(column.getSortByToggleProps());
                       return (
@@ -244,15 +221,6 @@ const GenericTable = ({
                   prepareRow(row);
                   return (
                     <tr key={row.id} {...row.getRowProps()} onClick={() => handleRowClick(row)}>
-                      <td>
-                        <FaHeart
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleWishlist(row.original.id);
-                          }}
-                          style={{ color: wishlist.has(row.original.id) ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5em' }}
-                        />
-                      </td>
                       {row.cells.map((cell) => {
                         const { key, ...rest } = cell.getCellProps();
                         return (

@@ -3,8 +3,6 @@ import { useTable, usePagination, useSortBy, useFilters, useColumnOrder } from '
 import FilterSection from './FilterSection';
 import { Table, Modal, Button, Form, Pagination } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './Courses.scss';
-import { FaHeart } from 'react-icons/fa'; // import heart icon
 
 const GenericTable = ({
   data,
@@ -20,16 +18,16 @@ const GenericTable = ({
   filterOptions,
   loading,
   filterLoading,
-  fetchData, // Ensure fetchData is passed
-  pageSize, // Ensure pageSize is passed
-  setPageSize // Ensure setPageSize is passed
+  fetchData,
+  pageSize,
+  setPageSize
 }) => {
   const [showFilters, setShowFilters] = useState(true);
   const [showColumnModal, setShowColumnModal] = useState(false);
   const [showRowModal, setShowRowModal] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [filteredData, setFilteredData] = useState(data);
-  const [wishlist, setWishlist] = useState(new Set()); // track wishlist items
+  const [wishlist, setWishlist] = useState(new Set());
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
@@ -38,7 +36,7 @@ const GenericTable = ({
   useEffect(() => {
     const resultsSection = document.querySelector('.results-section');
     if (showFilters) {
-      resultsSection.style.width = 'calc(100vw - 290px)'; // Account for filter width and padding
+      resultsSection.style.width = 'calc(100vw - 290px)';
     } else {
       resultsSection.style.width = '100vw';
     }
@@ -106,26 +104,6 @@ const GenericTable = ({
     setFilteredData(filtered);
   };
 
-  const toggleWishlist = (id) => {
-    setWishlist(prevWishlist => {
-      const newWishlist = new Set(prevWishlist);
-      if (newWishlist.has(id)) {
-        newWishlist.delete(id);
-      } else {
-        newWishlist.add(id);
-      }
-      return newWishlist;
-    });
-  };
-
-  const toggleAllWishlist = () => {
-    if (wishlist.size === filteredData.length) {
-      setWishlist(new Set());
-    } else {
-      setWishlist(new Set(filteredData.map(row => row.id)));
-    }
-  };
-
   const {
     getTableProps,
     getTableBodyProps,
@@ -146,8 +124,8 @@ const GenericTable = ({
     {
       columns,
       data: filteredData,
-      initialState: { pageIndex: page - 1 }, // Set initial page
-      manualPagination: true, // Inform React Table that we'll handle pagination on our own
+      initialState: { pageIndex: page - 1 },
+      manualPagination: true,
       pageCount: totalPages,
     },
     useFilters,
@@ -203,7 +181,7 @@ const GenericTable = ({
         data={data}
         filterOptions={filterOptions}
         loading={filterLoading}
-        getFilterParamName={getFilterParamName} // Pass this function to FilterSection
+        getFilterParamName={getFilterParamName}
         clearAllFilters={clearAllFilters}
       />
       <div className={`results-section ${showFilters ? "" : "full-width"}`}>
@@ -222,12 +200,6 @@ const GenericTable = ({
               <thead>
                 {headerGroups.map((headerGroup) => (
                   <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
-                    <th>
-                      <FaHeart
-                        onClick={toggleAllWishlist}
-                        style={{ color: wishlist.size === filteredData.length ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5em' }}
-                      />
-                    </th>
                     {headerGroup.headers.map((column) => {
                       const { key, ...rest } = column.getHeaderProps(column.getSortByToggleProps());
                       return (
@@ -245,15 +217,6 @@ const GenericTable = ({
                   prepareRow(row);
                   return (
                     <tr key={row.id} {...row.getRowProps()} onClick={() => handleRowClick(row)}>
-                      <td>
-                        <FaHeart
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleWishlist(row.original.id);
-                          }}
-                          style={{ color: wishlist.has(row.original.id) ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5em' }}
-                        />
-                      </td>
                       {row.cells.map((cell) => {
                         const { key, ...rest } = cell.getCellProps();
                         return (
@@ -276,7 +239,7 @@ const GenericTable = ({
                 value={pageSize}
                 onChange={(e) => setPageSize(Number(e.target.value))}
                 className="me-3"
-                style={{ width: '45px',height:'40px' }}
+                style={{ width: '45px', height: '40px' }}
               >
                 {[10, 25, 50, 100].map((size) => (
                   <option key={size} value={size}>
@@ -294,7 +257,7 @@ const GenericTable = ({
                 value={pageIndex + 1}
                 onChange={(e) => setPage(Number(e.target.value))}
                 className="me-2"
-                style={{ width: '55px',height:'40px' }}
+                style={{ width: '55px', height: '40px' }}
               />
             </Form.Group>
             <div className="pagination-controls">

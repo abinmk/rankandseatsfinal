@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const feesController = require('../controllers/feesController');
+const { getFeesData, getFilterOptions } = require('../controllers/feesController');
 
-router.get('/', feesController.getFeesData);
-router.get('/filters', feesController.getFilterOptions);
+// Define the routes and link them to the controller functions
+router.get('/', getFeesData);
+router.get('/filters', getFilterOptions);
 
 module.exports = router;

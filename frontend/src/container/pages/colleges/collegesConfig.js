@@ -8,6 +8,7 @@ export const collegesColumns = [
   { Header: 'Year of Establishment', accessor: 'yearOfEstablishment' },
   { Header: 'No. of Seats', accessor: 'yearOfEstablishment2' },
   { Header: 'Total Hospital Beds', accessor: 'totalHospitalBeds' },
+
 ];
 
 export const collegesFiltersConfig = [

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Form, Accordion, Button, Spinner } from 'react-bootstrap';
 import FilterItem from './FilterItem';
-import './Courses.scss';
 
 const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, filterOptions, loading, getFilterParamName, clearAllFilters }) => {
   const handleFilterChange = (value, checked, filterName) => {

@@ -8,7 +8,7 @@ const Allotment = require('../models/Allotment');
 const College = require('../models/College');
 const Course = require('../models/Course');
 const Fee = require('../models/Fee');
-const CombinedDataset = require('../models/CombinedDataset');
+const { batchInsert } = require('../utils'); // Ensure this path is correct
 
 // Multer configuration for file uploads
 const storage = multer.diskStorage({
@@ -21,17 +21,6 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage }).single('file');
-
-// Utility function for batch inserting data
-const batchInsert = async (Model, data, batchSize = 1000) => {
-  const batches = [];
-  for (let i = 0; i < data.length; i += batchSize) {
-    batches.push(data.slice(i, i + batchSize));
-  }
-  for (const batch of batches) {
-    await Model.insertMany(batch, { ordered: false });
-  }
-};
 
 // Function to dynamically get or create a model
 const getModel = (modelName) => {
@@ -200,20 +189,20 @@ const uploadFee = (req, res) => {
     const filePath = path.join(__dirname, '..', 'uploads', req.file.filename);
 
     try {
-      const rows = await readExcelFile(filePath, { sheet: 'Sheet6' });
+      const rows = await readExcelFile(filePath, { sheet: 'Sheet1' }); // Use 'Sheet1'
       rows.shift(); // Remove header row
       const fees = rows.map(row => ({
         collegeName: row[0],
         courseName: row[1],
-        noOfSeats: row[2],
-        courseFee: row[3],
-        nriFee: row[4],
-        stipendYear1: row[5],
-        stipendYear2: row[6],
-        stipendYear3: row[7],
-        bondYear: row[8],
-        bondPenality: row[9],
-        seatLeavingPenality: row[10]
+        courseFee: row[2],
+        nriFee: row[3],
+        stipendYear1: row[4],
+        stipendYear2: row[5],
+        stipendYear3: row[6],
+        bondYear: row[7],
+        bondPenality: row[8],
+        seatLeavingPenality: row[9],
+        noOfSeats: row[10],
       }));
 
       // Delete existing data
@@ -260,6 +249,25 @@ const generateCombinedDataset = async (req, res) => {
       return acc;
     }, {});
 
+    // Calculate total seats for each college and course based on fees data
+    const totalSeatsInCollege = {};
+    const totalSeatsInCourse = {};
+
+    fees.forEach(fee => {
+      if (!totalSeatsInCollege[fee.collegeName]) {
+        totalSeatsInCollege[fee.collegeName] = 0;
+      }
+      totalSeatsInCollege[fee.collegeName] += fee.noOfSeats;
+
+      if (!totalSeatsInCourse[fee.courseName]) {
+        totalSeatsInCourse[fee.courseName] = 0;
+      }
+      totalSeatsInCourse[fee.courseName] += fee.noOfSeats;
+    });
+
+    console.log("Total seats in each college:", totalSeatsInCollege);
+    console.log("Total seats in each course:", totalSeatsInCourse);
+
     const combinedData = combinedAllotments.map(allotment => {
       const college = collegeMap[allotment.allottedInstitute];
       const course = courseMap[allotment.course];
@@ -299,6 +307,9 @@ const generateCombinedDataset = async (req, res) => {
         bondYear: fee?.bondYear,
         bondPenality: fee?.bondPenality,
         seatLeavingPenality: fee?.seatLeavingPenality,
+        noOfSeats: fee?.noOfSeats,
+        totalSeatsInCollege: totalSeatsInCollege[allotment.allottedInstitute] || 0,
+        totalSeatsInCourse: totalSeatsInCourse[allotment.course] || 0,
         description: course?.description
       };
     });
@@ -355,8 +366,8 @@ const listAvailableAllotments = async (req, res) => {
       const partsA = a.split('_');
       const partsB = b.split('_');
       const yearA = partsA[partsA.length - 2];
-      const roundA = partsA[partsA.length - 1];
       const yearB = partsB[partsB.length - 2];
+      const roundA = partsA[partsA.length - 1];
       const roundB = partsB[partsB.length - 1];
 
       if (yearA !== yearB) {
@@ -397,3 +408,4 @@ module.exports = {
   listAvailableAllotments,
   getGeneratedData
 };
+

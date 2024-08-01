@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Accordion, Button, Modal } from 'react-bootstrap';
-import './Courses.scss';
 
 const FilterItem = ({ title, options, filterName, filters, handleFilterChange, eventKey, viewMore, appliedFiltersCount, getFilterParamName }) => {
   const [showModal, setShowModal] = useState(false);

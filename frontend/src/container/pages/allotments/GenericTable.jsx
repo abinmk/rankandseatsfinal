@@ -202,7 +202,7 @@ const GenericTable = ({
                     <th>
                       <FaHeart
                         onClick={() => toggleAllWishlist()}
-                        style={{ color: wishlist.length === filteredData.length ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5em' }}
+                        style={{ color: wishlist.length === filteredData.length ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5rem' }}
                       />
                     </th>
                     {headerGroup.headers.map((column) => {
@@ -232,7 +232,7 @@ const GenericTable = ({
                               addToWishlist(row.original);
                             }
                           }}
-                          style={{ color: wishlist.some(item => item.allotmentId === row.original._id) ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5em' }}
+                          style={{ color: wishlist.some(item => item.allotmentId === row.original._id) ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5rem' }}
                         />
                       </td>
                       {row.cells.map((cell) => {

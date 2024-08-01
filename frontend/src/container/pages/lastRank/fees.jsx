@@ -54,6 +54,7 @@ const Fees = () => {
   }, []);
 
   return (
+    <div className='fees-container'>
     <GenericTable
       data={data}
       columns={feesColumns}
@@ -71,6 +72,7 @@ const Fees = () => {
       pageSize={pageSize}
       setPageSize={setPageSize}
     />
+    </div>
   );
 };
 

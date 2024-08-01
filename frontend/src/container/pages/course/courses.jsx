@@ -58,6 +58,7 @@ const Courses = () => {
   }, []);
 
   return (
+    <div className="courses-container">
     <GenericTable
       data={data}
       columns={courseColumns}
@@ -75,6 +76,7 @@ const Courses = () => {
       pageSize={pageSize} // Pass pageSize
       setPageSize={setPageSize} // Pass setPageSize
     />
+    </div>
   );
 };
 

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 exports.getFeesData = async (req, res) => {
   try {
-    const { page = 1, limit = 10, state, bondPenaltyRange, ...filters } = req.query;
+    const { page = 1, limit = 10, bondPenaltyRange, ...filters } = req.query;
     const collectionName = 'GENERATED_NEET_PG_ALL_INDIA';
     let AllotmentModel;
 
@@ -18,43 +18,38 @@ exports.getFeesData = async (req, res) => {
 
     const query = {};
 
-    // Process state filter if present
-    if (state) {
-      query['state'] = { $in: Array.isArray(state) ? state : [state] };
-    }
-
     // Utility function to add range filters
-    const addRangeFilter = (field, range) => {
-      if (range) {
-        const rangeQuery = {};
-        if (range.min) {
-          rangeQuery.$gte = Number(range.min);
-        }
-        if (range.max) {
-          rangeQuery.$lte = Number(range.max);
-        }
-        if (Object.keys(rangeQuery).length > 0) {
-          query[field] = rangeQuery;
-        }
+    const addRangeFilter = (field, min, max) => {
+      const rangeQuery = {};
+      if (min !== undefined) {
+        rangeQuery.$gte = Number(min);
+      }
+      if (max !== undefined) {
+        rangeQuery.$lte = Number(max);
+      }
+      if (Object.keys(rangeQuery).length > 0) {
+        query[field] = rangeQuery;
       }
     };
 
-    // Process filters including range filters
+    // Process range filters like bondPenaltyRange
+    if (bondPenaltyRange) {
+      const min = bondPenaltyRange.min;
+      const max = bondPenaltyRange.max;
+      addRangeFilter('bondPenality', min, max);
+    }
+
+    // Process other filters
     for (const key in filters) {
       if (filters[key]) {
         if (key.endsWith('Range')) {
           // Extract field name and range values
           const field = key.replace('Range', '');
-          addRangeFilter(field, filters[key]);
+          addRangeFilter(field, filters[key].min, filters[key].max);
         } else {
           query[key] = Array.isArray(filters[key]) ? { $in: filters[key] } : filters[key];
         }
       }
-    }
-
-    // Specific handling for bondPenaltyRange
-    if (bondPenaltyRange) {
-      addRangeFilter('bondPenality', bondPenaltyRange);
     }
 
     console.log('Query:', query); // Logging the query for debugging
@@ -76,7 +71,7 @@ exports.getFeesData = async (req, res) => {
     res.status(500).send('Failed to fetch allotment data.');
   }
 };
-// Fetch filter options
+
 exports.getFilterOptions = async (req, res) => {
   try {
     const collectionName = `GENERATED_NEET_PG_ALL_INDIA`;
@@ -112,7 +107,7 @@ exports.getFilterOptions = async (req, res) => {
       { $group: { _id: null, min: { $min: '$totalHospitalBeds' }, max: { $max: '$totalHospitalBeds' } } }
     ]);
     const stipendYear1Range = await AllotmentModel.aggregate([
-      { $group: { _id: null, min: { $min: '$stipendYear1Range' }, max: { $max: '$stipendYear1Range' } } }
+      { $group: { _id: null, min: { $min: '$stipendYear1' }, max: { $max: '$stipendYear1' } } }
     ]);
 
     res.json({
