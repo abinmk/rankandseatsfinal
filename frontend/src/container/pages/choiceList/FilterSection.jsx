@@ -1,52 +1,42 @@
-import React from 'react';
-import { Form, Button } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Accordion, Form, Button, Spinner } from 'react-bootstrap';
+import FilterItem from './FilterItem';
 
-const FilterSection = ({
-  showFilters,
-  toggleFilters,
-  filters,
-  setFilters,
-  filterOptions,
-  loading,
-  getFilterParamName,
-  clearAllFilters,
-}) => {
-  const handleChange = (e, filterId) => {
-    const value = e.target.value;
-    setFilters(prevFilters => ({
-      ...prevFilters,
-      [filterId]: value,
-    }));
+const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, filterOptions, clearAllFilters }) => {
+  const handleFilterChange = (value, checked, filterName) => {
+    const newValues = checked
+      ? [...(filters[filterName] || []), value]
+      : (filters[filterName] || []).filter((v) => v !== value);
+    setFilters(filterName, newValues);
   };
 
   return (
     <div className={`filters-section ${showFilters ? 'show' : 'hide'}`}>
       <div className="filters-header">
-        <h5>Filters</h5>
-        <Button variant="outline-primary" onClick={clearAllFilters}>
+        <span>Filters</span>
+        <span className="clear-all-btn" onClick={clearAllFilters}>
           Clear All
-        </Button>
+        </span>
+        <span className="close-btn" onClick={toggleFilters}>
+          x
+        </span>
       </div>
-      {filterOptions && (
-        <Form>
-          {Object.keys(filterOptions).map(filterId => (
-            <Form.Group controlId={filterId} key={filterId}>
-              <Form.Label>{filterOptions[filterId].label}</Form.Label>
-              <Form.Control
-                as="select"
-                value={filters[filterId] || ''}
-                onChange={(e) => handleChange(e, filterId)}
-              >
-                <option value="">All</option>
-                {filterOptions[filterId].options.map(option => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </Form.Control>
-            </Form.Group>
+      {Object.keys(filterOptions).length === 0 ? (
+        <Spinner animation="border" />
+      ) : (
+        <Accordion defaultActiveKey={['0']} alwaysOpen>
+          {Object.keys(filterOptions).map((filterName, index) => (
+            <FilterItem
+              key={filterName}
+              eventKey={index.toString()}
+              title={filterName.charAt(0).toUpperCase() + filterName.slice(1)}
+              options={filterOptions[filterName]}
+              filterName={filterName}
+              filters={filters}
+              handleFilterChange={handleFilterChange}
+            />
           ))}
-        </Form>
+        </Accordion>
       )}
     </div>
   );
