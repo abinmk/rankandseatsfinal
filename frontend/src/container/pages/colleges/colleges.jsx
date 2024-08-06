@@ -24,7 +24,8 @@ const Colleges = () => {
       instituteType: 'instituteType',
       university: 'universityName',
       yearOfEstablishment: 'yearOfEstablishment',
-      totalHospitalBedsRange: 'totalHospitalBeds'
+      totalHospitalBedsRange: 'totalHospitalBeds',
+      totalSeatsInCollegeRange:'totalSeatsInCollege'
     };
     return (filterKey) => filterMapping[filterKey] || filterKey;
   }, []);

@@ -1,8 +1,9 @@
+// fees.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import GenericTable from './GenericTable';
-import { courseColumns, courseFiltersConfig } from './courseConfig';
-import './Courses.scss';
+import { feesColumns, feesFiltersConfig } from './feesConfig';
+import './Fees.scss';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -16,7 +17,7 @@ const Courses = () => {
   const [loading, setLoading] = useState(true);
   const [filterLoading, setFilterLoading] = useState(true);
 
-  // Fetch college data with filters, pagination
+  // Fetch fees data with filters and pagination
   const fetchData = useCallback(async (page, pageSize, filters) => {
     setLoading(true);
     try {
@@ -31,7 +32,7 @@ const Courses = () => {
       setPage(response.data.currentPage);
       setTotalPages(response.data.totalPages);
     } catch (error) {
-      console.error('Error fetching college data:', error);
+      console.error('Error fetching fees data:', error);
     }
     setLoading(false);
   }, []);
@@ -58,24 +59,24 @@ const Courses = () => {
   }, []);
 
   return (
-    <div className="courses-container">
-    <GenericTable
-      data={data}
-      columns={courseColumns}
-      filtersConfig={courseFiltersConfig}
-      headerTitle="Courses"
-      filters={filters}
-      setFilters={setFilters}
-      page={page}
-      setPage={setPage}
-      totalPages={totalPages}
-      filterOptions={filterOptions}
-      loading={loading}
-      filterLoading={filterLoading}
-      fetchData={fetchData} // Pass fetchData
-      pageSize={pageSize} // Pass pageSize
-      setPageSize={setPageSize} // Pass setPageSize
-    />
+    <div className="fees-container">
+      <GenericTable
+        data={data}
+        columns={feesColumns}
+        filtersConfig={feesFiltersConfig}
+        headerTitle="Courses"
+        filters={filters}
+        setFilters={setFilters}
+        page={page}
+        setPage={setPage}
+        totalPages={totalPages}
+        filterOptions={filterOptions}
+        loading={loading}
+        filterLoading={filterLoading}
+        fetchData={fetchData} // Pass fetchData
+        pageSize={pageSize} // Pass pageSize
+        setPageSize={setPageSize} // Pass setPageSize
+      />
     </div>
   );
 };

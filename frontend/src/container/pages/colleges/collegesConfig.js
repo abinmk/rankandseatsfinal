@@ -6,7 +6,7 @@ export const collegesColumns = [
   { Header: 'Institute Type', accessor: 'instituteType' },
   { Header: 'University', accessor: 'universityName' },
   { Header: 'Year of Establishment', accessor: 'yearOfEstablishment' },
-  { Header: 'No. of Seats', accessor: 'yearOfEstablishment2' },
+  { Header: 'No. of Seats', accessor: 'totalSeatsInCollege' },
   { Header: 'Total Hospital Beds', accessor: 'totalHospitalBeds' },
 
 ];

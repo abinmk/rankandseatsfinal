@@ -14,7 +14,6 @@ const GenericTable = ({
   page,
   setPage,
   totalPages,
-  setTotalPages,
   filterOptions,
   loading,
   filterLoading,
@@ -27,7 +26,6 @@ const GenericTable = ({
   const [showRowModal, setShowRowModal] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [filteredData, setFilteredData] = useState(data);
-  const [wishlist, setWishlist] = useState(new Set());
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
@@ -48,16 +46,17 @@ const GenericTable = ({
 
   const getFilterParamName = (filterKey) => {
     const filterMapping = {
-      quotas: 'allottedQuota',
-      institutes: 'allottedInstitute',
-      courses: 'course',
+      state: 'state',
+      institute: 'allottedInstitute',
+      instituteType: 'instituteType',
+      quota: 'allottedQuota',
+      course: 'course',
+      duration:'duration',
       allottedCategories: 'allottedCategory',
       candidateCategories: 'candidateCategory',
       examNames: 'examName',
       years: 'year',
       rounds: 'round',
-      states: 'state',
-      instituteTypes: 'instituteType',
       universityNames: 'universityName',
       yearsOfEstablishment: 'yearOfEstablishment',
       totalHospitalBeds: 'totalHospitalBeds',
@@ -80,24 +79,29 @@ const GenericTable = ({
     return filterMapping[filterKey] || filterKey;
   };
 
+  const handleSliderChange = (filterKey, newValue) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [filterKey]: JSON.stringify({ min: newValue[0], max: newValue[1] })
+    }));
+  };
+
   const applyFilters = () => {
     let filtered = data;
 
     Object.keys(filters).forEach(filterKey => {
-      if (filters[filterKey] && filters[filterKey].length > 0) {
-        filtered = filtered.filter(item => {
-          const itemValue = item[filterKey];
-
-          if (Array.isArray(filters[filterKey])) {
-            return filters[filterKey].includes(itemValue);
-          }
-
-          if (filters[filterKey].min !== undefined && filters[filterKey].max !== undefined) {
-            return itemValue >= filters[filterKey].min && itemValue <= filters[filterKey].max;
-          }
-
-          return itemValue === filters[filterKey];
-        });
+      const filterParamName = getFilterParamName(filterKey);
+      const filterValue = filters[filterKey];
+      if (filterValue && filterValue.length > 0) {
+        if (filterValue.includes('min') && filterValue.includes('max')) {
+          const { min, max } = JSON.parse(filterValue);
+          filtered = filtered.filter(item => item[filterParamName] >= min && item[filterParamName] <= max);
+        } else {
+          filtered = filtered.filter(item => {
+            const itemValue = item[filterParamName];
+            return Array.isArray(filterValue) ? filterValue.includes(itemValue) : itemValue === filterValue;
+          });
+        }
       }
     });
 
@@ -183,6 +187,7 @@ const GenericTable = ({
         loading={filterLoading}
         getFilterParamName={getFilterParamName}
         clearAllFilters={clearAllFilters}
+        handleSliderChange={handleSliderChange} // Pass the handler to FilterSection
       />
       <div className={`results-section ${showFilters ? "" : "full-width"}`}>
         <button className={`show-filters-btn ${showFilters ? "hidden" : ""}`} onClick={toggleFilters} id='view-btn'>
@@ -239,7 +244,7 @@ const GenericTable = ({
                 value={pageSize}
                 onChange={(e) => setPageSize(Number(e.target.value))}
                 className="me-3"
-                style={{ width: '45px', height: '40px' }}
+                style={{ width: '45px',height:'40px' }}
               >
                 {[10, 25, 50, 100].map((size) => (
                   <option key={size} value={size}>
@@ -257,7 +262,7 @@ const GenericTable = ({
                 value={pageIndex + 1}
                 onChange={(e) => setPage(Number(e.target.value))}
                 className="me-2"
-                style={{ width: '55px', height: '40px' }}
+                style={{ width: '55px',height:'40px' }}
               />
             </Form.Group>
             <div className="pagination-controls">
