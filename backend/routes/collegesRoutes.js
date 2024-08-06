@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const collegesController = require('../controllers/collegesController');
+const { getCollegesData, getFilterOptions } = require('../controllers/collegesController'); // Make sure the path is correct
 
-router.get('/', collegesController.getCollegeData);
-router.get('/filters', collegesController.getFilterOptions);
+router.get('/', getCollegesData);
+router.get('/filters', getFilterOptions);
 
 module.exports = router;

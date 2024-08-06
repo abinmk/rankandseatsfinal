@@ -10,6 +10,7 @@ const FeesSchema = new mongoose.Schema({
   stipendYear3: { type: Number, required: true },
   bondYear: { type: Number, required: true },
   bondPenality: { type: Number, required: true },
+  seatLeavingPenality: { type: Number, required: true },
   noOfSeats: { type: Number, required: true },
 });
 

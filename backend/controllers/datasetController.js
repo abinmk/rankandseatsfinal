@@ -121,12 +121,12 @@ const uploadCollege = (req, res) => {
           universityName,
           instituteType,
           yearOfEstablishment,
-          totalHospitalBeds: parseInt(totalHospitalBeds, 10) || 0,
+          totalHospitalBeds: Number(totalHospitalBeds) || 0,
           locationMapLink,
           nearestRailwayStation,
-          distanceFromRailwayStation: parseFloat(distanceFromRailwayStation) || 0,
+          distanceFromRailwayStation: Number(distanceFromRailwayStation) || 0,
           nearestAirport,
-          distanceFromAirport: parseFloat(distanceFromAirport) || 0,
+          distanceFromAirport: Number(distanceFromAirport) || 0,
           phoneNumber,
           website
         };
@@ -144,12 +144,14 @@ const uploadCollege = (req, res) => {
   });
 };
 
+
 // Upload Courses
 const uploadCourse = (req, res) => {
   upload(req, res, async function (err) {
     if (err instanceof multer.MulterError || err) {
       return res.status(500).send({ message: err.message });
     }
+    
 
     const filePath = path.join(__dirname, '..', 'uploads', req.file.filename);
 
@@ -202,7 +204,7 @@ const uploadFee = (req, res) => {
         bondYear: row[7],
         bondPenality: row[8],
         seatLeavingPenality: row[9],
-        noOfSeats: row[10],
+        noOfSeats: parseInt(row[10], 10) || 0,
       }));
 
       // Delete existing data
@@ -217,7 +219,6 @@ const uploadFee = (req, res) => {
   });
 };
 
-// Generate Combined Dataset with Multiple Allotments
 const generateCombinedDataset = async (req, res) => {
   try {
     const { examName, rounds } = req.body; // rounds is an array of selected allotments
@@ -288,26 +289,26 @@ const generateCombinedDataset = async (req, res) => {
         instituteType: college?.instituteType,
         universityName: college?.universityName,
         yearOfEstablishment: college?.yearOfEstablishment,
-        totalHospitalBeds: college?.totalHospitalBeds,
+        totalHospitalBeds: Number(college?.totalHospitalBeds) || 0,
         locationMapLink: college?.locationMapLink,
         nearestRailwayStation: college?.nearestRailwayStation,
-        distanceFromRailwayStation: college?.distanceFromRailwayStation,
+        distanceFromRailwayStation: Number(college?.distanceFromRailwayStation) || 0,
         nearestAirport: college?.nearestAirport,
-        distanceFromAirport: college?.distanceFromAirport,
+        distanceFromAirport: Number(college?.distanceFromAirport) || 0,
         phoneNumber: college?.phoneNumber,
         website: college?.website,
         courseType: course?.courseType,
         courseCategory: course?.courseCategory,
         degreeType: course?.degreeType,
-        feeAmount: fee?.courseFee,
-        nriFee: fee?.nriFee,
-        stipendYear1: fee?.stipendYear1,
-        stipendYear2: fee?.stipendYear2,
-        stipendYear3: fee?.stipendYear3,
-        bondYear: fee?.bondYear,
-        bondPenality: fee?.bondPenality,
-        seatLeavingPenality: fee?.seatLeavingPenality,
-        noOfSeats: fee?.noOfSeats,
+        feeAmount: Number(fee?.courseFee) || 0,
+        nriFee: Number(fee?.nriFee) || 0,
+        stipendYear1: Number(fee?.stipendYear1) || 0,
+        stipendYear2: Number(fee?.stipendYear2) || 0,
+        stipendYear3: Number(fee?.stipendYear3) || 0,
+        bondYear: Number(fee?.bondYear) || 0,
+        bondPenality: Number(fee?.bondPenality) || 0,
+        seatLeavingPenality: Number(fee?.seatLeavingPenality) || 0,
+        noOfSeats: Number(fee?.noOfSeats) || 0,
         totalSeatsInCollege: totalSeatsInCollege[allotment.allottedInstitute] || 0,
         totalSeatsInCourse: totalSeatsInCourse[allotment.course] || 0,
         description: course?.description
@@ -322,13 +323,112 @@ const generateCombinedDataset = async (req, res) => {
 
     // Insert the new combined data
     await batchInsert(GeneratedModel, combinedData);
+
+    // Generate FEE_RESULT dataset with distinct colleges and courses
+    const feeResultData = Object.values(feeMap).map(fee => {
+      const college = collegeMap[fee.collegeName];
+      const course = courseMap[fee.courseName];
+
+      return {
+        collegeName: fee.collegeName,
+        courseName: fee.courseName,
+        feeAmount: Number(fee.courseFee) || 0,
+        nriFee: Number(fee.nriFee) || 0,
+        stipendYear1: Number(fee.stipendYear1) || 0,
+        stipendYear2: Number(fee.stipendYear2) || 0,
+        stipendYear3: Number(fee.stipendYear3) || 0,
+        bondYear: Number(fee.bondYear) || 0,
+        bondPenality: Number(fee.bondPenality) || 0,
+        seatLeavingPenality: Number(fee.seatLeavingPenality) || 0,
+        noOfSeats: Number(fee.noOfSeats) || 0,
+        state: college?.state,
+        instituteType: college?.instituteType,
+        universityName: college?.universityName,
+        yearOfEstablishment: college?.yearOfEstablishment,
+        totalHospitalBeds: Number(college?.totalHospitalBeds) || 0,
+        locationMapLink: college?.locationMapLink,
+        nearestRailwayStation: college?.nearestRailwayStation,
+        distanceFromRailwayStation: Number(college?.distanceFromRailwayStation) || 0,
+        nearestAirport: college?.nearestAirport,
+        distanceFromAirport: Number(college?.distanceFromAirport) || 0,
+        phoneNumber: college?.phoneNumber,
+        website: college?.website,
+        courseType: course?.courseType,
+        courseCategory: course?.courseCategory,
+        degreeType: course?.degreeType,
+        totalSeatsInCollege: totalSeatsInCollege[fee.collegeName] || 0,
+        totalSeatsInCourse: totalSeatsInCourse[fee.courseName] || 0,
+      };
+    });
+
+    const feeResultCollectionName = 'FEE_RESULT';
+    const FeeResultModel = getModel(feeResultCollectionName);
+
+    // Delete existing data in the fee result collection
+        // Delete existing data in the fee result collection
+        await FeeResultModel.deleteMany({});
+
+        // Insert the new fee result data
+        await batchInsert(FeeResultModel, feeResultData);
     
-    res.json({ combinedData });
-  } catch (error) {
-    console.error('Error generating combined dataset:', error);
-    res.status(500).send('Failed to generate combined dataset.');
-  }
-};
+        // Generate COURSE_RESULT dataset with distinct courses
+        const courseResultData = Object.values(courseMap).map(course => {
+          return {
+            courseName: course.courseName,
+            duration: course.duration,
+            clinicalType: course.clinicalType,
+            degreeType: course.degreeType,
+            courseType: course.courseType,
+            totalSeatsInCourse: Number(totalSeatsInCourse[course.courseName]) || 0,
+          };
+        });
+    
+        const courseResultCollectionName = 'COURSE_RESULT';
+        const CourseResultModel = getModel(courseResultCollectionName);
+    
+        // Delete existing data in the course result collection
+        await CourseResultModel.deleteMany({});
+    
+        // Insert the new course result data
+        await batchInsert(CourseResultModel, courseResultData);
+    
+        // Generate COLLEGE_RESULT dataset with distinct colleges
+        const collegeResultData = Object.values(collegeMap).map(college => {
+          return {
+            collegeName: college.collegeName,
+            state: college.state,
+            instituteType: college.instituteType,
+            universityName: college.universityName,
+            yearOfEstablishment: college.yearOfEstablishment,
+            totalHospitalBeds: Number(college.totalHospitalBeds) || 0,
+            locationMapLink: college.locationMapLink,
+            nearestRailwayStation: college.nearestRailwayStation,
+            distanceFromRailwayStation: Number(college.distanceFromRailwayStation) || 0,
+            nearestAirport: college.nearestAirport,
+            distanceFromAirport: Number(college.distanceFromAirport) || 0,
+            phoneNumber: college.phoneNumber,
+            website: college.website,
+            totalSeatsInCollege: Number(totalSeatsInCollege[college.collegeName]) || 0,
+          };
+        });
+    
+        const collegeResultCollectionName = 'COLLEGE_RESULT';
+        const CollegeResultModel = getModel(collegeResultCollectionName);
+    
+        // Delete existing data in the college result collection
+        await CollegeResultModel.deleteMany({});
+    
+        // Insert the new college result data
+        await batchInsert(CollegeResultModel, collegeResultData);
+    
+        res.json({ combinedData, feeResultData, courseResultData, collegeResultData });
+      } catch (error) {
+        console.error('Error generating combined dataset:', error);
+        res.status(500).send('Failed to generate combined dataset.');
+      }
+    };
+    
+
 
 // List Available Allotments
 const listAvailableAllotments = async (req, res) => {
@@ -399,6 +499,56 @@ const getGeneratedData = async (req, res) => {
   }
 };
 
+// Get Courses Data
+const getCoursesData = async (req, res) => {
+  try {
+    const { page = 1, limit = 10, ...filters } = req.query;
+    const query = {};
+
+    for (const key in filters) {
+      if (filters[key]) {
+        query[key] = Array.isArray(filters[key]) ? { $in: filters[key] } : filters[key];
+      }
+    }
+
+    const data = await Course.find(query)
+      .skip((page - 1) * limit)
+      .limit(Number(limit))
+      .lean();
+    const totalItems = await Course.countDocuments(query);
+
+    res.json({
+      data,
+      currentPage: Number(page),
+      totalPages: Math.ceil(totalItems / limit),
+      totalItems,
+    });
+  } catch (error) {
+    console.error('Error fetching course data:', error);
+    res.status(500).send('Failed to fetch course data.');
+  }
+};
+
+// Get Filter Options for Courses
+const getCourseFilterOptions = async (req, res) => {
+  try {
+    const filterOptions = {
+      courseName: await Course.distinct('courseName'),
+      clinicalType: await Course.distinct('clinicalType'),
+      degreeType: await Course.distinct('degreeType'),
+      courseType: await Course.distinct('courseType'),
+      duration: await Course.distinct('duration'),
+      totalSeats: await Course.distinct('totalSeats')
+    };
+
+    console.log('Filter Options:', filterOptions); // Debugging line
+    res.json(filterOptions);
+  } catch (error) {
+    console.error('Error fetching filter options:', error);
+    res.status(500).send('Failed to fetch filter options.');
+  }
+};
+
 module.exports = {
   uploadAllotment,
   uploadCollege,
@@ -406,6 +556,8 @@ module.exports = {
   uploadFee,
   generateCombinedDataset,
   listAvailableAllotments,
-  getGeneratedData
+  getGeneratedData,
+  getCoursesData,
+  getCourseFilterOptions,
 };
 

@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 exports.getFeesData = async (req, res) => {
   try {
     const { page = 1, limit = 10, bondPenaltyRange, ...filters } = req.query;
-    const collectionName = 'GENERATED_NEET_PG_ALL_INDIA';
+    const collectionName = 'FEE_RESULT';
     let AllotmentModel;
 
     try {
@@ -74,7 +74,7 @@ exports.getFeesData = async (req, res) => {
 
 exports.getFilterOptions = async (req, res) => {
   try {
-    const collectionName = `GENERATED_NEET_PG_ALL_INDIA`;
+    const collectionName = `FEE_RESULT`;
     let AllotmentModel;
 
     try {
