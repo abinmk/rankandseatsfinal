@@ -40,11 +40,40 @@ exports.removeFromWishlist = async (req, res) => {
   }
 };
 
-// Get Wishlist
 exports.getWishlist = async (req, res) => {
   try {
     const { username } = req.query;
-    const wishlist = await Wishlist.findOne({ username });
+    const { courses = [], categories = [], institutes = [] } = req.query;
+
+    // Fetch the wishlist for the specified user
+    let wishlist = await Wishlist.findOne({ username });
+
+    if (!wishlist) {
+      return res.status(404).json({ message: 'Wishlist not found' });
+    }
+
+    // Filter the items based on the query parameters
+    let filteredItems = wishlist.items;
+
+    if (courses.length > 0) {
+      filteredItems = filteredItems.filter(item =>
+        courses.includes(item.allotment.course)
+      );
+    }
+
+    if (categories.length > 0) {
+      filteredItems = filteredItems.filter(item =>
+        categories.includes(item.allotment.allottedCategory)
+      );
+    }
+
+    if (institutes.length > 0) {
+      filteredItems = filteredItems.filter(item =>
+        institutes.includes(item.allotment.allottedInstitute)
+      );
+    }
+
+    wishlist.items = filteredItems;
 
     res.status(200).json({ wishlist });
   } catch (error) {
@@ -52,6 +81,7 @@ exports.getWishlist = async (req, res) => {
     res.status(500).send('Failed to fetch wishlist.');
   }
 };
+
 
 // Update Wishlist Order
 exports.updateWishlistOrder = async (req, res) => {
@@ -73,5 +103,40 @@ exports.updateWishlistOrder = async (req, res) => {
   } catch (error) {
     console.error('Error updating wishlist order:', error);
     res.status(500).send('Failed to update wishlist order.');
+  }
+};
+
+
+
+exports.getFilterOptions = async (req, res) => {
+  try {
+    const wishlists = await Wishlist.find({});
+
+    const institutesSet = new Set();
+    const coursesSet = new Set();
+    const categoriesSet = new Set();
+
+    wishlists.forEach(wishlist => {
+      wishlist.items.forEach(item => {
+        if (item.allotment) {
+          institutesSet.add(item.allotment.allottedInstitute);
+          coursesSet.add(item.allotment.course);
+          categoriesSet.add(item.allotment.allottedCategory);
+        }
+      });
+    });
+
+    const institutes = Array.from(institutesSet);
+    const courses = Array.from(coursesSet);
+    const categories = Array.from(categoriesSet);
+
+    res.status(200).json({
+      institutes,
+      courses,
+      categories,
+    });
+  } catch (error) {
+    console.error('Error fetching filters:', error);
+    res.status(500).send('Failed to fetch filters.');
   }
 };
