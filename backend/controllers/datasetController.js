@@ -481,19 +481,37 @@ const listAvailableAllotments = async (req, res) => {
 
 // Get Generated Data
 const getGeneratedData = async (req, res) => {
+  const uri = process.env.MONGO_URI; // Make sure this environment variable is set
+  const dbName = process.env.DB_NAME; // Ensure DB_NAME is set in your environment variables
+
+  if (!uri) {
+    return res.status(500).json({ error: 'MONGO_URI is not defined in environment variables' });
+  }
+
+  const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
   try {
-    const { examName, year, resultName } = req.query;
-    const combinedCollectionName = `GENERATED_${examName}_${year}_${resultName}`;
+    await client.connect();
+    const db = client.db(dbName); // Use the DB_NAME from environment variables
 
-    const CombinedModel = getModel(combinedCollectionName);
-    const data = await CombinedModel.find({}).lean();
+    // Assuming 'generatedDatasets' is the collection where your generated datasets are stored
+    const collections = await db.listCollections().toArray();
+    const generatedDatasets = collections
+      .map(collection => collection.name)
+      .filter(name => name.startsWith('EXAM'));
 
-    res.json({ data });
+    res.json({ datasets: generatedDatasets });
   } catch (error) {
-    console.error('Error fetching generated data:', error);
-    res.status(500).send('Failed to fetch generated data.');
+    console.error('Error fetching generated datasets:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  } finally {
+    await client.close();
   }
 };
+
+
+
+
 
 // Get Courses Data
 const getCoursesData = async (req, res) => {

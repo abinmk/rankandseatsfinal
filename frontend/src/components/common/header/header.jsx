@@ -206,159 +206,180 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
       try {
         const response = await axios.get(`${API_URL}/list-generated-datasets`);
         const datasets = response.data.datasets || [];
-		const types = datasets.map(dataset => {
-			const match = dataset.match(/EXAM:.*_TYPE:(.*)/);
-			return match ? match[1].replace(/_/g, ' ') : null;
-		  }).filter(Boolean);
-  
-		  setAvailableCounselingTypes(types);
-		} catch (error) {
-		  console.error('Error fetching available datasets', error);
-		}
-	  };
-  
-	  fetchDatasets();
-	}, [API_URL]);
-  
-	return (
-	  <Fragment>
-		<header className="app-header">
-		  <div className="main-header-container container-fluid" id="main-container">
-			<div className="header-content-left">
-			  <div className="header-element">
-				<Link aria-label="anchor" to="#" className="sidemenu-toggle header-link" data-bs-toggle="sidebar" onClick={toggleSidebar}>
-				  <span className="open-toggle me-2">
-					<i className="bx bx-menu header-link-icon"></i>
-				  </span>
-				</Link>
-			  </div>
-			  <div className="header-content-left d-flex align-items-center">
-				<Link to="/home" className="header-logo">
-				  <img src={desktoplogo} alt="logo" className="desktop-logo" />
-				</Link>
-			  </div>
-			  <div className="exam-selection d-flex ms-3">
-				<select value={exam} onChange={(e) => setExam(e.target.value.toUpperCase().replace(/ /g, '_'))} className="form-select me-2" id="exam-name">
-				  <option value="NEET_PG">NEET PG</option>
-				  <option value="NEET_SS">NEET SS</option>
-				  <option value="INI_CET">INI CET</option>
-				  {/* Add more exam options here */}
-				</select>
-				<select value={counselingType} onChange={(e) => setCounselingType(e.target.value)} className="form-select" id="counseling">
-				  {availableCounselingTypes.map((type, index) => (
-					<option key={index} value={type}>{type}</option>
-				  ))}
-				</select>
-			  </div>
-			</div>
-			<div className="header-container">
-			  <h3 className="ms-3" id="selectedTab">{selectedTab}</h3>
-			</div>
-			<div className="header-content-right">
-			  <Dropdown className="header-element notifications-dropdown" autoClose="outside">
-				<Dropdown.Toggle variant='' className="header-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" id="messageDropdown" aria-expanded="false">
-				  <i className="bx bx-bell bx-flip-horizontal header-link-icon ionicon"></i>
-				  <span className="badge bg-info rounded-pill header-icon-badge pulse pulse-secondary" id="notification-icon-badge">{notifications.length}</span>
-				</Dropdown.Toggle>
-				<Dropdown.Menu align="end" className="main-header-dropdown dropdown-menu border-0 dropdown-menu-end" data-popper-placement="none">
-				  <div className="p-3">
-					<div className="d-flex align-items-center justify-content-between">
-					  <p className="mb-0 fs-17 fw-semibold">Notifications</p>
-					  <span className="badge bg-secondary-transparent" id="notification-data">{`${notifications.length} Unread`}</span>
-					</div>
-				  </div>
-				  <div className="dropdown-divider"></div>
-				  <ul className="list-unstyled mb-0">
-					<SimpleBar id="header-notification-scroll">
-					  {notifications.map((notification, index) => (
-						<Dropdown.Item as="li" key={index}>
-						  <div className="d-flex align-items-start">
-							<div className="pe-2">
-							  <span className={`avatar avatar-md bg-${notification.avatarcolor}-transparent rounded-2`}>
-								{notification.src && <img src={notification.src} alt="avatar" className="avatar-img" />}
-								<i className={notification.icon}></i>
-							  </span>
-							</div>
-							<div className="flex-grow-1 d-flex justify-content-between">
-							  <div>
-								<p className="mb-0 fw-semibold"><Link to="#">{notification.name}</Link> <span className="text-warning">{notification.text2}</span></p>
-								<span className="fs-12 text-muted fw-normal">{notification.text1}</span>
-							  </div>
-							  <div className="min-w-fit-content ms-2 text-end">
-								<Link aria-label="anchor" to="#" className="min-w-fit-content text-muted me-1 -close1" onClick={() => handleNotificationClose(index)}>
-								  <i className="ti ti-x fs-14"></i>
-								</Link>
-								<p className="mb-0 text-muted fs-11">{notification.text3}</p>
-							  </div>
-							</div>
-						  </div>
-						</Dropdown.Item>
-					  ))}
-					</SimpleBar>
-				  </ul>
-				  <div className={`p-3 empty-header-item1 border-top ${notifications.length === 0 ? "d-none" : "d-block"}`}>
-					<div className="d-grid">
-					  <Link to="#" className="btn btn-primary">View All</Link>
-					</div>
-				  </div>
-				  <div className={`p-5 empty-item1 ${notifications.length === 0 ? "d-block" : "d-none"}`}>
-					<div className="text-center">
-					  <span className="avatar avatar-xl avatar-rounded bg-secondary-transparent">
-						<i className="bx bx-bell-off bx-tada fs-2"></i>
-					  </span>
-					  <h6 className="fw-semibold mt-3">No New Notifications</h6>
-					</div>
-				  </div>
-				</Dropdown.Menu>
-			  </Dropdown>
-			  <div className="header-element header-fullscreen">
-				<Link aria-label="anchor" onClick={toggleFullScreen} to="#" className="header-link">
-				  {fullScreen ? (
-					<i className="bx bx-exit-fullscreen header-link-icon full-screen-close"></i>
-				  ) : (
-					<i className="bx bx-fullscreen header-link-icon full-screen-open"></i>
-				  )}
-				</Link>
-			  </div>
-			  <Dropdown className="header-element mainuserProfile">
-				<Dropdown.Toggle variant='' as="a" className="header-link dropdown-toggle" id="mainHeaderProfile" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-				  <div className="d-flex align-items-center">
-					<div className="d-sm-flex wd-100p">
-					  <div className="avatar avatar-sm"><img alt="avatar" className="rounded-circle" src={faces1} /></div>
-					  <div className="ms-2 my-auto d-none d-xl-flex">
-						<h6 className="font-weight-semibold mb-0 fs-13 user-name d-sm-block d-none">Harry Jones</h6>
-					  </div>
-					</div>
-				  </div>
-				</Dropdown.Toggle>
-				<Dropdown.Menu as="ul" className="dropdown-menu border-0 main-header-dropdown overflow-hidden header-profile-dropdown" aria-labelledby="mainHeaderProfile">
-				  <Dropdown.Item as="li" className="border-0">
-					<Link to="#"><i className="fs-13 me-2 bx bx-user"></i>Profile</Link>
-				  </Dropdown.Item>
-				  <Dropdown.Item as="li" className="border-0">
-					<Link to="#"><i className="fs-13 me-2 bx bx-comment"></i>Message</Link>
-				  </Dropdown.Item>
-				  <Dropdown.Item as="li" className="border-0">
-					<Link to="#"><i className="fs-13 me-2 bx bx-cog"></i>Settings</Link>
-				  </Dropdown.Item>
-				  <Dropdown.Item as="li" className="border-0">
-					<Link to="#"><i className="fs-13 me-2 bx bx-help-circle"></i>Help</Link>
-				  </Dropdown.Item>
-				  <Dropdown.Item as="li" className="border-0">
-					<Link to="#"><i className="fs-13 me-2 bx bx-arrow-to-right"></i>Log Out</Link>
-				  </Dropdown.Item>
-				</Dropdown.Menu>
-			  </Dropdown>
-			</div>
-		  </div>
-		</header>
-	  </Fragment>
-	);
+        const types = datasets.map(dataset => {
+          const match = dataset.match(/EXAM:.*_TYPE:(.*)/);
+          return match ? match[1].replace(/_/g, ' ') : null;
+        }).filter(Boolean);
+
+        setAvailableCounselingTypes(types);
+      } catch (error) {
+        console.error('Error fetching available datasets', error);
+      }
+    };
+
+    fetchDatasets();
+  }, [API_URL]);
+
+  const saveUserSelection = async (exam, counselingType) => {
+    try {
+      await axios.post(`${API_URL}/save-user-selection`, { exam, counselingType });
+      console.log('User selection saved successfully');
+    } catch (error) {
+      console.error('Error saving user selection', error);
+    }
   };
-  
-  const mapStateToProps = (state) => ({
-	local_varaiable: state
-  });
-  
-  export default connect(mapStateToProps, { ThemeChanger })(Header);
-  
+
+  const handleExamChange = (e) => {
+    const selectedExam = e.target.value.toUpperCase().replace(/ /g, '_');
+    setExam(selectedExam);
+    saveUserSelection(selectedExam, counselingType);
+  };
+
+  const handleCounselingTypeChange = (e) => {
+    const selectedCounselingType = e.target.value;
+    setCounselingType(selectedCounselingType);
+    saveUserSelection(exam, selectedCounselingType);
+  };
+
+  return (
+    <Fragment>
+      <header className="app-header">
+        <div className="main-header-container container-fluid" id="main-container">
+          <div className="header-content-left">
+            <div className="header-element">
+              <Link aria-label="anchor" to="#" className="sidemenu-toggle header-link" data-bs-toggle="sidebar" onClick={toggleSidebar}>
+                <span className="open-toggle me-2">
+                  <i className="bx bx-menu header-link-icon"></i>
+                </span>
+              </Link>
+            </div>
+            <div className="header-content-left d-flex align-items-center">
+              <Link to="/home" className="header-logo">
+                <img src={desktoplogo} alt="logo" className="desktop-logo" />
+              </Link>
+            </div>
+            <div className="exam-selection d-flex ms-3">
+              <select value={exam} onChange={handleExamChange} className="form-select me-2" id="exam-name">
+                <option value="NEET_PG">NEET PG</option>
+                <option value="NEET_SS">NEET SS</option>
+                <option value="INI_CET">INI CET</option>
+                {/* Add more exam options here */}
+              </select>
+              <select value={counselingType} onChange={handleCounselingTypeChange} className="form-select" id="counseling">
+                {availableCounselingTypes.map((type, index) => (
+                  <option key={index} value={type}>{type}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="header-container">
+            <h3 className="ms-3" id="selectedTab">{selectedTab}</h3>
+          </div>
+          <div className="header-content-right">
+            <Dropdown className="header-element notifications-dropdown" autoClose="outside">
+              <Dropdown.Toggle variant='' className="header-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" id="messageDropdown" aria-expanded="false">
+                <i className="bx bx-bell bx-flip-horizontal header-link-icon ionicon"></i>
+                <span className="badge bg-info rounded-pill header-icon-badge pulse pulse-secondary" id="notification-icon-badge">{notifications.length}</span>
+              </Dropdown.Toggle>
+              <Dropdown.Menu align="end" className="main-header-dropdown dropdown-menu border-0 dropdown-menu-end" data-popper-placement="none">
+                <div className="p-3">
+                  <div className="d-flex align-items-center justify-content-between">
+                    <p className="mb-0 fs-17 fw-semibold">Notifications</p>
+                    <span className="badge bg-secondary-transparent" id="notification-data">{`${notifications.length} Unread`}</span>
+                  </div>
+                </div>
+                <div className="dropdown-divider"></div>
+                <ul className="list-unstyled mb-0">
+                  <SimpleBar id="header-notification-scroll">
+                    {notifications.map((notification, index) => (
+                      <Dropdown.Item as="li" key={index}>
+                        <div className="d-flex align-items-start">
+                          <div className="pe-2">
+                            <span className={`avatar avatar-md bg-${notification.avatarcolor}-transparent rounded-2`}>
+                              {notification.src && <img src={notification.src} alt="avatar" className="avatar-img" />}
+                              <i className={notification.icon}></i>
+                            </span>
+                          </div>
+                          <div className="flex-grow-1 d-flex justify-content-between">
+                            <div>
+                              <p className="mb-0 fw-semibold"><Link to="#">{notification.name}</Link> <span className="text-warning">{notification.text2}</span></p>
+                              <span className="fs-12 text-muted fw-normal">{notification.text1}</span>
+                            </div>
+                            <div className="min-w-fit-content ms-2 text-end">
+                              <Link aria-label="anchor" to="#" className="min-w-fit-content text-muted me-1 -close1" onClick={() => handleNotificationClose(index)}>
+                                <i className="ti ti-x fs-14"></i>
+                              </Link>
+                              <p className="mb-0 text-muted fs-11">{notification.text3}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </Dropdown.Item>
+                    ))}
+                  </SimpleBar>
+                </ul>
+                <div className={`p-3 empty-header-item1 border-top ${notifications.length === 0 ? "d-none" : "d-block"}`}>
+                  <div className="d-grid">
+                    <Link to="#" className="btn btn-primary">View All</Link>
+                  </div>
+                </div>
+                <div className={`p-5 empty-item1 ${notifications.length === 0 ? "d-block" : "d-none"}`}>
+                  <div className="text-center">
+                    <span className="avatar avatar-xl avatar-rounded bg-secondary-transparent">
+                      <i className="bx bx-bell-off bx-tada fs-2"></i>
+                    </span>
+                    <h6 className="fw-semibold mt-3">No New Notifications</h6>
+                  </div>
+                </div>
+              </Dropdown.Menu>
+            </Dropdown>
+            <div className="header-element header-fullscreen">
+              <Link aria-label="anchor" onClick={toggleFullScreen} to="#" className="header-link">
+                {fullScreen ? (
+                  <i className="bx bx-exit-fullscreen header-link-icon full-screen-close"></i>
+                ) : (
+                  <i className="bx bx-fullscreen header-link-icon full-screen-open"></i>
+                )}
+              </Link>
+            </div>
+            <Dropdown className="header-element mainuserProfile">
+              <Dropdown.Toggle variant='' as="a" className="header-link dropdown-toggle" id="mainHeaderProfile" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                <div className="d-flex align-items-center">
+                  <div className="d-sm-flex wd-100p">
+                    <div className="avatar avatar-sm"><img alt="avatar" className="rounded-circle" src={faces1} /></div>
+                    <div className="ms-2 my-auto d-none d-xl-flex">
+                      <h6 className="font-weight-semibold mb-0 fs-13 user-name d-sm-block d-none">Harry Jones</h6>
+                    </div>
+                  </div>
+                </div>
+              </Dropdown.Toggle>
+              <Dropdown.Menu as="ul" className="dropdown-menu border-0 main-header-dropdown overflow-hidden header-profile-dropdown" aria-labelledby="mainHeaderProfile">
+                <Dropdown.Item as="li" className="border-0">
+                  <Link to="#"><i className="fs-13 me-2 bx bx-user"></i>Profile</Link>
+                </Dropdown.Item>
+                <Dropdown.Item as="li" className="border-0">
+                  <Link to="#"><i className="fs-13 me-2 bx bx-comment"></i>Message</Link>
+                </Dropdown.Item>
+                <Dropdown.Item as="li" className="border-0">
+                  <Link to="#"><i className="fs-13 me-2 bx bx-cog"></i>Settings</Link>
+                </Dropdown.Item>
+                <Dropdown.Item as="li" className="border-0">
+                  <Link to="#"><i className="fs-13 me-2 bx bx-help-circle"></i>Help</Link>
+                </Dropdown.Item>
+                <Dropdown.Item as="li" className="border-0">
+                  <Link to="#"><i className="fs-13 me-2 bx bx-arrow-to-right"></i>Log Out</Link>
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
+        </div>
+      </header>
+    </Fragment>
+  );
+};
+
+const mapStateToProps = (state) => ({
+  local_varaiable: state
+});
+
+export default connect(mapStateToProps, { ThemeChanger })(Header);
+
