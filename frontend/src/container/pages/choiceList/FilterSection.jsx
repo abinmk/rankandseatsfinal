@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Accordion, Form, Button, Spinner } from 'react-bootstrap';
+import React from 'react';
+import { Accordion, Spinner } from 'react-bootstrap';
 import FilterItem from './FilterItem';
 
 const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, filterOptions, clearAllFilters }) => {
@@ -22,7 +22,11 @@ const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, filter
         </span>
       </div>
       {Object.keys(filterOptions).length === 0 ? (
-        <Spinner animation="border" />
+        <div className="spinner-container">
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        </div>
       ) : (
         <Accordion defaultActiveKey={['0']} alwaysOpen>
           {Object.keys(filterOptions).map((filterName, index) => (

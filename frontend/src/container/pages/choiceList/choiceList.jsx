@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { Table, Button } from 'react-bootstrap';
+import { Table, Button, Modal } from 'react-bootstrap';
 import { FaTrash } from 'react-icons/fa';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import FilterSection from './FilterSection';
@@ -10,44 +10,60 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 const ChoiceList = ({ username }) => {
   const [choiceList, setChoiceList] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState({});
   const [filterOptions, setFilterOptions] = useState({});
   const [showFilters, setShowFilters] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteItemId, setDeleteItemId] = useState(null);
   const headerTitle = "ChoiceList";
 
-  useEffect(() => {
-    fetchChoiceList();
-    fetchFilterOptions();
-  }, [username, currentPage, filters]);
-
-  const fetchChoiceList = async () => {
+  const fetchChoiceList = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${apiUrl}/wishlist`, { params: { username, page: currentPage, ...filters } });
+      const response = await axios.get(`${apiUrl}/wishlist`, {
+        params: { username, page: currentPage, ...filters },
+      });
       setChoiceList(response.data.wishlist.items);
-      setTotalPages(response.data.totalPages); // Ensure your backend returns totalPages
+      setTotalPages(response.data.totalPages);
     } catch (error) {
       console.error('Error fetching choice list:', error);
     }
     setLoading(false);
-  };
+  }, [username, currentPage, filters]);
 
-  const fetchFilterOptions = async () => {
+  const fetchFilterOptions = useCallback(async () => {
     try {
-      const response = await axios.get(`${apiUrl}/wishlist/filters`, { params: { username } });
+      const response = await axios.get(`${apiUrl}/wishlist/filters`, {
+        params: { username },
+      });
       setFilterOptions(response.data);
     } catch (error) {
       console.error('Error fetching filter options:', error);
     }
+  }, [username]);
+
+  useEffect(() => {
+    fetchChoiceList();
+  }, [fetchChoiceList]);
+
+  useEffect(() => {
+    fetchFilterOptions();
+  }, [fetchFilterOptions]);
+
+  const handleDelete = (allotmentId) => {
+    setDeleteItemId(allotmentId);
+    setShowDeleteModal(true);
   };
 
-  const removeFromChoiceList = async (allotmentId) => {
+  const confirmDelete = async () => {
     try {
-      await axios.post(`${apiUrl}/wishlist/remove`, { username, allotmentId });
+      await axios.post(`${apiUrl}/wishlist/remove`, { username, allotmentId: deleteItemId });
       fetchChoiceList();
+      setShowDeleteModal(false);
+      setDeleteItemId(null);
     } catch (error) {
       console.error('Error removing from choice list:', error);
     }
@@ -70,10 +86,10 @@ const ChoiceList = ({ username }) => {
     }
   };
 
-  const handleFilterChange = (filterName, values) => {
+  const handleFilterChange = (filterName, newValues) => {
     setFilters(prevFilters => ({
       ...prevFilters,
-      [filterName]: values
+      [filterName]: newValues
     }));
     fetchChoiceList();
   };
@@ -88,7 +104,7 @@ const ChoiceList = ({ username }) => {
   };
 
   return (
-    <div className="choice-list-container">
+    <div className={`choice-list-container ${showDeleteModal ? 'modal-open' : ''}`}>
       <FilterSection
         showFilters={showFilters}
         toggleFilters={toggleFilters}
@@ -97,63 +113,96 @@ const ChoiceList = ({ username }) => {
         filterOptions={filterOptions}
         clearAllFilters={clearAllFilters}
       />
-      <div className={`choice-list-results ${showFilters ? '' : 'full-width'}`}>
-        <button className={`show-filters-btn ${showFilters ? 'hidden' : ''}`} onClick={toggleFilters}>
+      <div className={`choice-list-results ${showFilters ? '' : 'full-width'} ${showDeleteModal ? 'modal-open' : ''}`}>
+        <button
+          className={`show-filters-btn ${showFilters ? 'hidden' : ''}`}
+          onClick={toggleFilters}
+        >
           <i className="bi bi-funnel"></i> All Filters
         </button>
-        {loading ? (
-          <div>Loading...</div>
-        ) : choiceList.length === 0 ? (
-          <div>No items in choice list.</div>
-        ) : (
-          <>
-            <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId="choices">
-                {(provided) => (
-                  <div className="choice-list-table-wrapper" {...provided.droppableProps} ref={provided.innerRef}>
-                    <div>
-                      <span className='choice-header'>{headerTitle}</span>
-                    </div>
-                    <div className="table-wrapper">
-                      <Table striped bordered hover className="choice-list-table">
-                        <thead>
-                          <tr>
-                            <th>Sl. No.</th>
-                            <th>Institute</th>
-                            <th>Course</th>
-                            <th>Category</th>
-                            <th>Remove</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {choiceList.map((item, index) => (
-                            <Draggable key={item.allotmentId} draggableId={item.allotmentId} index={index}>
-                              {(provided) => (
-                                <tr ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                                  <td>{index + 1}</td>
-                                  <td>{item.allotment.allottedInstitute}</td>
-                                  <td>{item.allotment.course}</td>
-                                  <td>{item.allotment.allottedCategory}</td>
-                                  <td>
-                                    <Button variant="danger" onClick={() => removeFromChoiceList(item.allotmentId)}>
-                                      <FaTrash />
-                                    </Button>
-                                  </td>
-                                </tr>
-                              )}
-                            </Draggable>
-                          ))}
-                          {provided.placeholder}
-                        </tbody>
-                      </Table>
-                    </div>
-                  </div>
-                )}
-              </Droppable>
-            </DragDropContext>
-          </>
-        )}
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="choices">
+            {(provided) => (
+              <div
+                className="choice-list-table-wrapper"
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+              >
+                <div className='name-header'>
+                  <span className="choice-header">{headerTitle}</span>
+                </div>
+                <div className="table-wrapper">
+                  <Table
+                    striped
+                    bordered
+                    hover
+                    className="choice-list-table"
+                  >
+                    <thead>
+                      <tr>
+                        <th>Sl. No.</th>
+                        <th>Institute</th>
+                        <th>Course</th>
+                        <th>Category</th>
+                        <th>Remove</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {choiceList.map((item, index) => (
+                        <Draggable
+                          key={item.allotmentId}
+                          draggableId={item.allotmentId}
+                          index={index}
+                        >
+                          {(provided) => (
+                            <tr
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              <td>{index + 1}</td>
+                              <td>{item.allotment.allottedInstitute}</td>
+                              <td>{item.allotment.course}</td>
+                              <td>{item.allotment.allottedCategory}</td>
+                              <td>
+                                <Button
+                                  variant="outline-danger"
+                                  className="delete-button"
+                                  onClick={() =>
+                                    handleDelete(item.allotmentId)
+                                  }
+                                >
+                                  <FaTrash />
+                                </Button>
+                              </td>
+                            </tr>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </tbody>
+                  </Table>
+                </div>
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
       </div>
+
+      <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Delete</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete this item?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={confirmDelete}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

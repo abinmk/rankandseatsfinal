@@ -17,15 +17,15 @@ const UploadRound = () => {
   };
 
   const onExamChange = (event) => {
-    setExam(event.target.value);
+    setExam(event.target.value.toUpperCase().replace(/ /g, '_'));
   };
 
   const onExamTypeChange = (event) => {
-    setExamType(event.target.value);
+    setExamType(event.target.value.toUpperCase().replace(/ /g, '_'));
   };
 
   const onRoundChange = (event) => {
-    setRound(event.target.value);
+    setRound(event.target.value.toUpperCase().replace(/ /g, '_'));
   };
 
   const onYearChange = (event) => {
@@ -41,9 +41,7 @@ const UploadRound = () => {
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('examName', `${exam}_${examType}`);
-    formData.append('round', round);
-    formData.append('year', year);
+    formData.append('examName', `${exam}_${examType}_${year}_${round}`);
     setIsLoading(true);
 
     try {
@@ -75,11 +73,15 @@ const UploadRound = () => {
         </div>
         <div className="upload-round-group">
           <label className="upload-round-label" htmlFor="examType">Exam Type</label>
-          <select className="upload-round-select" id="examType" name="examType" value={examType} onChange={onExamTypeChange}>
-            <option value="">Select Exam Type</option>
-            <option value="ALL_INDIA">ALL_INDIA</option>
-            <option value="STATE">STATE</option>
-          </select>
+          <input
+            className="upload-round-input"
+            type="text"
+            id="examType"
+            name="examType"
+            value={examType}
+            onChange={onExamTypeChange}
+            placeholder="Enter Exam Type"
+          />
         </div>
         <div className="upload-round-group">
           <label className="upload-round-label" htmlFor="round">Round</label>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Accordion, Form, Button, Modal } from 'react-bootstrap';
+
 const FilterItem = ({ title, options, filterName, filters, handleFilterChange, eventKey }) => {
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
