@@ -358,7 +358,7 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
                 <Dropdown.Item as="li" className="border-0">
                   <Link to="#"><i className="fs-13 me-2 bx bx-user"></i>Profile</Link>
                 </Dropdown.Item>
-                {/* Add additional options here */}
+                {/* Add additional options her */}
                 <Dropdown.Item as="li" className="border-0">
                   <Link to="#" onClick={logout}><i className="fs-13 me-2 bx bx-arrow-to-right"></i>Log Out</Link> {/* Add logout functionality */}
                 </Dropdown.Item>
