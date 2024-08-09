@@ -4,7 +4,7 @@ export const feesColumns = [
   { Header: 'Institute', accessor: 'collegeName' },
   { Header: 'Institute Type', accessor: 'instituteType' },
   { Header: 'Course', accessor: 'courseName' },
-  { Header: 'Quota', accessor: 'quota' },
+  // { Header: 'Quota', accessor: 'quota' },
   { Header: 'No. of Seats', accessor: 'noOfSeats' },
   { Header: 'Hosp Beds', accessor: 'totalHospitalBeds' },
   { Header: 'Course Fee', accessor: 'feeAmount' },

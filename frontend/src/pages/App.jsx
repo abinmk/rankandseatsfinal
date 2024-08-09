@@ -11,16 +11,15 @@ import Tabtotop from "../components/common/tab-to-tap/tabtotap";
 
 function App() {
   const [lateLoad, setLateLoad] = useState(false);
+  const [exam, setExam] = useState(""); // State for the selected exam
+  const [examType, setExamType] = useState(""); // State for the selected exam
   const location = useLocation();
 
   useEffect(() => {
     setLateLoad(true);
   }, []);
 
-  // Determine if the current route should have the footer
   const showFooter = location.pathname === "/home" || location.pathname.startsWith("/dashboard");
-
-  // Determine if the current route should have the page header
   const showPageheader = location.pathname.startsWith("/dashboard");
 
   return (
@@ -29,12 +28,12 @@ function App() {
         <div style={{ display: `${lateLoad ? "block" : "none"}` }}>
           <Switcher />
           <div className="page">
-            <Header />
+            <Header exam={exam} examType={examType} setExamType={setExamType} setExam={setExam} />
             <Sidebar />
             {showPageheader && <Pageheader />}
             <div className="main-content app-content">
               <div className="container-fluid">
-                <Outlet />
+                <Outlet context={{ exam, examType }} />
               </div>
             </div>
             {showFooter && <Footer />}

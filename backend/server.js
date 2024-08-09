@@ -7,6 +7,7 @@ const AdminBroMongoose = require('@admin-bro/mongoose');
 const path = require('path');
 const bodyParser = require('body-parser');
 require('dotenv').config();
+const authMiddleware = require('./middlewares/authMiddleware');
 
 const adminRoutes = require('./routes/adminRoutes');
 const authRoutes = require('./routes/auth');
@@ -331,10 +332,11 @@ mongoose.connect(db, {
     // Register routes
     app.use('/api/users', userRoutes); // Add your user routes
     app.use('/api/auth', authRoutes);
-    // app.use('/api/wishlist', wishlistRoutes);
+    app.use('/api/wishlist', wishlistRoutes);
     app.use('/api/admin', adminRoutes);
     app.use('/api/dataset', datasetRoutes);
-    app.use('/api/allotments', allotmentsRoutes);
+    // app.use('/api/allotments', allotmentsRoutes);
+    app.use('/api/allotments', authMiddleware, allotmentsRoutes);
     app.use('/api/colleges', collegesRoutes);
     app.use('/api/courses', coursesRoutes);
     app.use('/api/fees', feesRoutes);

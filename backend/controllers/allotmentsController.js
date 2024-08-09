@@ -32,20 +32,21 @@ exports.getRankRange = async (req, res) => {
 
 exports.getAllotmentData = async (req, res) => {
   try {
-    const userId = req.user._id;
-    console.log(`Fetching data for user: ${userId}`);
-
+    console.log(req);
+    const userId = req.user.userId;  // Assuming you have middleware to get the user ID from the token
     const user = await User.findById(userId).lean();
     if (!user || !user.selectedExams || user.selectedExams.length === 0) {
-      console.error('No selected exams found for user.');
       return res.status(400).send('No selected exams found for user.');
     }
 
     const { exam, counselingType } = user.selectedExams[0];
-    const collectionName = `EXAM:${exam}_TYPE:${counselingType}`;
-    console.log(`Using collection: ${collectionName}`);
+    const formattedExam = exam.replace(/\s+/g, '_');
+    const formattedCounselingType = counselingType.replace(/\s+/g, '_');
+    const collectionName = `GENERATED_EXAM:${formattedExam}_TYPE:${formattedCounselingType}`;
 
+    const { page = 1, limit = 10, state, bondPenaltyRange, ...filters } = req.query;
     let AllotmentModel;
+
     try {
       AllotmentModel = mongoose.model(collectionName);
     } catch (error) {
@@ -56,15 +57,14 @@ exports.getAllotmentData = async (req, res) => {
       }
     }
 
-    const { page = 1, limit = 10, state, bondPenaltyRange, ...filters } = req.query;
-    console.log(`Query params:`, req.query);
-
     const query = {};
 
+    // Process state filter if present
     if (state) {
       query['state'] = { $in: Array.isArray(state) ? state : [state] };
     }
 
+    // Utility function to add range filters
     const addRangeFilter = (field, range) => {
       if (range) {
         const rangeQuery = {};
@@ -80,9 +80,11 @@ exports.getAllotmentData = async (req, res) => {
       }
     };
 
+    // Process filters including range filters
     for (const key in filters) {
       if (filters[key]) {
         if (key.endsWith('Range')) {
+          // Extract field name and range values
           const field = key.replace('Range', '');
           addRangeFilter(field, filters[key]);
         } else {
@@ -91,21 +93,20 @@ exports.getAllotmentData = async (req, res) => {
       }
     }
 
+    // Specific handling for bondPenaltyRange
     if (bondPenaltyRange) {
       addRangeFilter('bondPenality', bondPenaltyRange);
     }
 
-    console.log('Final query:', query);
+    console.log('Query:', query); // Logging the query for debugging
 
     const data = await AllotmentModel.find(query)
       .skip((page - 1) * limit)
       .limit(Number(limit))
       .lean();
-
     const totalItems = await AllotmentModel.countDocuments(query);
-    console.log(`Fetched ${data.length} records out of ${totalItems} total items.`);
 
-    return res.json({
+    res.json({
       data,
       currentPage: Number(page),
       totalPages: Math.ceil(totalItems / limit),
@@ -113,25 +114,23 @@ exports.getAllotmentData = async (req, res) => {
     });
   } catch (error) {
     console.error('Error fetching allotment data:', error);
-    if (!res.headersSent) {
-      return res.status(500).send('Failed to fetch allotment data.');
-    }
+    res.status(500).send('Failed to fetch allotment data.');
   }
 };
-
-
 
 /// Fetch filter options
 exports.getFilterOptions = async (req, res) => {
   try {
-    const userId = req.user._id;
+    const userId = req.user.userId;
     const user = await User.findById(userId).lean();
     if (!user || !user.selectedExams || user.selectedExams.length === 0) {
       return res.status(400).send('No selected exams found for user.');
     }
 
     const { exam, counselingType } = user.selectedExams[0];
-    const collectionName = `EXAM:${exam}_TYPE:${counselingType}`;
+    const formattedExam = exam.replace(/\s+/g, '_');
+    const formattedCounselingType = counselingType.replace(/\s+/g, '_');
+    const collectionName = `GENERATED_EXAM:${formattedExam}_TYPE:${formattedCounselingType}`;
     let AllotmentModel;
     console.log(collectionName);
 

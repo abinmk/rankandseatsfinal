@@ -7,7 +7,7 @@ import { Link, useLocation } from "react-router-dom";
 import { connect } from "react-redux";
 import { ThemeChanger } from "../../../redux/action";
 import axios from 'axios';
-import { UserContext } from "../../../contexts/UserContext";  // Import UserContext
+import { UserContext } from "../../../contexts/UserContext";
 import "./header.scss";
 
 // IMAGES
@@ -15,7 +15,6 @@ import desktoplogo from "../../../assets/images/brand-logos/desktop-dark.png";
 import faces1 from "../../../assets/images/faces/1.jpg";
 
 const Header = ({ local_varaiable, ThemeChanger }) => {
-  const [startDatei, setStartDatei] = useState(new Date());
   const location = useLocation();
   const [selectedTab, setSelectedTab] = useState("Allotments");
   const [exam, setExam] = useState("NEET_PG");
@@ -30,9 +29,9 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
     { id: 5, src: "", icon: "bx bx-badge-check", name: "Account Has Been Verified", text1: "Your Account Has Been Verified Successfully", text2: "", text3: "20 min ago", avatarcolor: "pink" },
   ]);
 
-  const { user, logout } = useContext(UserContext); // Access user and logout from context
+  const { user, logout } = useContext(UserContext);
 
-  const API_URL = import.meta.env.VITE_API_URL;  // Access the environment variable
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const path = location.pathname;
@@ -176,7 +175,7 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
       if (theme.toggled === "close") {
         ThemeChanger({ ...theme, "toggled": "open" });
         setTimeout(() => {
-          if (theme.toggled == "open") {
+          if (theme.toggled === "open") {
             const overlay = document.querySelector("#responsive-overlay");
             if (overlay) {
               overlay.classList.add("active");
@@ -211,19 +210,18 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
         const response = await axios.get(`${API_URL}/dataset/list-generated-datasets`);
         const datasets = response.data.datasets || [];
         const types = datasets.map(dataset => {
-          const match = dataset.match(/EXAM:.*_TYPE:(.*)/);
-          return match ? match[1].replace(/_/g, ' ') : null;
+          const match = dataset.match(/EXAM:.*_TYPE:(.*)/);          return match ? match[1].replace(/_/g, ' ') : null;
         }).filter(Boolean);
-  
+
         setAvailableCounselingTypes(types);
       } catch (error) {
         console.error('Error fetching available datasets', error);
       }
     };
-  
+
     fetchDatasets();
   }, [API_URL]);
-  
+
   const saveUserSelection = async (exam, counselingType) => {
     try {
       await axios.post(`${API_URL}/users/save-user-selection`, { exam, counselingType });
@@ -232,19 +230,19 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
       console.error('Error saving user selection', error);
     }
   };
-  
+
   const handleExamChange = (e) => {
     const selectedExam = e.target.value.toUpperCase().replace(/ /g, '_');
     setExam(selectedExam);
     saveUserSelection(selectedExam, counselingType);
   };
-  
+
   const handleCounselingTypeChange = (e) => {
     const selectedCounselingType = e.target.value;
     setCounselingType(selectedCounselingType);
     saveUserSelection(exam, selectedCounselingType);
   };
-  
+
   return (
     <Fragment>
       <header className="app-header">
@@ -265,8 +263,8 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
             <div className="exam-selection d-flex ms-3">
               <select value={exam} onChange={handleExamChange} className="form-select me-2" id="exam-name">
                 <option value="NEET_PG">NEET PG</option>
-                <option value="NEET_SS">NEET SS</option>
-                <option value="INI_CET">INI CET</option>
+                {/* <option value="NEET_SS">NEET SS</option>
+                <option value="INI_CET">INI CET</option> */}
                 {/* Add more exam options here */}
               </select>
               <select value={counselingType} onChange={handleCounselingTypeChange} className="form-select" id="counseling">
@@ -360,15 +358,7 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
                 <Dropdown.Item as="li" className="border-0">
                   <Link to="#"><i className="fs-13 me-2 bx bx-user"></i>Profile</Link>
                 </Dropdown.Item>
-                <Dropdown.Item as="li" className="border-0">
-                  <Link to="#"><i className="fs-13 me-2 bx bx-comment"></i>Message</Link>
-                </Dropdown.Item>
-                <Dropdown.Item as="li" className="border-0">
-                  <Link to="#"><i className="fs-13 me-2 bx bx-cog"></i>Settings</Link>
-                </Dropdown.Item>
-                <Dropdown.Item as="li" className="border-0">
-                  <Link to="#"><i className="fs-13 me-2 bx bx-help-circle"></i>Help</Link>
-                </Dropdown.Item>
+                {/* Add additional options here */}
                 <Dropdown.Item as="li" className="border-0">
                   <Link to="#" onClick={logout}><i className="fs-13 me-2 bx bx-arrow-to-right"></i>Log Out</Link> {/* Add logout functionality */}
                 </Dropdown.Item>
@@ -379,11 +369,10 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
       </header>
     </Fragment>
   );
-  };
-  
-  const mapStateToProps = (state) => ({
-    local_varaiable: state
-  });
-  
-  export default connect(mapStateToProps, { ThemeChanger })(Header);
-  
+};
+
+const mapStateToProps = (state) => ({
+  local_varaiable: state,
+});
+
+export default connect(mapStateToProps, { ThemeChanger })(Header);

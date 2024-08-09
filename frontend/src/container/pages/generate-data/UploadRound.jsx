@@ -41,7 +41,10 @@ const UploadRound = () => {
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('examName', `${exam}_${examType}_${year}_${round}`);
+    console.log({ exam, examType, round, year }); // Check for undefined values here
+    formData.append('examName', `${exam}_${examType}`);
+    formData.append('year', `${year}`);
+    formData.append('round', `${round}`);
     setIsLoading(true);
 
     try {

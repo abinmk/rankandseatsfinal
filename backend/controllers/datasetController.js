@@ -39,9 +39,12 @@ const uploadAllotment = (req, res) => {
     if (err instanceof multer.MulterError || err) {
       return res.status(500).send({ message: err.message });
     }
-
+    console.log(req.body);
+    console.log({ round: req.body.round, year: req.body.year });
+    
     const { examName, round, year } = req.body;
     const filePath = path.join(__dirname, '..', 'uploads', req.file.filename);
+    console.log({ examName,round, year }); // Check for undefined values here
     const collectionName = `${examName}_${year}_${round}`;
 
     const AllotmentModel = getModel(collectionName);
@@ -58,8 +61,8 @@ const uploadAllotment = (req, res) => {
         allottedCategory: row[5],
         candidateCategory: row[6],
         examName,
-        year,
-        round
+        year,  // Include the year
+        round  // Include the round
       }));
 
       // Delete existing data
@@ -73,6 +76,7 @@ const uploadAllotment = (req, res) => {
     }
   });
 };
+
 
 // Upload Colleges
 const uploadCollege = (req, res) => {
@@ -220,7 +224,7 @@ const uploadFee = (req, res) => {
 
 const generateCombinedDataset = async (req, res) => {
   try {
-    const { examName, rounds } = req.body; // rounds is an array of selected allotments
+    const { examName, rounds } = req.body;
 
     let combinedAllotments = [];
 
@@ -229,6 +233,13 @@ const generateCombinedDataset = async (req, res) => {
       const allotments = await AllotmentModel.find({}).lean();
       combinedAllotments = combinedAllotments.concat(allotments);
     }
+
+    // Sort combined allotments by year in descending order and then by round in ascending order
+    combinedAllotments.sort((a, b) => {
+      const yearDiff = b.year - a.year;
+      if (yearDiff !== 0) return yearDiff; // Sort by year descending
+      return a.round.localeCompare(b.round, undefined, { numeric: true }); // Sort by round ascending (1, 2, 3...)
+    });
 
     const colleges = await College.find({}).lean();
     const courses = await Course.find({}).lean();
@@ -249,24 +260,13 @@ const generateCombinedDataset = async (req, res) => {
       return acc;
     }, {});
 
-    // Calculate total seats for each college and course based on fees data
     const totalSeatsInCollege = {};
     const totalSeatsInCourse = {};
 
     fees.forEach(fee => {
-      if (!totalSeatsInCollege[fee.collegeName]) {
-        totalSeatsInCollege[fee.collegeName] = 0;
-      }
-      totalSeatsInCollege[fee.collegeName] += fee.noOfSeats;
-
-      if (!totalSeatsInCourse[fee.courseName]) {
-        totalSeatsInCourse[fee.courseName] = 0;
-      }
-      totalSeatsInCourse[fee.courseName] += fee.noOfSeats;
+      totalSeatsInCollege[fee.collegeName] = (totalSeatsInCollege[fee.collegeName] || 0) + fee.noOfSeats;
+      totalSeatsInCourse[fee.courseName] = (totalSeatsInCourse[fee.courseName] || 0) + fee.noOfSeats;
     });
-
-    console.log("Total seats in each college:", totalSeatsInCollege);
-    console.log("Total seats in each course:", totalSeatsInCourse);
 
     const combinedData = combinedAllotments.map(allotment => {
       const college = collegeMap[allotment.allottedInstitute];
@@ -281,25 +281,20 @@ const generateCombinedDataset = async (req, res) => {
         course: allotment.course,
         allottedCategory: allotment.allottedCategory,
         candidateCategory: allotment.candidateCategory,
-        examName: allotment.examName,
-        year: allotment.year,
-        round: allotment.round,
-        state: college?.state,
-        instituteType: college?.instituteType,
-        universityName: college?.universityName,
-        yearOfEstablishment: college?.yearOfEstablishment,
+        examName: `${examName}`,
+        state: college?.state || "",
+        instituteType: college?.instituteType || "",
+        universityName: college?.universityName || "",
+        yearOfEstablishment: college?.yearOfEstablishment || "",
         totalHospitalBeds: Number(college?.totalHospitalBeds) || 0,
-        locationMapLink: college?.locationMapLink,
-        nearestRailwayStation: college?.nearestRailwayStation,
+        locationMapLink: college?.locationMapLink || "",
+        nearestRailwayStation: college?.nearestRailwayStation || "",
         distanceFromRailwayStation: Number(college?.distanceFromRailwayStation) || 0,
-        nearestAirport: college?.nearestAirport,
+        nearestAirport: college?.nearestAirport || "",
         distanceFromAirport: Number(college?.distanceFromAirport) || 0,
-        phoneNumber: college?.phoneNumber,
-        website: college?.website,
-        courseType: course?.courseType,
-        courseCategory: course?.courseCategory,
-        degreeType: course?.degreeType,
-        feeAmount: Number(fee?.courseFee) || 0,
+        courseType: course?.courseType || "",
+        degreeType: course?.degreeType || "",
+        feeAmount: Number(fee?.feeAmount) || 0,
         nriFee: Number(fee?.nriFee) || 0,
         stipendYear1: Number(fee?.stipendYear1) || 0,
         stipendYear2: Number(fee?.stipendYear2) || 0,
@@ -310,7 +305,9 @@ const generateCombinedDataset = async (req, res) => {
         noOfSeats: Number(fee?.noOfSeats) || 0,
         totalSeatsInCollege: totalSeatsInCollege[allotment.allottedInstitute] || 0,
         totalSeatsInCourse: totalSeatsInCourse[allotment.course] || 0,
-        description: course?.description
+        description: course?.description || "",
+        year: allotment.year,
+        round: allotment.round
       };
     });
 
@@ -352,9 +349,6 @@ const generateCombinedDataset = async (req, res) => {
         distanceFromAirport: Number(college?.distanceFromAirport) || 0,
         phoneNumber: college?.phoneNumber,
         website: college?.website,
-        courseType: course?.courseType,
-        courseCategory: course?.courseCategory,
-        degreeType: course?.degreeType,
         totalSeatsInCollege: totalSeatsInCollege[fee.collegeName] || 0,
         totalSeatsInCourse: totalSeatsInCourse[fee.courseName] || 0,
       };
@@ -417,14 +411,18 @@ const generateCombinedDataset = async (req, res) => {
     await CollegeResultModel.deleteMany({});
 
     // Insert the new college result data
-    await batchInsert(CollegeResultModel, collegeResultData);
+        // Insert the new college result data
+        await batchInsert(CollegeResultModel, collegeResultData);
 
-    res.json({ combinedData, feeResultData, courseResultData, collegeResultData });
-  } catch (error) {
-    console.error('Error generating combined dataset:', error);
-    res.status(500).send('Failed to generate combined dataset.');
-  }
-};
+        res.json({ combinedData, feeResultData, courseResultData, collegeResultData });
+      } catch (error) {
+        console.error('Error generating combined dataset:', error);
+        res.status(500).send('Failed to generate combined dataset.');
+      }
+    };
+    
+
+
 
 // List Available Allotments
 const listAvailableAllotments = async (req, res) => {
@@ -498,7 +496,7 @@ const getGeneratedData = async (req, res) => {
     const collections = await db.listCollections().toArray();
     const generatedDatasets = collections
       .map(collection => collection.name)
-      .filter(name => name.startsWith('EXAM'));
+      .filter(name => name.startsWith('GENERATED_EXAM'));
 
     res.json({ datasets: generatedDatasets });
   } catch (error) {

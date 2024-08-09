@@ -5,7 +5,7 @@ import GenericTable from './GenericTable';
 import { allotmentsColumns, allotmentsFiltersConfig } from './allotmentsConfig';
 import './Allotments.scss';
 import axiosInstance from '../../../utils/axiosInstance';
-
+import { useOutletContext } from 'react-router-dom';
 
 const Allotments = () => {
   const [data, setData] = useState([]);
@@ -21,6 +21,7 @@ const Allotments = () => {
 
   const apiUrl = import.meta.env.VITE_API_URL;
   const username = 'dummyUser'; // Replace this with actual user data when available
+  const { exam, examType } = useOutletContext(); 
 
   const getFilterParamName = useMemo(() => {
     const filterMapping = {
@@ -43,7 +44,7 @@ const Allotments = () => {
   }, []);
 
   const fetchData = useCallback(
-    _.debounce(async (page, pageSize, filters) => {
+    _.debounce(async (page, pageSize, filters, examType) => {
       setLoading(true);
       try {
         const token = localStorage.getItem('token'); // Retrieve the token from localStorage
@@ -54,6 +55,7 @@ const Allotments = () => {
           params: {
             page,
             limit: pageSize,
+            examType,
             ...filters,
           },
         });
@@ -72,10 +74,11 @@ const Allotments = () => {
     setFilterLoading(true);
     try {
       const token = localStorage.getItem('token'); // Retrieve the token from localStorage
-      const response = await axios.get(`${apiUrl}/allotments/filters`, {
+      const response = await axiosInstance.get(`${apiUrl}/allotments/filters`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        params: { examType }
       });
       setFilterOptions(response.data);
       setRankRange({ min: response.data.rankRange.min, max: response.data.rankRange.max });
@@ -83,7 +86,7 @@ const Allotments = () => {
       console.error('Error fetching filter options:', error);
     }
     setFilterLoading(false);
-  }, [apiUrl]);
+  }, [apiUrl, examType]);
   
   const fetchWishlist = useCallback(async () => {
     try {
@@ -100,14 +103,13 @@ const Allotments = () => {
     }
   }, [apiUrl, username]);
   
-
   useEffect(() => {
-    fetchData(page, pageSize, filters);
+    fetchData(page, pageSize, filters, examType);
     fetchWishlist();
     return () => {
       fetchData.cancel();
     };
-  }, [fetchData, fetchWishlist, filters, page, pageSize]);
+  }, [fetchData, fetchWishlist, filters, page, pageSize, exam, examType]);
 
   useEffect(() => {
     fetchFilterOptions();
