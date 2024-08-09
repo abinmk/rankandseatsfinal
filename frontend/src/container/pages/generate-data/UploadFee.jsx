@@ -20,7 +20,7 @@ const UploadFee = () => {
     formData.append('file', file);
 
     try {
-      await axios.post(`${API_URL}/upload-fee`, formData, {
+      await axios.post(`${API_URL}/dataset/upload-fee`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

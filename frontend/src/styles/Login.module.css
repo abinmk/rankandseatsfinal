@@ -1,0 +1,170 @@
+.loginContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f7f9fc;
+    position: relative;
+    padding: 20px;
+  }
+  .signin{
+    margin-top: 40px;
+    margin-bottom: 10px;
+    font-size: 1.5rem !important;
+  }
+  
+  .backgroundPattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #91bfff;
+    background-image: url('/path/to/your/subtle-pattern.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.2;
+    z-index: -1;
+  }
+  
+  .contentWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+  }
+  
+  .introText {
+    margin-bottom: 1.5rem;
+    color: #333;
+    padding: 1rem;
+  }
+  
+  .introText h2 {
+    font-size: 1rem;
+    color: #34495e;
+    margin-bottom: 1rem;
+  }
+  
+  .introText p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.4;
+  }
+  
+  .loginBox {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .loginBox:hover {
+    transform: translateY(-5px);
+  }
+  
+  .logoContainer {
+    margin-bottom: 2rem;
+  }
+  
+  .logo {
+    width: 250px;
+    height: auto;
+  }
+  
+  .title {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #34495e;
+    margin-bottom: 1rem;
+  }
+  
+  .inputAddon {
+    margin-right: 10px;
+    font-size: 1rem;
+    color: #34495e;
+  }
+  
+  .mobileInputContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    background: #eef3fa;
+    padding: 0.75rem;
+    border-radius: 10px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .inputText {
+    flex: 1;
+    border: black;
+    outline: none;
+    font-size: 1rem;
+    background: transparent;
+    color: #34495e;
+  }
+
+  .inputText2 {
+    flex: 1;
+    width: 40%;
+    margin: 10px;
+    border: rgb(255, 251, 251);
+    border-style: groove;
+    outline: none;
+    font-size: 1rem;
+    background: transparent;
+    color: #34495e;
+  }
+  
+  .button {
+    width: 100%;
+    margin-top: 1.5rem;
+    padding: 0.75rem;
+    border-radius: 10px;
+    background-color: #34495e;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .buttonChange {
+    width: 40%;
+    font-size: .5rem;
+    border-radius: 10px;
+    background-color: #34495e;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  
+  .button:hover ,.buttonChange:hover {
+    background-color: #0b3e96;
+  }
+  
+  .secondaryButton {
+    background-color: #ddd;
+    margin-top: 0.5rem;
+  }
+  
+  .secondaryButton:hover {
+    background-color: #bbb;
+  }
+  
+  .errorMessage {
+    color: #e74c3c;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+  }
+  

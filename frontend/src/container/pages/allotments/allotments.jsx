@@ -44,7 +44,11 @@ const Allotments = () => {
     _.debounce(async (page, pageSize, filters) => {
       setLoading(true);
       try {
+        const token = localStorage.getItem('token'); // Retrieve the token from localStorage
         const response = await axios.get(`${apiUrl}/allotments`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
           params: {
             page,
             limit: pageSize,
@@ -61,11 +65,16 @@ const Allotments = () => {
     }, 500),
     [apiUrl]
   );
-
+  
   const fetchFilterOptions = useCallback(async () => {
     setFilterLoading(true);
     try {
-      const response = await axios.get(`${apiUrl}/allotments/filters`);
+      const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+      const response = await axios.get(`${apiUrl}/allotments/filters`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setFilterOptions(response.data);
       setRankRange({ min: response.data.rankRange.min, max: response.data.rankRange.max });
     } catch (error) {
@@ -73,10 +82,14 @@ const Allotments = () => {
     }
     setFilterLoading(false);
   }, [apiUrl]);
-
+  
   const fetchWishlist = useCallback(async () => {
     try {
+      const token = localStorage.getItem('token'); // Retrieve the token from localStorage
       const response = await axios.get(`${apiUrl}/wishlist`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         params: { username },
       });
       setWishlist(response.data.wishlist.items);
@@ -84,6 +97,7 @@ const Allotments = () => {
       console.error('Error fetching wishlist:', error);
     }
   }, [apiUrl, username]);
+  
 
   useEffect(() => {
     fetchData(page, pageSize, filters);

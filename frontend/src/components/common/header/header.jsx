@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState, useContext } from "react";
 import { Dropdown } from "react-bootstrap";
 import SimpleBar from "simplebar-react";
 import { MENUITEMS } from "../sidebar/sidemenu";
@@ -7,7 +7,9 @@ import { Link, useLocation } from "react-router-dom";
 import { connect } from "react-redux";
 import { ThemeChanger } from "../../../redux/action";
 import axios from 'axios';
+import { UserContext } from "../../../contexts/UserContext";  // Import UserContext
 import "./header.scss";
+
 // IMAGES
 import desktoplogo from "../../../assets/images/brand-logos/desktop-dark.png";
 import faces1 from "../../../assets/images/faces/1.jpg";
@@ -27,6 +29,8 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
     { id: 4, src: "", icon: "bx bx-pulse fs-18", name: "Your Order Has Been Shipped", text1: "Order No: 123456 Has Shipped To Your Delivery Address", text2: "", text3: "12 min ago", avatarcolor: "primary" },
     { id: 5, src: "", icon: "bx bx-badge-check", name: "Account Has Been Verified", text1: "Your Account Has Been Verified Successfully", text2: "", text3: "20 min ago", avatarcolor: "pink" },
   ]);
+
+  const { user, logout } = useContext(UserContext); // Access user and logout from context
 
   const API_URL = import.meta.env.VITE_API_URL;  // Access the environment variable
 
@@ -204,43 +208,43 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
   useEffect(() => {
     const fetchDatasets = async () => {
       try {
-        const response = await axios.get(`${API_URL}/list-generated-datasets`);
+        const response = await axios.get(`${API_URL}/dataset/list-generated-datasets`);
         const datasets = response.data.datasets || [];
         const types = datasets.map(dataset => {
           const match = dataset.match(/EXAM:.*_TYPE:(.*)/);
           return match ? match[1].replace(/_/g, ' ') : null;
         }).filter(Boolean);
-
+  
         setAvailableCounselingTypes(types);
       } catch (error) {
         console.error('Error fetching available datasets', error);
       }
     };
-
+  
     fetchDatasets();
   }, [API_URL]);
-
+  
   const saveUserSelection = async (exam, counselingType) => {
     try {
-      await axios.post(`${API_URL}/save-user-selection`, { exam, counselingType });
+      await axios.post(`${API_URL}/users/save-user-selection`, { exam, counselingType });
       console.log('User selection saved successfully');
     } catch (error) {
       console.error('Error saving user selection', error);
     }
   };
-
+  
   const handleExamChange = (e) => {
     const selectedExam = e.target.value.toUpperCase().replace(/ /g, '_');
     setExam(selectedExam);
     saveUserSelection(selectedExam, counselingType);
   };
-
+  
   const handleCounselingTypeChange = (e) => {
     const selectedCounselingType = e.target.value;
     setCounselingType(selectedCounselingType);
     saveUserSelection(exam, selectedCounselingType);
   };
-
+  
   return (
     <Fragment>
       <header className="app-header">
@@ -347,7 +351,7 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
                   <div className="d-sm-flex wd-100p">
                     <div className="avatar avatar-sm"><img alt="avatar" className="rounded-circle" src={faces1} /></div>
                     <div className="ms-2 my-auto d-none d-xl-flex">
-                      <h6 className="font-weight-semibold mb-0 fs-13 user-name d-sm-block d-none">Harry Jones</h6>
+                      <h6 className="font-weight-semibold mb-0 fs-13 user-name d-sm-block d-none">{user ? user.name : "Guest"}</h6> {/* Display user name */}
                     </div>
                   </div>
                 </div>
@@ -366,7 +370,7 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
                   <Link to="#"><i className="fs-13 me-2 bx bx-help-circle"></i>Help</Link>
                 </Dropdown.Item>
                 <Dropdown.Item as="li" className="border-0">
-                  <Link to="#"><i className="fs-13 me-2 bx bx-arrow-to-right"></i>Log Out</Link>
+                  <Link to="#" onClick={logout}><i className="fs-13 me-2 bx bx-arrow-to-right"></i>Log Out</Link> {/* Add logout functionality */}
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
@@ -375,11 +379,11 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
       </header>
     </Fragment>
   );
-};
-
-const mapStateToProps = (state) => ({
-  local_varaiable: state
-});
-
-export default connect(mapStateToProps, { ThemeChanger })(Header);
-
+  };
+  
+  const mapStateToProps = (state) => ({
+    local_varaiable: state
+  });
+  
+  export default connect(mapStateToProps, { ThemeChanger })(Header);
+  

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const User = require('../models/User');  // Ensure the User model is correctly imported
 
 exports.getRankRange = async (req, res) => {
   try {
@@ -31,8 +32,16 @@ exports.getRankRange = async (req, res) => {
 
 exports.getAllotmentData = async (req, res) => {
   try {
+    const userId = req.user._id;  // Assuming you have middleware to get the user ID from the token
+    const user = await User.findById(userId).lean();
+    if (!user || !user.selectedExams || user.selectedExams.length === 0) {
+      return res.status(400).send('No selected exams found for user.');
+    }
+
+    const { exam, counselingType } = user.selectedExams[0];
+    const collectionName = `EXAM:NEET_PG_TYPE:ALL_INDIA`;
+
     const { page = 1, limit = 10, state, bondPenaltyRange, ...filters } = req.query;
-    const collectionName = 'GENERATED_NEET_PG_ALL_INDIA';
     let AllotmentModel;
 
     try {
@@ -106,16 +115,19 @@ exports.getAllotmentData = async (req, res) => {
   }
 };
 
-
-
-
-
-
-// Fetch filter options
+/// Fetch filter options
 exports.getFilterOptions = async (req, res) => {
   try {
-    const collectionName = `GENERATED_NEET_PG_ALL_INDIA`;
+    const userId = req.user._id;
+    const user = await User.findById(userId).lean();
+    if (!user || !user.selectedExams || user.selectedExams.length === 0) {
+      return res.status(400).send('No selected exams found for user.');
+    }
+
+    const { exam, counselingType } = user.selectedExams[0];
+    const collectionName = `EXAM:${exam}_TYPE:${counselingType}`;
     let AllotmentModel;
+    console.log(collectionName);
 
     try {
       AllotmentModel = mongoose.model(collectionName);
@@ -178,11 +190,17 @@ exports.getFilterOptions = async (req, res) => {
   }
 };
 
-
 // Fetch all allotment data
 exports.getAllAllotmentData = async (req, res) => {
   try {
-    const collectionName = `GENERATED_NEET_PG_ALL_INDIA_2015_RESULT`;
+    const userId = req.user._id;
+    const user = await User.findById(userId).lean();
+    if (!user || !user.selectedExams || user.selectedExams.length === 0) {
+      return res.status(400).send('No selected exams found for user.');
+    }
+
+    const { exam, counselingType } = user.selectedExams[0];
+    const collectionName = `EXAM:${exam}_TYPE:${counselingType}`;
     let AllotmentModel;
 
     try {

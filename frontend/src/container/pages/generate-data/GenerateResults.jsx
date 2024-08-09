@@ -20,7 +20,7 @@ function GenerateResults() {
   const fetchAvailableAllotments = async (exam, type) => {
     try {
       console.log(`Fetching available allotments for exam: ${exam}, type: ${type}`);
-      const response = await axios.get(`${API_URL}/list-available-allotments`, {
+      const response = await axios.get(`${API_URL}/dataset/list-available-allotments`, {
         params: { examName: `${exam}_${type}` },
       });
       console.log('Available allotments response:', response.data);
@@ -39,7 +39,7 @@ function GenerateResults() {
 
     setIsLoading(true);
     try {
-      await axios.post(`${API_URL}/generate-combined-dataset`, {
+      await axios.post(`${API_URL}/dataset/generate-combined-dataset`, {
         examName: `EXAM:${exam}_TYPE:${examType}`,
         rounds: selectedAllotments,
       });

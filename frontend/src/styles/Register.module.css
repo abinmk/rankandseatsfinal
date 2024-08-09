@@ -1,0 +1,43 @@
+.registerContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f7f9fc;
+  }
+  
+  .registerBox {
+    background-color: #ffffff;
+    padding: 2rem;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .logoContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+  
+  .logo {
+    max-width: 150px;
+  }
+  
+  .inputField {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  
+  .button {
+    width: 100%;
+    margin-top: 1rem;
+  }
+  
+  .errorMessage {
+    color: red;
+    margin-top: 1rem;
+  }
+  

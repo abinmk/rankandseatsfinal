@@ -45,7 +45,7 @@ const UploadRound = () => {
     setIsLoading(true);
 
     try {
-      await axios.post(`${API_URL}/upload-round`, formData, {
+      await axios.post(`${API_URL}/dataset/upload-round`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

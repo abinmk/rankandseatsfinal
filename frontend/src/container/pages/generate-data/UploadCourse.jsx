@@ -25,7 +25,7 @@ const UploadCourse = () => {
     setIsLoading(true);
 
     try {
-      await axios.post(`${API_URL}/upload-course`, formData, {
+      await axios.post(`${API_URL}/dataset/upload-course`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

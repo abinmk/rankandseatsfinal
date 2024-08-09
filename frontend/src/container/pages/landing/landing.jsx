@@ -243,12 +243,9 @@ const Landing = () => {
 								<div className="slide-right" id="slide-right"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24"> <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path> </svg></div>
 								<div className="d-lg-flex d-none">
 									<div className="btn-list d-xl-flex d-none">
-										<Link to={`${import.meta.env.BASE_URL}authentication/signup/signupbasic`} className="btn btn-wave btn-success">
-											Sign Up
+										<Link to={`${import.meta.env.BASE_URL}login/`} className="btn btn-wave btn-success">
+											Dashboard
 										</Link>
-										<Button variant='' type="button" aria-label="button" className="btn btn-wave btn-icon btn-light" data-bs-toggle="offcanvas" onClick={() => Switchericon()} data-bs-target="#switcher-canvas">
-											<i className="ri-settings-3-line"></i>
-										</Button>
 									</div>
 								</div>
 							</nav>
@@ -271,8 +268,8 @@ const Landing = () => {
 									<div className="py-lg-5 text-center">
 										<p className="landing-banner-heading text-fixed-white mb-1">Achieve your dreams with <span className="">us!</span></p>
 										<div className="fs-16 mb-4 text-fixed-white op-8 px-4">Your gateway to accurate rankings and seat allotments</div>
-										<Link to={`${import.meta.env.BASE_URL}rankings`} className="m-1 btn btn-lg btn-success" target="_blank"> Explore Rankings <i className="ri-arrow-right-line ms-2 align-middle"></i> </Link>
-										<Link to={`${import.meta.env.BASE_URL}seat-allotments`} className="m-1 btn btn-lg btn-light" target="_blank"> View Seat Allotments <i className="ri-eye-line ms-2 align-middle"></i> </Link>
+										<Link to={`${import.meta.env.BASE_URL}lastrank`} className="m-1 btn btn-lg btn-success" target="_blank"> Explore Rankings <i className="ri-arrow-right-line ms-2 align-middle"></i> </Link>
+										<Link to={`${import.meta.env.BASE_URL}allotments`} className="m-1 btn btn-lg btn-light" target="_blank"> View Seat Allotments <i className="ri-eye-line ms-2 align-middle"></i> </Link>
 									</div>
 								</div>
 							</div>
