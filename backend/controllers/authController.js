@@ -121,3 +121,25 @@ exports.verifyOtp = async (req, res) => {
     res.status(500).json({ message: 'Failed to verify OTP' });
   }
 };
+
+
+exports.refreshToken = async (req, res) => {
+  const { refreshToken } = req.body;
+  if (!refreshToken) {
+    return res.status(401).json({ message: 'Refresh token required' });
+  }
+
+  try {
+    const userData = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const user = await User.findById(userData.userId);
+    if (!user) {
+      return res.status(403).json({ message: 'Invalid refresh token' });
+    }
+
+    const newToken = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '15m' });
+    res.json({ token: newToken });
+  } catch (error) {
+    console.error('Error refreshing token:', error);
+    res.status(403).json({ message: 'Invalid refresh token' });
+  }
+};

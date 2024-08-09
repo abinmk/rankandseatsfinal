@@ -6,5 +6,6 @@ router.post('/send-otp-register', authController.sendOtpRegister);
 router.post('/verify-otp-register', authController.verifyOtpRegister);
 router.post('/send-otp', authController.sendOtp);
 router.post('/verify-otp', authController.verifyOtp);
+router.post('/refresh-token', authController.refreshToken); // Fixed syntax error
 
 module.exports = router;

@@ -4,6 +4,8 @@ import _ from 'lodash';
 import GenericTable from './GenericTable';
 import { allotmentsColumns, allotmentsFiltersConfig } from './allotmentsConfig';
 import './Allotments.scss';
+import axiosInstance from '../../../utils/axiosInstance';
+
 
 const Allotments = () => {
   const [data, setData] = useState([]);
@@ -45,7 +47,7 @@ const Allotments = () => {
       setLoading(true);
       try {
         const token = localStorage.getItem('token'); // Retrieve the token from localStorage
-        const response = await axios.get(`${apiUrl}/allotments`, {
+        const response = await axiosInstance.get(`${apiUrl}/allotments`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
