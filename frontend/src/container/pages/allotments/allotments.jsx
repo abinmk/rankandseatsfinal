@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import axios from 'axios';
 import _ from 'lodash';
 import GenericTable from './GenericTable';
 import { allotmentsColumns, allotmentsFiltersConfig } from './allotmentsConfig';
@@ -12,7 +11,7 @@ const Allotments = () => {
   const [filterOptions, setFilterOptions] = useState({});
   const [filters, setFilters] = useState({});
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(20);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [filterLoading, setFilterLoading] = useState(true);
@@ -20,8 +19,8 @@ const Allotments = () => {
   const [wishlist, setWishlist] = useState([]);
 
   const apiUrl = import.meta.env.VITE_API_URL;
-  const username = 'dummyUser'; // Replace this with actual user data when available
-  const { exam, examType } = useOutletContext(); 
+  const { exam, counselingType } = useOutletContext(); // Retrieve exam and counselingType from context
+  console.log(exam+counselingType+"Exam+counselingType");
 
   const getFilterParamName = useMemo(() => {
     const filterMapping = {
@@ -44,10 +43,10 @@ const Allotments = () => {
   }, []);
 
   const fetchData = useCallback(
-    _.debounce(async (page, pageSize, filters, examType) => {
+    _.debounce(async (page, pageSize, filters, counselingType) => {
       setLoading(true);
       try {
-        const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+        const token = localStorage.getItem('token');
         const response = await axiosInstance.get(`${apiUrl}/allotments`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -55,7 +54,7 @@ const Allotments = () => {
           params: {
             page,
             limit: pageSize,
-            examType,
+            counselingType,
             ...filters,
           },
         });
@@ -64,69 +63,77 @@ const Allotments = () => {
         setTotalPages(response.data.totalPages);
       } catch (error) {
         console.error('Error fetching allotment data:', error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }, 500),
     [apiUrl]
   );
-  
+
   const fetchFilterOptions = useCallback(async () => {
     setFilterLoading(true);
     try {
-      const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+      const token = localStorage.getItem('token');
       const response = await axiosInstance.get(`${apiUrl}/allotments/filters`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        params: { examType }
+        params: { counselingType }
       });
       setFilterOptions(response.data);
       setRankRange({ min: response.data.rankRange.min, max: response.data.rankRange.max });
     } catch (error) {
       console.error('Error fetching filter options:', error);
+    } finally {
+      setFilterLoading(false);
     }
-    setFilterLoading(false);
-  }, [apiUrl, examType]);
-  
+  }, [apiUrl, counselingType]);
+
   const fetchWishlist = useCallback(async () => {
     try {
-      const token = localStorage.getItem('token'); // Retrieve the token from localStorage
-      const response = await axios.get(`${apiUrl}/wishlist`, {
+      const token = localStorage.getItem('token');
+      const response = await axiosInstance.get(`${apiUrl}/wishlist`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        params: { username },
+        params: { examName: exam }
       });
       setWishlist(response.data.wishlist.items);
     } catch (error) {
       console.error('Error fetching wishlist:', error);
     }
-  }, [apiUrl, username]);
-  
+  }, [apiUrl, exam]);
+
   useEffect(() => {
-    fetchData(page, pageSize, filters, examType);
+    fetchData(page, pageSize, filters, counselingType);
     fetchWishlist();
-    return () => {
-      fetchData.cancel();
-    };
-  }, [fetchData, fetchWishlist, filters, page, pageSize, exam, examType]);
+  }, [fetchData, fetchWishlist, filters, page, pageSize, counselingType, exam]);
 
   useEffect(() => {
     fetchFilterOptions();
-  }, [fetchFilterOptions]);
+  }, [fetchFilterOptions, counselingType]);
 
-  const addToWishlist = async (allotment) => {
+  const addToWishlist = async (examName, allotment) => {
     try {
-      await axios.post(`${apiUrl}/wishlist/add`, { username, allotment });
+      const response = await axiosInstance.post('/wishlist/add', {
+        examName,
+        allotment,
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      console.log('Wishlist updated:', response.data);
       fetchWishlist();
     } catch (error) {
-      console.error('Error adding to wishlist:', error);
+      console.error('Error adding to wishlist:', error.response?.data || error.message);
     }
   };
 
   const removeFromWishlist = async (allotmentId) => {
     try {
-      await axios.post(`${apiUrl}/wishlist/remove`, { username, allotmentId });
+      await axiosInstance.post(`${apiUrl}/wishlist/remove`, { examName: exam, allotmentId });
       fetchWishlist();
     } catch (error) {
       console.error('Error removing from wishlist:', error);

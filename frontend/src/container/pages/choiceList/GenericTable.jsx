@@ -14,7 +14,7 @@ const GenericTable = ({
   const [filters, setFilters] = useState({});
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(20);
   const [loading, setLoading] = useState(false);
   const [filterLoading, setFilterLoading] = useState(false);
   const [filterOptions, setFilterOptions] = useState({ institutes: [], courses: [], categories: [] });
@@ -248,9 +248,9 @@ const GenericTable = ({
                 value={pageSize}
                 onChange={(e) => setPageSize(Number(e.target.value))}
                 className="me-3"
-                style={{ width: '45px',height:'40px' }}
+                style={{ width: 'fit-content',height:'40px' }}
               >
-                {[10, 25, 50, 100].map((size) => (
+                {[10,20, 30, 50, 100].map((size) => (
                   <option key={size} value={size}>
                     {size}
                   </option>
@@ -266,7 +266,7 @@ const GenericTable = ({
                 value={pageIndex + 1}
                 onChange={(e) => setPage(Number(e.target.value))}
                                className="me-3"
-                style={{ width: '45px', height: '40px' }}
+                style={{ width: 'fit-content', height: '40px' }}
               />
             </Form.Group>
             <div className="pagination-controls">

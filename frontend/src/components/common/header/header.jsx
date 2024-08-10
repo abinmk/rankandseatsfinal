@@ -13,6 +13,7 @@ import "./header.scss";
 // IMAGES
 import desktoplogo from "../../../assets/images/brand-logos/desktop-dark.png";
 import faces1 from "../../../assets/images/faces/1.jpg";
+import axiosInstance from "../../../utils/axiosInstance";
 
 const Header = ({ local_varaiable, ThemeChanger }) => {
   const location = useLocation();
@@ -224,7 +225,7 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
 
   const saveUserSelection = async (exam, counselingType) => {
     try {
-      await axios.post(`${API_URL}/users/save-user-selection`, { exam, counselingType });
+      await axiosInstance.post(`${API_URL}/users/save-user-selection`, { exam, counselingType });
       console.log('User selection saved successfully');
     } catch (error) {
       console.error('Error saving user selection', error);

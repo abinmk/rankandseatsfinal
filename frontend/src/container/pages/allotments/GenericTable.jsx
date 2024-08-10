@@ -171,6 +171,13 @@ const GenericTable = ({
     setFilters({});
   };
 
+  const handleAddToWishlist = (row) => {
+    const allotment = row.original; // Get the entire dataset (allotment)
+    const examName = allotment.examName; // Extract examName from the allotment object
+
+    addToWishlist(examName, allotment); // Pass both parameters to the function
+  };
+
   return (
     <div className="allotments-container">
       <FilterSection
@@ -229,7 +236,7 @@ const GenericTable = ({
                             if (wishlist.some(item => item.allotmentId === row.original._id)) {
                               removeFromWishlist(row.original._id);
                             } else {
-                              addToWishlist(row.original);
+                              handleAddToWishlist(row); // Call the function and pass the row data
                             }
                           }}
                           style={{ color: wishlist.some(item => item.allotmentId === row.original._id) ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5rem' }}
@@ -257,9 +264,9 @@ const GenericTable = ({
                 value={pageSize}
                 onChange={(e) => setPageSize(Number(e.target.value))}
                 className="me-3"
-                style={{ width: '45px',height:'40px' }}
+                style={{ width: 'fit-content',height:'40px' }}
               >
-                {[10, 25, 50, 100].map((size) => (
+                {[10,20, 30, 50, 100].map((size) => (
                   <option key={size} value={size}>
                     {size}
                   </option>
@@ -275,7 +282,7 @@ const GenericTable = ({
                 value={pageIndex + 1}
                 onChange={(e) => setPage(Number(e.target.value))}
                 className="me-2"
-                style={{ width: '55px',height:'40px' }}
+                style={{ width: 'fit-content',height:'40px' }}
               />
             </Form.Group>
             <div className="pagination-controls">

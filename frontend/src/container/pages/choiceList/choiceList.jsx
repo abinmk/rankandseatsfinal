@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import axiosInstance from '../../../utils/axiosInstance';
 import { Table, Button, Modal } from 'react-bootstrap';
 import { FaTrash } from 'react-icons/fa';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
@@ -8,7 +9,7 @@ import './ChoiceList.scss';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
-const ChoiceList = ({ username }) => {
+const ChoiceList = () => {
   const [choiceList, setChoiceList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState({});
@@ -20,30 +21,67 @@ const ChoiceList = ({ username }) => {
   const [deleteItemId, setDeleteItemId] = useState(null);
   const headerTitle = "ChoiceList";
 
+  const generateExamName = useCallback(async () => {
+    const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+    const response = await axiosInstance.get(`${apiUrl}/users/exams`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const user = response.data;
+
+    if (user && user.selectedExams && user.selectedExams.length > 0) {
+      const { exam, counselingType } = user.selectedExams[0];
+      const formattedExam = exam.replace(/\s+/g, '_');
+      const formattedCounselingType = counselingType.replace(/\s+/g, '_');
+      return `EXAM:${formattedExam}_TYPE:${formattedCounselingType}`;
+    }
+    return null;
+  }, []);
+
   const fetchChoiceList = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${apiUrl}/wishlist`, {
-        params: { username, page: currentPage, ...filters },
-      });
-      setChoiceList(response.data.wishlist.items);
-      setTotalPages(response.data.totalPages);
+      const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+      const examName = await generateExamName();
+      if (examName) {
+        const response = await axiosInstance.get(`${apiUrl}/wishlist`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: { examName, ...filters }, // Pass the filters along with the exam name
+        });
+        setChoiceList(response.data.wishlist.items);
+        setTotalPages(response.data.totalPages);
+      } else {
+        console.error('No exam name found.');
+      }
     } catch (error) {
       console.error('Error fetching choice list:', error);
     }
     setLoading(false);
-  }, [username, currentPage, filters]);
+  }, [apiUrl, generateExamName, filters]); // Add `filters` as a dependency
+  
 
   const fetchFilterOptions = useCallback(async () => {
     try {
-      const response = await axios.get(`${apiUrl}/wishlist/filters`, {
-        params: { username },
-      });
-      setFilterOptions(response.data);
+      const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+      const examName = await generateExamName();
+      if (examName) {
+        const response = await axiosInstance.get(`${apiUrl}/wishlist/filters`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: { examName }, // Pass the generated exam name
+        });
+        setFilterOptions(response.data);
+      } else {
+        console.error('No exam name found.');
+      }
     } catch (error) {
       console.error('Error fetching filter options:', error);
     }
-  }, [username]);
+  }, [apiUrl, generateExamName]);
 
   useEffect(() => {
     fetchChoiceList();
@@ -60,10 +98,23 @@ const ChoiceList = ({ username }) => {
 
   const confirmDelete = async () => {
     try {
-      await axios.post(`${apiUrl}/wishlist/remove`, { username, allotmentId: deleteItemId });
-      fetchChoiceList();
-      setShowDeleteModal(false);
-      setDeleteItemId(null);
+      const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+      const examName = await generateExamName();
+      if (examName) {
+        await axiosInstance.post(`${apiUrl}/wishlist/remove`, {
+          allotmentId: deleteItemId,
+          examName,
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        fetchChoiceList();
+        setShowDeleteModal(false);
+        setDeleteItemId(null);
+      } else {
+        console.error('No exam name found.');
+      }
     } catch (error) {
       console.error('Error removing from choice list:', error);
     }
@@ -77,10 +128,20 @@ const ChoiceList = ({ username }) => {
     setChoiceList(items);
 
     try {
-      await axios.post(`${apiUrl}/wishlist/updateOrder`, {
-        username,
-        updatedOrder: items.map(item => item.allotmentId)
-      });
+      const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+      const examName = await generateExamName();
+      if (examName) {
+        await axiosInstance.post(`${apiUrl}/wishlist/updateOrder`, {
+          updatedOrder: items.map(item => item.allotmentId),
+          examName,
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      } else {
+        console.error('No exam name found.');
+      }
     } catch (error) {
       console.error('Error updating order:', error);
     }

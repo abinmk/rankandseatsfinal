@@ -243,7 +243,7 @@ const GenericTable = ({
                 value={pageSize}
                 onChange={(e) => setPageSize(Number(e.target.value))}
                 className="me-3"
-                style={{ width: '45px',height:'40px' }}
+                style={{ width: 'fit-content',height:'fit-content' }}
               >
                 {[10, 25, 50, 100].map((size) => (
                   <option key={size} value={size}>
@@ -261,7 +261,7 @@ const GenericTable = ({
                 value={pageIndex + 1}
                 onChange={(e) => setPage(Number(e.target.value))}
                 className="me-2"
-                style={{ width: '55px',height:'40px' }}
+                style={{ width: 'fit-content',height:'fit-content' }}
               />
             </Form.Group>
             <div className="pagination-controls">

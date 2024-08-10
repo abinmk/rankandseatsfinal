@@ -330,9 +330,9 @@ mongoose.connect(db, {
     app.use(bodyParser.urlencoded({ extended: true }));
 
     // Register routes
-    app.use('/api/users', userRoutes); // Add your user routes
+    app.use('/api/users', authMiddleware, userRoutes); // Add your user routes
     app.use('/api/auth', authRoutes);
-    app.use('/api/wishlist', wishlistRoutes);
+    app.use('/api/wishlist',authMiddleware,wishlistRoutes);
     app.use('/api/admin', adminRoutes);
     app.use('/api/dataset', datasetRoutes);
     // app.use('/api/allotments', allotmentsRoutes);

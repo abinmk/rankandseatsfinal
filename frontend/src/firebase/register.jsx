@@ -59,7 +59,7 @@ const Register = () => {
       });
       const { token } = response.data;
       localStorage.setItem('token', token);
-      navigate('/dashboard');
+      navigate('/dashboards');
     } catch (error) {
       setError('Failed to verify OTP or register. Please try again.');
     }

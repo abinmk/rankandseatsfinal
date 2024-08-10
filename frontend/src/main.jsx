@@ -26,6 +26,7 @@ import 'primeicons/primeicons.css';                       // Icons
 import { UserProvider } from "./contexts/UserContext.jsx";
 import Register from "./firebase/register.jsx";
 import ProtectedRoute from './components/ProtectedRoute.jsx';
+import CollegeDetail from './container/pages/colleges/CollegeDetails.jsx';
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -50,6 +51,7 @@ root.render(
           <Route path="institutes" element={<ProtectedRoute><Colleges /></ProtectedRoute>} />
           <Route path="fees" element={<ProtectedRoute><Fees/></ProtectedRoute>} />
           <Route path="wishlist" element={<ProtectedRoute><ChoiceList username='dummyUser'/></ProtectedRoute>}/>
+          <Route path="/college/:id" element={<CollegeDetail />} />
         </Route>
         <Route path="/" element={<Authenticationlayout />}>
           <Route path="authentication/signup/signupbasic" element={<Signupbasic />} />

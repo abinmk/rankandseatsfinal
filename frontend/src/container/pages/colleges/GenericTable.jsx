@@ -2,7 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useTable, usePagination, useSortBy, useFilters, useColumnOrder } from 'react-table';
 import FilterSection from './FilterSection';
 import { Table, Modal, Button, Form, Pagination } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+const handleRowClick = (row) => {
+  navigate(`/college/${row.original.collegeId}`, { state: { college: row.original } });
+};
 
 const GenericTable = ({
   data,
@@ -233,7 +238,7 @@ const GenericTable = ({
                 value={pageSize}
                 onChange={(e) => setPageSize(Number(e.target.value))}
                 className="me-3"
-                style={{ width: '45px',height:'40px' }}
+                style={{ width: 'fit-content',height:'fit-content' }}
               >
                 {[10, 25, 50, 100].map((size) => (
                   <option key={size} value={size}>
@@ -251,7 +256,7 @@ const GenericTable = ({
                 value={pageIndex + 1}
                 onChange={(e) => setPage(Number(e.target.value))}
                 className="me-2"
-                style={{ width: '55px',height:'40px' }}
+                style={{ width: 'fit-content',height:'fit-content' }}
               />
             </Form.Group>
             <div className="pagination-controls">

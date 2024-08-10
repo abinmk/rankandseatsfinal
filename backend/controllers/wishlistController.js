@@ -1,142 +1,282 @@
-// // const Wishlist = require('../models/Wishlist');
+const mongoose = require('mongoose');
+const User = require('../models/User');
+const Allotment = require('../models/Allotment');
 
-// // Add to Wishlist
-// exports.addToWishlist = async (req, res) => {
-//   try {
-//     const { username, allotment } = req.body;
-//     let wishlist = await Wishlist.findOne({ username });
+exports.addToWishlist = async (req, res) => {
+  try {
+    console.log("Add to wishlist");
+    const { examName, allotment } = req.body; // Destructure allotment instead of _id
+    const userId = req.user.userId; // Assuming userId is set in req.user by middleware
 
-//     if (!wishlist) {
-//       wishlist = new Wishlist({ username, items: [] });
-//     }
+    if (!examName || !allotment || !allotment._id) {
+      console.log("Invalid request data");
+      return res.status(400).json({ message: 'Invalid request data' });
+    }
 
-//     if (!wishlist.items.some(item => item.allotmentId.toString() === allotment._id)) {
-//       wishlist.items.push({ allotmentId: allotment._id, allotment });
-//     }
+    // Validate that allotment._id is a valid ObjectId
+    const allotmentId = allotment._id;
 
-//     await wishlist.save();
-//     res.status(200).json({ message: 'Item added to wishlist', wishlist });
-//   } catch (error) {
-//     console.error('Error adding to wishlist:', error);
-//     res.status(500).send('Failed to add to wishlist.');
-//   }
-// };
+    if (!mongoose.Types.ObjectId.isValid(allotmentId)) {
+      return res.status(400).json({ message: 'Invalid allotment ID format' });
+    }
 
-// // Remove from Wishlist
-// exports.removeFromWishlist = async (req, res) => {
-//   try {
-//     const { username, allotmentId } = req.body;
-//     const wishlist = await Wishlist.findOne({ username });
+    // Find the user
+    let user = await User.findById(userId);
 
-//     if (wishlist) {
-//       wishlist.items = wishlist.items.filter(item => item.allotmentId.toString() !== allotmentId);
-//       await wishlist.save();
-//     }
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
 
-//     res.status(200).json({ message: 'Item removed from wishlist', wishlist });
-//   } catch (error) {
-//     console.error('Error removing from wishlist:', error);
-//     res.status(500).send('Failed to remove from wishlist.');
-//   }
-// };
+    // Find the wishlist entry for the exam and counseling type
+    let wishlist = user.wishlist.find(w => w.examName === examName);
 
-// exports.getWishlist = async (req, res) => {
-//   try {
-//     const { username } = req.query;
-//     const { courses = [], categories = [], institutes = [] } = req.query;
+    if (!wishlist) {
+      // If no wishlist exists for this exam and counseling type, create a new one
+      wishlist = {
+        examName,
+        items: [],
+      };
+      user.wishlist.push(wishlist);
+    }
 
-//     // Fetch the wishlist for the specified user
-//     let wishlist = await Wishlist.findOne({ username });
+    // Check if the allotment is already in the wishlist
+    const itemExists = wishlist.items.some(item => item.allotmentId.equals(allotmentId));
 
-//     if (!wishlist) {
-//       return res.status(404).json({ message: 'Wishlist not found' });
-//     }
+    if (!itemExists) {
+      // Add the allotment to the wishlist
+      wishlist.items.push({
+        allotmentId: mongoose.Types.ObjectId(allotmentId), // Ensure this is an ObjectId
+        allotment, // Store the full allotment object
+      });
+    } else {
+      return res.status(400).json({ message: 'Item already in wishlist' });
+    }
 
-//     // Filter the items based on the query parameters
-//     let filteredItems = wishlist.items;
+    // Save the user with the updated wishlist
+    await user.save();
 
-//     if (courses.length > 0) {
-//       filteredItems = filteredItems.filter(item =>
-//         courses.includes(item.allotment.course)
-//       );
-//     }
-
-//     if (categories.length > 0) {
-//       filteredItems = filteredItems.filter(item =>
-//         categories.includes(item.allotment.allottedCategory)
-//       );
-//     }
-
-//     if (institutes.length > 0) {
-//       filteredItems = filteredItems.filter(item =>
-//         institutes.includes(item.allotment.allottedInstitute)
-//       );
-//     }
-
-//     wishlist.items = filteredItems;
-
-//     res.status(200).json({ wishlist });
-//   } catch (error) {
-//     console.error('Error fetching wishlist:', error);
-//     res.status(500).send('Failed to fetch wishlist.');
-//   }
-// };
-
-
-// // Update Wishlist Order
-// exports.updateWishlistOrder = async (req, res) => {
-//   try {
-//     const { username, updatedOrder } = req.body;
-//     const wishlist = await Wishlist.findOne({ username });
-
-//     if (wishlist) {
-//       const newOrderItems = updatedOrder.map(id => {
-//         return wishlist.items.find(item => item.allotmentId.toString() === id);
-//       });
-
-//       wishlist.items = newOrderItems;
-//       await wishlist.save();
-//       res.status(200).json({ message: 'Wishlist order updated', wishlist });
-//     } else {
-//       res.status(404).send('Wishlist not found.');
-//     }
-//   } catch (error) {
-//     console.error('Error updating wishlist order:', error);
-//     res.status(500).send('Failed to update wishlist order.');
-//   }
-// };
+    res.status(200).json({ message: 'Item added to wishlist successfully', wishlist: user.wishlist });
+  } catch (error) {
+    console.error('Error adding to wishlist:', error);
+    res.status(500).json({ message: 'Failed to add to wishlist.', error: error.message });
+  }
+};
 
 
 
-// exports.getFilterOptions = async (req, res) => {
-//   try {
-//     const wishlists = await Wishlist.find({});
 
-//     const institutesSet = new Set();
-//     const coursesSet = new Set();
-//     const categoriesSet = new Set();
 
-//     wishlists.forEach(wishlist => {
-//       wishlist.items.forEach(item => {
-//         if (item.allotment) {
-//           institutesSet.add(item.allotment.allottedInstitute);
-//           coursesSet.add(item.allotment.course);
-//           categoriesSet.add(item.allotment.allottedCategory);
-//         }
-//       });
-//     });
+exports.getWishlist = async (req, res) => {
+    try {
+      const userId = req.user.userId;  // Assuming you have middleware to get the user ID from the token
+      const user = await User.findById(userId).lean();
+  
+      if (!user || !user.selectedExams || user.selectedExams.length === 0) {
+        return res.status(400).send('No selected exams found for user.');
+      }
+  
+      // Use the first selected exam
+      const { exam, counselingType } = user.selectedExams[0];
+      
+      // Format exam and counselingType by replacing spaces with underscores
+      const formattedExam = exam.replace(/\s+/g, '_');
+      const formattedCounselingType = counselingType.replace(/\s+/g, '_');
+  
+      // Generate the examName
+      const examName = `EXAM:${formattedExam}_TYPE:${formattedCounselingType}`;
+  
+      // Now you can use examName to query the wishlist or perform other operations
+      const wishlist = user.wishlist.find(w => w.examName === examName);
+  
+      if (!wishlist) {
+        return res.status(404).json({ message: 'Wishlist not found for this exam' });
+      }
+  
+      // Extract filters from query parameters
+      const { institutes = [], courses = [], categories = [] } = req.query;
+  
+      // Filter wishlist items based on filters
+      let filteredItems = wishlist.items;
+  
+      if (institutes.length > 0) {
+        filteredItems = filteredItems.filter(item =>
+          institutes.includes(item.allotment.allottedInstitute)
+        );
+      }
+  
+      if (courses.length > 0) {
+        filteredItems = filteredItems.filter(item =>
+          courses.includes(item.allotment.course)
+        );
+      }
+  
+      if (categories.length > 0) {
+        filteredItems = filteredItems.filter(item =>
+          categories.includes(item.allotment.allottedCategory)
+        );
+      }
+  
+      // Return filtered wishlist
+      return res.status(200).json({ wishlist: { ...wishlist, items: filteredItems } });
+    } catch (error) {
+      console.error('Error fetching wishlist:', error);
+      return res.status(500).json({ message: 'Failed to fetch wishlist.', error: error.message });
+    }
+  };
+  
+  
+  
 
-//     const institutes = Array.from(institutesSet);
-//     const courses = Array.from(coursesSet);
-//     const categories = Array.from(categoriesSet);
+  
+  exports.updateWishlistOrder = async (req, res) => {
+    try {
+      const { examName, updatedOrder } = req.body;
+      const userId = req.user.userId; // Assuming the user is authenticated and req.user is populated correctly
+  
+      const user = await User.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found.' });
+      }
+  
+      const examWishlist = user.wishlist.find(w => w.examName === examName);
+  
+      if (!examWishlist) {
+        return res.status(404).json({ message: 'Wishlist not found for the specified exam.' });
+      }
+  
+      // Create a map of allotmentId to the corresponding item
+      const itemMap = new Map();
+      examWishlist.items.forEach(item => {
+        itemMap.set(item.allotmentId.toString(), item);
+      });
+  
+      // Reorder items based on the updatedOrder array
+      const reorderedItems = [];
+      for (const id of updatedOrder) {
+        const item = itemMap.get(id);
+        if (item) {
+          reorderedItems.push(item);
+        } else {
+          return res.status(400).json({ message: `Invalid allotment ID: ${id}` });
+        }
+      }
+  
+      // Replace the items with the reordered list
+      examWishlist.items = reorderedItems;
+  
+      // Save the updated user document
+      await user.save();
+  
+      res.status(200).json({ message: 'Wishlist order updated successfully', wishlist: examWishlist.items });
+    } catch (error) {
+      console.error('Error updating wishlist order:', error);
+      res.status(500).json({ message: 'Failed to update wishlist order.', error: error.message });
+    }
+  };
+  
 
-//     res.status(200).json({
-//       institutes,
-//       courses,
-//       categories,
-//     });
-//   } catch (error) {
-//     console.error('Error fetching filters:', error);
-//     res.status(500).send('Failed to fetch filters.');
-//   }
-// };
+  exports.removeFromWishlist = async (req, res) => {
+    try {
+      const userId = req.user.userId;  // Assuming you have middleware to get the user ID from the token
+      const { allotmentId } = req.body;
+  
+      if (!allotmentId) {
+        return res.status(400).json({ message: 'Invalid request data' });
+      }
+  
+      // Find the user
+      let user = await User.findById(userId).lean();
+  
+      if (!user || !user.selectedExams || user.selectedExams.length === 0) {
+        return res.status(400).send('No selected exams found for user.');
+      }
+  
+      // Use the first selected exam to generate examName
+      const { exam, counselingType } = user.selectedExams[0];
+      const formattedExam = exam.replace(/\s+/g, '_');
+      const formattedCounselingType = counselingType.replace(/\s+/g, '_');
+      const examName = `EXAM:${formattedExam}_TYPE:${formattedCounselingType}`;
+  
+      // Find the wishlist entry for the exam and counseling type
+      let wishlist = user.wishlist.find(w => w.examName === examName);
+  
+      if (!wishlist) {
+        return res.status(404).json({ message: 'Wishlist not found for this exam' });
+      }
+  
+      // Find the index of the item to remove
+      const itemIndex = wishlist.items.findIndex(item => item.allotmentId.equals(allotmentId));
+  
+      if (itemIndex === -1) {
+        return res.status(404).json({ message: 'Item not found in wishlist' });
+      }
+  
+      // Remove the item from the wishlist
+      wishlist.items.splice(itemIndex, 1);
+  
+      // Save the updated user document
+      await User.updateOne({ _id: userId }, { wishlist: user.wishlist });
+  
+      res.status(200).json({ message: 'Item removed from wishlist successfully', wishlist: user.wishlist });
+    } catch (error) {
+      console.error('Error removing from wishlist:', error);
+      res.status(500).json({ message: 'Failed to remove from wishlist.', error: error.message });
+    }
+  };
+  
+  
+  exports.getFilterOptions = async (req, res) => {
+    try {
+      const userId = req.user.userId;  // Assuming you have middleware to get the user ID from the token
+      const user = await User.findById(userId).lean();
+      
+      if (!user || !user.selectedExams || user.selectedExams.length === 0) {
+        return res.status(400).send('No selected exams found for user.');
+      }
+  
+      // Use the first selected exam
+      const { exam, counselingType } = user.selectedExams[0];
+      
+      // Format exam and counselingType by replacing spaces with underscores
+      const formattedExam = exam.replace(/\s+/g, '_');
+      const formattedCounselingType = counselingType.replace(/\s+/g, '_');
+  
+      // Generate the examName
+      const examName = `EXAM:${formattedExam}_TYPE:${formattedCounselingType}`;
+  
+      // Find the wishlist for this specific exam
+      const wishlist = user.wishlist.find(w => w.examName === examName);
+  
+      if (!wishlist) {
+        return res.status(404).json({ message: 'Wishlist not found for this exam' });
+      }
+  
+      // Extract filters from the wishlist items
+      const institutesSet = new Set();
+      const coursesSet = new Set();
+      const categoriesSet = new Set();
+  
+      wishlist.items.forEach(item => {
+        if (item.allotment) {
+          institutesSet.add(item.allotment.allottedInstitute);
+          coursesSet.add(item.allotment.course);
+          categoriesSet.add(item.allotment.allottedCategory);
+        }
+      });
+  
+      const institutes = Array.from(institutesSet);
+      const courses = Array.from(coursesSet);
+      const categories = Array.from(categoriesSet);
+  
+      res.status(200).json({
+        institutes,
+        courses,
+        categories,
+      });
+    } catch (error) {
+      console.error('Error fetching filters:', error);
+      res.status(500).send('Failed to fetch filters.');
+    }
+  };
+  

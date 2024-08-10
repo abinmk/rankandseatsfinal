@@ -35,6 +35,7 @@ exports.getAllotmentData = async (req, res) => {
     console.log(req);
     const userId = req.user.userId;  // Assuming you have middleware to get the user ID from the token
     const user = await User.findById(userId).lean();
+    console.log("userinalltomentes" +user);
     if (!user || !user.selectedExams || user.selectedExams.length === 0) {
       return res.status(400).send('No selected exams found for user.');
     }
@@ -99,6 +100,10 @@ exports.getAllotmentData = async (req, res) => {
     }
 
     console.log('Query:', query); // Logging the query for debugging
+    if(limit>100)
+    {
+      res.status(500).send('Unauthorized !');
+    }
 
     const data = await AllotmentModel.find(query)
       .skip((page - 1) * limit)

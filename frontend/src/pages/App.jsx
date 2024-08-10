@@ -12,7 +12,7 @@ import Tabtotop from "../components/common/tab-to-tap/tabtotap";
 function App() {
   const [lateLoad, setLateLoad] = useState(false);
   const [exam, setExam] = useState(""); // State for the selected exam
-  const [examType, setExamType] = useState(""); // State for the selected exam
+  const [counselingType, setCounselingType] = useState(""); // State for the selected exam
   const location = useLocation();
 
   useEffect(() => {
@@ -28,12 +28,12 @@ function App() {
         <div style={{ display: `${lateLoad ? "block" : "none"}` }}>
           <Switcher />
           <div className="page">
-            <Header exam={exam} examType={examType} setExamType={setExamType} setExam={setExam} />
+            <Header exam={exam} counselingType={counselingType} setcounselingType={setCounselingType} setExam={setExam} />
             <Sidebar />
             {showPageheader && <Pageheader />}
             <div className="main-content app-content">
               <div className="container-fluid">
-                <Outlet context={{ exam, examType }} />
+                <Outlet context={{ exam, counselingType ,setCounselingType,setExam}} />
               </div>
             </div>
             {showFooter && <Footer />}

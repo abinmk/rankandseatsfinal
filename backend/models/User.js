@@ -1,16 +1,26 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
+// Schema for selected exams and their counseling types
 const examSelectionSchema = new mongoose.Schema({
   exam: { type: String, required: true },
   counselingType: { type: String, required: true },
 });
 
+// Schema for wishlist items
 const wishlistItemSchema = new mongoose.Schema({
   allotmentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Allotment', required: true },
   allotment: { type: mongoose.Schema.Types.Mixed, required: true },
 });
 
+// Schema for wishlist grouped by exam and counseling type
+const wishlistSchema = new mongoose.Schema({
+  examName: { type: String, required: false },
+  counselingType: { type: String, required: false },
+  items: [wishlistItemSchema],
+});
+
+// Main User Schema
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
@@ -21,7 +31,7 @@ const userSchema = new mongoose.Schema({
   otp: { type: String },
   isAdmin: { type: Boolean, default: false },
   selectedExams: [examSelectionSchema],
-  wishlist: [wishlistItemSchema],
+  wishlist: [wishlistSchema], // Grouped wishlist by exam and counseling type
 }, { timestamps: true });
 
 // Hash the password before saving the user

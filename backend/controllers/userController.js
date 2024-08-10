@@ -23,6 +23,22 @@ const createUser = async (req, res) => {
   }
 };
 
+const getUserExams = async (req, res) => {
+  try {
+    const userId = req.user.userId; // Assuming userId is set in req.user by middleware
+    const user = await User.findById(userId).lean();
+
+    if (!user || !user.selectedExams || user.selectedExams.length === 0) {
+      return res.status(400).json({ message: 'No selected exams found for user.' });
+    }
+
+    res.status(200).json({ selectedExams: user.selectedExams });
+  } catch (error) {
+    console.error('Error fetching user exams:', error);
+    res.status(500).json({ message: 'Error fetching user exams.' });
+  }
+};
+
 // Authenticate user
 const authenticateUser = async (req, res) => {
   try {
@@ -50,14 +66,33 @@ const authenticateUser = async (req, res) => {
 // Update exam selection for a user
 const updateExamSelection = async (req, res) => {
   try {
-    const { username, exam, counselingType } = req.body;
-    const user = await User.findOne({ username });
+    // Get user ID from authentication middleware
+    const userId = req.user.userId; // Assuming req.user is set by the auth middleware
+    console.log("userId=="+userId);
+
+    // Extract exam and counselingType from request body
+    const { exam, counselingType } = req.body;
+    console.log("exam=="+exam);
+    console.log("counselingType=="+counselingType);
+    
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+    console.log("user=="+user);
+
+    // Check if user exists
     if (!user) {
       return res.status(404).send('User not found');
     }
+
+    // Update the user's selected exams
     const selection = { exam, counselingType };
-    user.selectedExams = [selection];
+    user.selectedExams = [selection]; // Overwrite the selected exams with the new selection
+
+    // Save the updated user data
     await user.save();
+
+    // Send success response
     res.send('Exam selection updated successfully');
   } catch (error) {
     console.error('Error updating exam selection:', error);
@@ -225,4 +260,5 @@ module.exports = {
   getWishlist,
   updateWishlistOrder,
   getFilterOptions,
+  getUserExams
 };
