@@ -337,10 +337,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Register API routes
 app.use('/api/users', authMiddleware, userRoutes);
 app.use('/api/auth', authRoutes);
-app.use('/api/wishlist', authMiddleware, wishlistRoutes);
+app.use('/wishlist', authMiddleware, wishlistRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/dataset', datasetRoutes);
-app.use('/api/allotments', authMiddleware, allotmentsRoutes);
+app.use('/allotments', authMiddleware, allotmentsRoutes);
 app.use('/api/colleges', collegesRoutes);
 app.use('/api/courses', coursesRoutes);
 app.use('/api/fees', feesRoutes);
