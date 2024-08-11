@@ -187,8 +187,8 @@ const Landing = () => {
 							<div className="header-element">
 								<div className="horizontal-logo">
 									<Link to={`${import.meta.env.BASE_URL}dashboards/`} className="header-logo">
-										<img src={togglelogo} alt="logo" className="toggle-logo" />
-										<img src={toggledark} alt="logo" className="toggle-dark" />
+										{/* <img src={togglelogo} alt="logo" className="toggle-logo" />
+										<img src={toggledark} alt="logo" className="toggle-dark" /> */}
 									</Link>
 								</div>
 							</div>
@@ -202,67 +202,54 @@ const Landing = () => {
 
 						</div>
 
-						<div className="header-content-right">
-
-							<div className="header-element align-items-center">
-								<div className="btn-list d-lg-none d-block">
-									<Button variant='' type="button" className="btn btn-primary-light d-sm-inline d-none">
-										Sign Up
-									</Button>
-									<Button variant='' type="button" className="btn btn-secondary">
-										Get Started
-									</Button>
-									<Button variant='' aria-label="anchor" type="button" className="btn btn-icon btn-success" onClick={() => Switchericon()} data-bs-toggle="offcanvas" data-bs-target="#switcher-canvas">
-										<i className="ri-settings-3-line"></i>
-									</Button>
-								</div>
-							</div>
-
-						</div>
-
 					</div>
 
 				</header>
 				<div id="responsive-overlay"></div>
-				<aside className="app-sidebar" id="sidebar">
-
+				<aside className="app-sidebar d-none d-lg-block" id="sidebar">
 					<div className="container p-0">
 						<div className="main-sidebar">
-
-							<nav className="main-menu-container nav nav-pills sub-open">
-								<div className="landing-logo-container">
-									<div className="horizontal-logo">
-										<Link to={`${import.meta.env.BASE_URL}dashboards/`} className="header-logo">
-											<img src={desktoplogo} alt="logo" className="desktop-logo" />
-											<img src={desktopdark} alt="logo" className="desktop-dark" />
-										</Link>
-									</div>
-								</div>
-								<div className="slide-left" id="slide-left"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24"> <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path> </svg></div>
-								<Navbar1 />
-								<div className="slide-right" id="slide-right"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24"> <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path> </svg></div>
-								<div className="d-lg-flex d-none">
-									<div className="btn-list d-xl-flex d-none">
-										<Link to={`${import.meta.env.BASE_URL}login/`} className="btn btn-wave btn-success">
-											Dashboard
-										</Link>
-									</div>
-								</div>
-							</nav>
-
+						<nav className="main-menu-container nav nav-pills sub-open">
+							<div className="landing-logo-container">
+							<div className="horizontal-logo">
+								<Link to={`${import.meta.env.BASE_URL}dashboards/`} className="header-logo">
+								<img src={desktoplogo} alt="logo" className="desktop-logo" />
+								<img src={desktopdark} alt="logo" className="desktop-dark" />
+								</Link>
+							</div>
+							</div>
+							<div className="slide-left" id="slide-left">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
+								<path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path>
+							</svg>
+							</div>
+							<Navbar1 />
+							<div className="slide-right" id="slide-right">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
+								<path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path>
+							</svg>
+							</div>
+							<div className="d-lg-flex d-none">
+							<div className="btn-list d-xl-flex d-none">
+								<Link to={`${import.meta.env.BASE_URL}login/`} className="btn btn-wave btn-success">
+								Dashboard
+								</Link>
+							</div>
+							</div>
+						</nav>
 						</div>
 					</div>
+					</aside>
 
-				</aside>
 				<div className="main-content landing-main">
 
 					<div className="landing-banner" id="home">
 						<section className="section">
 							<div className="container main-banner-container">
-								<img src={landing5} alt="img" className="banner-png" />
+								{/* <img src={landing5} alt="img" className="banner-png" />
 								<img src={landing3} alt="img" className="banner-png1" />
 								<img src={landing4} alt="img" className="banner-png2" />
-								<img src={landing6} alt="img" className="banner-png3" />
+								<img src={landing6} alt="img" className="banner-png3" /> */}
 								<div className="row justify-content-center">
 								<div className="col-xxl-9 col-xl-8 col-lg-12 col-md-12">
 									<div className="py-lg-5 text-center">
@@ -594,7 +581,7 @@ const Landing = () => {
 					</section>
 
 
-					<section className="section landing-Features" id="statistics">
+					{/* <section className="section landing-Features" id="statistics">
 						<div className="container text-center position-relative text-fixed-white">
 							<p className="fs-12 fw-semibold text-primary mb-1 text-fixed-white"><span className="landing-section-heading">STATISTICS</span></p>
 							<h4 className="fw-semibold mb-2 text-fixed-white">Helping Students Achieve Their Dreams.</h4>
@@ -661,9 +648,9 @@ const Landing = () => {
 								</Col>
 							</div>
 						</div>
-					</section>
+					</section> */}
 
-					<section className="section landing-testimonials section-background section-style " id="clients">
+					{/* <section className="section landing-testimonials section-background section-style " id="clients">
 						<div className="container text-center">
 							<p className="fs-12 fw-semibold text-primary mb-1"><span className="landing-section-heading">OUR TEAM</span></p>
 							<h4 className="fw-semibold mb-2">Empowering Students Through Teamwork</h4>
@@ -898,9 +885,9 @@ const Landing = () => {
 								</div>
 							</div>
 						</div>
-					</section>
+					</section> */}
 
-					<section className="section" id="our-mission">
+					{/* <section className="section" id="our-mission">
 						<img src={landing4} alt="img" className="banner-png2 op-2" />
 						<img src={landing7} alt="img" className="banner-png4" />
 						<div className="container text-center">
@@ -1146,8 +1133,8 @@ const Landing = () => {
 								</div>
 							</div>
 						</div>
-					</section>
-					<section className="section section-background section-style" id="pricing">
+					</section> */}
+					{/* <section className="section section-background section-style" id="pricing">
     <div className="container text-center">
         <Tab.Container defaultActiveKey="first">
             <p className="fs-12 fw-semibold text-primary mb-1"><span className="landing-section-heading">PRICING</span></p>
@@ -1491,9 +1478,9 @@ const Landing = () => {
             </Col>
         </Tab.Container>
     </div>
-</section>
+</section> */}
 
-					<section className="section landing-Features">
+					{/* <section className="section landing-Features">
 						<div className="container">
 							<div className="row justify-content-center">
 								<div className="col-xl-12  text-start">
@@ -1507,7 +1494,7 @@ const Landing = () => {
 								</div>
 							</div>
 						</div>
-					</section>
+					</section> */}
 					<section className="section  section-background section-style" id="faq">
 						<div className="container text-center">
 							<p className="fs-12 fw-semibold text-primary mb-1"><span className="landing-section-heading">F.A.Q</span></p>
@@ -1639,7 +1626,7 @@ const Landing = () => {
 							</div>
 						</div>
 					</section>
-					<section className="section" id="testimonials">
+					{/* <section className="section" id="testimonials">
 						<img src={landing4} alt="img" className="banner-png2 op-2" />
 						<img src={landing7} alt="img" className="banner-png4" />
 						<div className="container text-center">
@@ -1894,7 +1881,7 @@ const Landing = () => {
 								</SwiperSlide>
 							</Swiper>
 						</div>
-					</section>
+					</section> */}
 					<section className="section section-background section-style" id="contact">
 						<div className="container text-center">
 							<p className="fs-12 fw-semibold text-primary mb-1"><span className="landing-section-heading">CONTACT US</span></p>
