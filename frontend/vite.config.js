@@ -3,13 +3,13 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   server: {
-    proxy: {
+    proxy: process.env.NODE_ENV === 'development' ? {
       '/api': {
-        target: 'http://localhost:5001',
+        target: process.env.VITE_API_URL, // http://localhost:5001 in development
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }
-    }
+    } : undefined,
   },
   plugins: [react()],
   build: {
