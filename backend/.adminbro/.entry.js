@@ -23,3 +23,15 @@ import Component11 from '../components/DeleteByCategory'
 AdminBro.UserComponents.Component11 = Component11
 import Component12 from '../components/DeleteByCategory'
 AdminBro.UserComponents.Component12 = Component12
+import Component13 from '../components/DeleteByCategory'
+AdminBro.UserComponents.Component13 = Component13
+import Component14 from '../components/DeleteByCategory'
+AdminBro.UserComponents.Component14 = Component14
+import Component15 from '../components/DeleteByCategory'
+AdminBro.UserComponents.Component15 = Component15
+import Component16 from '../components/DeleteByCategory'
+AdminBro.UserComponents.Component16 = Component16
+import Component17 from '../components/DeleteByCategory'
+AdminBro.UserComponents.Component17 = Component17
+import Component18 from '../components/DeleteByCategory'
+AdminBro.UserComponents.Component18 = Component18

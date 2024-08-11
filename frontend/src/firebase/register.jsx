@@ -69,9 +69,9 @@ const Register = () => {
     <div className={styles.registerContainer}>
       <div className={styles.registerBox}>
         <div className={styles.logoContainer}>
-          <img src="/images/logo.png" alt="Logo" className={styles.logo} />
+          <img src="/logo.png" alt="Logo" className={styles.logo} />
         </div>
-        <h1>Register</h1>
+        <h1 className={styles.signup}>Register</h1>
         <form onSubmit={(e) => e.preventDefault()}>
           <InputText
             value={name}
