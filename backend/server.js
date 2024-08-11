@@ -31,7 +31,8 @@ app.use('/static', express.static(path.join(__dirname, 'static')));
 // Set up CORS
 app.use(cors({
   origin: [
-    'http://localhost:3000', 
+    'http://localhost:3000',
+    'http://ec2-13-235-33-60.ap-south-1.compute.amazonaws.com:5001', 
     'http://localhost:5173',
     'http://ec2-52-63-164-69.ap-southeast-2.compute.amazonaws.com:5001',
     'https://ec2-52-63-164-69.ap-southeast-2.compute.amazonaws.com:5001',
