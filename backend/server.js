@@ -34,7 +34,7 @@ app.use(cors({
     'http://localhost:3000',
     'https://ec2-13-235-33-60.ap-south-1.compute.amazonaws.com:5001', 
     'http://localhost:5173',
-    'https://rankandseats.com',
+    'https://rankandseats.com:5001',
     'http://localhost:5001',
     'http://rankseatsbucket.s3-website-ap-southeast-2.amazonaws.com', 
     'https://rankseatsbucket.s3-website-ap-southeast-2.amazonaws.com'
@@ -334,6 +334,7 @@ mongoose.connect(db, {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Register API routes
 app.use('/api/users', authMiddleware, userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/wishlist', authMiddleware, wishlistRoutes);
@@ -344,7 +345,6 @@ app.use('/api/colleges', collegesRoutes);
 app.use('/api/courses', coursesRoutes);
 app.use('/api/fees', feesRoutes);
 app.use('/api/protected', require('./routes/protectedRoute'));
-
 
 // Serve the React app for any route not handled by the above
 app.get('*', (req, res) => {
