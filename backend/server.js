@@ -335,16 +335,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Register API routes
-app.use('/api/users', authMiddleware, userRoutes);
-app.use('/api/auth', authRoutes);
+app.use('/users', authMiddleware, userRoutes);
+app.use('/auth', authRoutes);
 app.use('/wishlist', authMiddleware, wishlistRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/dataset', datasetRoutes);
+app.use('/admin', adminRoutes);
+app.use('/dataset', datasetRoutes);
 app.use('/allotments', authMiddleware, allotmentsRoutes);
-app.use('/api/colleges', collegesRoutes);
-app.use('/api/courses', coursesRoutes);
-app.use('/api/fees', feesRoutes);
-app.use('/api/protected', require('./routes/protectedRoute'));
+app.use('/colleges', collegesRoutes);
+app.use('/courses', coursesRoutes);
+app.use('/fees', feesRoutes);
+app.use('/protected', require('./routes/protectedRoute'));
 
 // Serve the React app for any route not handled by the above
 app.get('*', (req, res) => {
