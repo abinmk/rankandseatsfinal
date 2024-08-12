@@ -5,6 +5,23 @@ import { allotmentsColumns, allotmentsFiltersConfig } from './allotmentsConfig';
 import './Allotments.scss';
 import axiosInstance from '../../../utils/axiosInstance';
 import { useOutletContext } from 'react-router-dom';
+import CryptoJS from 'crypto-js';
+
+// Decryption function
+const decrypt = (ciphertext) => {
+  try {
+    const key = CryptoJS.enc.Hex.parse(import.meta.env.VITE_ENCRYPTION_KEY);
+    const iv = CryptoJS.enc.Hex.parse(import.meta.env.VITE_IV);
+
+    const bytes = CryptoJS.AES.decrypt(ciphertext, key, { iv: iv });
+    const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+
+    return decryptedData;
+  } catch (error) {
+    console.error('Error decrypting data:', error);
+    throw error;
+  }
+};
 
 const Allotments = () => {
   const [data, setData] = useState([]);
@@ -20,7 +37,7 @@ const Allotments = () => {
 
   const apiUrl = import.meta.env.VITE_API_URL;
   const { exam, counselingType } = useOutletContext(); // Retrieve exam and counselingType from context
-  console.log(exam+counselingType+"Exam+counselingType");
+  console.log(exam + counselingType + "Exam+counselingType");
 
   const getFilterParamName = useMemo(() => {
     const filterMapping = {
@@ -58,7 +75,11 @@ const Allotments = () => {
             ...filters,
           },
         });
-        setData(response.data.data);
+
+        // Decrypt the data
+        const decryptedData = JSON.parse(decrypt(response.data.data));
+
+        setData(decryptedData);
         setPage(response.data.currentPage);
         setTotalPages(response.data.totalPages);
       } catch (error) {
@@ -73,21 +94,26 @@ const Allotments = () => {
   const fetchFilterOptions = useCallback(async () => {
     setFilterLoading(true);
     try {
-      const token = localStorage.getItem('token');
       const response = await axiosInstance.get(`${apiUrl}/allotments/filters`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        params: { counselingType }
+        params: { counselingType },
       });
-      setFilterOptions(response.data);
-      setRankRange({ min: response.data.rankRange.min, max: response.data.rankRange.max });
+  
+      console.log('Encrypted data:', response.data);
+      const decryptedString = decrypt(response.data.data);
+      console.log('Decrypted data (string):', decryptedString);
+      const decryptedData = JSON.parse(decryptedString);
+      console.log('Decrypted data (JSON):', decryptedData);
+  
+      // Set the filter options and rank range from the decrypted data
+      setFilterOptions(decryptedData);
+      setRankRange({ min: decryptedData.rankRange.min, max: decryptedData.rankRange.max });
     } catch (error) {
       console.error('Error fetching filter options:', error);
     } finally {
       setFilterLoading(false);
     }
   }, [apiUrl, counselingType]);
+  
 
   const fetchWishlist = useCallback(async () => {
     try {
@@ -96,7 +122,7 @@ const Allotments = () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        params: { examName: exam }
+        params: { examName: exam },
       });
       setWishlist(response.data.wishlist.items);
     } catch (error) {

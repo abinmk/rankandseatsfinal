@@ -1,5 +1,26 @@
 const mongoose = require('mongoose');
 const User = require('../models/User');  // Ensure the User model is correctly imported
+const crypto = require('crypto');
+
+// Ensure the ENCRYPTION_KEY and IV are imported correctly from your environment variables
+const ENCRYPTION_KEY = Buffer.from(process.env.ENCRYPTION_KEY, 'hex'); // Must be 32 bytes for aes-256
+const IV = Buffer.from(process.env.IV, 'hex'); // Must be 16 bytes for aes-256
+
+// Function to encrypt the data
+// const encrypt = (text) => {
+//   const cipher = crypto.createCipheriv('aes-256-cbc', ENCRYPTION_KEY, IV);
+//   let encrypted = cipher.update(text, 'utf8', 'hex');
+//   encrypted += cipher.final('hex');
+//   return encrypted;
+// };
+
+const encrypt = (text) => {
+  const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(process.env.ENCRYPTION_KEY, 'hex'), Buffer.from(process.env.IV, 'hex'));
+  let encrypted = cipher.update(text, 'utf8', 'base64');
+  encrypted += cipher.final('base64');
+  return encrypted;
+};
+
 
 exports.getRankRange = async (req, res) => {
   try {
@@ -20,9 +41,16 @@ exports.getRankRange = async (req, res) => {
     const minRank = await AllotmentModel.findOne().sort({ rank: 1 }).select('rank').lean();
     const maxRank = await AllotmentModel.findOne().sort({ rank: -1 }).select('rank').lean();
 
-    res.json({
+    const responseData = {
       minRank: minRank ? minRank.rank : 0,
       maxRank: maxRank ? maxRank.rank : 10000,
+    };
+
+    // Encrypt the response data
+    const encryptedData = encrypt(JSON.stringify(responseData));
+
+    res.json({
+      data: encryptedData, // Encrypted data
     });
   } catch (error) {
     console.error('Error fetching rank range:', error);
@@ -30,12 +58,11 @@ exports.getRankRange = async (req, res) => {
   }
 };
 
+
 exports.getAllotmentData = async (req, res) => {
   try {
-    console.log(req);
-    const userId = req.user.userId;  // Assuming you have middleware to get the user ID from the token
+    const userId = req.user.userId;
     const user = await User.findById(userId).lean();
-    console.log("userinalltomentes" +user);
     if (!user || !user.selectedExams || user.selectedExams.length === 0) {
       return res.status(400).send('No selected exams found for user.');
     }
@@ -60,12 +87,10 @@ exports.getAllotmentData = async (req, res) => {
 
     const query = {};
 
-    // Process state filter if present
     if (state) {
       query['state'] = { $in: Array.isArray(state) ? state : [state] };
     }
 
-    // Utility function to add range filters
     const addRangeFilter = (field, range) => {
       if (range) {
         const rangeQuery = {};
@@ -81,11 +106,9 @@ exports.getAllotmentData = async (req, res) => {
       }
     };
 
-    // Process filters including range filters
     for (const key in filters) {
       if (filters[key]) {
         if (key.endsWith('Range')) {
-          // Extract field name and range values
           const field = key.replace('Range', '');
           addRangeFilter(field, filters[key]);
         } else {
@@ -94,15 +117,13 @@ exports.getAllotmentData = async (req, res) => {
       }
     }
 
-    // Specific handling for bondPenaltyRange
     if (bondPenaltyRange) {
       addRangeFilter('bondPenality', bondPenaltyRange);
     }
 
-    console.log('Query:', query); // Logging the query for debugging
-    if(limit>100)
-    {
-      res.status(500).send('Unauthorized !');
+    console.log('Query:', query);
+    if (limit > 100) {
+      return res.status(500).send('Unauthorized!');
     }
 
     const data = await AllotmentModel.find(query)
@@ -111,8 +132,10 @@ exports.getAllotmentData = async (req, res) => {
       .lean();
     const totalItems = await AllotmentModel.countDocuments(query);
 
+    const encryptedData = encrypt(JSON.stringify(data));
+
     res.json({
-      data,
+      data: encryptedData,
       currentPage: Number(page),
       totalPages: Math.ceil(totalItems / limit),
       totalItems,
@@ -122,6 +145,8 @@ exports.getAllotmentData = async (req, res) => {
     res.status(500).send('Failed to fetch allotment data.');
   }
 };
+
+
 
 /// Fetch filter options
 exports.getFilterOptions = async (req, res) => {
@@ -137,7 +162,6 @@ exports.getFilterOptions = async (req, res) => {
     const formattedCounselingType = counselingType.replace(/\s+/g, '_');
     const collectionName = `GENERATED_EXAM:${formattedExam}_TYPE:${formattedCounselingType}`;
     let AllotmentModel;
-    console.log(collectionName);
 
     try {
       AllotmentModel = mongoose.model(collectionName);
@@ -176,7 +200,7 @@ exports.getFilterOptions = async (req, res) => {
       { $group: { _id: null, min: { $min: '$rank' }, max: { $max: '$rank' } } }
     ]);
 
-    res.json({
+    const responseData = {
       state,
       institute,
       instituteType,
@@ -192,13 +216,21 @@ exports.getFilterOptions = async (req, res) => {
       bondYearRange: bondYearRange[0],
       bondPenaltyRange: bondPenaltyRange[0],
       totalHospitalBedsRange: totalHospitalBedsRange[0],
-      rankRange: rankRange[0]
+      rankRange: rankRange[0],
+    };
+
+    // Encrypt the response data
+    const encryptedData = encrypt(JSON.stringify(responseData));
+
+    res.json({
+      data: encryptedData, // Encrypted data
     });
   } catch (error) {
     console.error('Error fetching filter options:', error);
     res.status(500).send('Failed to fetch filter options.');
   }
 };
+
 
 // Fetch all allotment data
 exports.getAllAllotmentData = async (req, res) => {
@@ -225,8 +257,11 @@ exports.getAllAllotmentData = async (req, res) => {
 
     const data = await AllotmentModel.find().lean();
 
+    // Encrypt the response data
+    const encryptedData = encrypt(JSON.stringify(data));
+
     res.json({
-      data,
+      data: encryptedData, // Encrypted data
       totalItems: data.length,
     });
   } catch (error) {
@@ -234,3 +269,4 @@ exports.getAllAllotmentData = async (req, res) => {
     res.status(500).send('Failed to fetch all allotment data.');
   }
 };
+
