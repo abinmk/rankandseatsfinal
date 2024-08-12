@@ -1783,22 +1783,31 @@ const Landing = () => {
                 </li>
                 <li className="mt-3">
                   <p className="mb-2 fw-semibold op-8">FOLLOW US ON :</p>
-                  <div className="mb-0">
-                    <div className="btn-list">
-                      <Button variant="" type="button" aria-label="Facebook" className="btn btn-sm btn-icon btn-primary-light btn-wave waves-effect waves-light">
-                        <i className="ri-facebook-line fw-bold"></i>
-                      </Button>
-                      <Button variant="" type="button" aria-label="Twitter" className="btn btn-sm btn-icon btn-secondary-light btn-wave waves-effect waves-light">
-                        <i className="ri-twitter-line fw-bold"></i>
-                      </Button>
-                      <Button variant="" type="button" aria-label="Instagram" className="btn btn-sm btn-icon btn-warning-light btn-wave waves-effect waves-light">
-                        <i className="ri-instagram-line fw-bold"></i>
-                      </Button>
-                      <Button variant="" type="button" aria-label="YouTube" className="btn btn-sm btn-icon btn-danger-light btn-wave waves-effect waves-light">
-                        <i className="ri-youtube-line fw-bold"></i>
-                      </Button>
-                    </div>
-                  </div>
+				  <div className="mb-0">
+  <div className="btn-list">
+    <a href="https://facebook.com/rankandseats" target="_blank" rel="noopener noreferrer">
+      <Button variant="" type="button" aria-label="Facebook" className="btn btn-sm btn-icon btn-primary-light btn-wave waves-effect waves-light">
+        <i className="ri-facebook-line fw-bold"></i>
+      </Button>
+    </a>
+    <a href="https://twitter.com/rankandseats" target="_blank" rel="noopener noreferrer">
+      <Button variant="" type="button" aria-label="Twitter" className="btn btn-sm btn-icon btn-secondary-light btn-wave waves-effect waves-light">
+        <i className="ri-twitter-line fw-bold"></i>
+      </Button>
+    </a>
+    <a href="https://instagram.com/rankandseats" target="_blank" rel="noopener noreferrer">
+      <Button variant="" type="button" aria-label="Instagram" className="btn btn-sm btn-icon btn-warning-light btn-wave waves-effect waves-light">
+        <i className="ri-instagram-line fw-bold"></i>
+      </Button>
+    </a>
+    <a href="https://youtube.com/rankandseats" target="_blank" rel="noopener noreferrer">
+      <Button variant="" type="button" aria-label="YouTube" className="btn btn-sm btn-icon btn-danger-light btn-wave waves-effect waves-light">
+        <i className="ri-youtube-line fw-bold"></i>
+      </Button>
+    </a>
+  </div>
+</div>
+
                 </li>
               </ul>
             </div>
