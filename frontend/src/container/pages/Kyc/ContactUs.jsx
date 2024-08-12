@@ -15,14 +15,22 @@ const ContactUs = () => {
               Write to us at <a href="mailto:mail@rankandseats.com" className="text-primary">mail@rankandseats.com</a>
             </p>
             <div className="text-center my-4">
-              <a href="https://facebook.com" className="text-dark mx-2" aria-label="Facebook"><FaFacebook size={32} /></a>
-              <a href="https://youtube.com" className="text-dark mx-2" aria-label="YouTube"><FaYoutube size={32} /></a>
-              <a href="https://telegram.org" className="text-dark mx-2" aria-label="Telegram"><FaTelegram size={32} /></a>
-            </div>
+  <a href="https://facebook.com/rankandseats" className="text-dark mx-2" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
+    <FaFacebook size={32} />
+  </a>
+  <a href="https://youtube.com/rankandseats" className="text-dark mx-2" aria-label="YouTube" target="_blank" rel="noopener noreferrer">
+    <FaYoutube size={32} />
+  </a>
+  <a href="https://telegram.org/rankandseats" className="text-dark mx-2" aria-label="Telegram" target="_blank" rel="noopener noreferrer">
+    <FaTelegram size={32} />
+  </a>
+</div>
+
             <p className="lead text-center">
               Rank and Seats<br />
               1st Floor, KINFRA Techno Industrial Park,<br />
-              Malappuram, Kerala – 673634
+              Malappuram, Kerala – 673634<br/>
+              Contact : +91 80 75 91 92 24
             </p>
           </div>
         </div>

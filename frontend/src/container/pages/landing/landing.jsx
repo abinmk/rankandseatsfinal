@@ -1632,7 +1632,7 @@ const Landing = () => {
                         <div className="flex-fill">
                           <div className="mb-1 align-items-top">
                             <h6 className="fw-semibold mb-1 lh-1">Phone Number</h6>
-                            <span className="text-muted">+91 99 61 96 46 34</span>
+                            <span className="text-muted">+91 80 75 91 92 24</span>
                           </div>
                         </div>
                       </div>
@@ -1779,7 +1779,7 @@ const Landing = () => {
                   <Link to="#" className="text-fixed-white op-6"><i className="ri-mail-line me-1 align-middle"></i> support@rankandseats.com</Link>
                 </li>
                 <li>
-                  <Link to="#" className="text-fixed-white op-6"><i className="ri-phone-line me-1 align-middle"></i> +91 99 61 96 46 34</Link>
+                  <Link to="#" className="text-fixed-white op-6"><i className="ri-phone-line me-1 align-middle"></i> +91 80 75 91 92 24</Link>
                 </li>
                 <li className="mt-3">
                   <p className="mb-2 fw-semibold op-8">FOLLOW US ON :</p>
