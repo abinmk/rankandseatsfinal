@@ -27,6 +27,16 @@ import { UserProvider } from "./contexts/UserContext.jsx";
 import Register from "./firebase/register.jsx";
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import CollegeDetail from './container/pages/colleges/CollegeDetails.jsx';
+import AboutUs from "./container/pages/Kyc/AboutUs.jsx";
+import ContactUs from "./container/pages/Kyc/ContactUs.jsx";
+import Pricing from "./container/pages/Kyc/Pricing.jsx";
+import Features from "./container/pages/Kyc/Features.jsx";
+import TermsAndConditions from "./container/pages/Kyc/TermsAndConditions.jsx";
+import PrivacyPolicy from "./container/pages/Kyc/PrivacyPolicy.jsx";
+import CancellationRefundPolicy from "./container/pages/Kyc/CancellationRefundPolicy.jsx";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // This includes Popper.js and Bootstrap's JavaScript
+
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -43,6 +53,7 @@ root.render(
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Route>
+  
         <Route path="/" element={<App />}>
           <Route path="dashboards" element={<Dashboard />} />
           <Route path="allotments" element={<ProtectedRoute><Allotments /></ProtectedRoute>} />
@@ -60,6 +71,13 @@ root.render(
         </Route>
         <Route path="/" element={<Landinglayout />}>
           <Route path="home" element={<Landing />} />
+          <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/contact-us" element={<ContactUs />} />
+          <Route path="/pricing" element={<Pricing />} />
+          <Route path="/features" element={<Features />} />
+          <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/cancellation-refund-policy" element={<CancellationRefundPolicy />} />
         </Route>
       </Routes>
     </React.Suspense>

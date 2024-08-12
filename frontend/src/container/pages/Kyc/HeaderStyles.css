@@ -1,0 +1,59 @@
+/* HeaderStyles.css */
+
+/* General Header Styling */
+.header {
+    background-color: #ffffff; /* White background for the header */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    border-bottom: 2px solid #f0f0f0; /* Light bottom border for separation */
+  }
+  
+  .navbar-brand img {
+    height: 50px;
+    transition: transform 0.3s ease; /* Smooth transition for logo on hover */
+  }
+  
+  .navbar-brand img:hover {
+    transform: scale(1.05); /* Slightly enlarge the logo on hover */
+  }
+  
+  .nav-link {
+    color: #004085; /* Dark blue color for the navigation links */
+    font-weight: 600;
+    padding: 8px 12px;
+    transition: color 0.3s ease, background-color 0.3s ease; /* Smooth transition for hover effects */
+    border-radius: 5px; /* Rounded corners for a modern look */
+  }
+  
+  .nav-link:hover {
+    color: #ffffff; /* White color on hover */
+    background-color: #004085; /* Dark blue background on hover */
+  }
+  
+  .dropdown-menu {
+    background-color: #ffffff; /* White background for the dropdown */
+    border: 1px solid #e0e0e0; /* Light border for the dropdown */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for dropdown */
+  }
+  
+  .dropdown-item {
+    color: #004085; /* Dark blue color for dropdown items */
+    transition: color 0.3s ease, background-color 0.3s ease; /* Smooth transition for hover effects */
+  }
+  
+  .dropdown-item:hover {
+    color: #ffffff; /* White color on hover */
+    background-color: #004085; /* Dark blue background on hover */
+  }
+  
+  @media (max-width: 768px) {
+    /* Adjustments for smaller screens */
+    .navbar-brand img {
+      height: 40px;
+    }
+  
+    .nav-link {
+      font-size: 0.9rem;
+      padding: 8px 10px;
+    }
+  }
+  

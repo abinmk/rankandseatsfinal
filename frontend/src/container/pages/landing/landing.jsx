@@ -1134,352 +1134,76 @@ const Landing = () => {
 							</div>
 						</div>
 					</section> */}
-					{/* <section className="section section-background section-style" id="pricing">
-    <div className="container text-center">
-        <Tab.Container defaultActiveKey="first">
-            <p className="fs-12 fw-semibold text-primary mb-1"><span className="landing-section-heading">PRICING</span></p>
-            <h4 className="fw-semibold mb-2">Affordable Plans for Your Educational Needs</h4>
-            <div className="row justify-content-center">
-                <Col xl={6}>
-                    <p className="text-muted fs-15 mb-3 fw-normal">Choose a plan that suits your requirements. Our affordable plans ensure that you get the best value for your educational journey.</p>
-                </Col>
-                <div className="d-flex justify-content-center mt-2 mb-3">
-                    <Nav className="nav nav-tabs mb-3 tab-style-6 bg-primary-transparent" id="myTab1" role="tablist">
-                        <Nav.Item role="presentation">
-                            <Nav.Link eventKey="first" className="" id="pricing-monthly1" data-bs-toggle="tab"
-                                data-bs-target="#pricing-monthly1-pane" type="button" role="tab"
-                                aria-controls="pricing-monthly1-pane" aria-selected="true">Monthly</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item role="presentation">
-                            <Nav.Link eventKey="second" className="" id="pricing-yearly1" data-bs-toggle="tab"
-                                data-bs-target="#pricing-yearly1-pane" type="button" role="tab"
-                                aria-controls="pricing-yearly1-pane" aria-selected="false">Yearly</Nav.Link>
-                        </Nav.Item>
-                    </Nav>
+					 <section className="section section-background section-style" id="pricing">
+      <div className="container text-center">
+        <p className="fs-12 fw-semibold text-primary mb-1"><span className="landing-section-heading">PRICING</span></p>
+        <h4 className="fw-semibold mb-2">Affordable Plan for Your Educational Needs</h4>
+        <Col xl={6} className="mx-auto">
+          <p className="text-muted fs-15 mb-3 fw-normal">
+            Choose the plan that suits your requirements. Our affordable plan ensures that you get the best value for your educational journey.
+          </p>
+        </Col>
+        <div className="row justify-content-center mt-4">
+          <Col xl={4} lg={6} md={8} sm={10}>
+            <div className="card custom-card overflow-hidden">
+              <div className="card-body p-0">
+                <div className="p-4 pricing-card">
+                  <div className="d-flex justify-content-between align-items-center mb-3">
+                    <div className="d-flex">
+                      <i className="ti ti-free-rights fs-24 text-primary me-1"></i>
+                      <div className="fs-18 fw-semibold">Rank and Seats</div>
+                    </div>
+                    <div>
+                      <span className="badge bg-success-transparent">For NEET Aspirants</span>
+                    </div>
+                  </div>
+                  <div className="fs-25 fw-bold mb-1">
+                    ₹999<sub className="text-muted fw-semibold fs-11">+ GST / Per Year</sub>
+                  </div>
+                  <div className="mb-1 text-muted">
+                    Get full access to all features to help you in your NEET counselling journey.
+                  </div>
+                  <div className="fs-12 mb-3">
+                    <u>Billed Annually</u>
+                  </div>
+                  <ul className="list-unstyled mb-0">
+                    <li className="d-flex align-items-center mb-3">
+                      <span className="me-2">
+                        <i className="ri-checkbox-circle-line fs-15 text-success"></i>
+                      </span>
+                      <span>
+                        <strong className="me-1 d-inline-block">Full Access</strong> to All Features
+                      </span>
+                    </li>
+                    <li className="d-flex align-items-center mb-3">
+                      <span className="me-2">
+                        <i className="ri-checkbox-circle-line fs-15 text-success"></i>
+                      </span>
+                      <span>
+                        <strong className="me-1 d-inline-block">All</strong> Counselings
+                      </span>
+                    </li>
+                    <li className="d-flex align-items-center mb-3">
+                      <span className="me-2">
+                        <i className="ri-checkbox-circle-line fs-15 text-success"></i>
+                      </span>
+                      <span>
+                        <strong className="me-1 d-inline-block">Wishlist</strong>Creation
+                      </span>
+                    </li>
+                    <li className="d-grid">
+                      <Button variant="primary" type="button" aria-label="Choose Plan" className="btn btn-primary">
+                        Choose Plan
+                      </Button>
+                    </li>
+                  </ul>
                 </div>
+              </div>
             </div>
-            <Col xl={12}>
-                <Tab.Content className="" id="myTabContent1">
-                    <Tab.Pane eventKey="first" className="p-0 border-0" id="pricing-monthly1-pane" role="tabpanel" aria-labelledby="pricing-monthly1" tabIndex={0}>
-                        <div className="row justify-content-center">
-                            <div className="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                <div className="card custom-card overflow-hidden">
-                                    <div className="card-body p-0">
-                                        <div className="p-4">
-                                            <div className="d-flex justify-content-between align-items-center mb-3">
-                                                <div className="d-flex">
-                                                    <i className="ti ti-free-rights fs-24 text-primary me-1"></i>
-                                                    <div className="fs-18 fw-semibold ">Basic</div>
-                                                </div>
-                                                <div>
-                                                    <span className="badge bg-success-transparent">For Individuals</span>
-                                                </div>
-                                            </div>
-                                            <div className="fs-25 fw-bold mb-1">$0<sub className="text-muted fw-semibold fs-11">/ Per Month</sub></div>
-                                            <div className="mb-1 text-muted">Access essential features to start your educational journey.</div>
-                                            <div className="fs-12 mb-3"><u>Billed Monthly</u></div>
-                                            <ul className="list-unstyled mb-0">
-                                                <li className="d-flex align-items-center mb-3">
-                                                    <span className="me-2">
-                                                        <i className="ri-checkbox-circle-line fs-15 text-success"></i>
-                                                    </span>
-                                                    <span>
-                                                        <strong className="me-1 d-inline-block">Access to</strong>Basic Courses
-                                                    </span>
-                                                </li>
-                                                <li className="d-flex align-items-center mb-3">
-                                                    <span className="me-2">
-                                                        <i className="ri-checkbox-circle-line fs-15 text-success"></i>
-                                                    </span>
-                                                    <span>
-                                                        <strong className="me-1 d-inline-block">1 GB</strong>Cloud Storage
-                                                    </span>
-                                                </li>
-                                                <li className="d-flex align-items-center mb-3">
-                                                    <span className="me-2">
-                                                        <i className="ri-checkbox-circle-line fs-15 text-muted op-3"></i>
-                                                    </span>
-                                                    <span>
-                                                        <strong className="me-1 d-inline-block">Email</strong>Support
-                                                    </span>
-                                                </li>
-                                                <li className="d-grid">
-                                                    <Button variant="" type="button" aria-label="button" className="btn btn-light btn-wave waves-effect waves-light">Choose Plan</Button>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                <div className="card custom-card overflow-hidden">
-                                    <div className="card-body p-0">
-                                        <div className="p-4">
-                                            <div className="d-flex justify-content-between align-items-center mb-3">
-                                                <div className="d-flex">
-                                                    <i className="ti ti-api-app  fs-24 text-primary me-1"></i>
-                                                    <div className="fs-18 fw-semibold">Pro</div>
-                                                </div>
-                                                <div>
-                                                    <span className="badge bg-success-transparent">
-                                                        For Small Teams
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div className="fs-25 fw-bold mb-1">$149<sub className="text-muted fw-semibold fs-11">/ Per Month</sub></div>
-                                            <div className="mb-1 text-muted">Enhanced features for small teams and collaborative learning.</div>
-                                            <div className="fs-12 mb-3"><u>Billed Monthly</u></div>
-                                            <ul className="list-unstyled mb-0">
-                                                <li className="d-flex align-items-center mb-3">
-                                                    <span className="me-2">
-                                                        <i className="ri-checkbox-circle-line fs-15 text-success"></i>
-                                                    </span>
-                                                    <span>
-                                                        <strong className="me-1 d-inline-block">Access to</strong>All Courses
-                                                    </span>
-                                                </li>
-                                                <li className="d-flex align-items-center mb-3">
-                                                    <span className="me-2">
-                                                        <i className="ri-checkbox-circle-line fs-15 text-success"></i>
-                                                    </span>
-                                                    <span>
-                                                        <strong className="me-1 d-inline-block">5 GB</strong>Cloud Storage
-                                                    </span>
-                                                </li>
-                                                <li className="d-flex align-items-center mb-3">
-                                                    <span className="me-2">
-                                                        <i className="ri-checkbox-circle-line fs-15 text-success"></i>
-                                                    </span>
-                                                    <span>
-                                                        <strong className="me-1 d-inline-block">Priority</strong>Email Support
-                                                    </span>
-                                                </li>
-                                                <li className="d-grid">
-                                                    <Button variant="" type="button" aria-label="button" className="btn btn-light btn-wave waves-effect waves-light">Choose Plan</Button>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                <div className="custom-card border border-primary rounded card">
-                                    <div className="d-flex flex-column p-0">
-                                        <div className="card-body p-0">
-                                            <div className="p-4">
-                                                <div className="d-flex justify-content-between align-items-center mb-3">
-                                                    <div className="d-flex">
-                                                        <i className="ti ti-businessplan text-primary fs-24 me-1"></i>
-                                                        <div className="fs-18 fw-semibold">Enterprise</div>
-                                                    </div>
-                                                    <div>
-                                                        <span className="badge bg-primary-transparent">
-                                                            For Large Teams
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div className="fs-25 fw-bold mb-1">$1,299<sub className="text-muted fw-semibold fs-11">/ Per Month</sub></div>
-                                                <div className="mb-1 text-muted">Comprehensive solutions for large teams and businesses.</div>
-                                                <div className="fs-12 mb-3 text-primary"><u>Billed Monthly</u></div>
-                                                <ul className="list-unstyled mb-0">
-                                                    <li className="d-flex align-items-center mb-3">
-                                                        <span className="me-2">
-                                                            <i className="ri-checkbox-circle-line fs-15 text-success"></i>
-                                                        </span>
-                                                        <span>
-                                                            <strong className="me-1 d-inline-block">Unlimited</strong>Course Access
-                                                        </span>
-                                                    </li>
-                                                    <li className="d-flex align-items-center mb-3">
-                                                        <span className="me-2">
-                                                            <i className="ri-checkbox-circle-line fs-15 text-success"></i>
-                                                        </span>
-                                                        <span>
-                                                            <strong className="me-1 d-inline-block">20 GB</strong>Cloud Storage
-                                                        </span>
-                                                    </li>
-                                                    <li className="d-flex align-items-center mb-3">
-                                                        <span className="me-2">
-                                                            <i className="ri-checkbox-circle-line fs-15 text-success"></i>
-                                                        </span>
-                                                        <span>
-                                                            <strong className="me-1 d-inline-block">Dedicated</strong>Support
-                                                        </span>
-                                                    </li>
-                                                    <li className="d-grid">
-                                                        <Button variant="" type="button" aria-label="button" className="btn btn-primary btn-wave waves-effect waves-light">Choose Plan</Button>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </Tab.Pane>
-                    <Tab.Pane eventKey="second" className="p-0 border-0" id="pricing-yearly1-pane" role="tabpanel" aria-labelledby="pricing-yearly1" tabIndex={0}>
-                        <div className="row justify-content-center">
-                            <div className="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                <div className="card custom-card overflow-hidden">
-                                    <div className="card-body p-0">
-                                        <div className="p-4">
-                                            <div className="d-flex justify-content-between align-items-center mb-3">
-                                                <div className="d-flex">
-                                                    <i className="ti ti-free-rights fs-24 text-primary me-1"></i>
-                                                    <div className="fs-18 fw-semibold ">Basic</div>
-                                                </div>
-                                                <div>
-                                                    <span className="badge bg-success-transparent">For Individuals</span>
-                                                </div>
-                                            </div>
-                                            <div className="fs-25 fw-bold mb-1">$0<sub className="text-muted fw-semibold fs-11">/ Per Year</sub></div>
-                                            <div className="mb-1 text-muted">Access essential features to start your educational journey.</div>
-                                            <div className="fs-12 mb-3"><u>Billed Yearly</u></div>
-                                            <ul className="list-unstyled mb-0">
-                                                <li className="d-flex align-items-center mb-3">
-                                                    <span className="me-2">
-                                                        <i className="ri-checkbox-circle-line fs-15 text-success"></i>
-                                                    </span>
-                                                    <span>
-                                                        <strong className="me-1">Access to</strong>Basic Courses
-                                                    </span>
-                                                </li>
-                                                <li className="d-flex align-items-center mb-3">
-                                                    <span className="me-2">
-                                                        <i className="ri-checkbox-circle-line fs-15 text-success"></i>
-                                                    </span>
-                                                    <span>
-                                                        <strong className="me-1">1 GB</strong>Cloud Storage
-                                                    </span>
-                                                </li>
-                                                <li className="d-flex align-items-center mb-3">
-                                                    <span className="me-2">
-                                                        <i className="ri-checkbox-circle-line fs-15 text-muted op-3"></i>
-                                                    </span>
-                                                    <span>
-                                                        <strong className="me-1">Email</strong>Support
-                                                    </span>
-                                                </li>
-                                                <li className="d-grid">
-                                                    <Button variant="" type="button" aria-label="button" className="btn btn-light btn-wave waves-effect waves-light">Choose Plan</Button>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                <div className="card custom-card overflow-hidden">
-                                    <div className="card-body p-0">
-                                        <div className="p-4">
-                                            <div className="d-flex justify-content-between align-items-center mb-3">
-                                                <div className="d-flex">
-                                                    <i className="ti ti-api-app  fs-24 text-primary me-1"></i>
-                                                    <div className="fs-18 fw-semibold">Pro</div>
-                                                </div>
-                                                <div>
-                                                    <span className="badge bg-success-transparent">
-                                                        For Small Teams
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div className="fs-25 fw-bold mb-1">$1,049<sub className="text-muted fw-semibold fs-11">/ Per Year</sub></div>
-                                            <div className="mb-1 text-muted">Enhanced features for small teams and collaborative learning.</div>
-                                            <div className="fs-12 mb-3"><u>Billed Yearly</u></div>
-                                            <ul className="list-unstyled mb-0">
-                                                <li className="d-flex align-items-center mb-3">
-                                                    <span className="me-2">
-                                                        <i className="ri-checkbox-circle-line fs-15 text-success"></i>
-                                                    </span>
-                                                    <span>
-                                                        <strong className="me-1">Access to</strong>All Courses
-                                                    </span>
-                                                </li>
-                                                <li className="d-flex align-items-center mb-3">
-                                                    <span className="me-2">
-                                                        <i className="ri-checkbox-circle-line fs-15 text-success"></i>
-                                                    </span>
-                                                    <span>
-                                                        <strong className="me-1">5 GB</strong>Cloud Storage
-                                                    </span>
-                                                </li>
-                                                <li className="d-flex align-items-center mb-3">
-                                                    <span className="me-2">
-                                                        <i className="ri-checkbox-circle-line fs-15 text-success"></i>
-                                                    </span>
-                                                    <span>
-                                                        <strong className="me-1">Priority</strong>Email Support
-                                                    </span>
-                                                </li>
-                                                <li className="d-grid">
-                                                    <Button variant="" type="button" aria-label="button" className="btn btn-light btn-wave waves-effect waves-light">Choose Plan</Button>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                <div className="custom-card border border-primary rounded card">
-                                    <div className="d-flex flex-column p-0">
-                                        <div className="card-body p-0">
-                                            <div className="p-4">
-                                                <div className="d-flex justify-content-between align-items-center mb-3">
-                                                    <div className="d-flex">
-                                                        <i className="ti ti-businessplan text-primary fs-24 me-1"></i>
-                                                        <div className="fs-18 fw-semibold">Enterprise</div>
-                                                    </div>
-                                                    <div>
-                                                        <span className="badge bg-primary-transparent">
-                                                            For Large Teams
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div className="fs-25 fw-bold mb-1">$5,299<sub className="text-muted fw-semibold fs-11">/ Per Year</sub></div>
-                                                <div className="mb-1 text-muted">Comprehensive solutions for large teams and businesses.</div>
-                                                <div className="fs-12 mb-3 text-primary"><u>Billed Yearly</u></div>
-                                                <ul className="list-unstyled mb-0">
-                                                    <li className="d-flex align-items-center mb-3">
-                                                        <span className="me-2">
-                                                            <i className="ri-checkbox-circle-line fs-15 text-success"></i>
-                                                        </span>
-                                                        <span>
-                                                            <strong className="me-1">Unlimited</strong>Course Access
-                                                        </span>
-                                                    </li>
-                                                    <li className="d-flex align-items-center mb-3">
-                                                        <span className="me-2">
-                                                            <i className="ri-checkbox-circle-line fs-15 text-success"></i>
-                                                        </span>
-                                                        <span>
-                                                            <strong className="me-1">20 GB</strong>Cloud Storage
-                                                        </span>
-                                                    </li>
-                                                    <li className="d-flex align-items-center mb-3">
-                                                        <span className="me-2">
-                                                            <i className="ri-checkbox-circle-line fs-15 text-success"></i>
-                                                        </span>
-                                                        <span>
-                                                            <strong className="me-1">Dedicated</strong>Support
-                                                        </span>
-                                                    </li>
-                                                    <li className="d-grid">
-                                                        <Button variant="" type="button" aria-label="button" className="btn btn-primary btn-wave waves-effect waves-light">Choose Plan</Button>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </Tab.Pane>
-                </Tab.Content>
-            </Col>
-        </Tab.Container>
-    </div>
-</section> */}
-
+          </Col>
+        </div>
+      </div>
+    </section>
 					{/* <section className="section landing-Features">
 						<div className="container">
 							<div className="row justify-content-center">
@@ -1495,7 +1219,7 @@ const Landing = () => {
 							</div>
 						</div>
 					</section> */}
-					<section className="section  section-background section-style" id="faq">
+					{/* <section className="section  section-background section-style" id="faq">
 						<div className="container text-center">
 							<p className="fs-12 fw-semibold text-primary mb-1"><span className="landing-section-heading">F.A.Q</span></p>
 							<h4 className="fw-semibold mb-2">Frequently asked questions ?</h4>
@@ -1625,7 +1349,7 @@ const Landing = () => {
 								</Col>
 							</div>
 						</div>
-					</section>
+					</section> */}
 					{/* <section className="section" id="testimonials">
 						<img src={landing4} alt="img" className="banner-png2 op-2" />
 						<img src={landing7} alt="img" className="banner-png4" />
@@ -1883,225 +1607,205 @@ const Landing = () => {
 						</div>
 					</section> */}
 					<section className="section section-background section-style" id="contact">
-						<div className="container text-center">
-							<p className="fs-12 fw-semibold text-primary mb-1"><span className="landing-section-heading">CONTACT US</span></p>
-							<h4 className="fw-semibold mb-2">Have any questions ? We would love to hear from you.</h4>
-							<p className="text-muted fs-15 mb-5 fw-normal">You can contact us anytime regarding any queries or deals,dont hesitate to clear your doubts before trying our product.</p>
+      <div className="container text-center">
+        <p className="fs-12 fw-semibold text-primary mb-1"><span className="landing-section-heading">CONTACT US</span></p>
+        <h4 className="fw-semibold mb-2">Have any questions? We would love to hear from you.</h4>
+        <p className="text-muted fs-15 mb-5 fw-normal">Feel free to reach out with any queries or concerns. We're here to help and ensure you have a smooth experience with Rank and Seats.</p>
 
-							<div className="row text-start justify-content-center">
-
-								<div className="col-xxl-10 col-lg-12 col-md-12 col-sm-12">
-									<div className="card custom-card contactus-form overflow-hidden">
-										<div className="card-body p-4">
-											<Row>
-												<div className="col-xl-5 p-0">
-													<div className="p-3">
-														<h5 className="card-title mb-1">Contact Information</h5>
-														<p className="text-muted mb-0">Fill up the Form our team will be get back to you</p>
-													</div>
-													<div className="p-3">
-														<div className="d-flex align-items-top mt-2">
-															<div className="me-3">
-																<span className="avatar avatar-md p-2 bg-info-transparent">
-																	<i className="bx bxs-phone"></i>
-																</span>
-															</div>
-															<div className="flex-fill">
-																<div className=" mb-1 align-items-top">
-																	<h6 className="fw-semibold mb-1 lh-1">Phone number</h6>
-																	<span className="text-muted">+ 01 234 567 88</span>
-																</div>
-															</div>
-														</div>
-														<div className="d-flex align-items-top mt-4">
-															<div className="me-3">
-																<span className="avatar avatar-md p-2 bg-pink-transparent">
-																	<i className="bx bxs-envelope"></i>
-																</span>
-															</div>
-															<div className="flex-fill">
-																<div className=" mb-1 align-items-top">
-																	<h6 className="fw-semibold mb-1 lh-1">Email Address</h6>
-																	<span className="text-muted">Alizver873@example.com</span>
-																</div>
-															</div>
-														</div>
-														<div className="d-flex align-items-top mt-4">
-															<div className="me-3">
-																<span className="avatar avatar-md p-2 bg-teal-transparent">
-																	<i className="bx bxs-time"></i>
-																</span>
-															</div>
-															<div className="flex-fill">
-																<div className=" mb-1 align-items-top">
-																	<h6 className="fw-semibold mb-1 lh-1">Timings</h6>
-																	<span className="text-muted">Mon-Fri 09:00 to 06:00</span>
-																</div>
-															</div>
-														</div>
-														<div className="d-flex align-items-top mt-4">
-															<div className="me-3">
-																<span className="avatar avatar-md p-2 bg-warning-transparent">
-																	<i className="bx bxs-location-plus"></i>
-																</span>
-															</div>
-															<div className="flex-fill">
-																<div className=" mb-1 align-items-top">
-																	<h6 className="fw-semibold mb-1 lh-1">Address</h6>
-																	<span className="text-muted">New York, NY 10012, US-52014</span>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div className="col-xl-7 border rounded-3  p-3">
-													<div className="row gy-3">
-														<Col xl={6}>
-															<label htmlFor="contact-address-firstname" className="form-label ">First Name :</label>
-															<input type="text" className="form-control" id="contact-address-firstname" placeholder="Enter Name" />
-														</Col>
-														<Col xl={6}>
-															<label htmlFor="contact-address-lastname" className="form-label ">Last Name :</label>
-															<input type="text" className="form-control" id="contact-address-lastname" placeholder="Enter Name" />
-														</Col>
-														<div className="col-xl-6 mt-4">
-															<label htmlFor="contact-address-phone" className="form-label ">Phone No :</label>
-															<input type="text" className="form-control" id="contact-address-phone" placeholder="Enter Phone No" />
-														</div>
-														<div className="col-xl-6 mt-4">
-															<label htmlFor="contact-address-email" className="form-label ">Email Id :</label>
-															<input type="email" className="form-control" id="contact-address-email1" placeholder="Enter Email Id" />
-														</div>
-														<div className="col-xl-6 mt-4">
-															<label htmlFor="contact-address-address" className="form-label ">Address :</label>
-															<textarea className="form-control" id="contact-address-address" rows={2}></textarea>
-														</div>
-														<div className="col-xl-6 mt-4">
-															<label htmlFor="contact-mail-message" className="form-label ">Message :</label>
-															<textarea className="form-control" id="contact-mail-message" rows={2}></textarea>
-														</div>
-													</div>
-													<div className="card-footer border-top-0 ps-0 pb-0 mt-1">
-														<div className="text-start">
-															<Button variant="" type="button" aria-label="button" className="btn btn-primary btn-wave">Send Message</Button>
-														</div>
-													</div>
-
-												</div>
-											</Row>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</section>
-					<section className="section landing-footer text-fixed-white">
-						<div className="container">
-							<Row>
-								<div className="col-xl-4">
-									<div className="px-4">
-										<p className="fw-semibold mb-3"><Link aria-label="anchor" to={`${import.meta.env.BASE_URL}dashboards/sales`}>
-											<img src={desktopdark} alt="" /></Link></p>
-										<p className="mb-2 op-6 fw-normal">
-											Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit et magnam, fuga est mollitia eius, quo illum illo inventore optio aut quas omnis rem. Dolores accusantium aspernatur minus ea incidunt.
-										</p>
-										<p className="mb-0 op-6 fw-normal">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Autem ea esse ad</p>
-									</div>
-								</div>
-								<div className="col-xl-2">
-									<div className="px-4">
-										<h6 className="fw-semibold mb-3 text-fixed-white mb-2">PAGES</h6>
-										<ul className="list-unstyled op-6 fw-normal landing-footer-list">
-											<li>
-												<Link to="#" className="text-fixed-white">Email</Link>
-											</li>
-											<li>
-												<Link to="#" className="text-fixed-white">Profile</Link>
-											</li>
-											<li>
-												<Link to="#" className="text-fixed-white">Timeline</Link>
-											</li>
-											<li>
-												<Link to="#" className="text-fixed-white">Projects</Link>
-											</li>
-											<li>
-												<Link to="#" className="text-fixed-white">Contacts</Link>
-											</li>
-											<li>
-												<Link to="#" className="text-fixed-white">Portfolio</Link>
-											</li>
-										</ul>
-									</div>
-								</div>
-								<div className="col-xl-2">
-									<div className="px-4">
-										<h6 className="fw-semibold text-fixed-white mb-2">INFO</h6>
-										<ul className="list-unstyled op-6 fw-normal landing-footer-list">
-											<li>
-												<Link to="#" className="text-fixed-white">Our Team</Link>
-											</li>
-											<li>
-												<Link to="#" className="text-fixed-white">Contact US</Link>
-											</li>
-											<li>
-												<Link to="#" className="text-fixed-white">About</Link>
-											</li>
-											<li>
-												<Link to="#" className="text-fixed-white">Services</Link>
-											</li>
-											<li>
-												<Link to="#" className="text-fixed-white">Blog</Link>
-											</li>
-											<li>
-												<Link to="#" className="text-fixed-white">Terms &amp; Conditions</Link>
-											</li>
-										</ul>
-									</div>
-								</div>
-								<div className="col-xl-4">
-									<div className="px-4">
-										<h6 className="fw-semibold text-fixed-white mb-2">CONTACT</h6>
-										<ul className="list-unstyled fw-normal landing-footer-list">
-											<li>
-												<Link to="#" className="text-fixed-white op-6"><i className="ri-home-4-line me-1 align-middle"></i> New York, NY 10012, US</Link>
-											</li>
-											<li>
-												<Link to="#" className="text-fixed-white op-6"><i className="ri-mail-line me-1 align-middle"></i> info@fmail.com</Link>
-											</li>
-											<li>
-												<Link to="#" className="text-fixed-white op-6"><i className="ri-phone-line me-1 align-middle"></i> +(555)-1920 1831</Link>
-											</li>
-											<li>
-												<Link to="#" className="text-fixed-white op-6"><i className="ri-printer-line me-1 align-middle"></i> +(123) 1293 123</Link>
-											</li>
-											<li className="mt-3">
-												<p className="mb-2 fw-semibold op-8">FOLLOW US ON :</p>
-												<div className="mb-0">
-													<div className="btn-list">
-														<Button variant="" type="button" aria-label="button" className="btn btn-sm btn-icon btn-primary-light btn-wave waves-effect waves-light">
-															<i className="ri-facebook-line fw-bold"></i>
-														</Button>
-														<Button variant="" type="button" aria-label="button" className="btn btn-sm btn-icon btn-secondary-light btn-wave waves-effect waves-light">
-															<i className="ri-twitter-line fw-bold"></i>
-														</Button>
-														<Button variant="" type="button" aria-label="button" className="btn btn-sm btn-icon btn-warning-light btn-wave waves-effect waves-light">
-															<i className="ri-instagram-line fw-bold"></i>
-														</Button>
-														<Button variant="" type="button" aria-label="button" className="btn btn-sm btn-icon btn-success-light btn-wave waves-effect waves-light">
-															<i className="ri-github-line fw-bold"></i>
-														</Button>
-														<Button variant="" type="button" aria-label="button" className="btn btn-sm btn-icon btn-danger-light btn-wave waves-effect waves-light">
-															<i className="ri-youtube-line fw-bold"></i>
-														</Button>
-													</div>
-												</div>
-											</li>
-										</ul>
-									</div>
-								</div>
-							</Row>
-						</div>
-					</section>
+        <div className="row text-start justify-content-center">
+          <div className="col-xxl-10 col-lg-12 col-md-12 col-sm-12">
+            <div className="card custom-card contactus-form overflow-hidden">
+              <div className="card-body p-4">
+                <Row>
+                  <div className="col-xl-5 p-0">
+                    <div className="p-3">
+                      <h5 className="card-title mb-1">Contact Information</h5>
+                      <p className="text-muted mb-0">Fill out the form, and our team will get back to you shortly.</p>
+                    </div>
+                    <div className="p-3">
+                      <div className="d-flex align-items-top mt-2">
+                        <div className="me-3">
+                          <span className="avatar avatar-md p-2 bg-info-transparent">
+                            <i className="bx bxs-phone"></i>
+                          </span>
+                        </div>
+                        <div className="flex-fill">
+                          <div className="mb-1 align-items-top">
+                            <h6 className="fw-semibold mb-1 lh-1">Phone Number</h6>
+                            <span className="text-muted">+91 99 61 96 46 34</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="d-flex align-items-top mt-4">
+                        <div className="me-3">
+                          <span className="avatar avatar-md p-2 bg-pink-transparent">
+                            <i className="bx bxs-envelope"></i>
+                          </span>
+                        </div>
+                        <div className="flex-fill">
+                          <div className="mb-1 align-items-top">
+                            <h6 className="fw-semibold mb-1 lh-1">Email Address</h6>
+                            <span className="text-muted">support@rankandseats.com</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="d-flex align-items-top mt-4">
+                        <div className="me-3">
+                          <span className="avatar avatar-md p-2 bg-teal-transparent">
+                            <i className="bx bxs-time"></i>
+                          </span>
+                        </div>
+                        <div className="flex-fill">
+                          <div className="mb-1 align-items-top">
+                            <h6 className="fw-semibold mb-1 lh-1">Office Hours</h6>
+                            <span className="text-muted">Mon-Fri 09:00 AM - 06:00 PM</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="d-flex align-items-top mt-4">
+                        <div className="me-3">
+                          <span className="avatar avatar-md p-2 bg-warning-transparent">
+                            <i className="bx bxs-location-plus"></i>
+                          </span>
+                        </div>
+                        <div className="flex-fill">
+                          <div className="mb-1 align-items-top">
+                            <h6 className="fw-semibold mb-1 lh-1">Address</h6>
+                            <span className="text-muted">1st Floor, KINFRA Techno Industrial Park, Malappuram, Kerala – 673634</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-xl-7 border rounded-3 p-3">
+                    <div className="row gy-3">
+                      <Col xl={6}>
+                        <label htmlFor="contact-address-firstname" className="form-label">First Name :</label>
+                        <input type="text" className="form-control" id="contact-address-firstname" placeholder="Enter Name" />
+                      </Col>
+                      <Col xl={6}>
+                        <label htmlFor="contact-address-lastname" className="form-label">Last Name :</label>
+                        <input type="text" className="form-control" id="contact-address-lastname" placeholder="Enter Name" />
+                      </Col>
+                      <div className="col-xl-6 mt-4">
+                        <label htmlFor="contact-address-phone" className="form-label">Phone No :</label>
+                        <input type="text" className="form-control" id="contact-address-phone" placeholder="Enter Phone No" />
+                      </div>
+                      <div className="col-xl-6 mt-4">
+                        <label htmlFor="contact-address-email" className="form-label">Email Id :</label>
+                        <input type="email" className="form-control" id="contact-address-email1" placeholder="Enter Email Id" />
+                      </div>
+                      <div className="col-xl-6 mt-4">
+                        <label htmlFor="contact-address-address" className="form-label">Address :</label>
+                        <textarea className="form-control" id="contact-address-address" rows={2} placeholder="Enter Address"></textarea>
+                      </div>
+                      <div className="col-xl-6 mt-4">
+                        <label htmlFor="contact-mail-message" className="form-label">Message :</label>
+                        <textarea className="form-control" id="contact-mail-message" rows={2} placeholder="Enter Your Message"></textarea>
+                      </div>
+                    </div>
+                    <div className="card-footer border-top-0 ps-0 pb-0 mt-1">
+                      <div className="text-start">
+                        <Button variant="primary" type="button" aria-label="Send Message" className="btn btn-primary btn-wave">Send Message</Button>
+                      </div>
+                    </div>
+                  </div>
+                </Row>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+	<section className="section landing-footer text-fixed-white">
+      <div className="container">
+        <Row>
+          <Col xl={4}>
+            <div className="px-4">
+              <p className="fw-semibold mb-3">
+                <Link aria-label="anchor" to="/">
+                  <img src={desktopdark} alt="Rank and Seats Logo" />
+                </Link>
+              </p>
+              <p className="mb-2 op-6 fw-normal">
+                Rank and Seats is your trusted partner in navigating the complexities of NEET counseling. We provide comprehensive data and insights to help you make informed decisions about your future.
+              </p>
+              <p className="mb-0 op-6 fw-normal">Your success is our priority. Let's achieve it together.</p>
+            </div>
+          </Col>
+          <Col xl={2}>
+            <div className="px-4">
+              <h6 className="fw-semibold mb-3 text-fixed-white mb-2">PAGES</h6>
+              <ul className="list-unstyled op-6 fw-normal landing-footer-list">
+                <li>
+                  <a href="/about-us" className="text-fixed-white" target="_blank" rel="noopener noreferrer">About Us</a>
+                </li>
+                <li>
+                  <a href="/contact-us" className="text-fixed-white" target="_blank" rel="noopener noreferrer">Contact Us</a>
+                </li>
+                <li>
+                  <a href="/pricing" className="text-fixed-white" target="_blank" rel="noopener noreferrer">Pricing</a>
+                </li>
+                <li>
+                  <a href="/features" className="text-fixed-white" target="_blank" rel="noopener noreferrer">Features</a>
+                </li>
+              </ul>
+            </div>
+          </Col>
+          <Col xl={2}>
+            <div className="px-4">
+              <h6 className="fw-semibold mb-3 text-fixed-white mb-2">INFO</h6>
+              <ul className="list-unstyled op-6 fw-normal landing-footer-list">
+                <li>
+                  <Link to="/privacy-policy" className="text-fixed-white">Privacy Policy</Link>
+                </li>
+                <li>
+                  <Link to="/terms-and-conditions" className="text-fixed-white">Terms & Conditions</Link>
+                </li>
+                <li>
+                  <Link to="/cancellation-refund-policy" className="text-fixed-white">Cancellation/Refund Policy</Link>
+                </li>
+              </ul>
+            </div>
+          </Col>
+          <Col xl={4}>
+            <div className="px-4">
+              <h6 className="fw-semibold text-fixed-white mb-2">CONTACT US</h6>
+              <ul className="list-unstyled fw-normal landing-footer-list">
+                <li>
+                  <Link to="#" className="text-fixed-white op-6"><i className="ri-home-4-line me-1 align-middle"></i> 1st Floor, KINFRA Techno Industrial Park, Malappuram, Kerala – 673634</Link>
+                </li>
+                <li>
+                  <Link to="#" className="text-fixed-white op-6"><i className="ri-mail-line me-1 align-middle"></i> support@rankandseats.com</Link>
+                </li>
+                <li>
+                  <Link to="#" className="text-fixed-white op-6"><i className="ri-phone-line me-1 align-middle"></i> +91 99 61 96 46 34</Link>
+                </li>
+                <li className="mt-3">
+                  <p className="mb-2 fw-semibold op-8">FOLLOW US ON :</p>
+                  <div className="mb-0">
+                    <div className="btn-list">
+                      <Button variant="" type="button" aria-label="Facebook" className="btn btn-sm btn-icon btn-primary-light btn-wave waves-effect waves-light">
+                        <i className="ri-facebook-line fw-bold"></i>
+                      </Button>
+                      <Button variant="" type="button" aria-label="Twitter" className="btn btn-sm btn-icon btn-secondary-light btn-wave waves-effect waves-light">
+                        <i className="ri-twitter-line fw-bold"></i>
+                      </Button>
+                      <Button variant="" type="button" aria-label="Instagram" className="btn btn-sm btn-icon btn-warning-light btn-wave waves-effect waves-light">
+                        <i className="ri-instagram-line fw-bold"></i>
+                      </Button>
+                      <Button variant="" type="button" aria-label="YouTube" className="btn btn-sm btn-icon btn-danger-light btn-wave waves-effect waves-light">
+                        <i className="ri-youtube-line fw-bold"></i>
+                      </Button>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </Col>
+        </Row>
+      </div>
+    </section>
 
 					<div className="text-center landing-main-footer py-3">
 						<span className="text-muted fs-15"> Copyright © <span id="year">2024</span> <Link to="#" className="text-primary fw-semibold"><u>Rank & Seats</u></Link>.

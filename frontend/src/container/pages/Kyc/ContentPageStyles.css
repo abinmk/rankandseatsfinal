@@ -1,0 +1,171 @@
+/* Import the desired rounded font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+/* General page styling for content pages */
+.content-page {
+  background-color: #f9f9f9;
+  padding: 60px 0;
+  font-family: 'Poppins', sans-serif; /* Apply rounded font to the entire page */
+}
+
+.content-page h1 {
+  color: #004085;
+  font-weight: 700; /* Use a heavier weight for the heading */
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  text-align: center;
+  text-transform: uppercase; /* Make the heading uppercase for emphasis */
+  letter-spacing: 1px; /* Add some spacing between letters */
+  border-bottom: 2px solid #004085; /* Optional: Add an underline to emphasize the heading */
+  padding-bottom: 10px; /* Adjust the padding for the underline */
+}
+
+.content-page .lead {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: #495057;
+  margin-bottom: 1.5rem;
+  text-align: justify;
+  font-weight: 400; /* Regular weight for body text */
+  transition: color 0.3s ease; /* Smooth transition for text color changes */
+}
+
+.content-page .lead:hover {
+  color: #333333; /* Slightly darker text color on hover */
+}
+
+.content-page .img-fluid.rounded {
+  max-width: 80%;
+  height: auto;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  margin: 20px 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for image hover effects */
+}
+
+.content-page .img-fluid.rounded:hover {
+  transform: scale(1.05); /* Slightly enlarge the image on hover */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Add a deeper shadow on hover */
+}
+
+.content-page .container {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 40px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease; /* Smooth transition for container shadow */
+}
+
+.content-page .container:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Enhance shadow on hover for a lifted effect */
+}
+
+.content-page .text-center {
+  text-align: center;
+}
+
+.content-page .mt-4 {
+  margin-top: 1.5rem !important;
+}
+
+.content-page .mt-5 {
+  margin-top: 3rem !important;
+}
+
+/* Additional styling for buttons */
+.content-page .btn-primary {
+  background-color: #004085;
+  border-color: #004085;
+  padding: 10px 20px;
+  border-radius: 25px; /* More rounded corners for a modern look */
+  font-weight: 600; /* Use semi-bold weight for buttons */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition for background color and scale */
+}
+
+.content-page .btn-primary:hover {
+  background-color: #002e5b;
+  border-color: #002e5b;
+  transform: scale(1.05); /* Slightly enlarge the button on hover */
+}
+
+/* Specific styling for the feature boxes */
+.feature-box {
+  background-color: #f8f9fa; /* Light background for the feature box */
+  border: 1px solid #e0e0e0; /* Light border for subtle separation */
+  border-radius: 15px; /* Rounder corners for feature boxes */
+  padding: 20px; /* Add padding inside the feature box */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effects */
+}
+
+.feature-box:hover {
+  background-color: #e9ecef; /* Slightly darker background on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow on hover */
+}
+
+.feature-box h3 {
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+  color: #004085;
+  transition: color 0.3s ease; /* Smooth transition for text color changes */
+  font-weight: 600; /* Semi-bold weight for headings */
+}
+
+.feature-box p {
+  margin-bottom: 0;
+  font-size: 1rem;
+  color: #495057;
+  font-weight: 400; /* Regular weight for paragraph text */
+}
+
+.feature-box:hover h3 {
+  color: #002e5b; /* Darker heading color on hover */
+}
+
+/* Pricing Card Styling */
+.pricing-card {
+  background-color: #f8f9fa; /* Light background for the pricing card */
+  border: 1px solid #e0e0e0; /* Light border for subtle separation */
+  border-radius: 15px; /* Rounder corners for pricing cards */
+  padding: 30px; /* Add padding inside the pricing card */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effects */
+}
+
+.pricing-card:hover {
+  background-color: #e9ecef; /* Slightly darker background on hover */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Add a deeper shadow on hover */
+}
+
+.pricing-card h3 {
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  color: #004085;
+  transition: color 0.3s ease; /* Smooth transition for text color changes */
+  font-weight: 600; /* Semi-bold weight for headings */
+}
+
+.pricing-card .price-display {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #004085;
+}
+
+.pricing-card .text-muted {
+  font-size: 1rem;
+  color: #6c757d; /* Standard muted text color */
+  font-weight: 400; /* Regular weight for muted text */
+}
+
+.pricing-card .btn-primary {
+  background-color: #004085;
+  border-color: #004085;
+  padding: 10px 20px;
+  border-radius: 25px; /* More rounded corners for a modern look */
+  font-weight: 600; /* Use semi-bold weight for buttons */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition for background color and scale */
+}
+
+.pricing-card .btn-primary:hover {
+  background-color: #002e5b;
+  border-color: #002e5b;
+  transform: scale(1.05); /* Slightly enlarge the button on hover */
+}

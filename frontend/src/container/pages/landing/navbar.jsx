@@ -74,7 +74,7 @@ const Navbar1 = () => {
 				</li>
 				<li className="slide">
 					<a href="#about" className="side-menu__item">
-						<span className="side-menu__label">About</span>
+						<span className="side-menu__label">About Us</span>
 					</a>
 				</li>
 				<li className="slide">
@@ -82,19 +82,19 @@ const Navbar1 = () => {
 						<span className="side-menu__label">Pricing</span>
 					</a>
 				</li>
-				<li className="slide">
+				{/* <li className="slide">
 					<a href="#faq" className="side-menu__item">
 						<span className="side-menu__label">Faq's</span>
 					</a>
-				</li>
-				<li className="slide">
+				</li> */}
+				{/* <li className="slide">
 					<a href="#testimonials" className="side-menu__item">
 						<span className="side-menu__label">Testimonials</span>
 					</a>
-				</li>
+				</li> */}
 				<li className="slide">
 					<a href="#contact" className="side-menu__item">
-						<span className="side-menu__label">Contact</span>
+						<span className="side-menu__label">Contact Us</span>
 					</a>
 				</li>
 			</ul>
