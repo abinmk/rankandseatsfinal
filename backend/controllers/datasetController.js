@@ -288,8 +288,8 @@ const generateCombinedDataset = async (req, res) => {
 
     const colleges = await College.find({}).lean();
     const courses = await Course.find({}).lean();
-    const seats = await Seat.find({}).lean(); // Load seats data
-    const fees = await Fee.find({}).lean(); // Load fee data
+    const seats = await Seat.find({}).lean();
+    const fees = await Fee.find({}).lean();
 
     const collegeMap = colleges.reduce((acc, college) => {
       acc[college.collegeName] = college;
@@ -301,6 +301,11 @@ const generateCombinedDataset = async (req, res) => {
       return acc;
     }, {});
 
+    const feeMap = fees.reduce((acc, fee) => {
+      acc[`${fee.collegeName}_${fee.courseName}`] = fee;
+      return acc;
+    }, {});
+
     const totalSeatsInCollege = {};
     const totalSeatsInCourse = {};
 
@@ -309,10 +314,11 @@ const generateCombinedDataset = async (req, res) => {
       totalSeatsInCourse[seat.courseName] = (totalSeatsInCourse[seat.courseName] || 0) + seat.seats;
     });
 
-    // Create combined data without seat information
+    // Create combined data with fee information included
     const combinedData = combinedAllotments.map(allotment => {
       const college = collegeMap[allotment.allottedInstitute];
       const course = courseMap[allotment.course];
+      const fee = feeMap[`${allotment.allottedInstitute}_${allotment.course}`] || {};
 
       return {
         _id: mongoose.Types.ObjectId(),
@@ -337,7 +343,17 @@ const generateCombinedDataset = async (req, res) => {
         degreeType: course?.degreeType || "",
         description: course?.description || "",
         year: allotment.year,
-        round: allotment.round
+        round: allotment.round,
+        // Fee details
+        feeAmount: Number(fee.courseFee) || 0,
+        nriFee: Number(fee.nriFee) || 0,
+        stipendYear1: Number(fee.stipendYear1) || 0,
+        stipendYear2: Number(fee.stipendYear2) || 0,
+        stipendYear3: Number(fee.stipendYear3) || 0,
+        bondYear: Number(fee.bondYear) || 0,
+        bondPenality: Number(fee.bondPenality) || 0,
+        seatLeavingPenality: Number(fee.seatLeavingPenality) || 0,
+        quota: fee.quota || ""
       };
     });
 
@@ -369,9 +385,9 @@ const generateCombinedDataset = async (req, res) => {
         quota: fee.quota || "",
         instituteType: college.instituteType || "",
         totalHospitalBeds: Number(college.totalHospitalBeds) || 0,
-        state: college.state || "", // Added state field from college
-        courseType: course.courseType || "", // Added courseType from course
-        degreeType: course.degreeType || "", // Added degreeType from course
+        state: college.state || "",
+        courseType: course.courseType || "",
+        degreeType: course.degreeType || ""
       };
     });
 
@@ -400,7 +416,7 @@ const generateCombinedDataset = async (req, res) => {
         distanceFromAirport: Number(college.distanceFromAirport) || 0,
         phoneNumber: college.phoneNumber,
         website: college.website,
-        totalSeatsInCollege: totalSeatsInCollege[college.collegeName] || 0, // Add total seats in college
+        totalSeatsInCollege: totalSeatsInCollege[college.collegeName] || 0
       };
     });
 
@@ -421,7 +437,7 @@ const generateCombinedDataset = async (req, res) => {
         clinicalType: course.clinicalType,
         degreeType: course.degreeType,
         courseType: course.courseType,
-        totalSeatsInCourse: Number(totalSeatsInCourse[course.courseName]) || 0, // Add total seats in course
+        totalSeatsInCourse: Number(totalSeatsInCourse[course.courseName]) || 0
       };
     });
 
@@ -440,6 +456,7 @@ const generateCombinedDataset = async (req, res) => {
     res.status(500).send('Failed to generate combined dataset.');
   }
 };
+
 
 
 
