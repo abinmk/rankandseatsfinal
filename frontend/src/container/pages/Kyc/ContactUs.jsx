@@ -27,9 +27,11 @@ const ContactUs = () => {
 </div>
 
             <p className="lead text-center">
-              Rank and Seats<br />
-              1st Floor, KINFRA Techno Industrial Park,<br />
-              Malappuram, Kerala – 673634<br/>
+            Rankseats Solutions LLP<br />
+            C/o Kayalody Arcade,<br />
+            Thettamala Road<br/>
+            Vellamunda, Wayanad<br/>
+            Kerala-670731<br/>
               Contact : +91 80 75 91 92 24
             </p>
           </div>

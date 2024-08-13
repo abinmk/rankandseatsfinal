@@ -1773,7 +1773,11 @@ const Landing = () => {
               <h6 className="fw-semibold text-fixed-white mb-2">CONTACT US</h6>
               <ul className="list-unstyled fw-normal landing-footer-list">
                 <li>
-                  <Link to="#" className="text-fixed-white op-6"><i className="ri-home-4-line me-1 align-middle"></i> 1st Floor, KINFRA Techno Industrial Park, Malappuram, Kerala – 673634</Link>
+                  <Link to="#" className="text-fixed-white op-6"><i className="ri-home-4-line me-1 align-middle"></i> Rankseats Solutions LLP
+C/o Kayalody Arcade
+Thettamala Road
+Vellamunda, Wayanad
+Kerala-670731</Link>
                 </li>
                 <li>
                   <Link to="#" className="text-fixed-white op-6"><i className="ri-mail-line me-1 align-middle"></i> support@rankandseats.com</Link>
