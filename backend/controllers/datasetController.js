@@ -3,12 +3,17 @@ const multer = require('multer');
 const path = require('path');
 const readExcelFile = require('read-excel-file/node');
 const { MongoClient } = require('mongodb');
+const fs = require('fs');
+const Seat = require('../models/Seats'); // Adjust the path if needed
+
+
 
 // Define Mongoose models (replace with your actual model definitions)
 const Allotment = require('../models/Allotment');
 const College = require('../models/College');
 const Course = require('../models/Course');
 const Fee = require('../models/Fee');
+const Seats = require('../models/Seats'); // Replace with the correct path to your Seats model
 const { batchInsert } = require('../utils'); // Ensure this path is correct
 
 // Multer configuration for file uploads
@@ -149,6 +154,45 @@ const uploadCollege = (req, res) => {
   });
 };
 
+const uploadSeats = (req, res) => {
+  upload(req, res, async function (err) {
+    if (err instanceof multer.MulterError || err) {
+      return res.status(500).send({ message: err.message });
+    }
+
+    const filePath = path.join(__dirname, '..', 'uploads', req.file.filename);
+
+    try {
+      const rows = await readExcelFile(filePath, { sheet: 'Sheet1' }); // Adjust sheet name if needed
+      rows.shift(); // Remove header row
+
+      const seatsData = rows.map(row => ({
+        collegeName: row[0],
+        courseName: row[1],
+        seats: parseInt(row[2], 10) || 0,
+      }));
+
+      // Optional: Delete existing data if needed
+      await Seats.deleteMany({});
+
+      // Insert new data
+      await batchInsert(Seats, seatsData);
+
+      // Delete the uploaded file from the server
+      fs.unlink(filePath, (unlinkErr) => {
+        if (unlinkErr) {
+          console.error('Failed to delete uploaded file:', unlinkErr);
+        }
+      });
+
+      res.send('Seats data has been successfully saved to MongoDB.');
+    } catch (err) {
+      console.error('Error processing seats upload:', err);
+      res.status(500).send('Failed to process seats file.');
+    }
+  });
+};
+
 // Upload Courses
 const uploadCourse = (req, res) => {
   upload(req, res, async function (err) {
@@ -197,22 +241,23 @@ const uploadFee = (req, res) => {
       const rows = await readExcelFile(filePath, { sheet: 'Sheet1' }); // Use 'Sheet1'
       rows.shift(); // Remove header row
       const fees = rows.map(row => ({
-        collegeName: row[0],
-        courseName: row[1],
-        courseFee: row[2],
-        nriFee: row[3],
-        stipendYear1: row[4],
-        stipendYear2: row[5],
-        stipendYear3: row[6],
-        bondYear: row[7],
-        bondPenality: row[8],
-        seatLeavingPenality: row[9],
-        noOfSeats: parseInt(row[10], 10) || 0,
+        collegeName: row[0],        // College Name
+        courseName: row[1],         // Course Name
+        courseFee: row[2],          // Course Fee
+        nriFee: row[3],             // NRI Fee
+        stipendYear1: row[4],       // Stipend Year 1
+        stipendYear2: row[5],       // Stipend Year 2
+        stipendYear3: row[6],       // Stipend Year 3
+        bondYear: row[7],           // Bond Year
+        bondPenality: row[8],       // Bond Penalty
+        seatLeavingPenality: row[9],// Seat Leaving Penalty
+        quota: row[10],             // Quota instead of Seats
       }));
 
       // Delete existing data
       await Fee.deleteMany({});
 
+      // Batch insert the new data
       await batchInsert(Fee, fees);
       res.send('Fees details have been successfully saved to MongoDB.');
     } catch (err) {
@@ -243,7 +288,8 @@ const generateCombinedDataset = async (req, res) => {
 
     const colleges = await College.find({}).lean();
     const courses = await Course.find({}).lean();
-    const fees = await Fee.find({}).lean();
+    const seats = await Seat.find({}).lean(); // Load seats data
+    const fees = await Fee.find({}).lean(); // Load fee data
 
     const collegeMap = colleges.reduce((acc, college) => {
       acc[college.collegeName] = college;
@@ -255,23 +301,18 @@ const generateCombinedDataset = async (req, res) => {
       return acc;
     }, {});
 
-    const feeMap = fees.reduce((acc, fee) => {
-      acc[`${fee.collegeName}_${fee.courseName}`] = fee;
-      return acc;
-    }, {});
-
     const totalSeatsInCollege = {};
     const totalSeatsInCourse = {};
 
-    fees.forEach(fee => {
-      totalSeatsInCollege[fee.collegeName] = (totalSeatsInCollege[fee.collegeName] || 0) + fee.noOfSeats;
-      totalSeatsInCourse[fee.courseName] = (totalSeatsInCourse[fee.courseName] || 0) + fee.noOfSeats;
+    seats.forEach(seat => {
+      totalSeatsInCollege[seat.collegeName] = (totalSeatsInCollege[seat.collegeName] || 0) + seat.seats;
+      totalSeatsInCourse[seat.courseName] = (totalSeatsInCourse[seat.courseName] || 0) + seat.seats;
     });
 
+    // Create combined data without seat information
     const combinedData = combinedAllotments.map(allotment => {
       const college = collegeMap[allotment.allottedInstitute];
       const course = courseMap[allotment.course];
-      const fee = feeMap[`${allotment.allottedInstitute}_${allotment.course}`];
 
       return {
         _id: mongoose.Types.ObjectId(),
@@ -294,17 +335,6 @@ const generateCombinedDataset = async (req, res) => {
         distanceFromAirport: Number(college?.distanceFromAirport) || 0,
         courseType: course?.courseType || "",
         degreeType: course?.degreeType || "",
-        feeAmount: Number(fee?.feeAmount) || 0,
-        nriFee: Number(fee?.nriFee) || 0,
-        stipendYear1: Number(fee?.stipendYear1) || 0,
-        stipendYear2: Number(fee?.stipendYear2) || 0,
-        stipendYear3: Number(fee?.stipendYear3) || 0,
-        bondYear: Number(fee?.bondYear) || 0,
-        bondPenality: Number(fee?.bondPenality) || 0,
-        seatLeavingPenality: Number(fee?.seatLeavingPenality) || 0,
-        noOfSeats: Number(fee?.noOfSeats) || 0,
-        totalSeatsInCollege: totalSeatsInCollege[allotment.allottedInstitute] || 0,
-        totalSeatsInCourse: totalSeatsInCourse[allotment.course] || 0,
         description: course?.description || "",
         year: allotment.year,
         round: allotment.round
@@ -320,10 +350,10 @@ const generateCombinedDataset = async (req, res) => {
     // Insert the new combined data
     await batchInsert(GeneratedModel, combinedData);
 
-    // Generate FEE_RESULT dataset with distinct colleges and courses
-    const feeResultData = Object.values(feeMap).map(fee => {
-      const college = collegeMap[fee.collegeName];
-      const course = courseMap[fee.courseName];
+    // Generate FEE_RESULT dataset with fee data and additional college and course data
+    const feeResultData = fees.map(fee => {
+      const college = collegeMap[fee.collegeName] || {};
+      const course = courseMap[fee.courseName] || {};
 
       return {
         collegeName: fee.collegeName,
@@ -336,21 +366,12 @@ const generateCombinedDataset = async (req, res) => {
         bondYear: Number(fee.bondYear) || 0,
         bondPenality: Number(fee.bondPenality) || 0,
         seatLeavingPenality: Number(fee.seatLeavingPenality) || 0,
-        noOfSeats: Number(fee.noOfSeats) || 0,
-        state: college?.state,
-        instituteType: college?.instituteType,
-        universityName: college?.universityName,
-        yearOfEstablishment: college?.yearOfEstablishment,
-        totalHospitalBeds: Number(college?.totalHospitalBeds) || 0,
-        locationMapLink: college?.locationMapLink,
-        nearestRailwayStation: college?.nearestRailwayStation,
-        distanceFromRailwayStation: Number(college?.distanceFromRailwayStation) || 0,
-        nearestAirport: college?.nearestAirport,
-        distanceFromAirport: Number(college?.distanceFromAirport) || 0,
-        phoneNumber: college?.phoneNumber,
-        website: college?.website,
-        totalSeatsInCollege: totalSeatsInCollege[fee.collegeName] || 0,
-        totalSeatsInCourse: totalSeatsInCourse[fee.courseName] || 0,
+        quota: fee.quota || "",
+        instituteType: college.instituteType || "",
+        totalHospitalBeds: Number(college.totalHospitalBeds) || 0,
+        state: college.state || "", // Added state field from college
+        courseType: course.courseType || "", // Added courseType from course
+        degreeType: course.degreeType || "", // Added degreeType from course
       };
     });
 
@@ -362,27 +383,6 @@ const generateCombinedDataset = async (req, res) => {
 
     // Insert the new fee result data
     await batchInsert(FeeResultModel, feeResultData);
-
-    // Generate COURSE_RESULT dataset with distinct courses
-    const courseResultData = Object.values(courseMap).map(course => {
-      return {
-        courseName: course.courseName,
-        duration: course.duration,
-        clinicalType: course.clinicalType,
-        degreeType: course.degreeType,
-        courseType: course.courseType,
-        totalSeatsInCourse: Number(totalSeatsInCourse[course.courseName]) || 0,
-      };
-    });
-
-    const courseResultCollectionName = 'COURSE_RESULT';
-    const CourseResultModel = getModel(courseResultCollectionName);
-
-    // Delete existing data in the course result collection
-    await CourseResultModel.deleteMany({});
-
-    // Insert the new course result data
-    await batchInsert(CourseResultModel, courseResultData);
 
     // Generate COLLEGE_RESULT dataset with distinct colleges
     const collegeResultData = Object.values(collegeMap).map(college => {
@@ -400,7 +400,7 @@ const generateCombinedDataset = async (req, res) => {
         distanceFromAirport: Number(college.distanceFromAirport) || 0,
         phoneNumber: college.phoneNumber,
         website: college.website,
-        totalSeatsInCollege: Number(totalSeatsInCollege[college.collegeName]) || 0,
+        totalSeatsInCollege: totalSeatsInCollege[college.collegeName] || 0, // Add total seats in college
       };
     });
 
@@ -411,15 +411,40 @@ const generateCombinedDataset = async (req, res) => {
     await CollegeResultModel.deleteMany({});
 
     // Insert the new college result data
-        // Insert the new college result data
-        await batchInsert(CollegeResultModel, collegeResultData);
+    await batchInsert(CollegeResultModel, collegeResultData);
 
-        res.json({ combinedData, feeResultData, courseResultData, collegeResultData });
-      } catch (error) {
-        console.error('Error generating combined dataset:', error);
-        res.status(500).send('Failed to generate combined dataset.');
-      }
-    };
+    // Generate COURSE_RESULT dataset with distinct courses
+    const courseResultData = Object.values(courseMap).map(course => {
+      return {
+        courseName: course.courseName,
+        duration: course.duration,
+        clinicalType: course.clinicalType,
+        degreeType: course.degreeType,
+        courseType: course.courseType,
+        totalSeatsInCourse: Number(totalSeatsInCourse[course.courseName]) || 0, // Add total seats in course
+      };
+    });
+
+    const courseResultCollectionName = 'COURSE_RESULT';
+    const CourseResultModel = getModel(courseResultCollectionName);
+
+    // Delete existing data in the course result collection
+    await CourseResultModel.deleteMany({});
+
+    // Insert the new course result data
+    await batchInsert(CourseResultModel, courseResultData);
+
+    res.json({ combinedData, feeResultData, collegeResultData, courseResultData });
+  } catch (error) {
+    console.error('Error generating combined dataset:', error);
+    res.status(500).send('Failed to generate combined dataset.');
+  }
+};
+
+
+
+
+
     
 
 
@@ -571,6 +596,7 @@ module.exports = {
   getGeneratedData,
   getCoursesData,
   getCourseFilterOptions,
+  uploadSeats
 };
 
 

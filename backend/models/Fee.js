@@ -11,7 +11,7 @@ const FeesSchema = new mongoose.Schema({
   bondYear: { type: Number, required: true },
   bondPenality: { type: Number, required: true },
   seatLeavingPenality: { type: Number, required: true },
-  noOfSeats: { type: Number, required: true },
+  quota: { type: String, required: true }, // Replaced noOfSeats with quota
 });
 
 module.exports = mongoose.model('Fees', FeesSchema);

@@ -47,10 +47,10 @@ const GenericTable = ({
   const getFilterParamName = (filterKey) => {
     const filterMapping = {
       state: 'state',
-      institute: 'allottedInstitute',
+      institute: 'collegeName',
       instituteType: 'instituteType',
-      quota: 'allottedQuota',
-      course: 'course',
+      quota: 'quota',
+      course: 'courseName',
       allottedCategories: 'allottedCategory',
       candidateCategories: 'candidateCategory',
       examNames: 'examName',

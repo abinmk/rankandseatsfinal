@@ -87,10 +87,10 @@ exports.getFilterOptions = async (req, res) => {
       }
     }
 
-    const quota = await AllotmentModel.distinct('allottedQuota');
-    const institute = await AllotmentModel.distinct('allottedInstitute');
+    const quota = await AllotmentModel.distinct('quota');
+    const institute = await AllotmentModel.distinct('collegeName');
     const instituteType = await AllotmentModel.distinct('instituteType');
-    const course = await AllotmentModel.distinct('course');
+    const course = await AllotmentModel.distinct('courseName');
     const courseType = await AllotmentModel.distinct('courseType');
     const degreeType = await AllotmentModel.distinct('degreeType');
     const state = await AllotmentModel.distinct('state');
@@ -118,7 +118,7 @@ exports.getFilterOptions = async (req, res) => {
       courseType,
       degreeType,
       quota,
-      feesRange: feeAmountRange[0],
+      feeAmountRange: feeAmountRange[0],
       stipendYear1Range: stipendYear1Range[0],
       bondYearRange: bondYearRange[0],
       bondPenaltyRange: bondPenaltyRange[0],

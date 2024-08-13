@@ -4,6 +4,7 @@ import UploadRound from './UploadRound';
 import UploadCourse from './UploadCourse';
 import UploadCollege from './UploadCollege';
 import UploadFee from './UploadFee'; // Import the UploadFee component
+import UploadSeats from './UploadSeats'; // Import the new UploadSeats component
 import GenerateResults from './GenerateResults';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -21,8 +22,11 @@ const Upload = () => {
         <Tab eventKey="college" title="Upload College">
           <UploadCollege />
         </Tab>
-        <Tab eventKey="fee" title="Upload Fee"> {/* Add a new Tab for UploadFee */}
+        <Tab eventKey="fee" title="Upload Fee">
           <UploadFee />
+        </Tab>
+        <Tab eventKey="seats" title="Upload Seats"> {/* Add a new Tab for UploadSeats */}
+          <UploadSeats />
         </Tab>
         <Tab eventKey="generate" title="Generate Data">
           <GenerateResults />
