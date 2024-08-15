@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const getLastRanks = async (req, res) => {
   try {
-    const { page = 1, limit = 10, bondPenaltyRange, ...filters } = req.query;
+    const { page = 1, limit = 100, bondPenaltyRange, ...filters } = req.query;
     const collectionName = 'LAST_RANK_RESULT';
     let LastRankModel;
 
