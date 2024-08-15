@@ -18,6 +18,7 @@ const coursesRoutes = require('./routes/coursesRoutes');
 const feesRoutes = require('./routes/feesRoutes');
 const wishlistRoutes = require('./routes/wishlistRoutes');
 const userRoutes = require('./routes/users');
+const lastRankRoutes = require('./routes/lastRankRoutes');
 
 const app = express();
 const port = process.env.PORT || 5001;
@@ -345,6 +346,7 @@ app.use('/api/colleges', collegesRoutes);
 app.use('/api/courses', coursesRoutes);
 app.use('/api/fees', feesRoutes);
 app.use('/api/protected', require('./routes/protectedRoute'));
+app.use('/api/lastrank', lastRankRoutes);
 
 // Serve the React app for any route not handled by the above
 app.get('*', (req, res) => {

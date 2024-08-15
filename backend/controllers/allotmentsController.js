@@ -72,7 +72,7 @@ exports.getAllotmentData = async (req, res) => {
     const formattedCounselingType = counselingType.replace(/\s+/g, '_');
     const collectionName = `GENERATED_EXAM:${formattedExam}_TYPE:${formattedCounselingType}`;
 
-    const { page = 1, limit = 10, state, bondPenaltyRange, ...filters } = req.query;
+    const { page = 1, limit = 10, state, bondPenaltyRange,totalHospitalBedsRange, ...filters } = req.query;
     let AllotmentModel;
 
     try {
@@ -121,6 +121,10 @@ exports.getAllotmentData = async (req, res) => {
       addRangeFilter('bondPenality', bondPenaltyRange);
     }
 
+    if (totalHospitalBedsRange) {
+      addRangeFilter('totalHospitalBeds', totalHospitalBedsRange);
+    }
+
     console.log('Query:', query);
     if (limit > 100) {
       return res.status(500).send('Unauthorized!');
@@ -130,6 +134,7 @@ exports.getAllotmentData = async (req, res) => {
       .skip((page - 1) * limit)
       .limit(Number(limit))
       .lean();
+    console.log("data---->"+data);
     const totalItems = await AllotmentModel.countDocuments(query);
 
     const encryptedData = encrypt(JSON.stringify(data));

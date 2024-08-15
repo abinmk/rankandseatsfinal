@@ -16,7 +16,7 @@ import Allotments from "./container/pages/allotments/allotments.jsx";
 import Colleges from "./container/pages/colleges/colleges.jsx";
 import Courses from "./container/pages/course/courses.jsx";
 import Fees from "./container/pages/fees/fees.jsx";
-import LastRank from "./container/pages/lastRank/fees.jsx";
+import LastRank from "./container/pages/lastRank/LastRank.jsx";
 import Upload from "./container/pages/generate-data/Upload.jsx";
 import UploadRound from "./container/pages/generate-data/UploadRound";
 import ChoiceList from "./container/pages/choiceList/choiceList.jsx";
@@ -57,7 +57,7 @@ root.render(
         <Route path="/" element={<App />}>
           <Route path="dashboards" element={<Dashboard />} />
           <Route path="allotments" element={<ProtectedRoute><Allotments /></ProtectedRoute>} />
-          <Route path="lastrank/" element={<ProtectedRoute><LastRank/></ProtectedRoute>} />
+          <Route path="lastrank" element={<ProtectedRoute><LastRank/></ProtectedRoute>} />
           <Route path="courses" element={<ProtectedRoute><Courses/></ProtectedRoute>} />
           <Route path="institutes" element={<ProtectedRoute><Colleges /></ProtectedRoute>} />
           <Route path="fees" element={<ProtectedRoute><Fees/></ProtectedRoute>} />

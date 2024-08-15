@@ -1,37 +1,70 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTable, usePagination, useSortBy, useFilters, useColumnOrder } from 'react-table';
 import FilterSection from './FilterSection';
 import { Table, Modal, Button, Form, Pagination } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FaHeart } from 'react-icons/fa';
+import axios from 'axios';
 
 const GenericTable = ({
-  data,
   columns,
-  filtersConfig,
   headerTitle,
-  filters,
-  setFilters,
-  page,
-  setPage,
-  totalPages,
-  filterOptions,
-  loading,
-  filterLoading,
-  fetchData,
-  pageSize,
-  setPageSize
 }) => {
+  const [data, setData] = useState([]);
+  const [filters, setFilters] = useState({});
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
+  const [loading, setLoading] = useState(false);
+  const [filterLoading, setFilterLoading] = useState(false);
+  const [filterOptions, setFilterOptions] = useState({ institutes: [], courses: [], categories: [] });
+  const [wishlist, setWishlist] = useState([]);
   const [showFilters, setShowFilters] = useState(true);
   const [showColumnModal, setShowColumnModal] = useState(false);
   const [showRowModal, setShowRowModal] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [filteredData, setFilteredData] = useState(data);
-  const [wishlist, setWishlist] = useState(new Set());
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
   };
+
+  useEffect(() => {
+    const fetchFilters = async () => {
+      setFilterLoading(true);
+      try {
+        const response = await axios.get('/api/filters');
+        setFilterOptions(response.data);
+      } catch (error) {
+        console.error('Error fetching filter options:', error);
+      }
+      setFilterLoading(false);
+    };
+
+    fetchFilters();
+  }, []);
+
+  const fetchData = async (page, pageSize, filters) => {
+    setLoading(true);
+    try {
+      const response = await axios.get('/api/wishlist', {
+        params: {
+          page,
+          pageSize,
+          ...filters,
+        },
+      });
+      setData(response.data.items);
+      setTotalPages(response.data.totalPages);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchData(page, pageSize, filters);
+  }, [page, pageSize, filters]);
 
   useEffect(() => {
     const resultsSection = document.querySelector('.results-section');
@@ -43,85 +76,54 @@ const GenericTable = ({
   }, [showFilters]);
 
   useEffect(() => {
-    applyFilters();
-  }, [filters, data]);
+    setFilteredData(data);
+  }, [data]);
 
   const getFilterParamName = (filterKey) => {
     const filterMapping = {
-      quotas: 'allottedQuota',
-      institutes: 'allottedInstitute',
-      courses: 'course',
-      allottedCategories: 'allottedCategory',
-      candidateCategories: 'candidateCategory',
-      examNames: 'examName',
-      years: 'year',
-      rounds: 'round',
-      states: 'state',
-      instituteTypes: 'instituteType',
-      universityNames: 'universityName',
-      yearsOfEstablishment: 'yearOfEstablishment',
-      totalHospitalBeds: 'totalHospitalBeds',
-      locationMapLinks: 'locationMapLink',
-      nearestRailwayStations: 'nearestRailwayStation',
-      distancesFromRailwayStation: 'distanceFromRailwayStation',
-      nearestAirports: 'nearestAirport',
-      distancesFromAirport: 'distanceFromAirport',
-      courseTypes: 'courseType',
-      degreeTypes: 'degreeType',
-      feeAmounts: 'feeAmount',
-      nriFees: 'nriFee',
-      stipendYear1: 'stipendYear1',
-      stipendYear2: 'stipendYear2',
-      stipendYear3: 'stipendYear3',
-      bondYears: 'bondYear',
-      bondPenalties: 'bondPenality',
+      institute: 'allottedInstitute',
+      course: 'course',
+      category: 'allottedCategory',
     };
-    
     return filterMapping[filterKey] || filterKey;
   };
 
-  const applyFilters = () => {
-    let filtered = data;
-
-    Object.keys(filters).forEach(filterKey => {
-      if (filters[filterKey] && filters[filterKey].length > 0) {
-        filtered = filtered.filter(item => {
-          const itemValue = item[filterKey];
-
-          if (Array.isArray(filters[filterKey])) {
-            return filters[filterKey].includes(itemValue);
-          }
-
-          if (filters[filterKey].min !== undefined && filters[filterKey].max !== undefined) {
-            return itemValue >= filters[filterKey].min && itemValue <= filters[filterKey].max;
-          }
-
-          return itemValue === filters[filterKey];
-        });
-      }
-    });
-
-    setFilteredData(filtered);
-  };
-
-  const toggleWishlist = (id) => {
-    setWishlist(prevWishlist => {
-      const newWishlist = new Set(prevWishlist);
-      if (newWishlist.has(id)) {
-        newWishlist.delete(id);
+  const buildFilterParams = () => {
+    const params = {};
+    Object.keys(filters).forEach((filterKey) => {
+      const filterValue = filters[filterKey];
+      if (Array.isArray(filterValue)) {
+        params[filterKey] = filterValue.join(',');
       } else {
-        newWishlist.add(id);
+        params[filterKey] = filterValue;
       }
-      return newWishlist;
     });
+    return params;
   };
 
-  const toggleAllWishlist = () => {
-    if (wishlist.size === filteredData.length) {
-      setWishlist(new Set());
-    } else {
-      setWishlist(new Set(filteredData.map(row => row.id)));
+  const handleRowClick = (row) => {
+    setSelectedRowData(row.original);
+    setShowRowModal(true);
+  };
+
+  const handleColumnToggle = (column) => {
+    column.toggleHidden();
+  };
+
+  const renderPaginationItems = () => {
+    const paginationItems = [];
+    for (let number = 0; number < totalPages; number++) {
+      paginationItems.push(
+        <Pagination.Item key={number} active={number === page - 1} onClick={() => setPage(number + 1)}>
+          {number + 1}
+        </Pagination.Item>
+      );
     }
+    return paginationItems;
+  };
+
+  const clearAllFilters = () => {
+    setFilters({});
   };
 
   const {
@@ -160,45 +162,13 @@ const GenericTable = ({
     }
   }, [page, gotoPage]);
 
-  const handleRowClick = (row) => {
-    setSelectedRowData(row.original);
-    setShowRowModal(true);
-  };
-
-  const handleColumnToggle = (column) => {
-    column.toggleHidden();
-  };
-
-  const renderPaginationItems = () => {
-    const paginationItems = [];
-
-    for (let number = 0; number < pageCount; number++) {
-      if (number === pageIndex || number === pageIndex - 1 || number === pageIndex + 1 || number === 0 || number === pageCount - 1) {
-        paginationItems.push(
-          <Pagination.Item key={number} active={number === pageIndex} onClick={() => setPage(number + 1)}>
-            {number + 1}
-          </Pagination.Item>
-        );
-      } else if (number === pageIndex - 2 || number === pageIndex + 2) {
-        paginationItems.push(<Pagination.Ellipsis key={`ellipsis-${number}`} />);
-      }
-    }
-
-    return paginationItems;
-  };
-
-  const clearAllFilters = () => {
-    setFilters({});
-  };
-
   return (
-    <div className="allotments-container">
+    <div className="generic-table-container">
       <FilterSection
         showFilters={showFilters}
         toggleFilters={toggleFilters}
         filters={filters}
         setFilters={setFilters}
-        data={data}
         filterOptions={filterOptions}
         loading={filterLoading}
         getFilterParamName={getFilterParamName}
@@ -222,8 +192,8 @@ const GenericTable = ({
                   <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
                     <th>
                       <FaHeart
-                        onClick={toggleAllWishlist}
-                        style={{ color: wishlist.size === filteredData.length ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5em' }}
+                        onClick={() => toggleAllWishlist()}
+                        style={{ color: wishlist.length === filteredData.length ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5rem' }}
                       />
                     </th>
                     {headerGroup.headers.map((column) => {
@@ -247,9 +217,13 @@ const GenericTable = ({
                         <FaHeart
                           onClick={(e) => {
                             e.stopPropagation();
-                            toggleWishlist(row.original.id);
+                            if (wishlist.some(item => item.allotmentId === row.original._id)) {
+                              removeFromWishlist(row.original._id);
+                            } else {
+                              addToWishlist(row.original);
+                            }
                           }}
-                          style={{ color: wishlist.has(row.original.id) ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5em' }}
+                          style={{ color: wishlist.some(item => item.allotmentId === row.original._id) ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5rem' }}
                         />
                       </td>
                       {row.cells.map((cell) => {
@@ -274,9 +248,9 @@ const GenericTable = ({
                 value={pageSize}
                 onChange={(e) => setPageSize(Number(e.target.value))}
                 className="me-3"
-                style={{ width: '45px',height:'40px' }}
+                style={{ width: 'fit-content',height:'40px' }}
               >
-                {[10, 25, 50, 100].map((size) => (
+                {[10,20, 30, 50, 100].map((size) => (
                   <option key={size} value={size}>
                     {size}
                   </option>
@@ -291,22 +265,24 @@ const GenericTable = ({
                 max={pageCount}
                 value={pageIndex + 1}
                 onChange={(e) => setPage(Number(e.target.value))}
-                className="me-2"
-                style={{ width: '55px',height:'40px' }}
+                               className="me-3"
+                style={{ width: 'fit-content', height: '40px' }}
               />
             </Form.Group>
             <div className="pagination-controls">
-              <Pagination className="mb-0">
+              <Pagination>
                 <Pagination.First onClick={() => setPage(1)} disabled={!canPreviousPage} />
-                <Pagination.Prev onClick={() => setPage(page - 1)} disabled={!canPreviousPage} />
+                <Pagination.Prev onClick={() => previousPage()} disabled={!canPreviousPage} />
                 {renderPaginationItems()}
-                <Pagination.Next onClick={() => setPage(page + 1)} disabled={!canNextPage} />
+                <Pagination.Next onClick={() => nextPage()} disabled={!canNextPage} />
                 <Pagination.Last onClick={() => setPage(pageCount)} disabled={!canNextPage} />
               </Pagination>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Column Toggle Modal */}
       <Modal show={showColumnModal} onHide={() => setShowColumnModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>View/Hide Columns</Modal.Title>
@@ -316,8 +292,9 @@ const GenericTable = ({
             <Form.Check
               key={column.id}
               type="checkbox"
-              label={column.render('Header')}
-              checked={column.isVisible}
+              id={column.id}
+              label={column.Header}
+              checked={!column.isHidden}
               onChange={() => handleColumnToggle(column)}
             />
           ))}
@@ -329,6 +306,7 @@ const GenericTable = ({
         </Modal.Footer>
       </Modal>
 
+      {/* Row Details Modal */}
       <Modal show={showRowModal} onHide={() => setShowRowModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Row Details</Modal.Title>
@@ -337,9 +315,9 @@ const GenericTable = ({
           {selectedRowData && (
             <div>
               {Object.entries(selectedRowData).map(([key, value]) => (
-                <div key={key}>
-                  <strong>{key}:</strong> {value}
-                </div>
+                <p key={key}>
+                  <strong>{key}:</strong> {JSON.stringify(value, null, 2)}
+                </p>
               ))}
             </div>
           )}
@@ -355,3 +333,4 @@ const GenericTable = ({
 };
 
 export default GenericTable;
+
