@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { Table, Container } from 'react-bootstrap';
+import { Table, Container, Button, Modal } from 'react-bootstrap';
 import './LastRank.scss';
 
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -8,6 +8,8 @@ const apiUrl = import.meta.env.VITE_API_URL;
 const LastRank = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [modalData, setModalData] = useState([]);
 
   const fetchLastRankData = useCallback(async () => {
     setLoading(true);
@@ -25,6 +27,11 @@ const LastRank = () => {
     fetchLastRankData();
   }, [fetchLastRankData]);
 
+  const handleShowModal = (allottedDetails) => {
+    setModalData(allottedDetails);
+    setShowModal(true);
+  };
+
   const renderRoundDetails = (years) => {
     return Object.keys(years).map((year) => (
       <tr key={year}>
@@ -33,12 +40,7 @@ const LastRank = () => {
           <td key={round}>
             <div>Round {round}</div>
             <div>Last Rank: {years[year].rounds[round].lastRank}</div>
-            <div>Total Allotted: {years[year].rounds[round].totalAllotted}</div>
-            <ul>
-              {years[year].rounds[round].allottedDetails.map((detail) => (
-                <li key={detail._id}>{detail.rank} - {detail.allottedCategory}</li>
-              ))}
-            </ul>
+            <div>Total Allotted: <Button variant="link" onClick={() => handleShowModal(years[year].rounds[round].allottedDetails)}>{years[year].rounds[round].totalAllotted}</Button></div>
           </td>
         ))}
       </tr>
@@ -86,6 +88,44 @@ const LastRank = () => {
           )}
         </tbody>
       </Table>
+
+      {/* Modal for Allotted Data */}
+      <Modal show={showModal} onHide={() => setShowModal(false)} size="lg">
+        <Modal.Header closeButton>
+          <Modal.Title>Allotted Data</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>Roll Number</th>
+                <th>Rank</th>
+                <th>Allotted Quota</th>
+                <th>Allotted Institute</th>
+                <th>Course</th>
+                <th>Allotted Category</th>
+                <th>Candidate Category</th>
+              </tr>
+            </thead>
+            <tbody>
+              {modalData.map((detail) => (
+                <tr key={detail._id}>
+                  <td>{detail.rollNumber}</td>
+                  <td>{detail.rank}</td>
+                  <td>{detail.allottedQuota}</td>
+                  <td>{detail.allottedInstitute}</td>
+                  <td>{detail.course}</td>
+                  <td>{detail.allottedCategory}</td>
+                  <td>{detail.candidateCategory}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>Close</Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };
