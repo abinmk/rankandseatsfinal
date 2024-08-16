@@ -113,11 +113,11 @@ const Allotments = () => {
       setFilterLoading(false);
     }
   }, [apiUrl, counselingType]);
-  
 
   const fetchWishlist = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
+      console.log(exam);
       const response = await axiosInstance.get(`${apiUrl}/wishlist`, {
         headers: {
           Authorization: `Bearer ${token}`,

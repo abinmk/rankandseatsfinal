@@ -252,9 +252,11 @@ const uploadFee = (req, res) => {
   });
 };
 
+
 const generateCombinedDataset = async (req, res) => {
   try {
-    const { examName, rounds } = req.body;
+    const { examName, rounds, examType, counselingType } = req.body;
+
 
     let combinedAllotments = [];
 
@@ -265,11 +267,13 @@ const generateCombinedDataset = async (req, res) => {
       combinedAllotments = combinedAllotments.concat(allotments);
     }
 
-    // Sort combined allotments by year descending and then by round ascending
+    // Sort combined allotments by year descending, round ascending, and rank ascending
     combinedAllotments.sort((a, b) => {
       const yearDiff = b.year - a.year;
       if (yearDiff !== 0) return yearDiff;
-      return a.round.localeCompare(b.round, undefined, { numeric: true });
+      const roundDiff = a.round.localeCompare(b.round, undefined, { numeric: true });
+      if (roundDiff !== 0) return roundDiff;
+      return a.rank - b.rank;
     });
 
     // Fetch related data from the database
@@ -280,17 +284,17 @@ const generateCombinedDataset = async (req, res) => {
 
     // Create mapping objects for quick lookup
     const collegeMap = colleges.reduce((acc, college) => {
-      acc[college.collegeName] = college;
+      acc[college.collegeName.trim().toLowerCase()] = college;
       return acc;
     }, {});
 
     const courseMap = courses.reduce((acc, course) => {
-      acc[course.courseName] = course;
+      acc[course.courseName.trim().toLowerCase()] = course;
       return acc;
     }, {});
 
     const feeMap = fees.reduce((acc, fee) => {
-      acc[`${fee.collegeName}_${fee.courseName}`] = fee;
+      acc[`${fee.collegeName.trim().toLowerCase()}_${fee.courseName.trim().toLowerCase()}`] = fee;
       return acc;
     }, {});
 
@@ -299,22 +303,32 @@ const generateCombinedDataset = async (req, res) => {
 
     // Iterate over each allotment and aggregate data accordingly
     combinedAllotments.forEach(allotment => {
-      const key = `${allotment.allottedInstitute}_${allotment.course}_${allotment.allottedQuota}`;
+      const key = `${allotment.allottedInstitute.trim().toLowerCase()}_${allotment.course.trim().toLowerCase()}_${allotment.allottedQuota.trim().toLowerCase()}_${allotment.allottedCategory.trim().toLowerCase()}`;
 
       if (!lastRankMap[key]) {
         lastRankMap[key] = {
           collegeName: allotment.allottedInstitute,
           courseName: allotment.course,
           quota: allotment.allottedQuota,
+          allottedCategory: allotment.allottedCategory,
           years: {},
-          courseFee: feeMap[`${allotment.allottedInstitute}_${allotment.course}`]?.courseFee || 0,
-          nriFee: feeMap[`${allotment.allottedInstitute}_${allotment.course}`]?.nriFee || 0,
-          stipendYear1: feeMap[`${allotment.allottedInstitute}_${allotment.course}`]?.stipendYear1 || 0,
-          stipendYear2: feeMap[`${allotment.allottedInstitute}_${allotment.course}`]?.stipendYear2 || 0,
-          stipendYear3: feeMap[`${allotment.allottedInstitute}_${allotment.course}`]?.stipendYear3 || 0,
-          bondYear: feeMap[`${allotment.allottedInstitute}_${allotment.course}`]?.bondYear || 0,
-          bondPenality: feeMap[`${allotment.allottedInstitute}_${allotment.course}`]?.bondPenality || 0,
-          seatLeavingPenality: feeMap[`${allotment.allottedInstitute}_${allotment.course}`]?.seatLeavingPenality || 0,
+          courseFee: feeMap[key]?.courseFee || 0,
+          nriFee: feeMap[key]?.nriFee || 0,
+          stipendYear1: feeMap[key]?.stipendYear1 || 0,
+          stipendYear2: feeMap[key]?.stipendYear2 || 0,
+          stipendYear3: feeMap[key]?.stipendYear3 || 0,
+          bondYear: feeMap[key]?.bondYear || 0,
+          bondPenality: feeMap[key]?.bondPenality || 0,
+          seatLeavingPenality: feeMap[key]?.seatLeavingPenality || 0,
+          instituteType: collegeMap[allotment.allottedInstitute.trim().toLowerCase()]?.instituteType || '',
+          universityName: collegeMap[allotment.allottedInstitute.trim().toLowerCase()]?.universityName || '',
+          state: collegeMap[allotment.allottedInstitute.trim().toLowerCase()]?.state || '',
+          duration: courseMap[allotment.course.trim().toLowerCase()]?.duration || '',
+          clinicalType: courseMap[allotment.course.trim().toLowerCase()]?.clinicalType || '',
+          degreeType: courseMap[allotment.course.trim().toLowerCase()]?.degreeType || '',
+          courseType: courseMap[allotment.course.trim().toLowerCase()]?.courseType || '',
+          totalSeatsInCollege: seats.filter(seat => seat.collegeName.trim().toLowerCase() === allotment.allottedInstitute.trim().toLowerCase()).reduce((sum, seat) => sum + seat.seats, 0),
+          totalSeatsInCourse: seats.filter(seat => seat.courseName.trim().toLowerCase() === allotment.course.trim().toLowerCase()).reduce((sum, seat) => sum + seat.seats, 0),
         };
       }
 
@@ -344,7 +358,16 @@ const generateCombinedDataset = async (req, res) => {
       }
     });
 
-    // Convert lastRankMap to an array (if needed) or keep it as an object
+    // Sort each round's allottedDetails by rank in ascending order
+    Object.values(lastRankMap).forEach(item => {
+      Object.values(item.years).forEach(year => {
+        Object.values(year.rounds).forEach(round => {
+          round.allottedDetails.sort((a, b) => a.rank - b.rank);
+        });
+      });
+    });
+
+    // Convert lastRankMap to an array for storage
     const lastRankResult = Object.values(lastRankMap);
 
     const lastRankResultCollectionName = 'LAST_RANK_RESULT';
@@ -356,8 +379,8 @@ const generateCombinedDataset = async (req, res) => {
 
     // Generate FEE_RESULT dataset
     const feeResultData = fees.map(fee => {
-      const college = collegeMap[fee.collegeName] || {};
-      const course = courseMap[fee.courseName] || {};
+      const college = collegeMap[fee.collegeName.trim().toLowerCase()] || {};
+      const course = courseMap[fee.courseName.trim().toLowerCase()] || {};
 
       return {
         collegeName: fee.collegeName,
@@ -402,7 +425,7 @@ const generateCombinedDataset = async (req, res) => {
         distanceFromAirport: Number(college.distanceFromAirport) || 0,
         phoneNumber: college.phoneNumber,
         website: college.website,
-        totalSeatsInCollege: seats.filter(seat => seat.collegeName === college.collegeName).reduce((sum, seat) => sum + seat.seats, 0)
+        totalSeatsInCollege: seats.filter(seat => seat.collegeName.trim().toLowerCase() === college.collegeName.trim().toLowerCase()).reduce((sum, seat) => sum + seat.seats, 0)
       };
     });
 
@@ -413,37 +436,92 @@ const generateCombinedDataset = async (req, res) => {
     await CollegeResultModel.deleteMany({});
     await batchInsert(CollegeResultModel, collegeResultData);
 
-    // Generate COURSE_RESULT dataset
-    const courseResultData = Object.values(courseMap).map(course => {
-      return {
-        courseName: course.courseName,
-        duration: course.duration,
-        clinicalType: course.clinicalType,
-        degreeType: course.degreeType,
-        courseType: course.courseType,
-        totalSeatsInCourse: seats.filter(seat => seat.courseName === course.courseName).reduce((sum, seat) => sum + seat.seats, 0)
-      };
-    });
+      // Generate COURSE_RESULT dataset
+      const courseResultCollectionName = 'COURSE_RESULT';
+      const CourseResultModel = getModel(courseResultCollectionName);
+      const courseResultData = Object.values(courseMap).map(course => {
+        return {
+          courseName: course.courseName,
+          duration: course.duration,
+          clinicalType: course.clinicalType,
+          degreeType: course.degreeType,
+          courseType: course.courseType,
+          totalSeatsInCourse: seats.filter(seat => seat.courseName.trim().toLowerCase() === course.courseName.trim().toLowerCase()).reduce((sum, seat) => sum + seat.seats, 0)
+        };
+      });
+  
+      await CourseResultModel.deleteMany({});
+      await batchInsert(CourseResultModel, courseResultData);
+  
+      // Generate GENERATED_EXAM dataset with the correct format
+      const generatedExamCollectionName = `GENERATED_${examName}`;
+      const GeneratedExamModel = getModel(generatedExamCollectionName);
+  
+      // Clear existing data and insert new generated exam data
+      await GeneratedExamModel.deleteMany({});
+  
+      const generatedExamData = combinedAllotments.map(allotment => {
+        const key = `${allotment.allottedInstitute.trim().toLowerCase()}_${allotment.course.trim().toLowerCase()}_${allotment.allottedQuota.trim().toLowerCase()}_${allotment.allottedCategory.trim().toLowerCase()}`;
+        const college = collegeMap[allotment.allottedInstitute.trim().toLowerCase()] || {};
+        const course = courseMap[allotment.course.trim().toLowerCase()] || {};
+        const fee = feeMap[key] || {};
+  
+        return {
+          ...allotment,
+          examName: examName,
+          state: college.state || '',
+          instituteType: college.instituteType || '',
+          universityName: college.universityName || '',
+          yearOfEstablishment: Number(college.yearOfEstablishment) || 0,
+          totalHospitalBeds: Number(college.totalHospitalBeds) || 0,
+          locationMapLink: college.locationMapLink || '',
+          nearestRailwayStation: college.nearestRailwayStation || '',
+          distanceFromRailwayStation: Number(college.distanceFromRailwayStation) || 0,
+          nearestAirport: college.nearestAirport || '',
+          distanceFromAirport: Number(college.distanceFromAirport) || 0,
+          courseType: course.courseType || '',
+          degreeType: course.degreeType || '',
+          duration: course.duration || '',
+          feeAmount: Number(fee.courseFee) || 0,
+          nriFee: Number(fee.nriFee) || 0,
+          stipendYear1: Number(fee.stipendYear1) || 0,
+          stipendYear2: Number(fee.stipendYear2) || 0,
+          stipendYear3: Number(fee.stipendYear3) || 0,
+          bondYear: Number(fee.bondYear) || 0,
+          bondPenality: Number(fee.bondPenality) || 0,
+          seatLeavingPenality: Number(fee.seatLeavingPenality) || 0,
+        };
+      });
+  
+      // Sort the generated exam data by year descending, round ascending, and rank ascending
+      generatedExamData.sort((a, b) => {
+        const yearDiff = b.year - a.year;
+        if (yearDiff !== 0) return yearDiff;
+        const roundDiff = a.round.localeCompare(b.round, undefined, { numeric: true });
+        if (roundDiff !== 0) return roundDiff;
+        return a.rank - b.rank;
+      });
+  
+      await batchInsert(GeneratedExamModel, generatedExamData);
+  
+      // Return all the generated data
+      res.json({
+        lastRankResult,
+        feeResultData,
+        collegeResultData,
+        courseResultData,
+        generatedExamData,
+      });
+    } catch (error) {
+      console.error('Error generating combined dataset:', error);
+      res.status(500).send('Failed to generate combined dataset.');
+    }
+  };
+  
 
-    const courseResultCollectionName = 'COURSE_RESULT';
-    const CourseResultModel = getModel(courseResultCollectionName);
 
-    // Clear existing data and insert new course result data
-    await CourseResultModel.deleteMany({});
-    await batchInsert(CourseResultModel, courseResultData);
 
-    // Return all the generated data
-    res.json({
-      lastRankResult,
-      feeResultData,
-      collegeResultData,
-      courseResultData,
-    });
-  } catch (error) {
-    console.error('Error generating combined dataset:', error);
-    res.status(500).send('Failed to generate combined dataset.');
-  }
-};
+
 
 
 

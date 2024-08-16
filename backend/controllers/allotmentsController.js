@@ -71,6 +71,7 @@ exports.getAllotmentData = async (req, res) => {
     const formattedExam = exam.replace(/\s+/g, '_');
     const formattedCounselingType = counselingType.replace(/\s+/g, '_');
     const collectionName = `GENERATED_EXAM:${formattedExam}_TYPE:${formattedCounselingType}`;
+    console.log(collectionName);
 
     const { page = 1, limit = 10, state, bondPenaltyRange,totalHospitalBedsRange, ...filters } = req.query;
     let AllotmentModel;
