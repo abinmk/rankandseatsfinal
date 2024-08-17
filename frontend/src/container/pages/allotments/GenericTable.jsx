@@ -77,7 +77,7 @@ const GenericTable = ({
       distancesFromAirport: 'distanceFromAirport',
       courseType: 'courseType',
       degreeType: 'degreeType',
-      feeAmounts: 'feeAmount',
+      feeAmounts: 'courseFee',
       nriFees: 'nriFee',
       stipendYear1: 'stipendYear1',
       stipendYear2: 'stipendYear2',
