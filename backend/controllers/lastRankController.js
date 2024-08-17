@@ -87,6 +87,40 @@ const getLastRanks = async (req, res) => {
   }
 };
 
-module.exports = {
-  getLastRanks,
-};
+const getLastRankFilters = async (req, res) => {
+    try {
+      const collectionName = 'LAST_RANK_RESULT';
+      let LastRankModel;
+  
+      try {
+        LastRankModel = mongoose.model(collectionName);
+      } catch (error) {
+        if (error.name === 'MissingSchemaError') {
+          LastRankModel = mongoose.model(collectionName, new mongoose.Schema({}, { strict: false }), collectionName);
+        } else {
+          throw error;
+        }
+      }
+  
+      // Fetch distinct values for each filterable field
+      const quotaOptions = await LastRankModel.distinct('quota');
+      const stateOptions = await LastRankModel.distinct('state');
+      const courseNameOptions = await LastRankModel.distinct('courseName');
+      const collegeNameOptions = await LastRankModel.distinct('collegeName');
+  
+      res.json({
+        quotaOptions,
+        stateOptions,
+        courseNameOptions,
+        collegeNameOptions
+      });
+    } catch (error) {
+      console.error('Error fetching filter options for last rank:', error);
+      res.status(500).send('Failed to fetch filter options.');
+    }
+  };
+  
+  module.exports = {
+    getLastRanks,
+    getLastRankFilters, // Add this to your exports
+  };

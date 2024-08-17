@@ -16,7 +16,7 @@ import Allotments from "./container/pages/allotments/allotments.jsx";
 import Colleges from "./container/pages/colleges/colleges.jsx";
 import Courses from "./container/pages/course/courses.jsx";
 import Fees from "./container/pages/fees/fees.jsx";
-import LastRank from "./container/pages/lastRank/LastRank.jsx";
+import LastRank from "./container/pages/last-rank/LastRank.jsx";
 import Upload from "./container/pages/generate-data/Upload.jsx";
 import UploadRound from "./container/pages/generate-data/UploadRound";
 import ChoiceList from "./container/pages/choiceList/choiceList.jsx";
