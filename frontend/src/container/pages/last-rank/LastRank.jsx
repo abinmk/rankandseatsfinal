@@ -62,7 +62,7 @@ const LastRank = () => {
     <div className="fees-container">
       <GenericTable
         data={data}
-        columns={LastRankColumns}
+        columns={LastRankColumns(data)}
         filtersConfig={LastRankFiltersConfig}
         headerTitle="Last Rank"
         filters={filters}
