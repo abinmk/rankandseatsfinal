@@ -74,7 +74,7 @@ const LastRank = () => {
   };
 
   return (
-    <div className="fees-container">
+    <div className={`fees-container ${showRowModal ? "hide-filters" : ""}`}>
       <GenericTable
         data={data}
         filtersConfig={LastRankFiltersConfig}
@@ -93,50 +93,59 @@ const LastRank = () => {
         columns={LastRankColumns(data, handleDetailClick)}
       />
 
-      <Modal show={showRowModal} onHide={() => setShowRowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Allotted Details</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-  {selectedRowData && (
-    <>
-      <p><strong>Year:</strong> {selectedRowData.year}</p>
-      <p><strong>Round:</strong> {selectedRowData.round}</p>
-      <p><strong>Last Rank:</strong> {selectedRowData.roundData.lastRank}</p>
-      <p><strong>Total Allotted:</strong> {selectedRowData.roundData.totalAllotted}</p>
-      <p><strong>Details:</strong></p>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Rank</th>
-            <th>Institute</th>
-            <th>Category</th>
-            <th>Candidate Category</th>
-          </tr>
-        </thead>
-        <tbody>
-          {selectedRowData.roundData.allottedDetails.map((detail, index) => (
-            <tr key={index}>
-              <td>{index + 1}</td>
-              <td>{detail.rank}</td>
-              <td>{detail.allottedInstitute}</td>
-              <td>{detail.allottedCategory}</td>
-              <td>{detail.candidateCategory}</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-    </>
-  )}
-</Modal.Body>
+<Modal show={showRowModal} onHide={() => setShowRowModal(false)} className="custom-modal">
+  <Modal.Header closeButton>
+    <Modal.Title>Allotted Details</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    {selectedRowData && (
+      <>
+        <p><strong>Year:</strong> {selectedRowData.year}</p>
+        <p><strong>Round:</strong> {selectedRowData.round}</p>
+        <p><strong>Course:</strong> {selectedRowData.roundData.course}</p>
+        <p><strong>Last Rank:</strong> {selectedRowData.roundData.lastRank}</p>
+        <p><strong>Total Allotted:</strong> {selectedRowData.roundData.totalAllotted}</p>
+        <p><strong>Allotted Candidates Details:</strong></p>
+        <div className="custom-table">
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>Sl No.</th>
+                <th>Roll Number</th>
+                <th>Rank</th>
+                <th>Institute</th>
+                <th>Course</th>
+                <th>Allotted Quota</th>
+                <th>Allotted Category</th>
+                <th>Candidate Category</th>
+              </tr>
+            </thead>
+            <tbody>
+              {selectedRowData.roundData.allottedDetails.map((detail, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{detail.rollNumber}</td>
+                  <td>{detail.rank}</td>
+                  <td>{detail.allottedInstitute}</td>
+                  <td>{detail.course}</td>
+                  <td>{detail.allottedQuota}</td>
+                  <td>{detail.allottedCategory}</td>
+                  <td>{detail.candidateCategory}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </div>
+      </>
+    )}
+  </Modal.Body>
+  <Modal.Footer>
+    <Button variant="secondary" onClick={() => setShowRowModal(false)}>
+      Close
+    </Button>
+  </Modal.Footer>
+</Modal>
 
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowRowModal(false)}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
     </div>
   );
 };

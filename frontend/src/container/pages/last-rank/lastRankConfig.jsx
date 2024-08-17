@@ -11,7 +11,7 @@ export const LastRankColumns = (data, handleDetailClick) => {
     { Header: 'Course', accessor: 'courseName' },
     ...years.flatMap((year) =>
       rounds.map((round) => ({
-        Header: `${year} [R${round}]`,
+        Header: `${year} R${round}`,
         accessor: (row) => row.years[year]?.rounds[round]?.lastRank || '-',
         Cell: ({ row }) => {
           const roundData = row.original.years[year]?.rounds[round];

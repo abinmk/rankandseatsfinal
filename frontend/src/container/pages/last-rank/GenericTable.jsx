@@ -87,14 +87,17 @@ const GenericTable = ({
     }));
   };
 
-
+  const handleDetailClick = (details) => {
+    setSelectedRowData(details);
+    setShowRowModal(true);
+  };
   
   // When rendering the table:
-  // <GenericTable
-  //   data={data}
-  //   columns={LastRankColumns(data, handleDetailClick)}
-  //   // ... other props
-  // />
+  <GenericTable
+    data={data}
+    columns={LastRankColumns(data, handleDetailClick)}
+    // ... other props
+  />
   
 
   const applyFilters = () => {
@@ -302,19 +305,72 @@ const GenericTable = ({
           </div>
         </div>
       </div>
-
+      <Modal show={showColumnModal} onHide={() => setShowColumnModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>View/Hide Columns</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {allColumns.map((column) => (
+            <Form.Check
+              key={column.id}
+              type="checkbox"
+              label={column.render('Header')}
+              checked={column.isVisible}
+              onChange={() => handleColumnToggle(column)}
+            />
+          ))}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowColumnModal(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       <Modal show={showRowModal} onHide={() => setShowRowModal(false)}>
   <Modal.Header closeButton>
     <Modal.Title>Allotted Details</Modal.Title>
   </Modal.Header>
+  <Modal.Body>
+    {selectedRowData && (
+      <div>
+        <p><strong>College:</strong> {selectedRowData.collegeName}</p>
+        <p><strong>Course:</strong> {selectedRowData.courseName}</p>
+        <p><strong>State:</strong> {selectedRowData.state}</p>
+        <p><strong>Quota:</strong> {selectedRowData.quota}</p>
+        <p><strong>Category:</strong> {selectedRowData.allottedCategory}</p>
+
+        {selectedRowData.yearData && Object.keys(selectedRowData.yearData).map(year => (
+          <div key={year}>
+            <h5>{year}</h5>
+            {selectedRowData.yearData[year].map((round, index) => (
+              <div key={index}>
+                <p><strong>Round {round.round}:</strong></p>
+                <p>Last Rank: {round.lastRank}</p>
+                <p>Total Allotted: {round.totalAllotted}</p>
+                <h6>Allotted Candidates:</h6>
+                <ul>
+                  {round.allottedDetails.map((detail, i) => (
+                    <li key={i}>
+                      Roll Number: {detail.rollNumber}, Rank: {detail.rank}, 
+                      Candidate Category: {detail.candidateCategory}, 
+                      Allotted Institute: {detail.allottedInstitute}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    )}
+  </Modal.Body>
   <Modal.Footer>
     <Button variant="secondary" onClick={() => setShowRowModal(false)}>
       Close
     </Button>
   </Modal.Footer>
 </Modal>
-
 
 
     </div>

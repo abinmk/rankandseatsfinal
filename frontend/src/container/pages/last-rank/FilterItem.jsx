@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Accordion, Button, Modal, Row, Col } from 'react-bootstrap';
 import Slider from '@mui/material/Slider';
 import { debounce } from 'lodash';
+import './LastRank.scss';
 
 const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChange, handleRangeChange, eventKey, viewMore, appliedFiltersCount, getFilterParamName, loading }) => {
   const [showModal, setShowModal] = useState(false);

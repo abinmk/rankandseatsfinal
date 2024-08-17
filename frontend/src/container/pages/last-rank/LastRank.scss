@@ -14,10 +14,6 @@
     align-items: center;
     margin-top: auto;
     margin-bottom: auto;
-  
-    .modal-content {
-      overflow-y: auto;
-    }
     
     /* Make the scrollbar always visible */
     .table-wrapper {
@@ -769,4 +765,19 @@
       }
     }
   }
+  
+  .custom-modal .modal-dialog {
+    z-index: 1050; /* Ensure it's higher than other elements */
+    max-width: 80%; /* Adjust width */
+  }
+  
+  .hide-filters .filters-section {
+    display: none; /* Hide filters when modal is open */
+  }
+  
+  .modal-backdrop {
+    z-index: 1049; /* Ensure backdrop is behind the modal but above other content */
+  }
+  
+  
   
