@@ -1,4 +1,4 @@
-export const LastRankColumns = (data) => {
+export const LastRankColumns = (data, handleDetailClick) => {
   const years = Object.keys(data[0]?.years || {}).sort((a, b) => b - a).slice(0, 3); // Sort and get latest 3 years
 
   const rounds = ['1', '2', '3', '4'];
@@ -18,7 +18,14 @@ export const LastRankColumns = (data) => {
           if (roundData) {
             const lastRank = roundData.lastRank;
             const totalAllotted = roundData.totalAllotted;
-            return `${lastRank} (${totalAllotted})`;
+            return (
+              <span
+                onClick={() => handleDetailClick(year, round, row.original)}
+                style={{ cursor: 'pointer', color: 'blue' }}
+              >
+                {`${lastRank} (${totalAllotted})`}
+              </span>
+            );
           }
           return '-';
         },
@@ -28,6 +35,8 @@ export const LastRankColumns = (data) => {
 
   return columns;
 };
+
+
 
 
 

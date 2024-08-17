@@ -3,6 +3,8 @@ import { useTable, usePagination, useSortBy, useFilters, useColumnOrder } from '
 import FilterSection from './FilterSection';
 import { Table, Modal, Button, Form, Pagination } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { LastRankColumns } from './lastRankConfig';
+
 
 const GenericTable = ({
   data,
@@ -85,6 +87,16 @@ const GenericTable = ({
     }));
   };
 
+
+  
+  // When rendering the table:
+  // <GenericTable
+  //   data={data}
+  //   columns={LastRankColumns(data, handleDetailClick)}
+  //   // ... other props
+  // />
+  
+
   const applyFilters = () => {
     let filtered = data;
 
@@ -143,10 +155,24 @@ const GenericTable = ({
     }
   }, [page, gotoPage]);
 
-  const handleRowClick = (row) => {
-    setSelectedRowData(row.original);
-    setShowRowModal(true);
-  };
+  // const handleRowClick = (row) => {
+  //   const { years } = row.original;
+  //   const yearData = Object.keys(years).reduce((acc, year) => {
+  //     const rounds = years[year].rounds;
+  //     acc[year] = Object.keys(rounds).map(round => ({
+  //       round,
+  //       lastRank: rounds[round].lastRank,
+  //       totalAllotted: rounds[round].totalAllotted,
+  //       allottedDetails: rounds[round].allottedDetails || [],
+  //     }));
+  //     return acc;
+  //   }, {});
+  
+  //   setSelectedRowData({ ...row.original, yearData });
+  //   setShowRowModal(true);
+  // };
+  
+  
 
   const handleColumnToggle = (column) => {
     column.toggleHidden();
@@ -276,49 +302,21 @@ const GenericTable = ({
           </div>
         </div>
       </div>
-      <Modal show={showColumnModal} onHide={() => setShowColumnModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>View/Hide Columns</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {allColumns.map((column) => (
-            <Form.Check
-              key={column.id}
-              type="checkbox"
-              label={column.render('Header')}
-              checked={column.isVisible}
-              onChange={() => handleColumnToggle(column)}
-            />
-          ))}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowColumnModal(false)}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+
 
       <Modal show={showRowModal} onHide={() => setShowRowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Row Details</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {selectedRowData && (
-            <div>
-              {Object.entries(selectedRowData).map(([key, value]) => (
-                <div key={key}>
-                  <strong>{key}:</strong> {value}
-                </div>
-              ))}
-            </div>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowRowModal(false)}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+  <Modal.Header closeButton>
+    <Modal.Title>Allotted Details</Modal.Title>
+  </Modal.Header>
+  <Modal.Footer>
+    <Button variant="secondary" onClick={() => setShowRowModal(false)}>
+      Close
+    </Button>
+  </Modal.Footer>
+</Modal>
+
+
+
     </div>
   );
 };
