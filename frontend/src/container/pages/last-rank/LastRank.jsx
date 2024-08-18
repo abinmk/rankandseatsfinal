@@ -21,18 +21,30 @@ const LastRank = () => {
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [showRowModal, setShowRowModal] = useState(false);
 
-  // Fetch data with filters and pagination
   const fetchData = useCallback(async (page, pageSize, filters) => {
     setLoading(true);
     try {
+      const adjustedFilters = {};
+
+      for (const key in filters) {
+        if (filters[key]) {
+          let field = key;
+          if (key === 'stateOptions') field = 'state';
+          if (key === 'quotaOptions') field = 'quota';
+          adjustedFilters[field] = filters[key];
+        }
+      }
+
       const response = await axios.get(`${apiUrl}/lastrank`, {
         params: {
           page,
           limit: pageSize,
-          ...filters
+          ...adjustedFilters
         }
       });
-      setData(response.data.data);
+
+      console.log('API Response:', response.data);
+      setData(response.data.data); // Correctly update the data
       setPage(response.data.currentPage);
       setTotalPages(response.data.totalPages);
     } catch (error) {
@@ -41,12 +53,10 @@ const LastRank = () => {
     setLoading(false);
   }, []);
 
-  // Fetch data when filters, page, or pageSize changes
   useEffect(() => {
     fetchData(page, pageSize, filters);
   }, [fetchData, filters, page, pageSize]);
 
-  // Fetch filter options once on component mount
   useEffect(() => {
     const fetchFilterOptions = async () => {
       setFilterLoading(true);
@@ -73,6 +83,10 @@ const LastRank = () => {
     setShowRowModal(true);
   };
 
+  const handleModalClose = () => {
+    setShowRowModal(false);
+  };
+
   return (
     <div className={`fees-container ${showRowModal ? "hide-filters" : ""}`}>
       <GenericTable
@@ -93,59 +107,58 @@ const LastRank = () => {
         columns={LastRankColumns(data, handleDetailClick)}
       />
 
-<Modal show={showRowModal} onHide={() => setShowRowModal(false)} className="custom-modal">
-  <Modal.Header closeButton>
-    <Modal.Title>Allotted Details</Modal.Title>
-  </Modal.Header>
-  <Modal.Body>
-    {selectedRowData && (
-      <>
-        <p><strong>Year:</strong> {selectedRowData.year}</p>
-        <p><strong>Round:</strong> {selectedRowData.round}</p>
-        <p><strong>Course:</strong> {selectedRowData.roundData.course}</p>
-        <p><strong>Last Rank:</strong> {selectedRowData.roundData.lastRank}</p>
-        <p><strong>Total Allotted:</strong> {selectedRowData.roundData.totalAllotted}</p>
-        <p><strong>Allotted Candidates Details:</strong></p>
-        <div className="custom-table">
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th>Sl No.</th>
-                <th>Roll Number</th>
-                <th>Rank</th>
-                <th>Institute</th>
-                <th>Course</th>
-                <th>Allotted Quota</th>
-                <th>Allotted Category</th>
-                <th>Candidate Category</th>
-              </tr>
-            </thead>
-            <tbody>
-              {selectedRowData.roundData.allottedDetails.map((detail, index) => (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>{detail.rollNumber}</td>
-                  <td>{detail.rank}</td>
-                  <td>{detail.allottedInstitute}</td>
-                  <td>{detail.course}</td>
-                  <td>{detail.allottedQuota}</td>
-                  <td>{detail.allottedCategory}</td>
-                  <td>{detail.candidateCategory}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </div>
-      </>
-    )}
-  </Modal.Body>
-  <Modal.Footer>
-    <Button variant="secondary" onClick={() => setShowRowModal(false)}>
-      Close
-    </Button>
-  </Modal.Footer>
-</Modal>
-
+      <Modal show={showRowModal} onHide={handleModalClose} className="custom-modal">
+        <Modal.Header closeButton>
+          <Modal.Title>Allotted Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedRowData && (
+            <>
+              <p><strong>Year:</strong> {selectedRowData.year}</p>
+              <p><strong>Round:</strong> {selectedRowData.round}</p>
+              <p><strong>Course:</strong> {selectedRowData.roundData.course}</p>
+              <p><strong>Last Rank:</strong> {selectedRowData.roundData.lastRank}</p>
+              <p><strong>Total Allotted:</strong> {selectedRowData.roundData.totalAllotted}</p>
+              <p><strong>Allotted Candidates Details:</strong></p>
+              <div className="custom-table">
+                <Table striped bordered hover responsive>
+                  <thead>
+                    <tr>
+                      <th>Sl No.</th>
+                      <th>Roll Number</th>
+                      <th>Rank</th>
+                      <th>Institute</th>
+                      <th>Course</th>
+                      <th>Allotted Quota</th>
+                      <th>Allotted Category</th>
+                      <th>Candidate Category</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {selectedRowData.roundData.allottedDetails.map((detail, index) => (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td>{detail.rollNumber}</td>
+                        <td>{detail.rank}</td>
+                        <td>{detail.allottedInstitute}</td>
+                        <td>{detail.course}</td>
+                        <td>{detail.allottedQuota}</td>
+                        <td>{detail.allottedCategory}</td>
+                        <td>{detail.candidateCategory}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </div>
+            </>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleModalClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

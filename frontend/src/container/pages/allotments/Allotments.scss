@@ -256,14 +256,12 @@
   background-color: white;
   flex-direction: column;
   width: 300px; /* Adjusted width */
-  transition: transform 0.5s ease;
   position: fixed;
   left: 15px;
   height: calc(100vh - 170px) !important;
   margin-top: 0px;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
   border-radius: 20px;
-  z-index: 5000;
   overflow-y: auto; /* Enable vertical scrolling */
   overflow-x: hidden; /* Hide horizontal overflow */
 
@@ -280,8 +278,6 @@
   .filters-header {
     position: sticky;
     top: 0;
-    z-index: 5000;
-    background-color: white;
     padding: 20px 10px;
     border-bottom: 10px solid #ffffff;
     display: flex;
@@ -415,7 +411,6 @@
     font-size: 0.875rem;
     font-weight: bold;
     color: var(--text-color);
-    background-color: white;
     border: none;
     padding: 10px;
     text-align: left;

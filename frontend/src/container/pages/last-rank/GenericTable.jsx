@@ -4,7 +4,7 @@ import FilterSection from './FilterSection';
 import { Table, Modal, Button, Form, Pagination } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { LastRankColumns } from './lastRankConfig';
-
+import './LastRank.scss';
 
 const GenericTable = ({
   data,
@@ -44,7 +44,7 @@ const GenericTable = ({
 
   useEffect(() => {
     applyFilters();
-  }, [filters, data]);
+  }, [filterOptions,filters, data]);
 
   const getFilterParamName = (filterKey) => {
     const filterMapping = {
@@ -157,23 +157,6 @@ const GenericTable = ({
       gotoPage(page - 1);
     }
   }, [page, gotoPage]);
-
-  // const handleRowClick = (row) => {
-  //   const { years } = row.original;
-  //   const yearData = Object.keys(years).reduce((acc, year) => {
-  //     const rounds = years[year].rounds;
-  //     acc[year] = Object.keys(rounds).map(round => ({
-  //       round,
-  //       lastRank: rounds[round].lastRank,
-  //       totalAllotted: rounds[round].totalAllotted,
-  //       allottedDetails: rounds[round].allottedDetails || [],
-  //     }));
-  //     return acc;
-  //   }, {});
-  
-  //   setSelectedRowData({ ...row.original, yearData });
-  //   setShowRowModal(true);
-  // };
   
   
 
@@ -204,7 +187,7 @@ const GenericTable = ({
   };
 
   return (
-    <div className="allotments-container">
+    <div className={`allotments-container ${showColumnModal ? "hide-filters" : ""}`}>
       <FilterSection
         showFilters={showFilters}
         toggleFilters={toggleFilters}

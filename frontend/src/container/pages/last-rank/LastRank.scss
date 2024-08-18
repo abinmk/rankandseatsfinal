@@ -253,7 +253,6 @@
     display: flex;
     padding-left: 10px;
     padding-right: 10px;
-    background-color: white;
     flex-direction: column;
     width: 300px; /* Adjusted width */
     transition: transform 0.5s ease;
@@ -263,7 +262,6 @@
     margin-top: 0px;
     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
     border-radius: 20px;
-    z-index: 5000;
     overflow-y: auto; /* Enable vertical scrolling */
     overflow-x: hidden; /* Hide horizontal overflow */
   
@@ -274,14 +272,11 @@
   
     &.show {
       transform: translateX(0);
-      background-color: #ffffff;
     }
   
     .filters-header {
       position: sticky;
       top: 0;
-      z-index: 5000;
-      background-color: white;
       padding: 20px 10px;
       border-bottom: 10px solid #ffffff;
       display: flex;
@@ -772,7 +767,7 @@
   }
   
   .hide-filters .filters-section {
-    display: none; /* Hide filters when modal is open */
+   z-index: 100;
   }
   
   .modal-backdrop {
