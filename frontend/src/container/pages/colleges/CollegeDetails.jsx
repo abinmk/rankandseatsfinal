@@ -1,37 +1,45 @@
-// src/components/CollegeDetail.jsx
-import React from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
 const CollegeDetail = () => {
-  const { state } = useLocation();
-  const college = state?.college; // Access the college data passed via state
+  const { collegeId } = useParams();
+  const [college, setCollege] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  if (!college) return <div>No college data found.</div>;
+  useEffect(() => {
+    const fetchCollegeDetails = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/college/${collegeId}`);
+        setCollege(response.data);
+      } catch (error) {
+        console.error('Error fetching college details:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCollegeDetails();
+  }, [collegeId]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!college) {
+    return <div>No college details found.</div>;
+  }
 
   return (
-    <div className="college-detail-container">
+    <div>
       <h1>{college.collegeName}</h1>
-      <p><strong>University:</strong> {college.universityName}</p>
+      <p><strong>Course Name:</strong> {college.courseName}</p>
+      <p><strong>Quota:</strong> {college.quota}</p>
+      <p><strong>Category:</strong> {college.allottedCategory}</p>
       <p><strong>State:</strong> {college.state}</p>
+      <p><strong>University Name:</strong> {college.universityName}</p>
       <p><strong>Institute Type:</strong> {college.instituteType}</p>
-      <p><strong>Year of Establishment:</strong> {college.yearOfEstablishment}</p>
-      <p><strong>Total Hospital Beds:</strong> {college.totalHospitalBeds}</p>
-      <p><strong>Nearest Railway Station:</strong> {college.nearestRailwayStation}</p>
-      <p><strong>Distance from Railway Station:</strong> {college.distanceFromRailwayStation}</p>
-      <p><strong>Nearest Airport:</strong> {college.nearestAirport}</p>
-      <p><strong>Distance from Airport:</strong> {college.distanceFromAirport}</p>
-      <div className="college-map">
-        <iframe
-          src={`https://www.google.com/maps/embed/v1/place?key=YOUR_GOOGLE_MAPS_API_KEY&q=${college.lat},${college.lon}`}
-          width="100%"
-          height="450"
-          frameBorder="0"
-          style={{ border: 0 }}
-          allowFullScreen=""
-          aria-hidden="false"
-          tabIndex="0"
-        ></iframe>
-      </div>
+      {/* Add other college details here */}
     </div>
   );
 };

@@ -33,7 +33,6 @@ const GenericTable = ({
     setShowFilters(!showFilters);
   };
 
-  // Adjust the results section width based on whether filters are shown
   useEffect(() => {
     const resultsSection = document.querySelector('.results-section');
     if (showFilters) {
@@ -43,12 +42,10 @@ const GenericTable = ({
     }
   }, [showFilters]);
 
-  // Apply filters whenever the filters or data changes
   useEffect(() => {
     applyFilters();
   }, [filters, data]);
 
-  // Set the filtered data when filters are applied
   useEffect(() => {
     setFilteredData(data);
   }, [data]);
@@ -152,7 +149,6 @@ const GenericTable = ({
     }
   }, [page, gotoPage]);
 
-  // Update hidden columns state whenever columns are toggled
   useEffect(() => {
     const currentHiddenColumns = allColumns.filter(col => !col.isVisible).map(col => col.id);
     setHiddenColumns(currentHiddenColumns);
@@ -201,7 +197,7 @@ const GenericTable = ({
         loading={filterLoading}
         getFilterParamName={getFilterParamName}
         clearAllFilters={clearAllFilters}
-        handleSliderChange={handleSliderChange} // Pass the handler to FilterSection
+        handleSliderChange={handleSliderChange}
       />
       <div className={`results-section ${showFilters ? "" : "full-width"}`}>
         <button className={`show-filters-btn ${showFilters ? "hidden" : ""}`} onClick={toggleFilters} id='view-btn'>
@@ -216,26 +212,35 @@ const GenericTable = ({
           </div>
           <div className="table-wrapper">
             <Table {...getTableProps()} className="tableCustom">
-              <thead>
-                {headerGroups.map((headerGroup) => (
-                  <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
-                    {headerGroup.headers.map((column) => {
-                      const { key, ...rest } = column.getHeaderProps(column.getSortByToggleProps());
-                      return (
-                        <th key={key} {...rest}>
-                          {column.render('Header')}
-                          <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
-                        </th>
-                      );
-                    })}
-                  </tr>
-                ))}
-              </thead>
+            <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => {
+                  if (column.headers) {
+                    // This is the year header
+                    return (
+                      <th key={column.id} colSpan={column.headers.length} className="year-header">
+                        {column.render('Header')}
+                      </th>
+                    );
+                  } else {
+                    // This is a round header
+                    return (
+                      <th key={column.id} {...column.getHeaderProps(column.getSortByToggleProps())} className="round-header">
+                        {column.render('Header')}
+                      </th>
+                    );
+                  }
+                })}
+              </tr>
+            ))}
+          </thead>
+
               <tbody {...getTableBodyProps()}>
                 {currentPage.map((row) => {
                   prepareRow(row);
                   return (
-                    <tr key={row.id} {...row.getRowProps()} onClick={() => handleDetailClick(row.original)}>
+                    <tr key={row.id} {...row.getRowProps()}>
                       {row.cells.map((cell) => {
                         const { key, ...rest } = cell.getCellProps();
                         return (
@@ -258,8 +263,8 @@ const GenericTable = ({
             </Table>
           </div>
           <div className="pagination-container">
-            <Form.Group controlId="rowsPerPage" className="d-flex align-items-center pagination-info">
-            <Form.Label className="me-2 mb-0">Rows per page:</Form.Label>
+          <Form.Group controlId="rowsPerPage" className="d-flex align-items-center pagination-info">
+              <Form.Label className="me-2 mb-0">Rows per page:</Form.Label>
               <Form.Control
                 as="select"
                 value={pageSize}

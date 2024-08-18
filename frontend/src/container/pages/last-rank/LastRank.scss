@@ -83,7 +83,8 @@
 
                   th {
                       padding: 10px !important;
-                      text-align: left !important;
+                      text-align: center !important;
+                      vertical-align:middle;
                       color: rgb(0, 0, 0) !important;
                       font-weight: 600;
                       border-bottom: 1px solid #ddd;
@@ -521,3 +522,24 @@
 }
 
 
+th {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+.tableCustom th {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+.tableCustom .year-header {
+  text-align: center !important;
+  font-size: 44px;
+  font-weight: bold !important;
+  color:red !important;
+}
+
+.tableCustom .round-header {
+  text-align: center;
+  padding: 0;
+}

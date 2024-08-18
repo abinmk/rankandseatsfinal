@@ -63,6 +63,7 @@ root.render(
           <Route path="fees" element={<ProtectedRoute><Fees/></ProtectedRoute>} />
           <Route path="wishlist" element={<ProtectedRoute><ChoiceList username='dummyUser'/></ProtectedRoute>}/>
           <Route path="/college/:id" element={<CollegeDetail />} />
+          <Route path="/college/:collegeId" element={<CollegeDetail />} /> 
         </Route>
         <Route path="/" element={<Authenticationlayout />}>
           <Route path="authentication/signup/signupbasic" element={<Signupbasic />} />

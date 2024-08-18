@@ -5,10 +5,6 @@ import { Table, Modal, Button, Form, Pagination } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const handleRowClick = (row) => {
-  navigate(`/college/${row.original.collegeId}`, { state: { college: row.original } });
-};
-
 const GenericTable = ({
   data,
   columns,
@@ -33,6 +29,8 @@ const GenericTable = ({
   const [showRowModal, setShowRowModal] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [filteredData, setFilteredData] = useState(data);
+
+  const navigate = useNavigate(); // useNavigate for routing
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
@@ -140,9 +138,8 @@ const GenericTable = ({
     }
   }, [page, gotoPage]);
 
-  const handleRowClick = (row) => {
-    setSelectedRowData(row.original);
-    setShowRowModal(true);
+  const handleCollegeClick = (_id) => {
+    window.open(`/college/${_id}`, '_blank'); // Open in a new tab
   };
 
   const handleColumnToggle = (column) => {
@@ -215,12 +212,21 @@ const GenericTable = ({
                 {currentPage.map((row) => {
                   prepareRow(row);
                   return (
-                    <tr key={row.id} {...row.getRowProps()} onClick={() => handleRowClick(row)}>
+                    <tr key={row.id} {...row.getRowProps()}>
                       {row.cells.map((cell) => {
                         const { key, ...rest } = cell.getCellProps();
                         return (
                           <td key={key} {...rest}>
-                            {cell.render('Cell')}
+                            {cell.column.id === 'collegeName' ? (
+                              <span
+                                style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}
+                                onClick={() => handleCollegeClick(row.original._id)}
+                              >
+                                {cell.render('Cell')}
+                              </span>
+                            ) : (
+                              cell.render('Cell')
+                            )}
                           </td>
                         );
                       })}
@@ -256,7 +262,7 @@ const GenericTable = ({
                 value={pageIndex + 1}
                 onChange={(e) => setPage(Number(e.target.value))}
                 className="me-2"
-                style={{ width: 'fit-content',height:'fit-content' }}
+                style={{ width: 'fit-content', height: 'fit-content' }}
               />
             </Form.Group>
             <div className="pagination-controls">
@@ -319,3 +325,4 @@ const GenericTable = ({
 };
 
 export default GenericTable;
+

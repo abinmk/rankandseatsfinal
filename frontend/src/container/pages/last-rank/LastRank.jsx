@@ -31,6 +31,9 @@ const LastRank = () => {
           let field = key;
           if (key === 'stateOptions') field = 'state';
           if (key === 'quotaOptions') field = 'quota';
+          if (key === 'collegeNameOptions') field = 'collegeName';
+          if (key === 'courseNameOptions') field = 'courseName';
+
           adjustedFilters[field] = filters[key];
         }
       }

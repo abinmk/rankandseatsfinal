@@ -1,6 +1,5 @@
 export const LastRankColumns = (data, handleDetailClick) => {
-  const years = Object.keys(data[0]?.years || {}).sort((a, b) => b - a).slice(0, 3); // Sort and get latest 3 years
-
+  const years = Object.keys(data[0]?.years || {}).sort((a, b) => b - a).slice(0, 3); // Sort and get the latest 3 years
   const rounds = ['1', '2', '3', '4'];
 
   const columns = [
@@ -9,9 +8,11 @@ export const LastRankColumns = (data, handleDetailClick) => {
     { Header: 'State', accessor: 'state' },
     { Header: 'College', accessor: 'collegeName' },
     { Header: 'Course', accessor: 'courseName' },
-    ...years.flatMap((year) =>
-      rounds.map((round) => ({
-        Header: `${year} R${round}`,
+    ...years.map((year) => ({
+      Header: year, // Main header
+      columns: rounds.map((round) => ({
+        Header: `R${round}`, // Sub-headers
+        id: `${year}_R${round}`, // Unique ID based on year and round
         accessor: (row) => row.years[year]?.rounds[round]?.lastRank || '-',
         Cell: ({ row }) => {
           const roundData = row.original.years[year]?.rounds[round];
@@ -21,7 +22,7 @@ export const LastRankColumns = (data, handleDetailClick) => {
             return (
               <span
                 onClick={() => handleDetailClick(year, round, row.original)}
-                style={{ cursor: 'pointer', color: 'blue' }}
+                style={{ cursor: 'pointer', color: 'blue', textAlign: 'center' }}
               >
                 {`${lastRank} (${totalAllotted})`}
               </span>
@@ -29,8 +30,10 @@ export const LastRankColumns = (data, handleDetailClick) => {
           }
           return '-';
         },
-      }))
-    ),
+        disableSortBy: true, // Disable sorting on round columns
+        style: { textAlign: 'center' }, // Center align the content
+      })),
+    })),
   ];
 
   return columns;

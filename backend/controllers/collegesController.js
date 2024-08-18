@@ -1,5 +1,30 @@
 const mongoose = require('mongoose');
 
+// Define the schema for the CollegeResult collection
+const CollegeSchema = new mongoose.Schema({}, { strict: false, collection: 'COLLEGE_RESULT' });
+
+const CollegeResult = mongoose.model('CollegeResult', CollegeSchema);
+
+exports.getCollegesDataById = async (req, res) => {
+  try {
+      const collegeId = req.params.id;
+      console.log('Received ID:', collegeId); // Log the received ID
+
+      // Fetch the college details by ID from the CollegeResult collection
+      const college = await CollegeResult.findById(collegeId);
+      console.log('Found College:', college); // Log the found document
+
+      if (!college) {
+          return res.status(404).json({ message: 'College not found' });
+      }
+
+      res.json(college);
+  } catch (error) {
+      console.error('Error fetching college by ID:', error);
+      res.status(500).json({ message: 'Server error' });
+  }
+};
+
 exports.getCollegesData = async (req, res) => {
   try {
     const { page = 1, limit = 10, ...filters } = req.query;
@@ -88,7 +113,6 @@ exports.getFilterOptions = async (req, res) => {
     const totalHospitalBedsRange = await CollegeModel.aggregate([
       { $group: { _id: null, min: { $min: '$totalHospitalBeds' }, max: { $max: '$totalHospitalBeds' } } }
     ]);
-    
 
     res.json({
       state,
