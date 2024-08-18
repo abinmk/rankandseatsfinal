@@ -3,7 +3,6 @@ import { useTable, usePagination, useSortBy, useFilters, useColumnOrder } from '
 import FilterSection from './FilterSection';
 import { Table, Modal, Button, Form, Pagination } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { LastRankColumns } from './lastRankConfig';
 import './LastRank.scss';
 
 const GenericTable = ({
@@ -28,6 +27,7 @@ const GenericTable = ({
   const [showRowModal, setShowRowModal] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [filteredData, setFilteredData] = useState([]);
+  const [hiddenColumns, setHiddenColumns] = useState([]);
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
@@ -94,11 +94,6 @@ const GenericTable = ({
     }));
   };
 
-  // const handleDetailClick = (details) => {
-  //   setSelectedRowData(details);
-  //   setShowRowModal(true);
-  // };
-
   const applyFilters = () => {
     let filtered = data;
 
@@ -128,7 +123,7 @@ const GenericTable = ({
     rows,
     prepareRow,
     allColumns,
-    setHiddenColumns,
+    setHiddenColumns: setTableHiddenColumns,
     state: { pageIndex },
     page: currentPage,
     gotoPage,
@@ -141,7 +136,7 @@ const GenericTable = ({
     {
       columns,
       data: filteredData,
-      initialState: { pageIndex: page - 1 },
+      initialState: { pageIndex: page - 1, hiddenColumns },
       manualPagination: true,
       pageCount: totalPages,
     },
@@ -157,8 +152,19 @@ const GenericTable = ({
     }
   }, [page, gotoPage]);
 
+  // Update hidden columns state whenever columns are toggled
+  useEffect(() => {
+    const currentHiddenColumns = allColumns.filter(col => !col.isVisible).map(col => col.id);
+    setHiddenColumns(currentHiddenColumns);
+  }, [allColumns]);
+
   const handleColumnToggle = (column) => {
-    column.toggleHidden();
+    const newHiddenColumns = hiddenColumns.includes(column.id)
+      ? hiddenColumns.filter(col => col !== column.id)
+      : [...hiddenColumns, column.id];
+
+    setHiddenColumns(newHiddenColumns);
+    setTableHiddenColumns(newHiddenColumns);
   };
 
   const renderPaginationItems = () => {
@@ -322,7 +328,6 @@ const GenericTable = ({
           {selectedRowData && (
             <div>
               <p><strong>College:</strong> {selectedRowData.collegeName}</p>
-              {/* <p><strong>Course:</strong> {selectedRowData.courseName}</p> */}
               <p><strong>State:</strong> {selectedRowData.state}</p>
               <p><strong>Quota:</strong> {selectedRowData.quota}</p>
               <p><strong>Category:</strong> {selectedRowData.allottedCategory}</p>
@@ -363,4 +368,4 @@ const GenericTable = ({
 };
 
 export default GenericTable;
-2
+
