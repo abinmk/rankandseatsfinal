@@ -116,7 +116,7 @@ const LastRank = () => {
             <>
               <p><strong>Year:</strong> {selectedRowData.year}</p>
               <p><strong>Round:</strong> {selectedRowData.round}</p>
-              <p><strong>Course:</strong> {selectedRowData.roundData.course}</p>
+              {/* <p><strong>Course:</strong> {selectedRowData.roundData.course}</p> */}
               <p><strong>Last Rank:</strong> {selectedRowData.roundData.lastRank}</p>
               <p><strong>Total Allotted:</strong> {selectedRowData.roundData.totalAllotted}</p>
               <p><strong>Allotted Candidates Details:</strong></p>

@@ -371,6 +371,21 @@ const generateCombinedDataset = async (req, res) => {
 
     // Convert lastRankMap to an array for storage
     const lastRankResult = Object.values(lastRankMap);
+    // Sort lastRankResult by the latest year and Round 1 lastRank in ascending order
+lastRankResult.sort((a, b) => {
+  const latestYearA = Math.max(...Object.keys(a.years).map(Number));
+  const latestYearB = Math.max(...Object.keys(b.years).map(Number));
+
+  if (latestYearA !== latestYearB) {
+    return latestYearA - latestYearB;
+  }
+
+  const lastRankA = a.years[latestYearA].rounds['1']?.lastRank || 0;
+  const lastRankB = b.years[latestYearB].rounds['1']?.lastRank || 0;
+
+  return lastRankA - lastRankB;
+});
+
 
     const lastRankResultCollectionName = 'LAST_RANK_RESULT';
     const LastRankResultModel = getModel(lastRankResultCollectionName);
@@ -511,6 +526,7 @@ const generateCombinedDataset = async (req, res) => {
     res.status(500).send('Failed to generate combined dataset.');
   }
 };
+
 
 
   

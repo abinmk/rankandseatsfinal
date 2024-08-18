@@ -27,12 +27,13 @@ const GenericTable = ({
   const [showColumnModal, setShowColumnModal] = useState(false);
   const [showRowModal, setShowRowModal] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
-  const [filteredData, setFilteredData] = useState(data);
+  const [filteredData, setFilteredData] = useState([]);
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
   };
 
+  // Adjust the results section width based on whether filters are shown
   useEffect(() => {
     const resultsSection = document.querySelector('.results-section');
     if (showFilters) {
@@ -42,9 +43,15 @@ const GenericTable = ({
     }
   }, [showFilters]);
 
+  // Apply filters whenever the filters or data changes
   useEffect(() => {
     applyFilters();
-  }, [filterOptions,filters, data]);
+  }, [filters, data]);
+
+  // Set the filtered data when filters are applied
+  useEffect(() => {
+    setFilteredData(data);
+  }, [data]);
 
   const getFilterParamName = (filterKey) => {
     const filterMapping = {
@@ -87,18 +94,10 @@ const GenericTable = ({
     }));
   };
 
-  const handleDetailClick = (details) => {
-    setSelectedRowData(details);
-    setShowRowModal(true);
-  };
-  
-  // When rendering the table:
-  <GenericTable
-    data={data}
-    columns={LastRankColumns(data, handleDetailClick)}
-    // ... other props
-  />
-  
+  // const handleDetailClick = (details) => {
+  //   setSelectedRowData(details);
+  //   setShowRowModal(true);
+  // };
 
   const applyFilters = () => {
     let filtered = data;
@@ -157,8 +156,6 @@ const GenericTable = ({
       gotoPage(page - 1);
     }
   }, [page, gotoPage]);
-  
-  
 
   const handleColumnToggle = (column) => {
     column.toggleHidden();
@@ -232,7 +229,7 @@ const GenericTable = ({
                 {currentPage.map((row) => {
                   prepareRow(row);
                   return (
-                    <tr key={row.id} {...row.getRowProps()} onClick={() => handleRowClick(row)}>
+                    <tr key={row.id} {...row.getRowProps()} onClick={() => handleDetailClick(row.original)}>
                       {row.cells.map((cell) => {
                         const { key, ...rest } = cell.getCellProps();
                         return (
@@ -244,18 +241,25 @@ const GenericTable = ({
                     </tr>
                   );
                 })}
+                {currentPage.length === 0 && (
+                  <tr>
+                    <td colSpan={columns.length} style={{ textAlign: 'center' }}>
+                      No data available.
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </Table>
           </div>
           <div className="pagination-container">
             <Form.Group controlId="rowsPerPage" className="d-flex align-items-center pagination-info">
-              <Form.Label className="me-2 mb-0">Rows per page:</Form.Label>
+            <Form.Label className="me-2 mb-0">Rows per page:</Form.Label>
               <Form.Control
                 as="select"
                 value={pageSize}
                 onChange={(e) => setPageSize(Number(e.target.value))}
                 className="me-3"
-                style={{ width: 'fit-content',height:'fit-content' }}
+                style={{ width: 'fit-content', height: 'fit-content' }}
               >
                 {[10, 25, 50, 100].map((size) => (
                   <option key={size} value={size}>
@@ -273,7 +277,7 @@ const GenericTable = ({
                 value={pageIndex + 1}
                 onChange={(e) => setPage(Number(e.target.value))}
                 className="me-2"
-                style={{ width: 'fit-content',height:'fit-content' }}
+                style={{ width: 'fit-content', height: 'fit-content' }}
               />
             </Form.Group>
             <div className="pagination-controls">
@@ -311,53 +315,52 @@ const GenericTable = ({
       </Modal>
 
       <Modal show={showRowModal} onHide={() => setShowRowModal(false)}>
-  <Modal.Header closeButton>
-    <Modal.Title>Allotted Details</Modal.Title>
-  </Modal.Header>
-  <Modal.Body>
-    {selectedRowData && (
-      <div>
-        <p><strong>College:</strong> {selectedRowData.collegeName}</p>
-        <p><strong>Course:</strong> {selectedRowData.courseName}</p>
-        <p><strong>State:</strong> {selectedRowData.state}</p>
-        <p><strong>Quota:</strong> {selectedRowData.quota}</p>
-        <p><strong>Category:</strong> {selectedRowData.allottedCategory}</p>
+        <Modal.Header closeButton>
+          <Modal.Title>Allotted Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedRowData && (
+            <div>
+              <p><strong>College:</strong> {selectedRowData.collegeName}</p>
+              {/* <p><strong>Course:</strong> {selectedRowData.courseName}</p> */}
+              <p><strong>State:</strong> {selectedRowData.state}</p>
+              <p><strong>Quota:</strong> {selectedRowData.quota}</p>
+              <p><strong>Category:</strong> {selectedRowData.allottedCategory}</p>
 
-        {selectedRowData.yearData && Object.keys(selectedRowData.yearData).map(year => (
-          <div key={year}>
-            <h5>{year}</h5>
-            {selectedRowData.yearData[year].map((round, index) => (
-              <div key={index}>
-                <p><strong>Round {round.round}:</strong></p>
-                <p>Last Rank: {round.lastRank}</p>
-                <p>Total Allotted: {round.totalAllotted}</p>
-                <h6>Allotted Candidates:</h6>
-                <ul>
-                  {round.allottedDetails.map((detail, i) => (
-                    <li key={i}>
-                      Roll Number: {detail.rollNumber}, Rank: {detail.rank}, 
-                      Candidate Category: {detail.candidateCategory}, 
-                      Allotted Institute: {detail.allottedInstitute}
-                    </li>
+              {selectedRowData.yearData && Object.keys(selectedRowData.yearData).map(year => (
+                <div key={year}>
+                  <h5>{year}</h5>
+                  {selectedRowData.yearData[year].map((round, index) => (
+                    <div key={index}>
+                      <p><strong>Round {round.round}:</strong></p>
+                      <p>Last Rank: {round.lastRank}</p>
+                      <p>Total Allotted: {round.totalAllotted}</p>
+                      <h6>Allotted Candidates:</h6>
+                      <ul>
+                        {round.allottedDetails.map((detail, i) => (
+                          <li key={i}>
+                            Roll Number: {detail.rollNumber}, Rank: {detail.rank}, 
+                            Candidate Category: {detail.candidateCategory}, 
+                            Allotted Institute: {detail.allottedInstitute}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
-    )}
-  </Modal.Body>
-  <Modal.Footer>
-    <Button variant="secondary" onClick={() => setShowRowModal(false)}>
-      Close
-    </Button>
-  </Modal.Footer>
-</Modal>
-
-
+                </div>
+              ))}
+            </div>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowRowModal(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
 
 export default GenericTable;
+2
