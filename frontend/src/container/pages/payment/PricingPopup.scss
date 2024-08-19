@@ -1,0 +1,38 @@
+.pricing-btn {
+  width: 100%;
+  padding: 10px;
+  font-size: 18px;
+  animation: pulse 2s infinite;
+}
+
+.pricing-modal .modal-header-custom {
+  background-color: #f8f9fa;
+  border-bottom: none;
+}
+
+.modal-btn-cancel, .modal-btn-confirm {
+  width: 45%;
+  padding: 10px;
+}
+
+.modal-btn-confirm {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.terms-text {
+  font-size: 12px;
+  color: #6c757d;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 20px rgba(0, 123, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
+  }
+}

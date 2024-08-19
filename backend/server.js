@@ -45,6 +45,7 @@ app.use(cors({
   credentials: true
 }));
 
+
 // MongoDB connection setup
 const db = process.env.MONGO_URI;
 if (!db) {

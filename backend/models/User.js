@@ -30,6 +30,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String },
   otp: { type: String },
   isAdmin: { type: Boolean, default: false },
+  paymentStatus: { type: String, default: 'Unpaid' },
   selectedExams: [examSelectionSchema],
   wishlist: [wishlistSchema], // Grouped wishlist by exam and counseling type
 }, { timestamps: true });
