@@ -22,7 +22,7 @@ const PricingPopup = () => {
   const handlePayment = () => {
     const options = {
       key: 'rzp_test_YRRWY9o1BIUXQZ',
-      amount: 99900, // Amount in paise (₹999)
+      amount: 117882, // Amount in paise (₹999)
       currency: 'INR',
       name: 'Rank and Seats',
       description: 'NEET Counselling Plan',
@@ -82,11 +82,11 @@ const PricingPopup = () => {
           <Modal.Title className="text-primary">Confirm Your Plan</Modal.Title>
         </Modal.Header>
         <Modal.Body className="text-center">
-          <h5 className="fw-bold">Rank and Seats - ₹999 + GST / Per Year</h5>
+          <h5 className="fw-bold">Rank and Seats - ₹999 + GST</h5>
           <p className="text-muted">
             Get full access to all features to help you in your NEET counselling journey.
           </p>
-          <p className="fw-bold">Billed Annually</p>
+          <p className="fw-bold">One-Time Fee</p>
           <p className="terms-text">By proceeding, you agree to our terms and conditions.</p>
         </Modal.Body>
         <Modal.Footer className="justify-content-center">

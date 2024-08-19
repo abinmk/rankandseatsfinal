@@ -1173,7 +1173,7 @@ const Landing = () => {
           Get full access to all features to help you in your NEET counselling journey.
         </div>
         <div className="fs-12 mb-3">
-          <u>Billed Annually</u>
+          <u>One-Time Fee</u>
         </div>
         <ul className="list-unstyled mb-0">
           <li className="d-flex align-items-center mb-3">
