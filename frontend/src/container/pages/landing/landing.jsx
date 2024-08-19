@@ -12,6 +12,7 @@ import { ThemeChanger } from "../../../redux/action";
 import store from "../../../redux/store";
 import faces1 from "../../../assets/images/faces/1.jpg";
 import { Link } from "react-router-dom";
+import "./nav.scss"
 
 //IMAGES
 import togglelogo from "../../../assets/images/brand-logos/toggle-logo.png";
@@ -1734,7 +1735,7 @@ const Landing = () => {
             <div className="px-4">
               <p className="fw-semibold mb-3">
                 <Link aria-label="anchor" to="/">
-                  <img src={desktopdark} alt="Rank and Seats Logo" />
+                  <img src={desktopdark} width={"300px"}alt="Rank and Seats Logo" />
                 </Link>
               </p>
               <p className="mb-2 op-6 fw-normal">
@@ -1829,16 +1830,15 @@ Kerala-670731</Link>
         </Row>
       </div>
     </section>
+	<div className="landing-main-footer py-4">
+  <span className="footer-text">
+    © <span id="year">2024</span> <Link to="" className="footer-link">Rank & Seats</Link>
+    Designed by <Link to="https://www.sysbitech.com/" target="_blank" className="footer-link">Sysbreeze</Link>
+    All rights reserved
+  </span>
+</div>
 
-					<div className="text-center landing-main-footer py-3">
-						<span className="text-muted fs-15"> Copyright © <span id="year">2024</span> <Link to="#" className="text-primary fw-semibold"><u>Rank & Seats</u></Link>.
-							Designed with <span className="fa fa-heart text-danger"></span> by <Link to="#" className="text-primary fw-semibold"><u>
-								Sysbreeze</u>
-						</Link> All
-							rights
-							reserved
-						</span>
-					</div>
+
 
 				</div>
 			</HelmetProvider>

@@ -1,3 +1,29 @@
-.main-menu{
-    background-color: blue;
-}
+.landing-main-footer {
+    background-color: #000; /* Black background */
+    padding: 20px 0; /* Vertical padding */
+    display: flex;
+    justify-content: center; /* Center the content horizontally */
+    align-items: center; /* Center the content vertically */
+  }
+  
+  .footer-text {
+    color: #fff; /* White text for contrast */
+    font-size: 14px; /* Modern, readable font size */
+    font-family: 'Roboto', sans-serif; /* Clean, modern font */
+  }
+  
+  .footer-link {
+    color: #00aaff; /* Modern, vibrant link color */
+    text-decoration: none; /* Remove underline for a cleaner look */
+    font-weight: bold; /* Emphasize links */
+    margin: 0 5px; /* Add spacing between links */
+  }
+  
+  .footer-link:hover {
+    color:antiquewhite;
+  }
+  
+  .fa-heart {
+    color: #ff5252; /* Soft red heart color */
+  }
+  
