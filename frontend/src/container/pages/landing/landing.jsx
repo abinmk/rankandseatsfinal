@@ -33,6 +33,7 @@ import faces8 from "../../../assets/images/faces/8.jpg";
 import faces11 from "../../../assets/images/faces/11.jpg";
 import faces15 from "../../../assets/images/faces/15.jpg";
 import Navbar1 from "./navbar";
+import PricingPopup from "../payment/pricingPopup";
 
 const Landing = () => {
 
@@ -255,8 +256,8 @@ const Landing = () => {
 									<div className="py-lg-5 text-center">
 										<p className="landing-banner-heading text-fixed-white mb-1">Achieve your dreams with <span className="">us!</span></p>
 										<div className="fs-16 mb-4 text-fixed-white op-8 px-4">Your gateway to accurate rankings and seat allotments</div>
-										<Link to={`${import.meta.env.BASE_URL}lastrank`} className="m-1 btn btn-lg btn-success" target="_blank"> Explore Rankings <i className="ri-arrow-right-line ms-2 align-middle"></i> </Link>
-										<Link to={`${import.meta.env.BASE_URL}allotments`} className="m-1 btn btn-lg btn-light" target="_blank"> View Seat Allotments <i className="ri-eye-line ms-2 align-middle"></i> </Link>
+										<Link to={`${import.meta.env.BASE_URL}lastrank/`} className="m-1 btn btn-lg btn-success" target="_blank"> Explore Rankings <i className="ri-arrow-right-line ms-2 align-middle"></i> </Link>
+										<Link to={`${import.meta.env.BASE_URL}allotments/`} className="m-1 btn btn-lg btn-light" target="_blank"> View Seat Allotments <i className="ri-eye-line ms-2 align-middle"></i> </Link>
 									</div>
 								</div>
 							</div>
@@ -281,8 +282,12 @@ const Landing = () => {
                         </div>
                         <h6 className="fw-semibold">NEET PG</h6>
                         <p className="text-muted">Benefit from our expert support and guidance tailored for NEET PG aspirants.</p>
-                        <Button variant="primary" size="lg" className="w-100 animate__animated animate__pulse">Get Support for NEET PG</Button>
-                    </Card.Body>
+						<Link to={`${import.meta.env.BASE_URL}allotments/`}>
+						<Button variant="primary" size="lg" className="w-100 animate__animated animate__pulse">
+							Get Support for NEET PG
+						</Button>
+						</Link>              
+					</Card.Body>
                 </div>
             </Col>
             <Col xl={3} lg={4} md={6} sm={12} className="mb-3">
@@ -293,7 +298,9 @@ const Landing = () => {
                         </div>
                         <h6 className="fw-semibold">NEET SS</h6>
                         <p className="text-muted">Get the right support and guidance you need to succeed in NEET SS.</p>
+						<Link to={`${import.meta.env.BASE_URL}allotments/`}>
                         <Button variant="success" size="lg" className="w-100 animate__animated animate__pulse">Get Support for NEET SS</Button>
+						</Link>
                     </Card.Body>
                 </div>
             </Col>
@@ -305,7 +312,9 @@ const Landing = () => {
                         </div>
                         <h6 className="fw-semibold">INI CET</h6>
                         <p className="text-muted">Leverage our expertise to navigate your INI CET preparations with confidence.</p>
+						<Link to={`${import.meta.env.BASE_URL}allotments/`}>
                         <Button variant="info" size="lg" className="w-100 animate__animated animate__pulse">Get Support for INI CET</Button>
+						</Link>
                     </Card.Body>
                 </div>
             </Col>
@@ -364,7 +373,7 @@ const Landing = () => {
 											<p className="text-muted mb-2 mx-1">
 												Our team provides expert guidance to help you navigate your educational journey.
 											</p>
-											<Link className="fs-12 mx-1 text-primary" to="#">Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
+											<Link className="fs-12 mx-1 text-primary" to={`${import.meta.env.BASE_URL}allotments/`}>Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
 										</div>
 									</div>
 								</div>
@@ -385,7 +394,7 @@ const Landing = () => {
 											<p className="text-muted mb-2 mx-1">
 												Receive tailored guidance and support to navigate your educational journey.
 											</p>
-											<Link className="fs-12 mx-1 text-primary" to="#">Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
+											<Link className="fs-12 mx-1 text-primary" to={`${import.meta.env.BASE_URL}allotments/`}>Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
 										</div>
 									</div>
 								</div>
@@ -412,7 +421,7 @@ const Landing = () => {
 											<p className="text-muted mb-2 mx-1">
 												Our platform is built with a responsive design to ensure a seamless experience across all devices.
 											</p>
-											<Link className="fs-12 mx-1 text-primary" to="#">Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
+											<Link className="fs-12 mx-1 text-primary" to={`${import.meta.env.BASE_URL}allotments/`}>Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
 										</div>
 									</div>
 								</div>
@@ -435,7 +444,7 @@ const Landing = () => {
 											<p className="text-muted mb-2 mx-1">
 												Access a wide variety of resources to support your educational journey and success.
 											</p>
-											<Link className="fs-12 mx-1 text-primary" to="#">Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
+											<Link className="fs-12 mx-1 text-primary" to={`${import.meta.env.BASE_URL}allotments/`}>Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
 										</div>
 									</div>
 								</div>
@@ -458,7 +467,7 @@ const Landing = () => {
 											<p className="text-muted mb-2 mx-1">
 												Access a wide range of resources and tools to support your educational journey and success.
 											</p>
-											<Link className="fs-12 mx-1 text-primary" to="#">Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
+											<Link className="fs-12 mx-1 text-primary" to={`${import.meta.env.BASE_URL}allotments/`}>Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
 										</div>
 									</div>
 								</div>
@@ -486,7 +495,7 @@ const Landing = () => {
 											<p className="text-muted mb-2 mx-1">
 												Our platform is designed with students in mind, offering a wealth of resources and tools.
 											</p>
-											<Link className="fs-12 mx-1 text-primary" to="#">Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
+											<Link className="fs-12 mx-1 text-primary" to={`${import.meta.env.BASE_URL}allotments/`}>Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
 										</div>
 									</div>
 								</div>
@@ -507,7 +516,7 @@ const Landing = () => {
 											<p className="text-muted mb-2 mx-1">
 												Our documentation provides detailed guidance to help you make the most of our services.
 											</p>
-											<Link className="fs-12 mx-1 text-primary" to="#">Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
+											<Link className="fs-12 mx-1 text-primary" to={`${import.meta.env.BASE_URL}allotments/`}>Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
 										</div>
 									</div>
 								</div>
@@ -528,7 +537,7 @@ const Landing = () => {
 											<p className="text-muted mb-2 mx-1">
 												Utilize our comprehensive charts to gain insights and make informed decisions.
 											</p>
-											<Link className="fs-12 mx-1 text-primary" to="#">Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
+											<Link className="fs-12 mx-1 text-primary" to={`${import.meta.env.BASE_URL}allotments/`}>Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
 										</div>
 									</div>
 								</div>
@@ -536,8 +545,8 @@ const Landing = () => {
 						</div>
 					</section>
 					<section className="section" id="about">
-						<img src={landing4} alt="img" className="banner-png2 op-1" />
-						<img src={landing7} alt="img" className="banner-png4" />
+						{/* <img src={landing4} alt="img" className="banner-png2 op-1" />
+						<img src={landing7} alt="img" className="banner-png4" /> */}
 						<div className="container text-center">
 							<p className="fs-12 fw-semibold text-primary mb-1"><span className="landing-section-heading">ABOUT US</span></p>
 							<h4 className="fw-semibold mb-2">Empowering Your Educational Journey</h4>
@@ -548,7 +557,7 @@ const Landing = () => {
 							</div>
 							<Row>
 								<Col xl={5} className="customize-image">
-									<img src={landing1} alt="" className="custmize-img" />
+									{/* <img src={landing1} alt="" className="custmize-img" /> */}
 								</Col>
 								<Col lg={7} className="text-start">
 									<p className="h4 mb-0"> Get to Know Us</p>
@@ -573,8 +582,8 @@ const Landing = () => {
 											</div>
 										</li>
 									</ul>
-									<Link to="#" className="btn btn-primary btn-lg me-2">Get Started Now</Link>
-									<Link to="#" className="btn btn-primary-transparent btn-lg">Learn More</Link>
+									<Link to={`${import.meta.env.BASE_URL}dashboards/`} className="btn btn-primary btn-lg me-2">Get Started Now</Link>
+									<Link to={`${import.meta.env.BASE_URL}allotments/`} className="btn btn-primary-transparent btn-lg">Learn More</Link>
 								</Col>
 							</Row>
 						</div>
@@ -1144,63 +1153,62 @@ const Landing = () => {
           </p>
         </Col>
         <div className="row justify-content-center mt-4">
-          <Col xl={4} lg={6} md={8} sm={10}>
-            <div className="card custom-card overflow-hidden">
-              <div className="card-body p-0">
-                <div className="p-4 pricing-card">
-                  <div className="d-flex justify-content-between align-items-center mb-3">
-                    <div className="d-flex">
-                      <i className="ti ti-free-rights fs-24 text-primary me-1"></i>
-                      <div className="fs-18 fw-semibold">Rank and Seats</div>
-                    </div>
-                    <div>
-                      <span className="badge bg-success-transparent">For NEET Aspirants</span>
-                    </div>
-                  </div>
-                  <div className="fs-25 fw-bold mb-1">
-                    ₹999<sub className="text-muted fw-semibold fs-11">+ GST / Per Year</sub>
-                  </div>
-                  <div className="mb-1 text-muted">
-                    Get full access to all features to help you in your NEET counselling journey.
-                  </div>
-                  <div className="fs-12 mb-3">
-                    <u>Billed Annually</u>
-                  </div>
-                  <ul className="list-unstyled mb-0">
-                    <li className="d-flex align-items-center mb-3">
-                      <span className="me-2">
-                        <i className="ri-checkbox-circle-line fs-15 text-success"></i>
-                      </span>
-                      <span>
-                        <strong className="me-1 d-inline-block">Full Access</strong> to All Features
-                      </span>
-                    </li>
-                    <li className="d-flex align-items-center mb-3">
-                      <span className="me-2">
-                        <i className="ri-checkbox-circle-line fs-15 text-success"></i>
-                      </span>
-                      <span>
-                        <strong className="me-1 d-inline-block">All</strong> Counselings
-                      </span>
-                    </li>
-                    <li className="d-flex align-items-center mb-3">
-                      <span className="me-2">
-                        <i className="ri-checkbox-circle-line fs-15 text-success"></i>
-                      </span>
-                      <span>
-                        <strong className="me-1 d-inline-block">Wishlist</strong>Creation
-                      </span>
-                    </li>
-                    <li className="d-grid">
-                      <Button variant="primary" type="button" aria-label="Choose Plan" className="btn btn-primary">
-                        Choose Plan
-                      </Button>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </Col>
+        <Col xl={4} lg={6} md={8} sm={10}>
+  <div className="card custom-card overflow-hidden">
+    <div className="card-body p-0">
+      <div className="p-4 pricing-card">
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <div className="d-flex">
+            <i className="ti ti-free-rights fs-24 text-primary me-1"></i>
+            <div className="fs-18 fw-semibold">Rank and Seats</div>
+          </div>
+          <div>
+            <span className="badge bg-success-transparent">For NEET Aspirants</span>
+          </div>
+        </div>
+        <div className="fs-25 fw-bold mb-1">
+          ₹999<sub className="text-muted fw-semibold fs-11">+ GST / Per Year</sub>
+        </div>
+        <div className="mb-1 text-muted">
+          Get full access to all features to help you in your NEET counselling journey.
+        </div>
+        <div className="fs-12 mb-3">
+          <u>Billed Annually</u>
+        </div>
+        <ul className="list-unstyled mb-0">
+          <li className="d-flex align-items-center mb-3">
+            <span className="me-2">
+              <i className="ri-checkbox-circle-line fs-15 text-success"></i>
+            </span>
+            <span>
+              <strong className="me-1 d-inline-block">Full Access</strong> to All Features
+            </span>
+          </li>
+          <li className="d-flex align-items-center mb-3">
+            <span className="me-2">
+              <i className="ri-checkbox-circle-line fs-15 text-success"></i>
+            </span>
+            <span>
+              <strong className="me-1 d-inline-block">All</strong> Counselings
+            </span>
+          </li>
+          <li className="d-flex align-items-center mb-3">
+            <span className="me-2">
+              <i className="ri-checkbox-circle-line fs-15 text-success"></i>
+            </span>
+            <span>
+              <strong className="me-1 d-inline-block">Wishlist</strong> Creation
+            </span>
+          </li>
+          <li className="d-grid">
+            <PricingPopup />
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</Col>
+
         </div>
       </div>
     </section>
@@ -1706,7 +1714,9 @@ const Landing = () => {
                     </div>
                     <div className="card-footer border-top-0 ps-0 pb-0 mt-1">
                       <div className="text-start">
-                        <Button variant="primary" type="button" aria-label="Send Message" className="btn btn-primary btn-wave">Send Message</Button>
+                        <Button variant="primary" type="button" aria-label="Send Message" onClick={function(){
+							alert("Thanks for choosing us !")
+						}} className="btn btn-primary btn-wave">Send Message</Button>
                       </div>
                     </div>
                   </div>
