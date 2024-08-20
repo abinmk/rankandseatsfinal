@@ -36,6 +36,11 @@ import PrivacyPolicy from "./container/pages/Kyc/PrivacyPolicy.jsx";
 import CancellationRefundPolicy from "./container/pages/Kyc/CancellationRefundPolicy.jsx";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // This includes Popper.js and Bootstrap's JavaScript
+import AdminInformationAlert from "./container/pages/admin/AdminInformationAlert.jsx";
+import AdminAlertsAnnouncements from "./container/pages/admin/AdminAlertsAnnouncements.jsx";
+import EventsUpdate from "./container/pages/admin/EventsUpdate.jsx";
+import CardsUpdate from "./container/pages/admin/CardsUpdate.jsx";
+import AdminDashboard from "./container/pages/admin/AdminMain.jsx";
 
 
 
@@ -46,7 +51,14 @@ root.render(
     <Scrolltop />
     <React.Suspense fallback={<div>Loading...</div>}>
       <Routes>
-        <Route path="upload" element={<Upload />} />
+        <Route path="admin/upload" element={<Upload />} />
+        <Route path="admin-info" element={<AdminInformationAlert />} />
+        <Route path="admin-alert" element={< AdminAlertsAnnouncements />} />
+        <Route path="admin-events"  element={< EventsUpdate />} />
+        <Route path="admin-cards" element={< CardsUpdate />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+
+       
         <Route path="upload/round" element={<UploadRound />} />
         <Route path="/" element={<Auth />}>
           <Route index element={<Login />} />

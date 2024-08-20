@@ -1,0 +1,102 @@
+/* Global Styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f5f6fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Cards */
+  .custom-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: none;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .custom-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  }
+  
+  .custom-card h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  /* Buttons */
+  button {
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  /* Tables */
+  .table {
+    border-collapse: separate;
+    border-spacing: 0 15px;
+    margin: 20px 0;
+  }
+  
+  .table thead th {
+    background-color: #007bff;
+    color: #fff;
+    padding: 12px;
+    border: none;
+  }
+  
+  .table tbody tr {
+    background-color: #fff;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .table tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .table td {
+    padding: 12px;
+    border-top: 1px solid #e9ecef;
+  }
+  
+  /* Modals */
+  .modal-header {
+    border-bottom: none;
+    padding-bottom: 10px;
+  }
+  
+  .modal-footer {
+    border-top: none;
+    padding-top: 10px;
+  }
+  
+  .modal-body {
+    padding-top: 0;
+  }
+  
+  /* Alerts */
+  .alert {
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  
+  /* Forms */
+  .form-control {
+    border-radius: 4px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  }
+  
