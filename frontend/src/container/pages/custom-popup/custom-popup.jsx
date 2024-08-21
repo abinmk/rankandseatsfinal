@@ -1,22 +1,30 @@
 import React from 'react';
-import { Modal, Button } from 'react-bootstrap';
 import './CustomPopup.scss';
 
 const CustomPopup = ({ show, handleClose, title, message }) => {
+  if (!show) return null;
+
   return (
-    <Modal show={show} onHide={handleClose} centered className="custom-popup">
-      <Modal.Header closeButton className="modal-header-custom">
-        <Modal.Title className="" id="title-id">{title}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body className="text-center">
-        <p className="popup-message">{message}</p>
-      </Modal.Body>
-      <Modal.Footer className="justify-content-center">
-        <Button variant="primary" onClick={handleClose} className="modal-btn-confirm">
-          OK
-        </Button>
-      </Modal.Footer>
-    </Modal>
+    <div className="custom-popup-overlay">
+      <div className="custom-popup">
+        <div className="popup-content">
+          <div className="popup-header">
+            <h5 className="popup-title">{title}</h5>
+            <button type="button" className="popup-close" onClick={handleClose}>
+              &times;
+            </button>
+          </div>
+          <div className="popup-body">
+            <p className="popup-message">{message}</p>
+          </div>
+          <div className="popup-footer">
+            <button className="popup-btn-confirm" onClick={handleClose}>
+              OK
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
