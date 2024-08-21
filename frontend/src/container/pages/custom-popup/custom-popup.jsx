@@ -9,7 +9,7 @@ const CustomPopup = ({ show, handleClose, title, message }) => {
       <div className="custom-popup">
         <div className="popup-content">
           <div className="popup-header">
-            <h5 className="popup-title">{title}</h5>
+            <h5 className="custom-popup-title">{title}</h5>
             <button type="button" className="popup-close" onClick={handleClose}>
               &times;
             </button>
