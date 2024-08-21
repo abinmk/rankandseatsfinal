@@ -23,6 +23,8 @@
     "@fullcalendar/timegrid": "^6.1.11",
     "@mui/icons-material": "^5.15.12",
     "@mui/material": "^5.16.5",
+    "@popperjs/core": "^2.11.8",
+    "@react-google-maps/api": "^2.19.3",
     "@reduxjs/toolkit": "^2.1.0",
     "@simonwep/pickr": "^1.9.0",
     "@types/dragula": "^3.7.4",

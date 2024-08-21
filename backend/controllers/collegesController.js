@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const CollegeSchema = new mongoose.Schema({}, { strict: false, collection: 'COLLEGE_RESULT' });
 
 const CollegeResult = mongoose.model('CollegeResult', CollegeSchema);
+const FullCollegeResult = require('../models/fullCollegeResultModel');
 
 exports.getCollegesDataById = async (req, res) => {
   try {
@@ -127,3 +128,23 @@ exports.getFilterOptions = async (req, res) => {
     res.status(500).send('Failed to fetch filter options.');
   }
 };
+
+exports.getCollegeByName = async (req, res) => {
+  const { collegeName } = req.params;
+  
+  try {
+      console.log('Entered method to fetch college by name:', collegeName);
+
+      const college = await FullCollegeResult.findOne({ collegeName });
+
+      if (!college) {
+          return res.status(404).json({ error: 'College not found' });
+      }
+
+      res.json(college);
+  } catch (error) {
+      console.error('Error fetching college by name:', error);
+      res.status(500).json({ error: 'Server error' });
+  }
+};
+

@@ -138,9 +138,14 @@ const GenericTable = ({
     }
   }, [page, gotoPage]);
 
-  const handleCollegeClick = (_id) => {
-    window.open(`/college/${_id}`, '_blank'); // Open in a new tab
+  const handleCollegeClick = (collegeName) => {
+    const encodedCollegeName = encodeURIComponent(collegeName);
+    const url = `/college/${encodedCollegeName}`;
+    window.open(url, '_blank'); // Opens in a new tab
   };
+  
+  
+
 
   const handleColumnToggle = (column) => {
     column.toggleHidden();
@@ -216,18 +221,19 @@ const GenericTable = ({
                       {row.cells.map((cell) => {
                         const { key, ...rest } = cell.getCellProps();
                         return (
-                          <td key={key} {...rest}>
-                            {cell.column.id === 'collegeName' ? (
-                              <span
-                                style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}
-                                onClick={() => handleCollegeClick(row.original._id)}
-                              >
-                                {cell.render('Cell')}
-                              </span>
-                            ) : (
-                              cell.render('Cell')
-                            )}
-                          </td>
+                        <td key={key} {...rest}>
+                          {cell.column.id === 'collegeName' ? (
+                            <span
+                              style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}
+                              onClick={() => handleCollegeClick(row.original.collegeName)} // Pass the college name here
+                            >
+                              {cell.render('Cell')}
+                            </span>
+                          ) : (
+                            cell.render('Cell')
+                          )}
+                        </td>
+
                         );
                       })}
                     </tr>

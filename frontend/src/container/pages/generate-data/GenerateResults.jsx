@@ -17,6 +17,23 @@ function GenerateResults() {
     }
   }, [exam, examType]);
 
+  const handleGenerateData = async () => {
+    try {
+      // Replace with your actual API URL
+      const response = await axios.post(`${API_URL}/dataset/generate-full-college-result`);
+      
+      if (response.status === 200) {
+        alert('College data generated successfully!');
+        console.log(response.data);
+      } else {
+        alert('Failed to generate college data.');
+      }
+    } catch (error) {
+      console.error('Error generating college data:', error);
+      alert('An error occurred while generating college data.');
+    }
+  };
+
   const fetchAvailableAllotments = async (exam, type) => {
     try {
       console.log(`Fetching available allotments for exam: ${exam}, type: ${type}`);
