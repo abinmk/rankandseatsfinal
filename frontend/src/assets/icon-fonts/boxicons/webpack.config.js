@@ -30,19 +30,23 @@ module.exports = {
         },
       },
       {
-        test: /\.css$/,
+        test: /\.scss$/,
         use: [
-            { loader: 'to-string-loader' },
+          'style-loader',
           {
             loader: 'css-loader',
             options: {
-              camelCase: true,
+              importLoaders: 1,
+              modules: true, // or false depending on whether you are using CSS modules
             },
           },
+          'postcss-loader', // if you are using PostCSS
         ],
       },
     ],
   },
+
+
   plugins: [
     new webpack.DefinePlugin({
       'BUILD.DATA': {
