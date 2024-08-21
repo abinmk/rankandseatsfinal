@@ -62,22 +62,19 @@ exports.verifyPayment = async (req, res) => {
 
 
   // Example Express route for checking subscription status
-  exports.checkSubscription = async (req, res) => {
-    try {
-      const userId = req.user.userId;  // This is provided by the middleware
-  
-      const user = await User.findById(userId);
-      if (user && user.paymentStatus === 'Paid') {
-        res.json({ status: 'paid' });
-      } else {
-        res.json({ status: 'not_paid' });
-      }
-    } catch (error) {
-      console.error('Error checking subscription status:', error);
-      res.status(500).json({ message: 'Server error' });
+exports.checkSubscription =  async (req, res) => {
+  const { userId } = req.body;
+  try {
+    const user = await User.findById(userId);
+    if (user && user.paymentStatus === 'Paid') {
+      res.json({ status: 'paid' });
+    } else {
+      res.json({ status: 'not_paid' });
     }
-  };
-  
-  
+  } catch (error) {
+    console.error('Error checking subscription status:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
 
   

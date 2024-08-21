@@ -8,6 +8,6 @@ router.post('/create-order', createOrder);
 
 // Route to verify payment signature
 router.post('/verify-signature', verifyPayment);
-router.post('/check-subscription',authMiddleware,checkSubscription);
+router.post('/check-subscription',checkSubscription);
 
 module.exports = router;
