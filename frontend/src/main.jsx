@@ -58,7 +58,7 @@ root.render(
         <Route path="admin-events"  element={< EventsUpdate />} />
         <Route path="admin-cards" element={< CardsUpdate />} />
         <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/college/:collegeName" element={<CollegeDetail />} />
+     
 
        
         <Route path="upload/round" element={<UploadRound />} />
@@ -76,6 +76,7 @@ root.render(
           <Route path="institutes" element={<ProtectedRoute><Colleges /></ProtectedRoute>} />
           <Route path="fees" element={<ProtectedRoute><Fees/></ProtectedRoute>} />
           <Route path="wishlist" element={<ProtectedRoute><ChoiceList username='dummyUser'/></ProtectedRoute>}/>
+          <Route path="/college/:collegeName" element={<CollegeDetail />} />
          
 
         </Route>

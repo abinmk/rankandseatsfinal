@@ -1,93 +1,180 @@
 .collegeDetailContainer {
-  display: flex;
-  flex-direction: column;
-  margin: 20px;
+  background-color: #f4f7fa;
+  max-width: 80%;
+  margin: 20px auto;
   padding: 20px;
-  background-color: #f8f9fa;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  font-family: 'Roboto', sans-serif;
+  color: #333;
 }
 
 .topSection {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 15px;
+  padding: 20px;
+  border: 1px solid #ddd;
   margin-bottom: 20px;
-}
-
-.leftSection, .rightSection {
-  flex: 1;
-  padding: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
 .collegeHeader {
+  background-color: #002e5b;
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  width: 100%;
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
-  border-bottom: 2px solid #dee2e6;
-  padding-bottom: 15px;
+  justify-content: space-between;
 }
 
-.collegeLogo img {
-  max-width: 130px;
-  border-radius: 8px;
-  margin-right: 20px;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+.collegeHeader h1 {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 0;
 }
 
-.collegeInfo h1 {
-  color: #0056b3;
-  font-size: 1.8rem;
-  margin-bottom: 10px;
+.collegeHeader .badges {
+  display: flex;
+  gap: 20px;
 }
 
-.collegeInfo p {
-  font-size: 0.95rem;
-  color: #555;
+.badge-custom {
+  background-color: #f7931e;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.generalDetails h2 {
+.detailSection {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
   margin-top: 20px;
-  margin-bottom: 10px;
-  color: #004085;
-  font-size: 1.4rem;
+  gap: 20px;
 }
 
-.generalDetails p {
-  font-size: 0.9rem;
-  color: #333;
+.detailsColumn {
+  flex: 1;
+  min-width: 300px;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
-.mapSection h2 {
-  margin-bottom: 15px;
+.detailsColumn p {
+  margin: 12px 0;
+  font-size: 16px;
+  color: #555;
+  display: flex;
+  align-items: center;
+}
+
+.detailsColumn p strong {
+  margin-right: 5px;
+}
+
+.detailsColumn p svg {
+  margin-right: 10px;
+  color: #002e5b;
 }
 
 .mapContainer {
-  width: 100%;
-  height: 400px;
+  width: 400px;
+  height: 250px;
   border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.coursesDetails {
-  margin-top: 20px;
+.coursesSection {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 15px;
+  border: 1px solid #ddd;
+  margin-top: 30px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
-.coursesList {
-  max-height: 500px;
-  overflow-y: auto;
-}
-
-.courseBox {
-  margin-bottom: 15px;
-}
-
-.courseInfo {
-  margin-top: 10px;
-}
-
-.smallFont {
-  font-size: 0.85rem;
+.coursesSection h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #002e5b;
 }
 
 .tableHeader {
-  background-color: #f8f9fa;
+  background-color: #002e5b;
+  color: white;
+  font-weight: bold;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+
+.totalSeatsContainer {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #ddd;
+  margin-top: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.totalSeatsContainer p {
+  font-size: 20px;
+  font-weight: bold;
+  color: #555;
+}
+
+.totalSeatsContainer .seatsCount {
+  font-size: 48px;
+  font-weight: bold;
+  color: #002e5b;
+}
+
+.totalCoursesContainer p {
+  font-size: 18px;
+  font-weight: bold;
+  color: #002e5b;
+  display: flex;
+  align-items: center;
+}
+
+.totalCoursesContainer svg {
+  margin-right: 10px;
+}
+
+button {
+  background-color: #002e5b;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #001d3d;
+}
+
+.smallFont {
+  font-size: 14px;
 }
