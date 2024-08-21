@@ -54,7 +54,11 @@ module.exports = {
       header: getWrapper('header'),
       footer: getWrapper('footer'),
     }),
+    
   ],
+  optimization: {
+    minimize: false, // Disables code minimization
+  },
 };
 
 function getWrapper(type) {
