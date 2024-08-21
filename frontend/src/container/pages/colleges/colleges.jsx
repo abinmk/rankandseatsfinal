@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect,useContext, useCallback, useMemo } from 'react';
 import axios from 'axios';
 import _ from 'lodash';
 import GenericTable from './GenericTable';
@@ -16,7 +16,6 @@ const Colleges = () => {
   const [filterLoading, setFilterLoading] = useState(true);
 
   const apiUrl = import.meta.env.VITE_API_URL;
-
   const getFilterParamName = useMemo(() => {
     const filterMapping = {
       state: 'state',

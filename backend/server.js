@@ -350,7 +350,7 @@ app.use('/api/courses', coursesRoutes);
 app.use('/api/fees', feesRoutes);
 app.use('/api/protected', require('./routes/protectedRoute'));
 app.use('/api/lastrank', lastRankRoutes);
-app.use('/api/payment', paymentRoutes);
+app.use('/api/payment',authMiddleware, paymentRoutes);
 app.use('/api/admin-data', informationAlertRoutes);
 
 // Serve the React app for any route not handled by the above
