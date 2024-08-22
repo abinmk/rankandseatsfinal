@@ -1,14 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Form, Accordion, Button, Modal, Row, Col } from 'react-bootstrap';
 import Slider from '@mui/material/Slider';
 import { debounce } from 'lodash';
+import axios from 'axios';
+import CustomPopup from '../custom-popup/custom-popup-filter';
+import { UserContext } from '../../../contexts/UserContext';
 
 const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChange, handleRangeChange, eventKey, viewMore, appliedFiltersCount, getFilterParamName, loading }) => {
   const [showModal, setShowModal] = useState(false);
+  const [showPaymentPopup, setShowPaymentPopup] = useState(false);
+  const [subscriptionStatus, setSubscriptionStatus] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [minValue, setMinValue] = useState(options.min || 0);
   const [maxValue, setMaxValue] = useState(options.max || 10000);
   const filterParamName = getFilterParamName(filterName);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     setSearchTerm('');
@@ -36,12 +42,39 @@ const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChan
 
   const handleModalClose = () => setShowModal(false);
   const handleModalOpen = () => setShowModal(true);
+  const handlePopupClose = () => setShowPaymentPopup(false);
 
-  const handleCheckboxChange = (option, checked) => {
+  const checkSubscription = async () => {
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/payment/check-subscription`, { userId: user._id });
+      setSubscriptionStatus(response.data.status === 'paid');
+      return response.data.status === 'paid';
+    } catch (error) {
+      console.error('Error checking subscription:', error);
+      return false;
+    }
+  };
+
+  const handlePayment = () => {
+    // Redirect to the payment page or trigger the payment process
+    window.location.href = '/payment-page'; // Example, replace with actual payment process
+  };
+
+  const handleCheckboxChange = async (option, checked) => {
+    const isSubscribed = await checkSubscription();
+    if (!isSubscribed) {
+      setShowPaymentPopup(true);
+      return;
+    }
     handleFilterChange(option, checked, filterName);
   };
 
-  const clearFilterCategory = () => {
+  const clearFilterCategory = async () => {
+    const isSubscribed = await checkSubscription();
+    if (!isSubscribed) {
+      setShowPaymentPopup(true);
+      return;
+    }
     options.forEach(option => handleFilterChange(option, false, filterName));
   };
 
@@ -54,7 +87,12 @@ const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChan
     handleRangeChange(newValue, filterName);
   }, 300);
 
-  const handleSliderChangeCommitted = (event, newValue) => {
+  const handleSliderChangeCommitted = async (event, newValue) => {
+    const isSubscribed = await checkSubscription();
+    if (!isSubscribed) {
+      setShowPaymentPopup(true);
+      return;
+    }
     debouncedHandleRangeChange(newValue);
   };
 
@@ -70,7 +108,12 @@ const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChan
     debouncedHandleRangeChange([minValue, value]);
   };
 
-  const resetFilter = () => {
+  const resetFilter = async () => {
+    const isSubscribed = await checkSubscription();
+    if (!isSubscribed) {
+      setShowPaymentPopup(true);
+      return;
+    }
     setMinValue(options.min || 0);
     setMaxValue(options.max || 10000);
     handleRangeChange([options.min || 0, options.max || 10000], filterName);
@@ -180,6 +223,16 @@ const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChan
           </Button>
         </Modal.Footer>
       </Modal>
+
+      {/* Custom Popup for Payment */}
+      <CustomPopup 
+        show={showPaymentPopup} 
+        handleClose={handlePopupClose} 
+        title="Subscription Required" 
+        message="You need to subscribe to access these filters. Please complete your payment to proceed."
+        onPay={handlePayment} // Pass the payment handler
+        subscriptionStatus={subscriptionStatus} // Pass subscription status
+      />
     </>
   );
 };

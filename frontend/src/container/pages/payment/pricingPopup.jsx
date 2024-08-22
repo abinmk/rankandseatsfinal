@@ -1,13 +1,13 @@
 import axios from 'axios';
 import React, { useState, useContext } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import { Button, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../../contexts/UserContext';
-import CustomPopup from '../custom-popup/custom-popup'; // Import the CustomPopup component
-import './PricingPopup.scss';
+import CustomPopup from '../custom-popup/custom-popup';
+import PlanDetailsPopup from '../payment/planDetailsPopup';
 
 const PricingPopup = () => {
-  const [show, setShow] = useState(false);
+  const [showPlanDetails, setShowPlanDetails] = useState(false);
   const [popupShow, setPopupShow] = useState(false);
   const [popupTitle, setPopupTitle] = useState('');
   const [popupMessage, setPopupMessage] = useState('');
@@ -15,28 +15,37 @@ const PricingPopup = () => {
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_URL;
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // For showing loading feedback
 
-  const handleClose = () => setShow(false);
   const handlePopupClose = () => setPopupShow(false);
+  const handlePlanDetailsClose = () => setShowPlanDetails(false);
 
-  const handleShow = async () => {
+  const handleSubscribeClick = () => {
     if (!user) {
       navigate('/login');
     } else {
-      try {
-        const response = await axios.post(`${apiUrl}/payment/check-subscription`, { userId: user._id });
-        if (response.data.status === 'paid') {
-          setPopupTitle('Subscription Active');
-          setPopupMessage('Your subscription is already active. You have full access to all features. Thank you for your continued support');
-          setPopupShow(true);
-          // navigate('/dashboards');
-        } else {
-          createOrder(); // Create the order and initiate payment
-        }
-      } catch (error) {
-        console.error('Error checking subscription status:', error);
-        alert('There was an error checking your subscription status. Please try again.');
+      setShowPlanDetails(true);
+    }
+  };
+
+  const handlePaymentProceed = async () => {
+    setShowPlanDetails(false);
+    setIsLoading(true); // Start loading feedback
+
+    try {
+      const response = await axios.post(`${apiUrl}/payment/check-subscription`, { userId: user._id });
+      if (response.data.status === 'paid') {
+        setPopupTitle('Subscription Active');
+        setPopupMessage('Your subscription is already active. You have full access to all features.');
+        setPopupShow(true);
+      } else {
+        await createOrder(); // Create the order and initiate payment
       }
+    } catch (error) {
+      console.error('Error checking subscription status:', error);
+      alert('There was an error checking your subscription status. Please try again.');
+    } finally {
+      setIsLoading(false); // End loading feedback
     }
   };
 
@@ -51,17 +60,18 @@ const PricingPopup = () => {
   };
 
   const initializePayment = (orderId) => {
-    if (isProcessing) return; // Prevent duplicate processing
+    if (isProcessing) return;
     setIsProcessing(true);
+    setIsLoading(true); // Show loading indicator while Razorpay loads
 
     const options = {
       key: 'rzp_test_YRRWY9o1BIUXQZ',
-      amount: 117882, // Amount in paise (₹999)
+      amount: 117882,
       currency: 'INR',
       name: 'Rank and Seats',
       description: 'NEET Counselling Plan',
       image: '/logo.png',
-      order_id: orderId, // Pass the order_id here
+      order_id: orderId,
       handler: handlePayment,
       prefill: {
         name: user.name,
@@ -71,15 +81,28 @@ const PricingPopup = () => {
       theme: {
         color: '#3399cc',
       },
+      modal: {
+        ondismiss: () => {
+          setIsProcessing(false); // Stop processing if user cancels payment
+          setIsLoading(false); // Hide loading indicator if payment modal is dismissed
+        },
+      },
     };
 
     const rzp = new window.Razorpay(options);
     rzp.open();
+
+    // Fallback timeout if Razorpay takes too long to load
+    setTimeout(() => {
+      if (isLoading) {
+        alert('Payment gateway is taking too long to load. Please try again later.');
+        setIsProcessing(false);
+        setIsLoading(false);
+      }
+    }, 10000); // 10 seconds timeout
   };
 
   const handlePayment = async (response) => {
-    console.log('Razorpay response:', response);
-
     try {
       const verifyResponse = await fetch(`${apiUrl}/payment/verify-signature`, {
         method: 'POST',
@@ -97,7 +120,6 @@ const PricingPopup = () => {
         setPopupTitle('Payment Successful');
         setPopupMessage('Your payment was successful and verified. Welcome aboard!');
         setPopupShow(true);
-        // navigate('/dashboards');
       } else {
         alert('Payment verification failed. Please try again.');
       }
@@ -105,45 +127,20 @@ const PricingPopup = () => {
       console.error('Error during payment verification:', error);
       alert('Payment failed. Please try again.');
     } finally {
-      setIsProcessing(false); // Reset processing state
+      setIsProcessing(false);
+      setIsLoading(false); // End loading feedback
     }
   };
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow} className="pricing-btn">
-        Subscribe
+      <Button variant="primary" onClick={handleSubscribeClick} className="pricing-btn" disabled={isLoading || isProcessing}>
+        {isLoading ? <Spinner animation="border" size="sm" /> : 'Subscribe'}
       </Button>
 
-      <Modal show={show} onHide={handleClose} centered className="pricing-modal">
-        <Modal.Header closeButton className="modal-header-custom">
-          <Modal.Title className="text-primary">Confirm Your Plan</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="text-center">
-          <h5 className="fw-bold">Rank and Seats - ₹999 + GST</h5>
-          <p className="text-muted">
-            Get full access to all features to help you in your NEET counselling journey.
-          </p>
-          <p className="fw-bold">One-Time Fee</p>
-          <p className="terms-text">By proceeding, you agree to our terms and conditions.</p>
-        </Modal.Body>
-        <Modal.Footer className="justify-content-center">
-          <Button variant="secondary" onClick={handleClose} className="modal-btn-cancel">
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={handleShow} className="modal-btn-confirm">
-            Proceed to Pay
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <PlanDetailsPopup show={showPlanDetails} handleClose={handlePlanDetailsClose} handlePaymentProceed={handlePaymentProceed} />
 
-      {/* Custom Popup for displaying messages */}
-      <CustomPopup
-        show={popupShow}
-        handleClose={handlePopupClose}
-        title={popupTitle}
-        message={popupMessage}
-      />
+      <CustomPopup show={popupShow} handleClose={handlePopupClose} title={popupTitle} message={popupMessage} />
     </>
   );
 };

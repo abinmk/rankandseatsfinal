@@ -1,8 +1,9 @@
+// PlanDetailsPopup Component
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import './PlanDetailsPopup.scss';
 
-const PlanDetailsPopup = ({ show, handleClose }) => {
+const PlanDetailsPopup = ({ show, handleClose, handlePaymentProceed }) => {
   return (
     <Modal show={show} onHide={handleClose} centered className="plan-details-popup">
       <Modal.Header closeButton className="modal-header-custom">
@@ -23,7 +24,7 @@ const PlanDetailsPopup = ({ show, handleClose }) => {
         <Button variant="secondary" id="close" onClick={handleClose} className="modal-btn-cancel">
           Close
         </Button>
-        <Button variant="primary" onClick={handleClose} className="modal-btn-confirm">
+        <Button variant="primary" onClick={handlePaymentProceed} className="modal-btn-confirm">
           Proceed to Payment
         </Button>
       </Modal.Footer>
