@@ -88,6 +88,7 @@ const LastRank = () => {
 
   const handleModalClose = () => {
     setShowRowModal(false);
+    setDataClose
   };
 
   return (
@@ -108,6 +109,7 @@ const LastRank = () => {
         pageSize={pageSize}
         setPageSize={setPageSize}
         columns={LastRankColumns(data, handleDetailClick)}
+        isModalOpen={showRowModal}
       />
 
       <Modal show={showRowModal} onHide={handleModalClose} className="custom-modal">

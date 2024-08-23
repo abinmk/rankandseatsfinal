@@ -20,7 +20,8 @@ const GenericTable = ({
   filterLoading,
   fetchData,
   pageSize,
-  setPageSize
+  setPageSize,
+  isModalOpen,
 }) => {
   const [showFilters, setShowFilters] = useState(true);
   const [showColumnModal, setShowColumnModal] = useState(false);
@@ -185,9 +186,32 @@ const GenericTable = ({
     setFilters({});
   };
 
+  const handleRowClick = (row) => {
+    // Prevent opening the row modal if another modal (like Last Rank) is already open
+    if (!isModalOpen) {
+      setSelectedRowData(row.original);
+      setShowRowModal(true);
+    }
+  };
+
+  useEffect(() => {
+    if (showRowModal && isModalOpen) {
+      setShowRowModal(false);
+    }
+  }, [isModalOpen]);
+
+
+  const handleCollegeClick = (collegeName) => {
+    const encodedCollegeName = encodeURIComponent(collegeName);
+    const url = `/college/${encodedCollegeName}`;
+    window.open(url, '_blank'); // Opens in a new tab
+  };
+  
+
   return (
-    <div className={`allotments-container ${showColumnModal ? "hide-filters" : ""}`}>
+    <div className={`allotments-container ${(showColumnModal || showRowModal) ? "hide-filters" : ""}`}>
       <FilterSection
+        className={showRowModal ? "blurred" : ""}
         showFilters={showFilters}
         toggleFilters={toggleFilters}
         filters={filters}
@@ -212,58 +236,71 @@ const GenericTable = ({
           </div>
           <div className="table-wrapper">
             <Table {...getTableProps()} className="tableCustom">
-            <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => {
-                  if (column.headers) {
-                    // This is the year header
-                    return (
-                      <th key={column.id} colSpan={column.headers.length} className="year-header">
-                        {column.render('Header')}
-                      </th>
-                    );
-                  } else {
-                    // This is a round header
-                    return (
-                      <th key={column.id} {...column.getHeaderProps(column.getSortByToggleProps())} className="round-header">
-                        {column.render('Header')}
-                      </th>
-                    );
-                  }
-                })}
-              </tr>
-            ))}
-          </thead>
+              <thead>
+                {headerGroups.map((headerGroup) => (
+                  <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
+                    {headerGroup.headers.map((column) => {
+                      if (column.headers) {
+                        // This is the year header
+                        return (
+                          <th key={column.id} colSpan={column.headers.length} className="year-header">
+                            {column.render('Header')}
+                          </th>
+                        );
+                      } else {
+                        // This is a round header
+                        return (
+                          <th key={column.id} {...column.getHeaderProps(column.getSortByToggleProps())} className="round-header">
+                            {column.render('Header')}
+                          </th>
+                        );
+                      }
+                    })}
+                  </tr>
+                ))}
+              </thead>
 
               <tbody {...getTableBodyProps()}>
-                {currentPage.map((row) => {
-                  prepareRow(row);
-                  return (
-                    <tr key={row.id} {...row.getRowProps()}>
-                      {row.cells.map((cell) => {
-                        const { key, ...rest } = cell.getCellProps();
-                        return (
-                          <td key={key} {...rest}>
-                            {cell.render('Cell')}
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  );
-                })}
-                {currentPage.length === 0 && (
-                  <tr>
-                    <td colSpan={columns.length} style={{ textAlign: 'center' }}>
-                      No data available.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
+  {currentPage.map((row) => {
+    prepareRow(row);
+    return (
+      <tr key={row.id} {...row.getRowProps()} onClick={() => handleRowClick(row)}>
+        {row.cells.map((cell) => {
+          const { key, ...rest } = cell.getCellProps();
+          return (
+            <td key={key} {...rest}>
+              {cell.column.id === 'collegeName' ? (
+                <span
+                  style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent triggering the row click
+                    handleCollegeClick(row.original.collegeName);
+                  }}
+                >
+                  {cell.render('Cell')}
+                </span>
+              ) : (
+                cell.render('Cell')
+              )}
+            </td>
+          );
+        })}
+      </tr>
+    );
+  })}
+  {currentPage.length === 0 && (
+    <tr>
+      <td colSpan={columns.length} style={{ textAlign: 'center' }}>
+        No data available.
+      </td>
+    </tr>
+  )}
+</tbody>
+
             </Table>
           </div>
           <div className="pagination-container">
-          <Form.Group controlId="rowsPerPage" className="d-flex align-items-center pagination-info">
+            <Form.Group controlId="rowsPerPage" className="d-flex align-items-center pagination-info">
               <Form.Label className="me-2 mb-0">Rows per page:</Form.Label>
               <Form.Control
                 as="select"
@@ -325,52 +362,129 @@ const GenericTable = ({
         </Modal.Footer>
       </Modal>
 
-      <Modal show={showRowModal} onHide={() => setShowRowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Allotted Details</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {selectedRowData && (
-            <div>
-              <p><strong>College:</strong> {selectedRowData.collegeName}</p>
-              <p><strong>State:</strong> {selectedRowData.state}</p>
-              <p><strong>Quota:</strong> {selectedRowData.quota}</p>
-              <p><strong>Category:</strong> {selectedRowData.allottedCategory}</p>
+      <Modal show={showRowModal && !isModalOpen} onHide={() => setShowRowModal(false)} size="lg" centered>
+  <Modal.Header closeButton className="custom-modal-header">
+    <div className="institute-header">
+      <img src="path_to_logo" alt="Institute Logo" className="institute-logo" />
+      <div className="institute-info">
+      <h4>
+      <a 
+        href="#" 
+        onClick={(e) => {
+          e.preventDefault();
+          handleCollegeClick(selectedRowData?.collegeName);
+        }} 
+        className="college-link"
+      >
+        {selectedRowData?.collegeName}
+      </a>
+    </h4>
+        <p>{selectedRowData?.state}</p>
+      </div>
+      <div className="institute-stats">
+        <div>
+          <span>Year of Establishment</span>
+          <h6>{selectedRowData?.yearOfEstablishment}</h6>
+        </div>
+        <div>
+          <span>No. of Beds</span>
+          <h6>{selectedRowData?.totalHospitalBeds}</h6>
+        </div>
+      </div>
+    </div>
+  </Modal.Header>
+  <Modal.Body>
+    <div className="course-details">
+      <div className="detail-box">
+        <h5>Course Name</h5>
+        <p>{selectedRowData?.courseName}</p>
+      </div>
+      <div className="detail-box">
+        <h5>Quota</h5>
+        <p>{selectedRowData?.quota}</p>
+      </div>
+      <div className="detail-box">
+        <h5>Allotted Category</h5>
+        <p>{selectedRowData?.allottedCategory}</p>
+      </div>
+    </div>
 
-              {selectedRowData.yearData && Object.keys(selectedRowData.yearData).map(year => (
-                <div key={year}>
-                  <h5>{year}</h5>
-                  {selectedRowData.yearData[year].map((round, index) => (
-                    <div key={index}>
-                      <p><strong>Round {round.round}:</strong></p>
-                      <p>Last Rank: {round.lastRank}</p>
-                      <p>Total Allotted: {round.totalAllotted}</p>
-                      <h6>Allotted Candidates:</h6>
-                      <ul>
-                        {round.allottedDetails.map((detail, i) => (
-                          <li key={i}>
-                            Roll Number: {detail.rollNumber}, Rank: {detail.rank}, 
-                            Candidate Category: {detail.candidateCategory}, 
-                            Allotted Institute: {detail.allottedInstitute}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowRowModal(false)}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+    <div className="rank-details">
+      <Table bordered>
+        <thead>
+          <tr>
+            <th>Year</th>
+            {Object.keys(selectedRowData?.years || {}).map(year => (
+              <th key={year} colSpan={Object.keys(selectedRowData?.years[year]?.rounds || {}).length}>
+                {year}
+              </th>
+            ))}
+          </tr>
+          <tr>
+            <th>Round</th>
+            {Object.keys(selectedRowData?.years || {}).map(year => (
+              Object.keys(selectedRowData?.years[year]?.rounds || {}).map(round => (
+                <th key={`${year}_${round}`}>R{round}</th>
+              ))
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Last Rank</td>
+            {Object.keys(selectedRowData?.years || {}).map(year => (
+              Object.keys(selectedRowData?.years[year]?.rounds || {}).map(round => (
+                <td key={`${year}_${round}`}>
+                  {selectedRowData.years[year].rounds[round]?.lastRank || '-'}
+                </td>
+              ))
+            ))}
+          </tr>
+          <tr>
+            <td>Total Allotted</td>
+            {Object.keys(selectedRowData?.years || {}).map(year => (
+              Object.keys(selectedRowData?.years[year]?.rounds || {}).map(round => (
+                <td key={`${year}_${round}`}>
+                  {selectedRowData.years[year].rounds[round]?.totalAllotted || '-'}
+                </td>
+              ))
+            ))}
+          </tr>
+        </tbody>
+      </Table>
+    </div>
+
+    <div className="additional-details">
+      <div className="detail-box">
+        <h5>Fee Details</h5>
+        <p>Course Fees: ₹{selectedRowData?.courseFee}</p>
+        <p>Hostel Fees: ₹{selectedRowData?.nriFee}</p>
+      </div>
+      <div className="detail-box">
+        <h5>Stipend Details</h5>
+        <p>Year 1: ₹{selectedRowData?.stipendYear1}</p>
+        <p>Year 2: ₹{selectedRowData?.stipendYear2}</p>
+      </div>
+      <div className="detail-box">
+        <h5>Bond Details</h5>
+        <p>Bond Years: {selectedRowData?.bondYear}</p>
+        <p>Bond Penalty: ₹{selectedRowData?.bondPenality}</p>
+      </div>
+      <div className="detail-box">
+        <h5>Penalties and Deductions</h5>
+        <p>Seat Leaving Penalty: ₹{selectedRowData?.seatLeavingPenality}</p>
+      </div>
+    </div>
+  </Modal.Body>
+  <Modal.Footer>
+    <Button variant="secondary" onClick={() => setShowRowModal(false)}>
+      Close
+    </Button>
+  </Modal.Footer>
+</Modal>
+
     </div>
   );
 };
 
 export default GenericTable;
-

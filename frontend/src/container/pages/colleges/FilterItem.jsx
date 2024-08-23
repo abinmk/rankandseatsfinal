@@ -121,6 +121,14 @@ const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChan
 
   return (
     <>
+       <CustomPopup 
+        show={showPaymentPopup} 
+        handleClose={handlePopupClose} 
+        title="Subscription Required" 
+        message="You need to subscribe to access these filters. Please complete your payment to proceed."
+        onPay={handlePayment} // Pass the payment handler
+        subscriptionStatus={subscriptionStatus} // Pass subscription status
+      />
       <Accordion.Item eventKey={eventKey}>
         <Accordion.Header>
           {title} ({appliedFiltersCount})
@@ -225,14 +233,7 @@ const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChan
       </Modal>
 
       {/* Custom Popup for Payment */}
-      <CustomPopup 
-        show={showPaymentPopup} 
-        handleClose={handlePopupClose} 
-        title="Subscription Required" 
-        message="You need to subscribe to access these filters. Please complete your payment to proceed."
-        onPay={handlePayment} // Pass the payment handler
-        subscriptionStatus={subscriptionStatus} // Pass subscription status
-      />
+   
     </>
   );
 };
