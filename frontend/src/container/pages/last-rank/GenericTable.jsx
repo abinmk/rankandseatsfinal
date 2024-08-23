@@ -362,10 +362,10 @@ const GenericTable = ({
         </Modal.Footer>
       </Modal>
 
-      <Modal show={showRowModal && !isModalOpen} onHide={() => setShowRowModal(false)} size="lg" centered>
+      <Modal show={showRowModal && !isModalOpen} onHide={() => setShowRowModal(false)} size='xl' centered>
   <Modal.Header closeButton className="custom-modal-header">
     <div className="institute-header">
-      <img src="path_to_logo" alt="Institute Logo" className="institute-logo" />
+      {/* <img src="path_to_logo" alt="Institute Logo" className="institute-logo" /> */}
       <div className="institute-info">
       <h4>
       <a 
@@ -379,9 +379,9 @@ const GenericTable = ({
         {selectedRowData?.collegeName}
       </a>
     </h4>
-        <p>{selectedRowData?.state}</p>
+        <p className='state-detail'>{selectedRowData?.state}</p>
       </div>
-      <div className="institute-stats">
+      <div className="institute-state">
         <div>
           <span>Year of Establishment</span>
           <h6>{selectedRowData?.yearOfEstablishment}</h6>
@@ -395,15 +395,15 @@ const GenericTable = ({
   </Modal.Header>
   <Modal.Body>
     <div className="course-details">
-      <div className="detail-box">
+      <div className="detail-box-1">
         <h5>Course Name</h5>
         <p>{selectedRowData?.courseName}</p>
       </div>
-      <div className="detail-box">
+      <div className="detail-box-1">
         <h5>Quota</h5>
         <p>{selectedRowData?.quota}</p>
       </div>
-      <div className="detail-box">
+      <div className="detail-box-1">
         <h5>Allotted Category</h5>
         <p>{selectedRowData?.allottedCategory}</p>
       </div>
@@ -476,11 +476,6 @@ const GenericTable = ({
       </div>
     </div>
   </Modal.Body>
-  <Modal.Footer>
-    <Button variant="secondary" onClick={() => setShowRowModal(false)}>
-      Close
-    </Button>
-  </Modal.Footer>
 </Modal>
 
     </div>

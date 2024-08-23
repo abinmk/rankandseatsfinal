@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTable, usePagination, useSortBy, useFilters, useColumnOrder } from 'react-table';
 import FilterSection from './FilterSection';
 import { Table, Modal, Button, Form, Pagination } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const GenericTable = ({
@@ -14,18 +15,22 @@ const GenericTable = ({
   page,
   setPage,
   totalPages,
+  setTotalPages,
   filterOptions,
   loading,
   filterLoading,
-  fetchData,
-  pageSize,
-  setPageSize
+  rankRange,
+  fetchData, // Ensure fetchData is passed
+  pageSize, // Ensure pageSize is passed
+  setPageSize // Ensure setPageSize is passed
 }) => {
   const [showFilters, setShowFilters] = useState(true);
   const [showColumnModal, setShowColumnModal] = useState(false);
   const [showRowModal, setShowRowModal] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [filteredData, setFilteredData] = useState(data);
+
+  const navigate = useNavigate(); // useNavigate for routing
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
@@ -34,29 +39,33 @@ const GenericTable = ({
   useEffect(() => {
     const resultsSection = document.querySelector('.results-section');
     if (showFilters) {
-      resultsSection.style.width = 'calc(100vw - 290px)';
+      resultsSection.style.width = 'calc(100vw - 290px)'; // Account for filter width and padding
     } else {
       resultsSection.style.width = '100vw';
     }
   }, [showFilters]);
 
   useEffect(() => {
-    applyFilters();
-  }, [filters, data]);
+    setFilteredData(data);
+  }, [data]);
+
+  useEffect(() => {
+    fetchData(page, pageSize, buildFilterParams());
+  }, [filters, page, pageSize]);
 
   const getFilterParamName = (filterKey) => {
     const filterMapping = {
-      state: 'state',
+      quota: 'allottedQuota',
       institute: 'collegeName',
-      instituteType: 'instituteType',
-      quota: 'quota',
-      course: 'courseName',
-      allottedCategories: 'allottedCategory',
+      course: 'course',
+      category: 'allottedCategory',
       candidateCategories: 'candidateCategory',
       examNames: 'examName',
-      years: 'year',
-      rounds: 'round',
-      universityNames: 'universityName',
+      year: 'year',
+      round: 'round',
+      state: 'state',
+      instituteType: 'instituteType',
+      university: 'universityName',
       yearsOfEstablishment: 'yearOfEstablishment',
       totalHospitalBeds: 'totalHospitalBeds',
       locationMapLinks: 'locationMapLink',
@@ -64,8 +73,8 @@ const GenericTable = ({
       distancesFromRailwayStation: 'distanceFromRailwayStation',
       nearestAirports: 'nearestAirport',
       distancesFromAirport: 'distanceFromAirport',
-      courseTypes: 'courseType',
-      degreeTypes: 'degreeType',
+      courseType: 'courseType',
+      degreeType: 'degreeType',
       feeAmounts: 'feeAmount',
       nriFees: 'nriFee',
       stipendYear1: 'stipendYear1',
@@ -73,38 +82,24 @@ const GenericTable = ({
       stipendYear3: 'stipendYear3',
       bondYears: 'bondYear',
       bondPenalties: 'bondPenality',
+      rank: 'rank'
     };
-    
+
     return filterMapping[filterKey] || filterKey;
   };
 
-  const handleSliderChange = (filterKey, newValue) => {
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [filterKey]: JSON.stringify({ min: newValue[0], max: newValue[1] })
-    }));
-  };
-
-  const applyFilters = () => {
-    let filtered = data;
-
-    Object.keys(filters).forEach(filterKey => {
-      const filterParamName = getFilterParamName(filterKey);
+  const buildFilterParams = () => {
+    const params = {};
+    Object.keys(filters).forEach((filterKey) => {
       const filterValue = filters[filterKey];
-      if (filterValue && filterValue.length > 0) {
-        if (filterValue.includes('min') && filterValue.includes('max')) {
-          const { min, max } = JSON.parse(filterValue);
-          filtered = filtered.filter(item => item[filterParamName] >= min && item[filterParamName] <= max);
-        } else {
-          filtered = filtered.filter(item => {
-            const itemValue = item[filterParamName];
-            return Array.isArray(filterValue) ? filterValue.includes(itemValue) : itemValue === filterValue;
-          });
-        }
+      if (typeof filterValue === 'object' && filterValue !== null) {
+        params[`${filterKey}Min`] = filterValue.min;
+        params[`${filterKey}Max`] = filterValue.max;
+      } else {
+        params[filterKey] = filterValue;
       }
     });
-
-    setFilteredData(filtered);
+    return params;
   };
 
   const {
@@ -127,8 +122,8 @@ const GenericTable = ({
     {
       columns,
       data: filteredData,
-      initialState: { pageIndex: page - 1 },
-      manualPagination: true,
+      initialState: { pageIndex: page - 1 }, // Set initial page
+      manualPagination: true, // Inform React Table that we'll handle pagination on our own
       pageCount: totalPages,
     },
     useFilters,
@@ -142,6 +137,12 @@ const GenericTable = ({
       gotoPage(page - 1);
     }
   }, [page, gotoPage]);
+
+  const handleCollegeClick = (collegeName) => {
+    const encodedCollegeName = encodeURIComponent(collegeName);
+    const url = `/college/${encodedCollegeName}`;
+    window.open(url, '_blank'); // Opens in a new tab
+  };
 
   const handleRowClick = (row) => {
     setSelectedRowData(row.original);
@@ -181,12 +182,10 @@ const GenericTable = ({
         toggleFilters={toggleFilters}
         filters={filters}
         setFilters={setFilters}
-        data={data}
         filterOptions={filterOptions}
         loading={filterLoading}
-        getFilterParamName={getFilterParamName}
+        getFilterParamName={getFilterParamName} // Pass this function to FilterSection
         clearAllFilters={clearAllFilters}
-        handleSliderChange={handleSliderChange} // Pass the handler to FilterSection
       />
       <div className={`results-section ${showFilters ? "" : "full-width"}`}>
         <button className={`show-filters-btn ${showFilters ? "hidden" : ""}`} onClick={toggleFilters} id='view-btn'>
@@ -225,7 +224,19 @@ const GenericTable = ({
                         const { key, ...rest } = cell.getCellProps();
                         return (
                           <td key={key} {...rest}>
-                            {cell.render('Cell')}
+                            {cell.column.id === 'collegeName' ? (
+                              <span
+                                style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}
+                                onClick={(e) => {
+                                  e.stopPropagation(); // Prevent triggering the row click event
+                                  handleCollegeClick(row.original.collegeName);
+                                }}
+                              >
+                                {cell.render('Cell')}
+                              </span>
+                            ) : (
+                              cell.render('Cell')
+                            )}
                           </td>
                         );
                       })}
@@ -243,9 +254,9 @@ const GenericTable = ({
                 value={pageSize}
                 onChange={(e) => setPageSize(Number(e.target.value))}
                 className="me-3"
-                style={{ width: 'fit-content',height:'fit-content' }}
+                style={{ width: 'fit-content', height: 'fit-content' }}
               >
-                {[10, 25, 50, 100].map((size) => (
+                               {[10, 25, 50, 100].map((size) => (
                   <option key={size} value={size}>
                     {size}
                   </option>
@@ -261,7 +272,7 @@ const GenericTable = ({
                 value={pageIndex + 1}
                 onChange={(e) => setPage(Number(e.target.value))}
                 className="me-2"
-                style={{ width: 'fit-content',height:'fit-content' }}
+                style={{ width: 'fit-content', height: 'fit-content' }}
               />
             </Form.Group>
             <div className="pagination-controls">
@@ -324,3 +335,4 @@ const GenericTable = ({
 };
 
 export default GenericTable;
+

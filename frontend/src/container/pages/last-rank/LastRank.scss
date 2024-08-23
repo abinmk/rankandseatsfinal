@@ -562,6 +562,7 @@ th {
 .custom-modal-header {
     background-color: #003f7f; /* Dark blue similar to the header in the image */
     color: white;
+    height: fit-content;
     padding: 20px;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -582,7 +583,7 @@ th {
   
   .institute-info h4 {
     margin-bottom: 5px;
-    font-size: 20px;
+    font-size: 15px;
     color: #ffffff; /* Ensure the college name is visible */
   }
   
@@ -591,7 +592,7 @@ th {
     color: #b0c4de; /* Lighter shade for state text */
   }
   
-  .institute-stats {
+  .institute-state {
     display: flex;
     gap: 30px;
     text-align: center;
@@ -605,42 +606,59 @@ th {
   }
   
   .institute-stats div h6 {
-    font-size: 18px;
+    font-size: 10px;
     margin-top: 5px;
     color: #ffffff;
   }
   
   .institute-stats div .icon {
-    font-size: 24px;
+    font-size: 22px;
     color: #b0c4de; /* Lighter color for icons */
     margin-bottom: 5px;
   }
   
-  .course-details,
-  .additional-details {
+  .course-details{
     display: flex;
-    justify-content: space-between;
-    margin: 20px 0;
+    justify-content: space-around;
   }
-  
-  .detail-box {
+  .detail-box-1{
     background-color: #e6f1ff; /* Light blue background for the boxes */
-    padding: 15px;
-    border-radius: 8px;
-    width: 23%;
+    padding: 20px;
+    border-radius: 10px;
+    min-width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add subtle shadow for depth */
   }
+  .detail-box-1 h5{
+  font-size: 20px;
+  color: #003f7f; /* Dark blue text for headers */
+  margin-bottom: 10px;
+  } 
+  .additional-details {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Create two equal-width columns */
+    grid-template-rows: auto auto; /* Allow the rows to adjust based on content */
+    gap: 40px; /* Add space between the grid items */
+    margin: 10px 0;
+}
+
+.detail-box {
+    background-color: #e6f1ff; /* Light blue background for the boxes */
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add subtle shadow for depth */
+}
   
-  .detail-box h5 {
-    font-size: 14px;
+.detail-box h5 {
+    font-size: 18px;
     color: #003f7f; /* Dark blue text for headers */
-    margin-bottom: 10px;
-  }
+}
   
-  .detail-box p {
-    font-size: 16px;
-    color: #003f7f; /* Dark blue text for the main content */
+.detail-box p {
+    font-size: 15px; /* Slightly larger text for readability */
+    color: #121d28; /* Dark blue text for the main content */
     margin: 0;
-  }
+}
+
   
   .rank-details {
     margin-top: 20px;
@@ -650,6 +668,7 @@ th {
   .rank-details th {
     background-color: #e6f1ff; /* Light blue for the table headers */
     color: #003f7f;
+    font-size: 8px;
     text-align: center;
   }
   
@@ -662,14 +681,19 @@ th {
   .college-link {
     color: #ffffff; /* White for the link to make it stand out on dark background */
     cursor: pointer;
-    text-decoration: underline;
+    font-size: 25px;
+    text-decoration: none;
+  }
+  .college-link:hover{
+    color: #f68904;
+  }
+  .state-detail{
+    font-size: 1.2rem;
   }
   
   .custom-modal-footer {
     background-color: #f0f0f0;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    padding: 15px;
+    padding: 1px;
     display: flex;
     justify-content: flex-end;
   }
