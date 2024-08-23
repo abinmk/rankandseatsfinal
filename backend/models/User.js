@@ -3,8 +3,8 @@ const bcrypt = require('bcryptjs');
 
 // Schema for selected exams and their counseling types
 const examSelectionSchema = new mongoose.Schema({
-  exam: { type: String, required: true },
-  counselingType: { type: String, required: true },
+  exam: { type: String, default: "NEET_PG" },
+  counselingType: { type: String, default: "ALL INDIA"},
 });
 
 // Schema for wishlist items
@@ -31,9 +31,13 @@ const userSchema = new mongoose.Schema({
   otp: { type: String },
   isAdmin: { type: Boolean, default: false },
   paymentStatus: { type: String, default: 'Unpaid' },
-  selectedExams: [examSelectionSchema],
+  selectedExams: {
+    type: [examSelectionSchema],
+    default: [{ exam: "NEET_PG", counselingType: "ALL INDIA" }],
+  },
   wishlist: [wishlistSchema], // Grouped wishlist by exam and counseling type
 }, { timestamps: true });
+
 
 // Hash the password before saving the user
 userSchema.pre('save', async function (next) {
