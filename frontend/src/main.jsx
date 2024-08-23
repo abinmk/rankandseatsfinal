@@ -74,7 +74,7 @@ root.render(
             <Route path="institutes" element={<ProtectedRoute><Colleges /></ProtectedRoute>} />
             <Route path="fees" element={<ProtectedRoute><Fees/></ProtectedRoute>} />
             <Route path="wishlist" element={<ProtectedRoute><ChoiceList/></ProtectedRoute>} />
-            <Route path="college/:collegeName" element={<ProtectedRoute><CollegeDetail /></ProtectedRoute>} />
+            <Route path="college/:collegeName" element={<CollegeDetail />} />
           </Route>
 
           {/* Public routes */}
