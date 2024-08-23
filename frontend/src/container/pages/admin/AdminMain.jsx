@@ -18,7 +18,7 @@ const AdminDashboard = () => {
 
   const renderContent = () => {
     switch (activeSection) {
-      case 'upload':
+      case 'admin-upload':
         return <Upload />;
       case 'admin-info':
         return <AdminInformationAlert />;
@@ -70,7 +70,7 @@ const AdminDashboard = () => {
                   <Card.Text>
                     Access the upload section to add new data to the system.
                   </Card.Text>
-                  <Button variant="primary" onClick={() => setActiveSection('upload')}>Go to Upload</Button>
+                  <Button variant="primary" onClick={() => setActiveSection('admin-upload')}>Go to Upload</Button>
                 </Card.Body>
               </Card>
             </Col>

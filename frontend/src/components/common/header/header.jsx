@@ -1,21 +1,76 @@
 import React, { Fragment, useEffect, useState, useContext } from "react";
-import { Dropdown } from "react-bootstrap";
 import SimpleBar from "simplebar-react";
 import { MENUITEMS } from "../sidebar/sidemenu";
 import store from "../../../redux/store";
 import { Link, useLocation } from "react-router-dom";
+import { Dropdown, Modal, Button, Form } from 'react-bootstrap';
 import { connect } from "react-redux";
 import { ThemeChanger } from "../../../redux/action";
 import axios from 'axios';
 import { UserContext } from "../../../contexts/UserContext";
 import "./header.scss";
+import axiosInstance from '../../../utils/axiosInstance';
 
 // IMAGES
 import desktoplogo from "../../../assets/images/brand-logos/desktop-dark.png";
 import faces1 from "../../../assets/images/faces/1.jpg";
-import axiosInstance from "../../../utils/axiosInstance";
 
 const Header = ({ local_varaiable, ThemeChanger }) => {
+
+
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [profileData, setProfileData] = useState({
+    name: '',
+    email: '',
+    mobileNumber: '',
+    state: '',
+    counseling: '',
+  });
+
+  const handleClose = () => setShowProfileModal(false);
+  const handleShow = () => setShowProfileModal(true);
+
+  useEffect(() => {
+    if (showProfileModal) {
+      // Fetch the user's profile data when the modal is opened
+      const fetchProfileData = async () => {
+        try {
+          const response = await axiosInstance.get('/profile');
+          setProfileData(response.data);
+        } catch (error) {
+          console.error('Error fetching profile data:', error);
+        }
+      };
+      fetchProfileData();
+    }
+  }, [showProfileModal]);
+
+  const renderSubscriptionDetails = () => {
+    if (profileData.paymentStatus === 'Paid') {
+      return <div className="text-success">Subscription Status: Active</div>;
+    } else {
+      return <div className="text-danger">Subscription Status: Inactive</div>;
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProfileData({ ...profileData, [name]: value });
+  };
+
+  const handleSave = async () => {
+    try {
+      await axiosInstance.put('/profile', profileData);
+      alert('Profile updated successfully!');
+      handleClose();
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      alert('Failed to update profile. Please try again.');
+    }
+  };
+
+
+
   const location = useLocation();
   const [selectedTab, setSelectedTab] = useState("Allotments");
   const [exam, setExam] = useState("NEET_PG");
@@ -244,6 +299,8 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
     saveUserSelection(exam, selectedCounselingType);
   };
 
+  
+
   return (
     <Fragment>
       <header className="app-header">
@@ -320,7 +377,7 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
                     ))}
                   </SimpleBar>
                 </ul>
-                <div className={`p-3 empty-header-item1 border-top ${notifications.length === 0 ? "d-none" : "d-block"}`}>
+                {/* <div className={`p-3 empty-header-item1 border-top ${notifications.length === 0 ? "d-none" : "d-block"}`}>
                   <div className="d-grid">
                     <Link to="#" className="btn btn-primary">View All</Link>
                   </div>
@@ -332,7 +389,7 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
                     </span>
                     <h6 className="fw-semibold mt-3">No New Notifications</h6>
                   </div>
-                </div>
+                </div> */}
               </Dropdown.Menu>
             </Dropdown>
             <div className="header-element header-fullscreen">
@@ -345,26 +402,105 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
               </Link>
             </div>
             <Dropdown className="header-element mainuserProfile">
-              <Dropdown.Toggle variant='' as="a" className="header-link dropdown-toggle" id="mainHeaderProfile" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                <div className="d-flex align-items-center">
-                  <div className="d-sm-flex wd-100p">
-                    <div className="avatar avatar-sm"><img alt="avatar" className="rounded-circle" src={faces1} /></div>
-                    <div className="ms-2 my-auto d-none d-xl-flex">
-                      <h6 className="font-weight-semibold mb-0 fs-13 user-name d-sm-block d-none">{user ? user.name : "Guest"}</h6> {/* Display user name */}
-                    </div>
-                  </div>
-                </div>
-              </Dropdown.Toggle>
-              <Dropdown.Menu as="ul" className="dropdown-menu border-0 main-header-dropdown overflow-hidden header-profile-dropdown" aria-labelledby="mainHeaderProfile">
-                <Dropdown.Item as="li" className="border-0">
-                  <Link to="#"><i className="fs-13 me-2 bx bx-user"></i>Profile</Link>
-                </Dropdown.Item>
-                {/* Add additional options her */}
-                <Dropdown.Item as="li" className="border-0">
-                  <Link to="#" onClick={logout}><i className="fs-13 me-2 bx bx-arrow-to-right"></i>Log Out</Link> {/* Add logout functionality */}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+        <Dropdown.Toggle variant='' as="a" className="header-link dropdown-toggle" id="mainHeaderProfile" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+          <div className="d-flex align-items-center">
+            <div className="d-sm-flex wd-100p">
+              {/* <div className="avatar avatar-sm">
+                <img alt="avatar" className="rounded-circle" src={faces1} />
+              </div> */}
+              <div className="ms-2 my-auto d-none d-xl-flex">
+                <h6 className="font-weight-semibold mb-0 fs-13 user-name d-sm-block d-none">
+                  {user ? user.name : "Guest"}
+                </h6> {/* Display user name */}
+              </div>
+            </div>
+          </div>
+        </Dropdown.Toggle>
+
+        {user && (
+          <Dropdown.Menu as="ul" className="dropdown-menu border-0 main-header-dropdown overflow-hidden header-profile-dropdown" aria-labelledby="mainHeaderProfile">
+            <Dropdown.Item as="li" className="border-0" onClick={handleShow}>
+              <i className="fs-13 me-2 bx bx-user"></i>Profile
+            </Dropdown.Item>
+            <Dropdown.Item as="li" className="border-0">
+              <Link to="#" onClick={logout}><i className="fs-13 me-2 bx bx-arrow-to-right"></i>Log Out</Link> {/* Add logout functionality */}
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        )}
+      </Dropdown>
+
+      {/* Profile Modal */}
+      <Modal show={showProfileModal} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>User Profile</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group controlId="formName">
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                type="text"
+                name="name"
+                value={profileData.name}
+                onChange={handleChange}
+                disabled
+              />
+            </Form.Group>
+            <Form.Group controlId="formEmail">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type="email"
+                name="email"
+                value={profileData.email}
+                onChange={handleChange}
+                disabled
+              />
+            </Form.Group>
+            <Form.Group controlId="formMobile">
+              <Form.Label>Mobile Number</Form.Label>
+              <Form.Control
+                type="text"
+                name="mobileNumber"
+                value={profileData.mobileNumber}
+                onChange={handleChange}
+                disabled
+              />
+            </Form.Group>
+            <Form.Group controlId="formState">
+              <Form.Label>State</Form.Label>
+              <Form.Control
+                type="text"
+                name="state"
+                value={profileData.state}
+                onChange={handleChange}
+              />
+            </Form.Group>
+            <Form.Group controlId="formCounseling">
+              <Form.Label>Preferred Counseling</Form.Label>
+              <Form.Control
+                type="text"
+                name="counseling"
+                value={profileData.counseling}
+                onChange={handleChange}
+              />
+            </Form.Group>
+            <Form.Group controlId="formSubscription">
+              <Form.Label>Subscription Details</Form.Label>
+              {renderSubscriptionDetails()} {/* Show subscription status based on paymentStatus */}
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleSave}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+
           </div>
         </div>
       </header>
