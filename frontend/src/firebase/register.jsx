@@ -1,22 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axiosInstance from '../utils/axiosInstance';
 import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
 import { Button } from 'primereact/button';
 import styles from '../styles/Register.module.css';
+import { UserContext } from '../contexts/UserContext';
 
 const Register = () => {
   const { state } = useLocation();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [mobileNumber] = useState(state ? state.mobileNumber : '');
+  const [mobileNumber, setMobileNumber] = useState(state ? state.mobileNumber : ''); // Allowing updates to mobileNumber
   const [otp, setOtp] = useState('');
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [error, setError] = useState('');
   const [selectedState, setSelectedState] = useState(null);
   const [selectedCounseling, setSelectedCounseling] = useState(null);
   const navigate = useNavigate();
+  const { user, login } = useContext(UserContext);
+
+  useEffect(() => {
+    if (user) {
+      navigate('/dashboards');
+    }
+  }, [user, navigate]);
 
   const states = [
     { label: 'Kerala', value: 'Kerala' },
@@ -35,12 +43,13 @@ const Register = () => {
     if (mobileNumber.length === 10) {
       try {
         await axiosInstance.post('/auth/send-otp-register', {
-          mobileNumber: '+91' + mobileNumber
+          mobileNumber: '+91' + mobileNumber,
+          name
         });
         setIsOtpSent(true);
         setError('');
       } catch (error) {
-        setError('Failed to send OTP. Please try again.');
+        setError(error.response?.data?.message || 'Failed to send OTP. Please try again.'); // Improved error handling
       }
     } else {
       setError('Please enter a valid 10-digit mobile number');
@@ -57,13 +66,24 @@ const Register = () => {
         counseling: selectedCounseling,
         code: otp
       });
-      const { token } = response.data;
-      localStorage.setItem('token', token);
+  
+      console.log("Backend response:", response.data);
+  
+      const { token, user } = response.data; // Ensure you destructure user correctly
+      localStorage.setItem('token', token); // Store the token
+      localStorage.setItem('user', JSON.stringify(user)); // Store user data correctly
+  
+      console.log("Stored user in localStorage:", localStorage.getItem('user'));
+  
+      login(user, token);
       navigate('/dashboards');
     } catch (error) {
-      setError('Failed to verify OTP or register. Please try again.');
+      console.error("Verification error:", error);
+      setError(error.response?.data?.message || 'Failed to verify OTP or register. Please try again.'); // Improved error handling
     }
   };
+  
+  
 
   return (
     <div className={styles.registerContainer}>
@@ -84,6 +104,13 @@ const Register = () => {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
             className={styles.inputField}
+          />
+          <InputText
+            value={mobileNumber}
+            onChange={(e) => setMobileNumber(e.target.value.replace(/\D/g, ''))} // Allow updates to mobileNumber
+            placeholder="Enter your mobile number"
+            className={styles.inputField}
+            maxLength="10"
           />
           <Dropdown
             value={selectedState}
