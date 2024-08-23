@@ -21,6 +21,7 @@ const userRoutes = require('./routes/users');
 const lastRankRoutes = require('./routes/lastRankRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const informationAlertRoutes = require('./routes/informationAlertRoutes'); 
+const profileRoutes = require('./routes/profileRoutes');
 
 const app = express();
 const port = process.env.PORT || 5001;
@@ -353,6 +354,7 @@ app.use('/api/protected', require('./routes/protectedRoute'));
 app.use('/api/lastrank', lastRankRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/admin-data', informationAlertRoutes);
+app.use('/api/profile', profileRoutes);
 
 // Serve the React app for any route not handled by the above
 app.get('*', (req, res) => {

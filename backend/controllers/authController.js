@@ -48,7 +48,7 @@ exports.verifyOtpRegister = async (req, res) => {
 
     if (isValid) {
       const newUser = await User.create({ name, email, mobileNumber, state, counseling });
-      const token = jwt.sign({ userId: newUser._id }, JWT_SECRET, { expiresIn: '1h' });
+      const token = jwt.sign({ userId: newUser._id }, JWT_SECRET, { expiresIn: '24h' });
       res.status(200).send({ token, user: newUser });  // Include the user in the response
     } else {
       res.status(400).send({ message: 'Invalid OTP' });
@@ -105,7 +105,7 @@ exports.verifyOtp = async (req, res) => {
     }
 
     const user = await User.findOne({ mobileNumber });
-    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '24h' });
     res.status(200).json({ token, user });
 
   } catch (error) {
@@ -127,7 +127,7 @@ exports.refreshToken = async (req, res) => {
       return res.status(403).json({ message: 'Invalid refresh token' });
     }
 
-    const newToken = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '15m' });
+    const newToken = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '24h' });
     res.status(200).json({ token: newToken });
 
   } catch (error) {
@@ -135,6 +135,7 @@ exports.refreshToken = async (req, res) => {
     res.status(403).json({ message: 'Invalid refresh token' });
   }
 };
+
 
 exports.verifyToken = async (req, res) => {
   const { token } = req.body;
