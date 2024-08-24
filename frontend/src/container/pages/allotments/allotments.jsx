@@ -23,8 +23,6 @@ const decrypt = (ciphertext) => {
   }
 };
 
-
-
 const Allotments = () => {
   const [data, setData] = useState([]);
   const [filterOptions, setFilterOptions] = useState({});
@@ -78,6 +76,14 @@ const Allotments = () => {
           },
         });
   
+        // Check if the response indicates an invalid token
+        if (response.data === 'Invalid token.') {
+          alert('Session expired. Please log in again.');
+          localStorage.removeItem('token'); // Remove token from localStorage
+          window.location.href = '/login'; // Redirect to login page
+          return; // Stop further execution
+        }
+  
         // Decrypt the data
         const decryptedData = JSON.parse(decrypt(response.data.data));
   
@@ -85,17 +91,13 @@ const Allotments = () => {
         setPage(response.data.currentPage);
         setTotalPages(response.data.totalPages);
       } catch (error) {
-        console.error('Error fetching allotment data:', error);
-  
-        if (error.response) {
-          // Check for a 400 status with "Invalid token" message
-          if (error.response.status === 400 && error.response.data === "Invalid token.") {
-            alert('Session expired. Please log in again.');
-            localStorage.removeItem('token'); // Remove token from localStorage
-            window.location.href = '/login'; // Redirect to login page
-          }
+        if (error.response && error.response.status === 401) {
+          // Handle token expiration
+          alert('Session expired. Please log in again.');
+          localStorage.removeItem('token'); // Remove token from localStorage
+          window.location.href = '/login'; // Redirect to login page
         } else {
-          console.error('Unexpected error:', error);
+          console.error('Error fetching allotment data:', error);
         }
       } finally {
         setLoading(false);
@@ -103,7 +105,6 @@ const Allotments = () => {
     }, 500),
     [apiUrl]
   );
-  
   
   
   const fetchFilterOptions = useCallback(async () => {
