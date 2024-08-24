@@ -89,6 +89,8 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
 
   const API_URL = import.meta.env.VITE_API_URL;
 
+  
+
   useEffect(() => {
     const path = location.pathname;
     if (path.includes("allotments")) {
@@ -260,13 +262,77 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
   };
 
   // Fetch available datasets
+  // useEffect(() => {
+  //   const fetchDatasets = async () => {
+  //     try {
+  //       const response = await axios.get(`${API_URL}/dataset/list-generated-datasets`);
+  //       const datasets = response.data.datasets || [];
+  //       const types = datasets.map(dataset => {
+  //         const match = dataset.match(/EXAM:.*_TYPE:(.*)/);          return match ? match[1].replace(/_/g, ' ') : null;
+  //       }).filter(Boolean);
+
+  //       setAvailableCounselingTypes(types);
+  //     } catch (error) {
+  //       console.error('Error fetching available datasets', error);
+  //     }
+  //   };
+
+  //   fetchDatasets();
+  // }, [API_URL]);
+
+  // const saveUserSelection = async (exam, counselingType) => {
+  //   try {
+  //     await axiosInstance.post(`${API_URL}/users/save-user-selection`, { exam, counselingType });
+  //     console.log('User selection saved successfully');
+  //   } catch (error) {
+  //     console.error('Error saving user selection', error);
+  //   }
+  // };
+
+  // const handleExamChange = (e) => {
+  //   const selectedExam = e.target.value.toUpperCase().replace(/ /g, '_');
+  //   setExam(selectedExam);
+  //   saveUserSelection(selectedExam, counselingType);
+  // };
+
+  // const handleCounselingTypeChange = (e) => {
+  //   const selectedCounselingType = e.target.value;
+  //   setCounselingType(selectedCounselingType);
+  //   saveUserSelection(exam, selectedCounselingType);
+  // };
+
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
+    const fetchUserSelection = async () => {
+      try {
+        // Fetch the user's selected exam and counseling type from the backend
+        const response = await  axiosInstance.get(`${apiUrl}/users/exams`);
+        console.log(response);
+        const userSelection = response.data.selectedExams[0];
+        console.log("user selection "+userSelection);
+
+        if (userSelection.exam) {
+          console.log("exam data is " + userSelection.exam);
+          setExam(userSelection.exam); // Update the exam state with the user's selected exam
+        }
+
+        if (userSelection.counselingType) {
+          setCounselingType(userSelection.counselingType); // Update the counselingType state
+        }
+
+      } catch (error) {
+        console.error('Error fetching user selection:', error);
+      }
+    };
+
     const fetchDatasets = async () => {
       try {
-        const response = await axios.get(`${API_URL}/dataset/list-generated-datasets`);
+        const response = await axiosInstance.get('/dataset/list-generated-datasets');
         const datasets = response.data.datasets || [];
         const types = datasets.map(dataset => {
-          const match = dataset.match(/EXAM:.*_TYPE:(.*)/);          return match ? match[1].replace(/_/g, ' ') : null;
+          const match = dataset.match(/EXAM:.*_TYPE:(.*)/);          
+          return match ? match[1].replace(/_/g, ' ') : null;
         }).filter(Boolean);
 
         setAvailableCounselingTypes(types);
@@ -275,28 +341,32 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
       }
     };
 
-    fetchDatasets();
-  }, [API_URL]);
-
-  const saveUserSelection = async (exam, counselingType) => {
-    try {
-      await axiosInstance.post(`${API_URL}/users/save-user-selection`, { exam, counselingType });
-      console.log('User selection saved successfully');
-    } catch (error) {
-      console.error('Error saving user selection', error);
-    }
-  };
+    fetchUserSelection(); // Fetch user's selected exam and counseling type
+    fetchDatasets(); // Fetch available counseling types
+  }, []);
 
   const handleExamChange = (e) => {
+    console.log("handle exam change");
     const selectedExam = e.target.value.toUpperCase().replace(/ /g, '_');
     setExam(selectedExam);
     saveUserSelection(selectedExam, counselingType);
+    window.location.reload();
   };
 
   const handleCounselingTypeChange = (e) => {
     const selectedCounselingType = e.target.value;
     setCounselingType(selectedCounselingType);
     saveUserSelection(exam, selectedCounselingType);
+  };
+
+  const saveUserSelection = async (exam, counselingType) => {
+    try {
+      await axiosInstance.post('/users/save-user-selection', { exam, counselingType });
+      console.log('User selection saved successfully');
+      window.location.reload();
+    } catch (error) {
+      console.error('Error saving user selection', error);
+    }
   };
 
   

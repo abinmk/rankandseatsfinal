@@ -1,24 +1,38 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
+import Spinner from '../components/Spinner/Spinner'; // Import a spinner component
 
-const ProtectedRoute = ({ children }) => {
-  const { user } = useContext(UserContext); // Access the user from UserContext
-  const token = localStorage.getItem('token'); // Check for the token in localStorage
-  const location = useLocation(); // Get the current location
+const ProtectedRoute = ({ children, requiredRole, redirectTo = "/login" }) => {
+  const { user } = useContext(UserContext);
+  const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem('token');
+  const location = useLocation();
 
-  // If the user is still being loaded, render a loading indicator or null
-  if (user === null) {
-    return <div>Loading...</div>; // Or replace with a proper loading spinner/component
+  useEffect(() => {
+    if (user !== null) {
+      setLoading(false); // Stop loading when user data is available
+    } else if (!token) {
+      setLoading(false); // Stop loading if there's no token (user is not logged in)
+    }
+  }, [user, token]);
+
+  if (loading) {
+    return <Spinner />; // Show loading spinner while determining user status
   }
 
-  // If user is authenticated and token exists, allow access to the protected route
-  if (user && token) {
-    return children;
-  } else {
-    // Redirect to login page but preserve the current location
-    return <Navigate to="/login" state={{ from: location }} />;
+  // If no user and no token, redirect to login
+  if (!user || !token) {
+    return <Navigate to={redirectTo} state={{ from: location }} />;
   }
+
+  // If user exists but doesn't have the required role, redirect
+  if (requiredRole && !user.roles.includes(requiredRole)) {
+    return <Navigate to={redirectTo} state={{ from: location }} />;
+  }
+
+  // If user is authenticated and has the required role, allow access
+  return children;
 };
 
 export default ProtectedRoute;
