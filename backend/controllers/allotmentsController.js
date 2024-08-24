@@ -199,9 +199,9 @@ exports.getFilterOptions = async (req, res) => {
     const bondPenaltyRange = await AllotmentModel.aggregate([
       { $group: { _id: null, min: { $min: '$bondPenality' }, max: { $max: '$bondPenality' } } }
     ]);
-    const totalHospitalBedsRange = await AllotmentModel.aggregate([
-      { $group: { _id: null, min: { $min: '$totalHospitalBeds' }, max: { $max: '$totalHospitalBeds' } } }
-    ]);
+    // const totalHospitalBedsRange = await AllotmentModel.aggregate([
+    //   { $group: { _id: null, min: { $min: '$totalHospitalBeds' }, max: { $max: '$totalHospitalBeds' } } }
+    // ]);
     const rankRange = await AllotmentModel.aggregate([
       { $group: { _id: null, min: { $min: '$rank' }, max: { $max: '$rank' } } }
     ]);
@@ -221,7 +221,7 @@ exports.getFilterOptions = async (req, res) => {
       allottedCategory,
       bondYearRange: bondYearRange[0],
       bondPenaltyRange: bondPenaltyRange[0],
-      totalHospitalBedsRange: totalHospitalBedsRange[0],
+      // totalHospitalBedsRange: totalHospitalBedsRange[0],
       rankRange: rankRange[0],
     };
 

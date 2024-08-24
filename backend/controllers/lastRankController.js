@@ -1,9 +1,22 @@
 const mongoose = require('mongoose');
+const User = require('../models/User');
 
 const getLastRanks = async (req, res) => {
     try {
       const { page = 1, limit = 100, bondPenaltyRange, quotaOptions, ...filters } = req.query;
-      const collectionName = 'LAST_RANK_RESULT';
+      
+
+      const userId = req.user.userId;
+      const user = await User.findById(userId).lean();
+      if (!user || !user.selectedExams || user.selectedExams.length === 0) {
+        return res.status(400).send('No selected exams found for user.');
+      }
+  
+      const { exam, counselingType } = user.selectedExams[0];
+      const formattedExam = exam.replace(/\s+/g, '_');
+      const formattedCounselingType = counselingType.replace(/\s+/g, '_');
+      const collectionName = `LAST_RANK_EXAM:${formattedExam}_TYPE:${formattedCounselingType}`;
+      console.log("counseling with collection name:" + collectionName);
       let LastRankModel;
   
       try {
@@ -79,9 +92,19 @@ const getLastRanks = async (req, res) => {
 
 const getLastRankFilters = async (req, res) => {
     try {
-      const collectionName = 'LAST_RANK_RESULT';
-      let LastRankModel;
+
+      const userId = req.user.userId;
+      const user = await User.findById(userId).lean();
+      if (!user || !user.selectedExams || user.selectedExams.length === 0) {
+        return res.status(400).send('No selected exams found for user.');
+      }
   
+      const { exam, counselingType } = user.selectedExams[0];
+      const formattedExam = exam.replace(/\s+/g, '_');
+      const formattedCounselingType = counselingType.replace(/\s+/g, '_');
+      const collectionName = `LAST_RANK_EXAM:${formattedExam}_TYPE:${formattedCounselingType}`;
+      console.log("counseling with collection name:" + collectionName);
+      let LastRankModel;
       try {
         LastRankModel = mongoose.model(collectionName);
       } catch (error) {

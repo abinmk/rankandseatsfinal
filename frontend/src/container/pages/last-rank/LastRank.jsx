@@ -6,7 +6,7 @@ import './LastRank.scss';
 import Modal from 'react-bootstrap/Modal';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
-
+import axiosInstance from '../../../utils/axiosInstance';
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const LastRank = () => {
@@ -38,7 +38,7 @@ const LastRank = () => {
         }
       }
 
-      const response = await axios.get(`${apiUrl}/lastrank`, {
+      const response = await axiosInstance.get(`${apiUrl}/lastrank`, {
         params: {
           page,
           limit: pageSize,
@@ -64,7 +64,7 @@ const LastRank = () => {
     const fetchFilterOptions = async () => {
       setFilterLoading(true);
       try {
-        const response = await axios.get(`${apiUrl}/lastrank/filters`);
+        const response = await axiosInstance.get(`${apiUrl}/lastrank/filters`);
         setFilterOptions(response.data);
       } catch (error) {
         console.error('Error fetching filter options:', error);
