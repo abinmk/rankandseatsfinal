@@ -15,11 +15,7 @@ const Colleges = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [filterLoading, setFilterLoading] = useState(true);
-
-  const { user } = useContext(UserContext);
-  const [countVal , setCountOf] = useState(0);
-  const [subscriptionStatus, setSubscriptionStatus] = useState(null);
-  const [showSubscriptionPopup, setShowSubscriptionPopup] = useState(false);
+  
 
   const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -61,7 +57,6 @@ const Colleges = () => {
     _.debounce(async (page, pageSize, filters) => {
       setLoading(true);
       try {
-
         const filterParams = buildFilterParams(filters);
         const response = await axios.get(`${apiUrl}/colleges`, {
           params: {
@@ -69,10 +64,6 @@ const Colleges = () => {
             limit: pageSize,
             ...filterParams
           }
-        });
-        setCountOf(prevCountVal => {
-          const newCount = prevCountVal + 1;
-          return newCount;
         });
         setData(response.data.data);
         setPage(response.data.currentPage);
@@ -162,14 +153,6 @@ const Colleges = () => {
         setPageSize={setPageSize}
         getFilterParamName={getFilterParamName}
         appliedFiltersCount={countAppliedFilters()} // Pass applied filters count
-        disabled = {showSubscriptionPopup && countVal>2}
-      />
-           <CustomPopup 
-        show={showSubscriptionPopup}
-        onHide={() => setShowSubscriptionPopup(false)}
-        title="Subscription Required" 
-        message="You need to subscribe to access these filters. Please complete your payment to proceed."
-        subscriptionStatus={subscriptionStatus} // Pass subscription status
       />
     </div>
   );

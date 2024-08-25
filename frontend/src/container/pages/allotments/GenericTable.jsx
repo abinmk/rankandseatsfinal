@@ -197,17 +197,18 @@ const GenericTable = ({
         <div className="table-container">
           <div>
             <span className='allotments-header'>{headerTitle}</span>
-            <Button variant="primary" className="column-toggle-btn" onClick={() => setShowColumnModal(true)}>
+            <Button variant="primary" className="column-toggle-btn" disabled={disabled} onClick={() => setShowColumnModal(true)}>
               View/Hide Columns
             </Button>
           </div>
           <div className="table-wrapper">
-            <Table {...getTableProps()} className="tableCustom">
+            <Table {...getTableProps()} className="tableCustom" disabled={disabled}>
               <thead>
                 {headerGroups.map((headerGroup) => (
                   <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
                     <th>
                       <FaHeart
+                      disabled={disabled}
                         onClick={() => toggleAllWishlist()}
                         style={{ color: wishlist.length === data.length ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5rem' }}
                       />
@@ -283,6 +284,7 @@ const GenericTable = ({
             <Form.Group controlId="rowsPerPage" className="d-flex align-items-center pagination-info">
               <Form.Label className="me-2 mb-0">Rows per page:</Form.Label>
               <Form.Control
+                disabled={disabled}
                 as="select"
                 value={pageSize}
                 onChange={(e) => setPageSize(Number(e.target.value))}
@@ -299,6 +301,7 @@ const GenericTable = ({
             <Form.Group controlId="gotoPage" className="d-flex align-items-center pagination-info">
               <Form.Label className="me-2 mb-0">Go to page:</Form.Label>
               <Form.Control
+                disabled={disabled}
                 type="number"
                 min="1"
                 max={pageCount}
@@ -308,13 +311,13 @@ const GenericTable = ({
                 style={{ width: 'fit-content', height:'40px' }}
               />
             </Form.Group>
-            <div className="pagination-controls" disabled={disabled}>
-              <Pagination className="mb-0">
-                <Pagination.First onClick={() => setPage(1)} disabled={!canPreviousPage} />
-                <Pagination.Prev onClick={() => setPage(page - 1)} disabled={!canPreviousPage} />
+            <div className={showSubscriptionPopup?"pagination-hidden":"pagination-controls"}>
+              <Pagination className="mb-0" disabled={disabled}>
+                <Pagination.First onClick={() => setPage(1)} disabled={!canPreviousPage || showSubscriptionPopup} />
+                <Pagination.Prev onClick={() => setPage(page - 1)} disabled={!canPreviousPage || showSubscriptionPopup} />
                 {renderPaginationItems()}
-                <Pagination.Next onClick={() => setPage(page + 1)} disabled={!canNextPage} />
-                <Pagination.Last onClick={() => setPage(pageCount)} disabled={!canNextPage} />
+                <Pagination.Next onClick={() => setPage(page + 1)} disabled={!canNextPage || showSubscriptionPopup} />
+                <Pagination.Last onClick={() => setPage(pageCount)} disabled={!canNextPage || showSubscriptionPopup} />
               </Pagination>
             </div>
           </div>
