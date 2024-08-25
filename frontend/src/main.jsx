@@ -60,7 +60,6 @@ root.render(
 
           {/* Auth routes */}
           <Route path="/" element={<Auth />}>
-            <Route index element={<Login />} />
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
           </Route>
@@ -78,12 +77,8 @@ root.render(
           </Route>
 
           {/* Public routes */}
-          <Route path="/" element={<Authenticationlayout />}>
-            <Route path="authentication/signup/signupbasic" element={<Signupbasic />} />
-            <Route path="authentication/signin/signinbasic" element={<Signinbasic />} />
-            <Route path="authentication/twostepverification/twostepbasic" element={<Twostepbasic />} />
-          </Route>
           <Route path="/" element={<Landinglayout />}>
+            <Route index element={<Landing />} />
             <Route path="home" element={<Landing />} />
             <Route path="about-us" element={<AboutUs />} />
             <Route path="contact-us" element={<ContactUs />} />
@@ -95,7 +90,7 @@ root.render(
           </Route>
 
           {/* Fallback route */}
-          <Route path="*" element={<Navigate to="/login" />} />
+          <Route path="*" element={<Navigate to="/home" />} />
         </Routes>
       </React.Suspense>
     </BrowserRouter>

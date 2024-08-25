@@ -4,6 +4,7 @@ import _ from 'lodash';
 import GenericTable from './GenericTable';
 import { collegesColumns, collegesFiltersConfig } from './collegesConfig';
 import './Colleges.scss';
+import axiosInstance from '../../../utils/axiosInstance';
 import { UserContext } from '../../../contexts/UserContext';
 
 const Colleges = () => {
@@ -15,9 +16,17 @@ const Colleges = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [filterLoading, setFilterLoading] = useState(true);
+
+  const { user } = useContext(UserContext);
+  const [countVal , setCountOf] = useState(0);
+  const [subscriptionStatus, setSubscriptionStatus] = useState(false);
+  const [showSubscriptionPopup, setShowSubscriptionPopup] = useState(false);
+  const [filterCountExceeded, setFilterCountExceed] = useState(false);
   
 
   const apiUrl = import.meta.env.VITE_API_URL;
+
+
 
   const getFilterParamName = useMemo(() => {
     const filterMapping = {
@@ -57,8 +66,19 @@ const Colleges = () => {
     _.debounce(async (page, pageSize, filters) => {
       setLoading(true);
       try {
+        setCountOf(prevCountVal => {
+          const newCount = prevCountVal + 1;
+          return newCount;
+        });
+        if((countVal>2 && subscriptionStatus==false) || page>1)
+        {
+          setShowSubscriptionPopup(true);
+          setFilterCountExceed(true);
+          return;
+        }
+
         const filterParams = buildFilterParams(filters);
-        const response = await axios.get(`${apiUrl}/colleges`, {
+        const response = await axiosInstance.get(`${apiUrl}/colleges`, {
           params: {
             page,
             limit: pageSize,
@@ -70,10 +90,11 @@ const Colleges = () => {
         setTotalPages(response.data.totalPages);
       } catch (error) {
         console.error('Error fetching college data:', error);
+      }finally {
+        setLoading(false);
       }
-      setLoading(false);
     }, 500),
-    [apiUrl]
+    [apiUrl,filters,page]
   );
 
   const fetchFilterOptions = useCallback(async () => {
@@ -120,10 +141,6 @@ const Colleges = () => {
         const response = await axiosInstance.post(`${apiUrl}/payment/check-subscription`, { userId: user._id });
         const isSubscribed = response.data.status === 'paid';
         setSubscriptionStatus(isSubscribed);
-  
-        if (!isSubscribed) {
-          setShowSubscriptionPopup(true); // Show popup if not subscribed
-        }
       } catch (error) {
         console.error('Error checking subscription:', error);
       }
@@ -131,7 +148,6 @@ const Colleges = () => {
   
     checkSubscription();
   }, [apiUrl]);
-
   return (
     <div className="colleges-container">
       <GenericTable
@@ -153,6 +169,9 @@ const Colleges = () => {
         setPageSize={setPageSize}
         getFilterParamName={getFilterParamName}
         appliedFiltersCount={countAppliedFilters()} // Pass applied filters count
+        disabled = {showSubscriptionPopup && countVal>2}
+        showSubscriptionPopup={showSubscriptionPopup}
+        setShowSubscriptionPopup={setShowSubscriptionPopup}
       />
     </div>
   );

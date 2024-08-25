@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState,useContext, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import GenericTable from './GenericTable';
 import { LastRankColumns, LastRankFiltersConfig } from './lastRankConfig';
+import axiosInstance from '../../../utils/axiosInstance';
+import { UserContext } from '../../../contexts/UserContext';
 import './LastRank.scss';
 import Modal from 'react-bootstrap/Modal';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
-import axiosInstance from '../../../utils/axiosInstance';
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const LastRank = () => {
@@ -21,10 +22,27 @@ const LastRank = () => {
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [showRowModal, setShowRowModal] = useState(false);
 
+  const { user } = useContext(UserContext);
+  const [countVal , setCountOf] = useState(0);
+  const [subscriptionStatus, setSubscriptionStatus] = useState(false);
+  const [showSubscriptionPopup, setShowSubscriptionPopup] = useState(false);
+  const [filterCountExceeded, setFilterCountExceed] = useState(false);
+
   const fetchData = useCallback(async (page, pageSize, filters) => {
     setLoading(true);
     try {
       const adjustedFilters = {};
+
+      setCountOf(prevCountVal => {
+        const newCount = prevCountVal + 1;
+        return newCount;
+      });
+      if((countVal>2 && subscriptionStatus==false) || page>1)
+      {
+        setShowSubscriptionPopup(true);
+        setFilterCountExceed(true);
+        return;
+      }
 
       for (const key in filters) {
         if (filters[key]) {
@@ -54,7 +72,7 @@ const LastRank = () => {
       console.error('Error fetching data:', error);
     }
     setLoading(false);
-  }, []);
+  }, [filters,page]);
 
   useEffect(() => {
     fetchData(page, pageSize, filters);
@@ -91,6 +109,20 @@ const LastRank = () => {
     setDataClose
   };
 
+  useEffect(() => {
+    const checkSubscription = async () => {
+      try {
+        const response = await axiosInstance.post(`${apiUrl}/payment/check-subscription`, { userId: user._id });
+        const isSubscribed = response.data.status === 'paid';
+        setSubscriptionStatus(isSubscribed);
+      } catch (error) {
+        console.error('Error checking subscription:', error);
+      }
+    };
+  
+    checkSubscription();
+  }, [apiUrl]);
+
   return (
     <div className={`fees-container ${showRowModal ? "hide-filters" : ""}`}>
       <GenericTable
@@ -110,6 +142,9 @@ const LastRank = () => {
         setPageSize={setPageSize}
         columns={LastRankColumns(data, handleDetailClick)}
         isModalOpen={showRowModal}
+        disabled = {showSubscriptionPopup && countVal>2}
+        showSubscriptionPopup={showSubscriptionPopup}
+        setShowSubscriptionPopup={setShowSubscriptionPopup}
       />
 
       <Modal show={showRowModal} onHide={handleModalClose} className="custom-modal">

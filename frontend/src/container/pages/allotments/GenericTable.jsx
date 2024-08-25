@@ -29,7 +29,9 @@ const GenericTable = ({
   addToWishlist,
   removeFromWishlist,
   disabled,
-  showSubscriptionPopup
+  showSubscriptionPopup,
+  setShowSubscriptionPopup
+  
   
 }) => {
   const [showFilters, setShowFilters] = useState(true);

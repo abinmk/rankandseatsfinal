@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState,useContext, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import GenericTable from './GenericTable';
 import { feesColumns, feesFiltersConfig } from './feesConfig';
 import './Fees.scss';
 import useDebounce from './useDebounce'; // Import the debounce hook
+import axiosInstance from '../../../utils/axiosInstance';
+import { UserContext } from '../../../contexts/UserContext';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -21,13 +23,29 @@ const Fees = () => {
   const debouncedPage = useDebounce(page, 300);
   const debouncedPageSize = useDebounce(pageSize, 300);
 
+  const { user } = useContext(UserContext);
+  const [countVal , setCountOf] = useState(0);
+  const [subscriptionStatus, setSubscriptionStatus] = useState(false);
+  const [showSubscriptionPopup, setShowSubscriptionPopup] = useState(false);
+  const [filterCountExceeded, setFilterCountExceed] = useState(false);
+
   // Fetch fees data with filters and pagination
   const fetchData = useCallback(async (page, pageSize, filters) => {
     setLoading(true);
     const source = axios.CancelToken.source();
 
     try {
-      const response = await axios.get(`${apiUrl}/fees`, {
+      setCountOf(prevCountVal => {
+        const newCount = prevCountVal + 1;
+        return newCount;
+      });
+      if((countVal>2 && subscriptionStatus==false) || page>1)
+      {
+        setShowSubscriptionPopup(true);
+        setFilterCountExceed(true);
+        return;
+      }
+      const response = await axiosInstance.get(`${apiUrl}/fees`, {
         cancelToken: source.token,
         params: {
           page,
@@ -50,7 +68,7 @@ const Fees = () => {
     return () => {
       source.cancel('Operation canceled due to new request.');
     };
-  }, []);
+  }, [filters,page]);
 
   // Fetch data when filters, page, or pageSize changes
   useEffect(() => {
@@ -73,6 +91,20 @@ const Fees = () => {
     fetchFilterOptions();
   }, []);
 
+  useEffect(() => {
+    const checkSubscription = async () => {
+      try {
+        const response = await axiosInstance.post(`${apiUrl}/payment/check-subscription`, { userId: user._id });
+        const isSubscribed = response.data.status === 'paid';
+        setSubscriptionStatus(isSubscribed);
+      } catch (error) {
+        console.error('Error checking subscription:', error);
+      }
+    };
+  
+    checkSubscription();
+  }, [apiUrl]);
+
   return (
     <div className="fees-container">
       <GenericTable
@@ -91,6 +123,9 @@ const Fees = () => {
         fetchData={fetchData} // Pass fetchData
         pageSize={pageSize} // Pass pageSize
         setPageSize={setPageSize} // Pass setPageSize
+        disabled = {showSubscriptionPopup && countVal>2}
+        showSubscriptionPopup={showSubscriptionPopup}
+        setShowSubscriptionPopup={setShowSubscriptionPopup}
       />
     </div>
   );

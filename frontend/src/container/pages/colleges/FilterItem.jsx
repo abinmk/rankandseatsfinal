@@ -40,34 +40,10 @@ const FilterItem = ({ title, options = {},disabled, filterName, filters, handleF
       option.toLowerCase().includes(searchTerm.toLowerCase())
     ) : [];
 
-  const handleModalClose = () => setShowModal(false);
-  const handleModalOpen = () => setShowModal(true);
-  const handlePopupClose = () => setShowPaymentPopup(false);
 
-  const checkSubscription = async () => {
-    try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/payment/check-subscription`, { userId: user._id });
-      setSubscriptionStatus(response.data.status === 'paid');
-      return response.data.status === 'paid';
-    } catch (error) {
-      console.error('Error checking subscription:', error);
-      return false;
-    }
-  };
-
-  const handlePayment = () => {
-    // Redirect to the payment page or trigger the payment process
-    window.location.href = '/payment-page'; // Example, replace with actual payment process
-  };
-
-  const handleCheckboxChange = async (option, checked) => {
-    const isSubscribed = await checkSubscription();
-    if (!isSubscribed) {
-      setShowPaymentPopup(true);
-      return;
-    }
-    handleFilterChange(option, checked, filterName);
-  };
+    const handleCheckboxChange = (option, checked) => {
+      handleFilterChange(option, checked, filterName);
+    };
 
   const clearFilterCategory = async () => {
     const isSubscribed = await checkSubscription();
@@ -108,6 +84,9 @@ const FilterItem = ({ title, options = {},disabled, filterName, filters, handleF
     debouncedHandleRangeChange([minValue, value]);
   };
 
+  const handleModalClose = () => setShowModal(false);
+  const handleModalOpen = () => setShowModal(true);
+
   const resetFilter = async () => {
     const isSubscribed = await checkSubscription();
     if (!isSubscribed) {
@@ -121,14 +100,6 @@ const FilterItem = ({ title, options = {},disabled, filterName, filters, handleF
 
   return (
     <>
-       {/* <CustomPopup 
-        show={showPaymentPopup} 
-        handleClose={handlePopupClose} 
-        title="Subscription Required" 
-        message="You need to subscribe to access these filters. Please complete your payment to proceed."
-        onPay={handlePayment} // Pass the payment handler
-        subscriptionStatus={subscriptionStatus} // Pass subscription status
-      /> */}
       <Accordion.Item eventKey={eventKey} disabled={disabled}>
         <Accordion.Header>
           {title} ({appliedFiltersCount})
@@ -231,8 +202,6 @@ const FilterItem = ({ title, options = {},disabled, filterName, filters, handleF
           </Button>
         </Modal.Footer>
       </Modal>
-
-      {/* Custom Popup for Payment */}
    
     </>
   );

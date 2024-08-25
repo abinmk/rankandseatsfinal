@@ -4,6 +4,7 @@ import FilterSection from './FilterSection';
 import { Table, Modal, Button, Form, Pagination } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './LastRank.scss';
+import CustomPopup from '../custom-popup/custom-popup-filter';
 
 const GenericTable = ({
   data,
@@ -22,6 +23,9 @@ const GenericTable = ({
   pageSize,
   setPageSize,
   isModalOpen,
+  disabled,
+  showSubscriptionPopup,
+  setShowSubscriptionPopup
 }) => {
   const [showFilters, setShowFilters] = useState(true);
   const [showColumnModal, setShowColumnModal] = useState(false);
@@ -298,6 +302,13 @@ const GenericTable = ({
 </tbody>
 
             </Table>
+            <CustomPopup 
+            show={showSubscriptionPopup}
+            onHide={() => setShowSubscriptionPopup(false)}
+            title="Subscription Required" 
+            message="Access to these features requires a subscription. Please complete your payment to continue enjoying our full range of services."
+            subscriptionStatus={false} // Pass subscription status
+          />
           </div>
           <div className="pagination-container">
             <Form.Group controlId="rowsPerPage" className="d-flex align-items-center pagination-info">

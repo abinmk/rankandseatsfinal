@@ -30,7 +30,7 @@ const Allotments = () => {
   const [filterOptions, setFilterOptions] = useState({});
   const [filters, setFilters] = useState({});
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
+  const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [filterLoading, setFilterLoading] = useState(true);
@@ -38,8 +38,9 @@ const Allotments = () => {
   const [wishlist, setWishlist] = useState([]);
   const { user } = useContext(UserContext);
   const [countVal , setCountOf] = useState(0);
-  const [subscriptionStatus, setSubscriptionStatus] = useState(null);
+  const [subscriptionStatus, setSubscriptionStatus] = useState(false);
   const [showSubscriptionPopup, setShowSubscriptionPopup] = useState(false);
+  const [filterCountExceeded, setFilterCountExceed] = useState(false);
 
   const apiUrl = import.meta.env.VITE_API_URL;
   const { exam, counselingType } = useOutletContext(); // Retrieve exam and counselingType from context
@@ -68,11 +69,18 @@ const Allotments = () => {
   const fetchData = useCallback(
     _.debounce(async (page, pageSize, filters, counselingType) => {
       setLoading(true);
+      console.log("page=="+page);
       try {
         setCountOf(prevCountVal => {
           const newCount = prevCountVal + 1;
           return newCount;
         });
+        if((countVal>2 && subscriptionStatus==false) || page>1)
+        {
+          setShowSubscriptionPopup(true);
+          setFilterCountExceed(true);
+          return;
+        }
 
         const token = localStorage.getItem('token');
         const response = await axiosInstance.get(`${apiUrl}/allotments`, {
@@ -102,7 +110,8 @@ const Allotments = () => {
           setPage(response.data.currentPage);
           setTotalPages(response.data.totalPages);
   
-      } catch (error) {
+      }
+     catch (error) {
         if (error.response && error.response.status === 401) {
           // Handle token expiration
           alert('Session expired. Please log in again.');
@@ -115,7 +124,7 @@ const Allotments = () => {
         setLoading(false);
       }
     }, 500),
-    [apiUrl]
+    [apiUrl,filters,page]
   );
   
   
@@ -217,17 +226,13 @@ useEffect(() => {
       const response = await axiosInstance.post(`${apiUrl}/payment/check-subscription`, { userId: user._id });
       const isSubscribed = response.data.status === 'paid';
       setSubscriptionStatus(isSubscribed);
-
-      if (!isSubscribed) {
-        setShowSubscriptionPopup(true); // Show popup if not subscribed
-      }
     } catch (error) {
       console.error('Error checking subscription:', error);
     }
   };
 
   checkSubscription();
-}, [apiUrl]);
+}, [apiUrl,filters]);
 
 
   return (
@@ -257,6 +262,7 @@ useEffect(() => {
         removeFromWishlist={removeFromWishlist}
         disabled = {showSubscriptionPopup && countVal>2}
         showSubscriptionPopup={showSubscriptionPopup}
+        setShowSubscriptionPopup={setShowSubscriptionPopup}
       />
     </div>
   );

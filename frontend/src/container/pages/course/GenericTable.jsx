@@ -3,6 +3,7 @@ import { useTable, usePagination, useSortBy, useFilters, useColumnOrder } from '
 import FilterSection from './FilterSection';
 import { Table, Modal, Button, Form, Pagination } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import CustomPopup from '../custom-popup/custom-popup-filter';
 
 const GenericTable = ({
   data,
@@ -19,7 +20,10 @@ const GenericTable = ({
   filterLoading,
   fetchData,
   pageSize,
-  setPageSize
+  setPageSize,
+  disabled,
+  showSubscriptionPopup,
+  setShowSubscriptionPopup
 }) => {
   const [showFilters, setShowFilters] = useState(true);
   const [showColumnModal, setShowColumnModal] = useState(false);
@@ -235,6 +239,13 @@ const GenericTable = ({
                 })}
               </tbody>
             </Table>
+            <CustomPopup 
+            show={showSubscriptionPopup}
+            onHide={() => setShowSubscriptionPopup(false)}
+            title="Subscription Required" 
+            message="Access to these features requires a subscription. Please complete your payment to continue enjoying our full range of services."
+            subscriptionStatus={false} // Pass subscription status
+          />
           </div>
           <div className="pagination-container">
             <Form.Group controlId="rowsPerPage" className="d-flex align-items-center pagination-info">
@@ -294,28 +305,6 @@ const GenericTable = ({
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowColumnModal(false)}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      <Modal show={showRowModal} onHide={() => setShowRowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Row Details</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {selectedRowData && (
-            <div>
-              {Object.entries(selectedRowData).map(([key, value]) => (
-                <div key={key}>
-                  <strong>{key}:</strong> {value}
-                </div>
-              ))}
-            </div>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowRowModal(false)}>
             Close
           </Button>
         </Modal.Footer>
