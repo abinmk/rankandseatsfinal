@@ -121,14 +121,14 @@ const FilterItem = ({ title, options = {},disabled, filterName, filters, handleF
 
   return (
     <>
-       <CustomPopup 
+       {/* <CustomPopup 
         show={showPaymentPopup} 
         handleClose={handlePopupClose} 
         title="Subscription Required" 
         message="You need to subscribe to access these filters. Please complete your payment to proceed."
         onPay={handlePayment} // Pass the payment handler
         subscriptionStatus={subscriptionStatus} // Pass subscription status
-      />
+      /> */}
       <Accordion.Item eventKey={eventKey} disabled={disabled}>
         <Accordion.Header>
           {title} ({appliedFiltersCount})
