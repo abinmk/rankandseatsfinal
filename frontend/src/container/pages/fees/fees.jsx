@@ -1,9 +1,9 @@
-// fees.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import GenericTable from './GenericTable';
 import { feesColumns, feesFiltersConfig } from './feesConfig';
 import './Fees.scss';
+import useDebounce from './useDebounce'; // Import the debounce hook
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -17,11 +17,18 @@ const Fees = () => {
   const [loading, setLoading] = useState(true);
   const [filterLoading, setFilterLoading] = useState(true);
 
+  const debouncedFilters = useDebounce(filters, 500);
+  const debouncedPage = useDebounce(page, 300);
+  const debouncedPageSize = useDebounce(pageSize, 300);
+
   // Fetch fees data with filters and pagination
   const fetchData = useCallback(async (page, pageSize, filters) => {
     setLoading(true);
+    const source = axios.CancelToken.source();
+
     try {
       const response = await axios.get(`${apiUrl}/fees`, {
+        cancelToken: source.token,
         params: {
           page,
           limit: pageSize,
@@ -32,15 +39,23 @@ const Fees = () => {
       setPage(response.data.currentPage);
       setTotalPages(response.data.totalPages);
     } catch (error) {
-      console.error('Error fetching fees data:', error);
+      if (axios.isCancel(error)) {
+        console.log('Request canceled:', error.message);
+      } else {
+        console.error('Error fetching fees data:', error);
+      }
     }
     setLoading(false);
+
+    return () => {
+      source.cancel('Operation canceled due to new request.');
+    };
   }, []);
 
   // Fetch data when filters, page, or pageSize changes
   useEffect(() => {
-    fetchData(page, pageSize, filters);
-  }, [fetchData, filters, page, pageSize]);
+    fetchData(debouncedPage, debouncedPageSize, debouncedFilters);
+  }, [fetchData, debouncedFilters, debouncedPage, debouncedPageSize]);
 
   // Fetch filter options once on component mount
   useEffect(() => {

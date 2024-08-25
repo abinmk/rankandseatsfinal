@@ -22,7 +22,8 @@ const GenericTable = ({
   rankRange,
   fetchData, // Ensure fetchData is passed
   pageSize, // Ensure pageSize is passed
-  setPageSize // Ensure setPageSize is passed
+  setPageSize, // Ensure setPageSize is passed
+  disabled
 }) => {
   const [showFilters, setShowFilters] = useState(true);
   const [showColumnModal, setShowColumnModal] = useState(false);
@@ -49,6 +50,8 @@ const GenericTable = ({
     setFilteredData(data);
   }, [data]);
 
+  
+
   useEffect(() => {
     fetchData(page, pageSize, buildFilterParams());
   }, [filters, page, pageSize]);
@@ -66,7 +69,7 @@ const GenericTable = ({
       state: 'state',
       instituteType: 'instituteType',
       university: 'universityName',
-      yearsOfEstablishment: 'yearOfEstablishment',
+      yearOfEstablishment: 'yearOfEstablishment',
       totalHospitalBeds: 'totalHospitalBeds',
       locationMapLinks: 'locationMapLink',
       nearestRailwayStations: 'nearestRailwayStation',
@@ -176,6 +179,7 @@ const GenericTable = ({
   return (
     <div className="allotments-container">
       <FilterSection
+        disabled={disabled}
         showFilters={showFilters}
         toggleFilters={toggleFilters}
         filters={filters}

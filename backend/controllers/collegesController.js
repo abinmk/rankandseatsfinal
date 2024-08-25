@@ -58,14 +58,20 @@ exports.getCollegesData = async (req, res) => {
       }
     };
 
-    // Process range filters if any
+    // Process filters to handle min and max range queries
     for (const key in filters) {
       if (filters[key]) {
-        if (key.endsWith('Range')) {
-          // Extract field name and range values
-          const field = key.replace('Range', '');
-          addRangeFilter(field, filters[key].min, filters[key].max);
-        } else {
+        // Check if the key ends with [min] or [max]
+        const minMatch = key.match(/(.*)\[min\]$/);
+        const maxMatch = key.match(/(.*)\[max\]$/);
+
+        if (minMatch) {
+          const field = minMatch[1];
+          const maxKey = `${field}[max]`;
+          addRangeFilter(field, filters[key], filters[maxKey]);
+          delete filters[maxKey]; // Remove max key from filters to prevent duplicate processing
+        } else if (!maxMatch) {
+          // Only add non-range filters
           query[key] = Array.isArray(filters[key]) ? { $in: filters[key] } : filters[key];
         }
       }
@@ -90,6 +96,7 @@ exports.getCollegesData = async (req, res) => {
     res.status(500).send('Failed to fetch college data.');
   }
 };
+
 
 exports.getFilterOptions = async (req, res) => {
   try {

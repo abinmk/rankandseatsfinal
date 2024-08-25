@@ -341,26 +341,29 @@ const GenericTable = ({
         </div>
       </div>
       <Modal show={showColumnModal} onHide={() => setShowColumnModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>View/Hide Columns</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {allColumns.map((column) => (
-            <Form.Check
-              key={column.id}
-              type="checkbox"
-              label={column.render('Header')}
-              checked={column.isVisible}
-              onChange={() => handleColumnToggle(column)}
-            />
-          ))}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowColumnModal(false)}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+  <Modal.Header closeButton>
+    <Modal.Title>View/Hide Columns</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    {allColumns
+      .filter((column) => !/^\d{4}_R\d+$/.test(column.id)) // Filters out columns with IDs like "2024_R1", "2023_R2", etc.
+      .map((column) => (
+        <Form.Check
+          key={column.id}
+          type="checkbox"
+          label={column.render('Header')}
+          checked={column.isVisible}
+          onChange={() => handleColumnToggle(column)}
+        />
+      ))}
+  </Modal.Body>
+  <Modal.Footer>
+    <Button variant="secondary" onClick={() => setShowColumnModal(false)}>
+      Close
+    </Button>
+  </Modal.Footer>
+</Modal>
+
 
       <Modal show={showRowModal && !isModalOpen} onHide={() => setShowRowModal(false)} size='xl' centered>
   <Modal.Header closeButton className="custom-modal-header">

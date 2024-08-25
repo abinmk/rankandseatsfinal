@@ -511,7 +511,7 @@ const generateCombinedDataset = async (req, res) => {
         state: college.state,
         instituteType: college.instituteType,
         universityName: college.universityName,
-        yearOfEstablishment: Number(college.yearOfEstablishment) || 0,
+        yearOfEstablishment: String(college.yearOfEstablishment) || '',
         totalHospitalBeds: Number(college.totalHospitalBeds) || 0,
         locationMapLink: college.locationMapLink,
         nearestRailwayStation: college.nearestRailwayStation,

@@ -6,7 +6,7 @@ import axios from 'axios';
 import CustomPopup from '../custom-popup/custom-popup-filter';
 import { UserContext } from '../../../contexts/UserContext';
 
-const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChange, handleRangeChange, eventKey, viewMore, appliedFiltersCount, getFilterParamName, loading }) => {
+const FilterItem = ({ title, options = {},disabled, filterName, filters, handleFilterChange, handleRangeChange, eventKey, viewMore, appliedFiltersCount, getFilterParamName, loading }) => {
   const [showModal, setShowModal] = useState(false);
   const [showPaymentPopup, setShowPaymentPopup] = useState(false);
   const [subscriptionStatus, setSubscriptionStatus] = useState(false);
@@ -129,7 +129,7 @@ const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChan
         onPay={handlePayment} // Pass the payment handler
         subscriptionStatus={subscriptionStatus} // Pass subscription status
       />
-      <Accordion.Item eventKey={eventKey}>
+      <Accordion.Item eventKey={eventKey} disabled={disabled}>
         <Accordion.Header>
           {title} ({appliedFiltersCount})
         </Accordion.Header>

@@ -1,9 +1,10 @@
-import React, { useState, useEffect,useContext, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback,useContext, useMemo } from 'react';
 import axios from 'axios';
 import _ from 'lodash';
 import GenericTable from './GenericTable';
 import { collegesColumns, collegesFiltersConfig } from './collegesConfig';
 import './Colleges.scss';
+import { UserContext } from '../../../contexts/UserContext';
 
 const Colleges = () => {
   const [data, setData] = useState([]);
@@ -15,7 +16,13 @@ const Colleges = () => {
   const [loading, setLoading] = useState(true);
   const [filterLoading, setFilterLoading] = useState(true);
 
+  const { user } = useContext(UserContext);
+  const [countVal , setCountOf] = useState(0);
+  const [subscriptionStatus, setSubscriptionStatus] = useState(null);
+  const [showSubscriptionPopup, setShowSubscriptionPopup] = useState(false);
+
   const apiUrl = import.meta.env.VITE_API_URL;
+
   const getFilterParamName = useMemo(() => {
     const filterMapping = {
       state: 'state',
@@ -24,7 +31,7 @@ const Colleges = () => {
       university: 'universityName',
       yearOfEstablishment: 'yearOfEstablishment',
       totalHospitalBedsRange: 'totalHospitalBeds',
-      totalSeatsInCollegeRange:'totalSeatsInCollege'
+      totalSeatsInCollegeRange: 'totalSeatsInCollege'
     };
     return (filterKey) => filterMapping[filterKey] || filterKey;
   }, []);
@@ -35,10 +42,10 @@ const Colleges = () => {
       const filterValue = filters[filterKey];
       if (typeof filterValue === 'object' && filterValue !== null && !Array.isArray(filterValue)) {
         if (filterValue.min !== undefined) {
-          params[`${getFilterParamName(filterKey)}Min`] = filterValue.min;
+          params[`${getFilterParamName(filterKey)}[min]`] = filterValue.min;
         }
         if (filterValue.max !== undefined) {
-          params[`${getFilterParamName(filterKey)}Max`] = filterValue.max;
+          params[`${getFilterParamName(filterKey)}[max]`] = filterValue.max;
         }
       } else if (Array.isArray(filterValue) && filterValue.length > 0) {
         params[getFilterParamName(filterKey)] = filterValue;
@@ -54,6 +61,7 @@ const Colleges = () => {
     _.debounce(async (page, pageSize, filters) => {
       setLoading(true);
       try {
+
         const filterParams = buildFilterParams(filters);
         const response = await axios.get(`${apiUrl}/colleges`, {
           params: {
@@ -61,6 +69,10 @@ const Colleges = () => {
             limit: pageSize,
             ...filterParams
           }
+        });
+        setCountOf(prevCountVal => {
+          const newCount = prevCountVal + 1;
+          return newCount;
         });
         setData(response.data.data);
         setPage(response.data.currentPage);
@@ -111,6 +123,24 @@ const Colleges = () => {
     return count;
   };
 
+  useEffect(() => {
+    const checkSubscription = async () => {
+      try {
+        const response = await axiosInstance.post(`${apiUrl}/payment/check-subscription`, { userId: user._id });
+        const isSubscribed = response.data.status === 'paid';
+        setSubscriptionStatus(isSubscribed);
+  
+        if (!isSubscribed) {
+          setShowSubscriptionPopup(true); // Show popup if not subscribed
+        }
+      } catch (error) {
+        console.error('Error checking subscription:', error);
+      }
+    };
+  
+    checkSubscription();
+  }, [apiUrl]);
+
   return (
     <div className="colleges-container">
       <GenericTable
@@ -132,6 +162,14 @@ const Colleges = () => {
         setPageSize={setPageSize}
         getFilterParamName={getFilterParamName}
         appliedFiltersCount={countAppliedFilters()} // Pass applied filters count
+        disabled = {showSubscriptionPopup && countVal>2}
+      />
+           <CustomPopup 
+        show={showSubscriptionPopup}
+        onHide={() => setShowSubscriptionPopup(false)}
+        title="Subscription Required" 
+        message="You need to subscribe to access these filters. Please complete your payment to proceed."
+        subscriptionStatus={subscriptionStatus} // Pass subscription status
       />
     </div>
   );

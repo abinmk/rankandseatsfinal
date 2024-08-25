@@ -1,3 +1,5 @@
+import React from 'react';
+
 export const allotmentsColumns = [
   {
     Header: 'Year',
@@ -22,6 +24,16 @@ export const allotmentsColumns = [
   {
     Header: 'Institute',
     accessor: 'allottedInstitute',
+    Cell: ({ value }) => (
+      <a
+        href={`/college/${encodeURIComponent(value)}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ color: 'blue', textDecoration: 'underline' }}
+      >
+        {value}
+      </a>
+    ),
   },
   {
     Header: 'Institute Type',
@@ -55,6 +67,10 @@ export const allotmentsColumns = [
     Header: 'Beds',
     accessor: 'totalHospitalBeds',
   },
+];
+
+export const allotmentsColumnsDisabled = [
+  
 ];
 
 export const allotmentsFiltersConfig = {

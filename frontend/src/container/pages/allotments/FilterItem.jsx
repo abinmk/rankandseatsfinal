@@ -3,7 +3,7 @@ import { Form, Accordion, Button, Modal, Row, Col } from 'react-bootstrap';
 import Slider from '@mui/material/Slider';
 import { debounce } from 'lodash';
 
-const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChange, handleRangeChange, eventKey, viewMore, appliedFiltersCount, getFilterParamName, loading }) => {
+const FilterItem = ({ title, options = {},disabled, filterName, filters, handleFilterChange, handleRangeChange, eventKey, viewMore, appliedFiltersCount, getFilterParamName, loading }) => {
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [minValue, setMinValue] = useState(options.min || 0);
@@ -82,7 +82,7 @@ const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChan
         <Accordion.Header>
           {title} ({appliedFiltersCount})
         </Accordion.Header>
-        <Accordion.Body className='sliderFilter'>
+        <Accordion.Body className='sliderFilter' disabled={disabled}>
           {isRangeFilter ? (
             <>
               <Slider
@@ -130,6 +130,7 @@ const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChan
                   key={option}
                   type="checkbox"
                   label={option}
+                  disabled={disabled}
                   checked={filters[filterParamName]?.includes(option)}
                   onChange={(e) => handleCheckboxChange(option, e.target.checked)}
                 />

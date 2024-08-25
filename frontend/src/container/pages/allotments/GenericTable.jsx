@@ -5,6 +5,7 @@ import { Table, Modal, Button, Form, Pagination } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Allotments.scss';
 import { FaHeart } from 'react-icons/fa';
+import CustomPopup from '../custom-popup/custom-popup-filter';
 
 const GenericTable = ({
   data,
@@ -27,12 +28,15 @@ const GenericTable = ({
   wishlist,
   addToWishlist,
   removeFromWishlist,
+  disabled,
+  showSubscriptionPopup
+  
 }) => {
   const [showFilters, setShowFilters] = useState(true);
   const [showColumnModal, setShowColumnModal] = useState(false);
   const [showRowModal, setShowRowModal] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
-  const [filteredData, setFilteredData] = useState(data);
+  const [collegeLinkClicked, setCollegeLinkClicked] = useState(false); // Track college link clicks
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
@@ -46,10 +50,6 @@ const GenericTable = ({
       resultsSection.style.width = '100vw';
     }
   }, [showFilters]);
-
-  useEffect(() => {
-    setFilteredData(data);
-  }, [data]);
 
   useEffect(() => {
     fetchData(page, pageSize, buildFilterParams());
@@ -111,7 +111,6 @@ const GenericTable = ({
     rows,
     prepareRow,
     allColumns,
-    setHiddenColumns,
     state: { pageIndex },
     page: currentPage,
     gotoPage,
@@ -123,7 +122,7 @@ const GenericTable = ({
   } = useTable(
     {
       columns,
-      data: filteredData,
+      data,
       initialState: { pageIndex: page - 1 },
       manualPagination: true,
       pageCount: totalPages,
@@ -141,13 +140,24 @@ const GenericTable = ({
   }, [page, gotoPage]);
 
   const handleRowClick = (row) => {
-    setSelectedRowData(row.original);
-    setShowRowModal(true);
+    if (!collegeLinkClicked) {
+      setSelectedRowData(row.original);
+      setShowRowModal(true);
+    }
+    setCollegeLinkClicked(false); // Reset after row click handling
   };
 
-  const handleColumnToggle = (column) => {
-    column.toggleHidden();
+  const handleCollegeClick = (row) => {
+    setCollegeLinkClicked(true);
+    setSelectedRowData(row.original); // Set the clicked row data
+    setShowRowModal(false); // Open the modal for the college
+
   };
+
+  const handleModalClose = () => {
+    setShowRowModal(false);
+  };
+  
 
   const renderPaginationItems = () => {
     const paginationItems = [];
@@ -167,28 +177,18 @@ const GenericTable = ({
     return paginationItems;
   };
 
-  const clearAllFilters = () => {
-    setFilters({});
-  };
-
-  const handleAddToWishlist = (row) => {
-    const allotment = row.original; // Get the entire dataset (allotment)
-    const examName = allotment.examName; // Extract examName from the allotment object
-
-    addToWishlist(examName, allotment); // Pass both parameters to the function
-  };
-
   return (
     <div className="allotments-container">
       <FilterSection
-        showFilters={showFilters}
+        showSubscriptionPopup={showSubscriptionPopup}
+        disabled={disabled}
+        showFilters={showFilters && !showRowModal} // Hide filters when modal is open
         toggleFilters={toggleFilters}
         filters={filters}
         setFilters={setFilters}
         filterOptions={filterOptions}
         loading={filterLoading}
         getFilterParamName={getFilterParamName}
-        clearAllFilters={clearAllFilters}
       />
       <div className={`results-section ${showFilters ? "" : "full-width"}`}>
         <button className={`show-filters-btn ${showFilters ? "hidden" : ""}`} onClick={toggleFilters} id='view-btn'>
@@ -209,7 +209,7 @@ const GenericTable = ({
                     <th>
                       <FaHeart
                         onClick={() => toggleAllWishlist()}
-                        style={{ color: wishlist.length === filteredData.length ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5rem' }}
+                        style={{ color: wishlist.length === data.length ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5rem' }}
                       />
                     </th>
                     {headerGroup.headers.map((column) => {
@@ -228,7 +228,11 @@ const GenericTable = ({
                 {currentPage.map((row) => {
                   prepareRow(row);
                   return (
-                    <tr key={row.id} {...row.getRowProps()} onClick={() => handleRowClick(row)}>
+                    <tr
+                      key={row.id}
+                      {...row.getRowProps()}
+                      onClick={() => handleRowClick(row)}
+                    >
                       <td>
                         <FaHeart
                           onClick={(e) => {
@@ -236,7 +240,7 @@ const GenericTable = ({
                             if (wishlist.some(item => item.allotmentId === row.original._id)) {
                               removeFromWishlist(row.original._id);
                             } else {
-                              handleAddToWishlist(row); // Call the function and pass the row data
+                              addToWishlist(row.original.examName, row.original); // Pass both parameters to the function
                             }
                           }}
                           style={{ color: wishlist.some(item => item.allotmentId === row.original._id) ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5rem' }}
@@ -246,7 +250,19 @@ const GenericTable = ({
                         const { key, ...rest } = cell.getCellProps();
                         return (
                           <td key={key} {...rest}>
-                            {cell.render('Cell')}
+                            {cell.column.id === 'allottedInstitute' ? (
+                              <span
+                                style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}
+                                onClick={(e) => {
+                                  e.stopPropagation(); // Prevent row click event
+                                  handleCollegeClick(row);
+                                }}
+                              >
+                                {cell.render('Cell')}
+                              </span>
+                            ) : (
+                              cell.render('Cell')
+                            )}
                           </td>
                         );
                       })}
@@ -255,6 +271,13 @@ const GenericTable = ({
                 })}
               </tbody>
             </Table>
+            <CustomPopup 
+        show={showSubscriptionPopup}
+        onHide={() => setShowSubscriptionPopup(false)}
+        title="Subscription Required" 
+        message="Access to these features requires a subscription. Please complete your payment to continue enjoying our full range of services."
+        subscriptionStatus={false} // Pass subscription status
+      />
           </div>
           <div className="pagination-container">
             <Form.Group controlId="rowsPerPage" className="d-flex align-items-center pagination-info">
@@ -264,9 +287,9 @@ const GenericTable = ({
                 value={pageSize}
                 onChange={(e) => setPageSize(Number(e.target.value))}
                 className="me-3"
-                style={{ width: 'fit-content',height:'40px' }}
+                style={{ width: 'fit-content', height:'40px' }}
               >
-                {[10,20, 30, 50, 100].map((size) => (
+                {[10, 20, 30, 50, 100].map((size) => (
                   <option key={size} value={size}>
                     {size}
                   </option>
@@ -282,10 +305,10 @@ const GenericTable = ({
                 value={pageIndex + 1}
                 onChange={(e) => setPage(Number(e.target.value))}
                 className="me-2"
-                style={{ width: 'fit-content',height:'40px' }}
+                style={{ width: 'fit-content', height:'40px' }}
               />
             </Form.Group>
-            <div className="pagination-controls">
+            <div className="pagination-controls" disabled={disabled}>
               <Pagination className="mb-0">
                 <Pagination.First onClick={() => setPage(1)} disabled={!canPreviousPage} />
                 <Pagination.Prev onClick={() => setPage(page - 1)} disabled={!canPreviousPage} />
@@ -308,7 +331,7 @@ const GenericTable = ({
               type="checkbox"
               label={column.render('Header')}
               checked={column.isVisible}
-              onChange={() => handleColumnToggle(column)}
+              onChange={() => column.toggleHidden()}
             />
           ))}
         </Modal.Body>
@@ -319,23 +342,60 @@ const GenericTable = ({
         </Modal.Footer>
       </Modal>
 
-      <Modal show={showRowModal} onHide={() => setShowRowModal(false)}>
+      <Modal show={showRowModal} onHide={handleModalClose} className="custom-modal">
         <Modal.Header closeButton>
-          <Modal.Title>Row Details</Modal.Title>
+          <Modal.Title>Allotted Details</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {selectedRowData && (
-            <div>
-              {Object.entries(selectedRowData).map(([key, value]) => (
-                <div key={key}>
-                  <strong>{key}:</strong> {value}
-                </div>
-              ))}
+            <div className="details-grid">
+              <div className="section">
+                <h5>General Information</h5>
+                <p><strong>Institute:</strong> {selectedRowData.allottedInstitute}</p>
+                <p><strong>Institute Type:</strong> {selectedRowData.instituteType}</p>
+                <p><strong>University:</strong> {selectedRowData.universityName}</p>
+                <p><strong>State:</strong> {selectedRowData.state}</p>
+              </div>
+              <div className="section">
+                <h5>Course Details</h5>
+                <p><strong>Course:</strong> {selectedRowData.course}</p>
+                <p><strong>Course Type:</strong> {selectedRowData.courseType}</p>
+                <p><strong>Degree Type:</strong> {selectedRowData.degreeType}</p>
+                <p><strong>Total Seats in Course:</strong> {selectedRowData.totalSeatsInCourse}</p>
+              </div>
+              <div className="section">
+                <h5>Allotment Information</h5>
+                <p><strong>Year:</strong> {selectedRowData.year}</p>
+                <p><strong>Round:</strong> {selectedRowData.round}</p>
+                <p><strong>Rank:</strong> {selectedRowData.rank}</p>
+                <p><strong>Allotted Quota:</strong> {selectedRowData.allottedQuota}</p>
+                <p><strong>Allotted Category:</strong> {selectedRowData.allottedCategory}</p>
+                <p><strong>Candidate Category:</strong> {selectedRowData.candidateCategory}</p>
+              </div>
+              <div className="section">
+                <h5>Financial Information</h5>
+                <p><strong>Fee Amount:</strong> ₹{selectedRowData.feeAmount}</p>
+                <p><strong>NRI Fee:</strong> ₹{selectedRowData.nriFee}</p>
+                <p><strong>Stipend Year 1:</strong> ₹{selectedRowData.stipendYear1}</p>
+                <p><strong>Stipend Year 2:</strong> ₹{selectedRowData.stipendYear2}</p>
+                <p><strong>Stipend Year 3:</strong> ₹{selectedRowData.stipendYear3}</p>
+              </div>
+              <div className="section">
+                <h5>Bond and Penalty</h5>
+                <p><strong>Bond Year:</strong> {selectedRowData.bondYear}</p>
+                <p><strong>Bond Penalty:</strong> ₹{selectedRowData.bondPenality}</p>
+                <p><strong>Seat Leaving Penalty:</strong> ₹{selectedRowData.seatLeavingPenality}</p>
+              </div>
+              <div className="section">
+                <h5>Additional Information</h5>
+                <p><strong>Total Hospital Beds:</strong> {selectedRowData.totalHospitalBeds}</p>
+                <p><strong>Total Seats in College:</strong> {selectedRowData.totalSeatsInCollege}</p>
+              </div>
             </div>
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowRowModal(false)}>
+          <Button variant="secondary" onClick={handleModalClose}>
             Close
           </Button>
         </Modal.Footer>

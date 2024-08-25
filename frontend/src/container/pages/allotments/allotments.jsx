@@ -1,11 +1,13 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo,useContext } from 'react';
 import _ from 'lodash';
 import GenericTable from './GenericTable';
-import { allotmentsColumns, allotmentsFiltersConfig } from './allotmentsConfig';
+import { allotmentsColumns, allotmentsFiltersConfig,allotmentsColumnsDisabled } from './allotmentsConfig';
 import './Allotments.scss';
 import axiosInstance from '../../../utils/axiosInstance';
 import { useOutletContext } from 'react-router-dom';
 import CryptoJS from 'crypto-js';
+import CustomPopup from '../custom-popup/custom-popup-filter';
+import { UserContext } from '../../../contexts/UserContext';
 
 // Decryption function
 const decrypt = (ciphertext) => {
@@ -34,6 +36,10 @@ const Allotments = () => {
   const [filterLoading, setFilterLoading] = useState(true);
   const [rankRange, setRankRange] = useState({ min: 0, max: 10000 });
   const [wishlist, setWishlist] = useState([]);
+  const { user } = useContext(UserContext);
+  const [countVal , setCountOf] = useState(0);
+  const [subscriptionStatus, setSubscriptionStatus] = useState(null);
+  const [showSubscriptionPopup, setShowSubscriptionPopup] = useState(false);
 
   const apiUrl = import.meta.env.VITE_API_URL;
   const { exam, counselingType } = useOutletContext(); // Retrieve exam and counselingType from context
@@ -63,6 +69,11 @@ const Allotments = () => {
     _.debounce(async (page, pageSize, filters, counselingType) => {
       setLoading(true);
       try {
+        setCountOf(prevCountVal => {
+          const newCount = prevCountVal + 1;
+          return newCount;
+        });
+
         const token = localStorage.getItem('token');
         const response = await axiosInstance.get(`${apiUrl}/allotments`, {
           headers: {
@@ -75,7 +86,8 @@ const Allotments = () => {
             ...filters,
           },
         });
-  
+    
+        
         // Check if the response indicates an invalid token
         if (response.data === 'Invalid token.') {
           alert('Session expired. Please log in again.');
@@ -86,10 +98,10 @@ const Allotments = () => {
   
         // Decrypt the data
         const decryptedData = JSON.parse(decrypt(response.data.data));
+          setData(decryptedData);
+          setPage(response.data.currentPage);
+          setTotalPages(response.data.totalPages);
   
-        setData(decryptedData);
-        setPage(response.data.currentPage);
-        setTotalPages(response.data.totalPages);
       } catch (error) {
         if (error.response && error.response.status === 401) {
           // Handle token expiration
@@ -183,6 +195,7 @@ const Allotments = () => {
   };
 
   const countAppliedFilters = () => {
+    
     let count = 0;
     for (const key in filters) {
       if (Array.isArray(filters[key])) {
@@ -197,6 +210,25 @@ const Allotments = () => {
     }
     return count;
   };
+
+useEffect(() => {
+  const checkSubscription = async () => {
+    try {
+      const response = await axiosInstance.post(`${apiUrl}/payment/check-subscription`, { userId: user._id });
+      const isSubscribed = response.data.status === 'paid';
+      setSubscriptionStatus(isSubscribed);
+
+      if (!isSubscribed) {
+        setShowSubscriptionPopup(true); // Show popup if not subscribed
+      }
+    } catch (error) {
+      console.error('Error checking subscription:', error);
+    }
+  };
+
+  checkSubscription();
+}, [apiUrl]);
+
 
   return (
     <div className="allotments-container">
@@ -223,6 +255,8 @@ const Allotments = () => {
         wishlist={wishlist}
         addToWishlist={addToWishlist}
         removeFromWishlist={removeFromWishlist}
+        disabled = {showSubscriptionPopup && countVal>2}
+        showSubscriptionPopup={showSubscriptionPopup}
       />
     </div>
   );

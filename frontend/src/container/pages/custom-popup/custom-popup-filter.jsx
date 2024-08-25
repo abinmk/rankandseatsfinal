@@ -42,9 +42,9 @@ const CustomPopup = ({ show, handleClose, title, message, subscriptionStatus }) 
         <div className="popup-content">
           <div className="popup-header">
             <h7 className="popup-title">{title}</h7>
-            <button type="button" className="popup-close" onClick={handleClose}>
+            {/* <button type="button" className="popup-close" onClick={handleClose}>
               &times;
-            </button>
+            </button> */}
           </div>
           <div className="popup-body">
             <p className="popup-message">{message}</p>

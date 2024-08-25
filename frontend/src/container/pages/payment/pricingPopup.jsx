@@ -120,6 +120,7 @@ const PricingPopup = () => {
         setPopupTitle('Payment Successful');
         setPopupMessage('Your payment was successful and verified. Welcome aboard!');
         setPopupShow(true);
+        location.reload();
       } else {
         alert('Payment verification failed. Please try again.');
       }
