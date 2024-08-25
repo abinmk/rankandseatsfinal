@@ -70,7 +70,7 @@ const Colleges = () => {
           const newCount = prevCountVal + 1;
           return newCount;
         });
-        if((countVal>2 && subscriptionStatus==false) || page>1)
+        if((countVal>2 && subscriptionStatus==false) || (page>1 && subscriptionStatus==false))
         {
           setShowSubscriptionPopup(true);
           setFilterCountExceed(true);

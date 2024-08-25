@@ -37,13 +37,12 @@ const LastRank = () => {
         const newCount = prevCountVal + 1;
         return newCount;
       });
-      if((countVal>2 && subscriptionStatus==false) || page>1)
+      if((countVal>2 && subscriptionStatus==false) || (page>1 && subscriptionStatus==false))
       {
         setShowSubscriptionPopup(true);
         setFilterCountExceed(true);
         return;
       }
-
       for (const key in filters) {
         if (filters[key]) {
           let field = key;
