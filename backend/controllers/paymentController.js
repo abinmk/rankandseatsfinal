@@ -4,9 +4,16 @@ const crypto = require('crypto');
 
 
 const razorpay = new Razorpay({
-  key_id: "rzp_test_YRRWY9o1BIUXQZ",
-  key_secret: "yQPAHOdJQT6TbjClMrPpe3Y3",
+  key_id: "rzp_live_Gx5yImqLmw0X6P",
+  key_secret: "5MmpfaY3mgv6yuLfO3tQJ7Ab",
 });
+
+// RAZORPAY_KEY_ID2=rzp_test_YRRWY9o1BIUXQZ
+// RAZORPAY_KEY_ID=rzp_live_Gx5yImqLmw0X6P
+
+
+// RAZORPAY_KEY_SECRET2=yQPAHOdJQT6TbjClMrPpe3Y3
+// RAZORPAY_KEY_SECRET=5MmpfaY3mgv6yuLfO3tQJ7Ab
 
 exports.createOrder = async (req, res) => {
   try {

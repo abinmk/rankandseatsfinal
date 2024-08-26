@@ -51,7 +51,7 @@ const PricingPopup = () => {
 
   const createOrder = async () => {
     try {
-      const orderResponse = await axios.post(`${apiUrl}/payment/create-order`, { amount: 1178.82 });
+      const orderResponse = await axios.post(`${apiUrl}/payment/create-order`, { amount: 1 });
       initializePayment(orderResponse.data.id);
     } catch (error) {
       console.error('Error creating order:', error);
