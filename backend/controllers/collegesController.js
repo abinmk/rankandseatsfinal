@@ -129,12 +129,9 @@ exports.getFilterOptions = async (req, res) => {
     const instituteType = await CollegeModel.distinct('instituteType');
     const universityName = await CollegeModel.distinct('universityName');
     const yearOfEstablishment = await CollegeModel.distinct('yearOfEstablishment');
-    // const totalHospitalBeds = await CollegeModel.aggregate([
-    //   { $group: { _id: null, min: { $min: '$totalHospitalBeds' }, max: { $max: '$totalHospitalBeds' } } }
-    // ]);
-    // const totalSeatsInCollege = await CollegeModel.aggregate([
-    //   { $group: { _id: null, min: { $min: '$totalSeatsInCollege' }, max: { $max: '$totalSeatsInCollege' } } }
-    // ]);
+    const totalHospitalBedsRange = await CollegeModel.aggregate([
+      { $group: { _id: null, min: { $min: '$totalHospitalBeds' }, max: { $max: '$totalHospitalBeds' } } }
+    ]);
 
     res.json({
       state,
@@ -142,8 +139,7 @@ exports.getFilterOptions = async (req, res) => {
       instituteType,
       universityName,
       yearOfEstablishment,
-      // totalHospitalBeds: totalHospitalBeds[0],
-      // totalSeatsInCollege:totalSeatsInCollege[0]
+      totalHospitalBedsRange: totalHospitalBedsRange[0],
     });
   } catch (error) {
     console.error('Error fetching filter options:', error);

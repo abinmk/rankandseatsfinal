@@ -13,7 +13,8 @@ export default defineConfig({
   },
   plugins: [react()],
   build: {
-    outDir: 'dist',
+    chunkSizeWarningLimit: 2000,
+    outDir: 'build',
     rollupOptions: {
       input: {
         main: './index.html',
