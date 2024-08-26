@@ -47,7 +47,7 @@ const CollegeDetail = () => {
       <div className={styles.topSection}>
         <div className={styles.collegeHeader}>
           <div>
-            <h1>{college.collegeName}</h1>
+            <p className={styles.headerCollegeName}>{college.collegeName}</p>
             <div className={styles.badges}>
               <span className={styles.badgeCustom}>Government Institute</span>
               <span className={styles.badgeCustom}>State: {college.state}</span>

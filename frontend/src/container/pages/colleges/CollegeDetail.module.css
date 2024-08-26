@@ -172,9 +172,16 @@ button {
 }
 
 button:hover {
-  background-color: #001d3d;
+  background-color: #cde5ff;
 }
 
 .smallFont {
   font-size: 14px;
+}
+
+
+.headerCollegeName{
+  font-size: 2rem !important; /* Example style */
+  color: #ffffff; /* Ensure the color is correctly set */
+  font-weight: bold; /* Adjust weight if needed */
 }

@@ -157,6 +157,12 @@ const GenericTable = ({
     column.toggleHidden();
   };
 
+  const handleCollegeClick = (collegeName) => {
+    const encodedCollegeName = encodeURIComponent(collegeName);
+    const url = `/college/${encodedCollegeName}`;
+    window.open(url, '_blank'); // Opens in a new tab
+  };
+
   const renderPaginationItems = () => {
     const paginationItems = [];
 
@@ -207,7 +213,7 @@ const GenericTable = ({
             </Button>
           </div>
           <div className="table-wrapper">
-            <Table {...getTableProps()} className="tableCustom">
+          <Table {...getTableProps()} className="tableCustom">
               <thead>
                 {headerGroups.map((headerGroup) => (
                   <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
@@ -227,13 +233,23 @@ const GenericTable = ({
                 {currentPage.map((row) => {
                   prepareRow(row);
                   return (
-                    <tr key={row.id} {...row.getRowProps()} onClick={() => handleRowClick(row)}>
+                    <tr key={row.id} {...row.getRowProps()}>
                       {row.cells.map((cell) => {
                         const { key, ...rest } = cell.getCellProps();
                         return (
-                          <td key={key} {...rest}>
-                            {cell.render('Cell')}
-                          </td>
+                        <td key={key} {...rest}>
+                          {cell.column.id === 'collegeName' ? (
+                            <span
+                              style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}
+                              onClick={() => handleCollegeClick(row.original.collegeName)} // Pass the college name here
+                            >
+                              {cell.render('Cell')}
+                            </span>
+                          ) : (
+                            cell.render('Cell')
+                          )}
+                        </td>
+
                         );
                       })}
                     </tr>
