@@ -28,15 +28,25 @@ exports.getCollegesDataById = async (req, res) => {
 
 exports.getCollegesData = async (req, res) => {
   try {
-    const { page = 1, limit = 10, ...filters } = req.query;
-    const collectionName = 'COLLEGE_RESULT'; // Ensure this matches your dataset name
+    let { page = 1, limit = 10, ...filters } = req.query;
+
+    // Ensure page and limit are numbers and valid
+    page = Math.max(1, Number(page));
+    limit = Math.max(1, Number(limit));
+
+    const collectionName = 'COLLEGE_RESULT';
     let CollegeModel;
 
+    // Ensure the model is registered or create a new one
     try {
       CollegeModel = mongoose.model(collectionName);
     } catch (error) {
       if (error.name === 'MissingSchemaError') {
-        CollegeModel = mongoose.model(collectionName, new mongoose.Schema({}, { strict: false }), collectionName);
+        CollegeModel = mongoose.model(
+          collectionName,
+          new mongoose.Schema({}, { strict: false }),
+          collectionName
+        );
       } else {
         throw error;
       }
@@ -60,7 +70,7 @@ exports.getCollegesData = async (req, res) => {
 
     // Process filters to handle min and max range queries
     for (const key in filters) {
-      if (filters[key]) {
+      if (filters.hasOwnProperty(key) && filters[key]) {
         // Check if the key ends with [min] or [max]
         const minMatch = key.match(/(.*)\[min\]$/);
         const maxMatch = key.match(/(.*)\[max\]$/);
@@ -81,13 +91,13 @@ exports.getCollegesData = async (req, res) => {
 
     const data = await CollegeModel.find(query)
       .skip((page - 1) * limit)
-      .limit(Number(limit))
+      .limit(limit)
       .lean();
     const totalItems = await CollegeModel.countDocuments(query);
 
     res.json({
       data,
-      currentPage: Number(page),
+      currentPage: page,
       totalPages: Math.ceil(totalItems / limit),
       totalItems,
     });
@@ -96,6 +106,7 @@ exports.getCollegesData = async (req, res) => {
     res.status(500).send('Failed to fetch college data.');
   }
 };
+
 
 
 exports.getFilterOptions = async (req, res) => {
@@ -118,9 +129,12 @@ exports.getFilterOptions = async (req, res) => {
     const instituteType = await CollegeModel.distinct('instituteType');
     const universityName = await CollegeModel.distinct('universityName');
     const yearOfEstablishment = await CollegeModel.distinct('yearOfEstablishment');
-    const totalHospitalBedsRange = await CollegeModel.aggregate([
-      { $group: { _id: null, min: { $min: '$totalHospitalBeds' }, max: { $max: '$totalHospitalBeds' } } }
-    ]);
+    // const totalHospitalBeds = await CollegeModel.aggregate([
+    //   { $group: { _id: null, min: { $min: '$totalHospitalBeds' }, max: { $max: '$totalHospitalBeds' } } }
+    // ]);
+    // const totalSeatsInCollege = await CollegeModel.aggregate([
+    //   { $group: { _id: null, min: { $min: '$totalSeatsInCollege' }, max: { $max: '$totalSeatsInCollege' } } }
+    // ]);
 
     res.json({
       state,
@@ -128,7 +142,8 @@ exports.getFilterOptions = async (req, res) => {
       instituteType,
       universityName,
       yearOfEstablishment,
-      totalHospitalBedsRange: totalHospitalBedsRange[0],
+      // totalHospitalBeds: totalHospitalBeds[0],
+      // totalSeatsInCollege:totalSeatsInCollege[0]
     });
   } catch (error) {
     console.error('Error fetching filter options:', error);
