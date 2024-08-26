@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Accordion, Spinner } from 'react-bootstrap';
 import FilterItem from './FilterItem';
 
-const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, filterOptions, loading, getFilterParamName, clearAllFilters }) => {
+const FilterSection = ({ showFilters,disabled, toggleFilters, filters, setFilters, filterOptions, loading, getFilterParamName, clearAllFilters }) => {
   const handleFilterChange = (value, checked, filterName) => {
     const filterParamName = getFilterParamName(filterName);
     setFilters((prevFilters) => {
@@ -47,6 +47,7 @@ const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, filter
         <Accordion defaultActiveKey={['0']} alwaysOpen>
           {Object.keys(filterOptions).map((filterName, index) => (
             <FilterItem
+              disabled={disabled}
               key={filterName}
               eventKey={index.toString()}
               title={filterName.charAt(0).toUpperCase() + filterName.slice(1).replace(/([A-Z])/g, ' $1')}

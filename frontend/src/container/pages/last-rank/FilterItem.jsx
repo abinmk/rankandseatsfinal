@@ -4,7 +4,7 @@ import Slider from '@mui/material/Slider';
 import { debounce } from 'lodash';
 import './LastRank.scss';
 
-const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChange, handleRangeChange, eventKey, viewMore, appliedFiltersCount, getFilterParamName, loading }) => {
+const FilterItem = ({ title, options = {},disabled, filterName, filters, handleFilterChange, handleRangeChange, eventKey, viewMore, appliedFiltersCount, getFilterParamName, loading }) => {
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [minValue, setMinValue] = useState(options.min || 0);
@@ -94,7 +94,7 @@ const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChan
                 valueLabelDisplay="auto"
                 min={options.min}
                 max={options.max}
-                disabled={loading}
+                disabled={loading || disabled}
               />
               <Row>
                 <Col>
@@ -103,7 +103,7 @@ const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChan
                     type="number"
                     value={minValue}
                     onChange={handleMinInputChange}
-                    disabled={loading}
+                    disabled={loading || disabled}
                   />
                 </Col>
                 <Col>
@@ -112,7 +112,7 @@ const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChan
                     type="number"
                     value={maxValue}
                     onChange={handleMaxInputChange}
-                    disabled={loading}
+                    disabled={loading || disabled}
                   />
                 </Col>
               </Row>
@@ -120,6 +120,7 @@ const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChan
           ) : (
             <>
               <Form.Control
+              disabled={disabled}
                 type="text"
                 placeholder={`Search ${title}`}
                 className="filter-search"
@@ -128,6 +129,7 @@ const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChan
               />
               {filteredOptions.slice(0, 4).map(option => (
                 <Form.Check
+                disabled={disabled}
                   key={option}
                   type="checkbox"
                   label={option}
@@ -137,11 +139,11 @@ const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChan
               ))}
               <div className="filter-actions">
                 {viewMore && (
-                  <Button variant="link" className="view-more-btn" onClick={handleModalOpen}>
+                  <Button disabled={disabled} variant="link" className="view-more-btn" onClick={handleModalOpen}>
                     View More
                   </Button>
                 )}
-                <Button variant="link" className="clear-btn" onClick={clearFilterCategory}>
+                <Button disabled={disabled} variant="link" className="clear-btn" onClick={clearFilterCategory}>
                   Clear
                 </Button>
               </div>
@@ -156,6 +158,7 @@ const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChan
         </Modal.Header>
         <Modal.Body>
           <Form.Control
+          disabled={disabled}
             type="text"
             placeholder={`Search ${title}`}
             className="filter-search"
@@ -164,6 +167,7 @@ const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChan
           />
           {filteredOptions.map(option => (
             <Form.Check
+            disabled={disabled}
               key={option}
               type="checkbox"
               label={option}
@@ -171,7 +175,7 @@ const FilterItem = ({ title, options = {}, filterName, filters, handleFilterChan
               onChange={(e) => handleCheckboxChange(option, e.target.checked)}
             />
           ))}
-          <Button variant="link" className="clear-category-btn" onClick={clearFilterCategory}>
+          <Button disabled={disabled} variant="link" className="clear-category-btn" onClick={clearFilterCategory}>
             Clear
           </Button>
         </Modal.Body>

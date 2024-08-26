@@ -63,10 +63,10 @@ const PricingPopup = () => {
     if (isProcessing) return;
     setIsProcessing(true);
     setIsLoading(true); // Show loading indicator while Razorpay loads
-
+//117882
     const options = {
-      key: 'rzp_test_YRRWY9o1BIUXQZ',
-      amount: 117882,
+      key: 'rzp_live_Gx5yImqLmw0X6P',
+      amount: 100,
       currency: 'INR',
       name: 'Rank and Seats',
       description: 'NEET Counselling Plan',

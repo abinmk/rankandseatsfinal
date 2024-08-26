@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Accordion, Spinner } from 'react-bootstrap';
 import FilterItem from './FilterItem';
 
-const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, filterOptions, loading, getFilterParamName, clearAllFilters }) => {
+const FilterSection = ({ showFilters,disabled, toggleFilters, filters, setFilters, filterOptions, loading, getFilterParamName, clearAllFilters }) => {
   const handleFilterChange = (value, checked, filterName) => {
     const filterParamName = getFilterParamName(filterName);
     setFilters((prevFilters) => {
@@ -34,7 +34,7 @@ const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, filter
     <div className={`filters-section ${showFilters ? 'show' : 'hide'}`}>
       <div className="filters-header">
         <span>Filters ({Object.keys(filters).reduce((total, key) => total + appliedFiltersCount(key), 0)})</span>
-        <span className="clear-all-btn" onClick={clearAllFilters}>
+        <span className="clear-all-btn" disabled={disabled} onClick={clearAllFilters}>
           Clear All
         </span>
         <span className="close-btn" onClick={toggleFilters}>
@@ -47,6 +47,7 @@ const FilterSection = ({ showFilters, toggleFilters, filters, setFilters, filter
         <Accordion defaultActiveKey={['0']} alwaysOpen>
           {Object.keys(filterOptions).map((filterName, index) => (
             <FilterItem
+            disabled={disabled}
               key={filterName}
               eventKey={index.toString()}
               title={filterName.charAt(0).toUpperCase() + filterName.slice(1).replace(/([A-Z])/g, ' $1')}

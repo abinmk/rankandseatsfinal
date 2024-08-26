@@ -32,7 +32,7 @@ const Courses = () => {
         const newCount = prevCountVal + 1;
         return newCount;
       });
-      if((countVal>2 && subscriptionStatus==false) || (page>1 && subscriptionStatus==false))
+      if((countVal>2 && subscriptionStatus==false) || ((page>1 || pageSize>10 ) && subscriptionStatus==false))
       {
         setShowSubscriptionPopup(true);
         setFilterCountExceed(true);

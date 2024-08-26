@@ -115,7 +115,7 @@ const FilterItem = ({ title, options = {},disabled, filterName, filters, handleF
                 valueLabelDisplay="auto"
                 min={options.min}
                 max={options.max}
-                disabled={loading}
+                disabled={loading || disabled}
               />
               <Row>
                 <Col>
@@ -141,6 +141,7 @@ const FilterItem = ({ title, options = {},disabled, filterName, filters, handleF
           ) : (
             <>
               <Form.Control
+               disabled={disabled}
                 type="text"
                 placeholder={`Search ${title}`}
                 className="filter-search"
@@ -149,6 +150,7 @@ const FilterItem = ({ title, options = {},disabled, filterName, filters, handleF
               />
               {filteredOptions.slice(0, 4).map(option => (
                 <Form.Check
+                disabled={disabled}
                   key={option}
                   type="checkbox"
                   label={option}
@@ -177,6 +179,7 @@ const FilterItem = ({ title, options = {},disabled, filterName, filters, handleF
         </Modal.Header>
         <Modal.Body>
           <Form.Control
+          disabled={disabled}
             type="text"
             placeholder={`Search ${title}`}
             className="filter-search"
@@ -185,6 +188,7 @@ const FilterItem = ({ title, options = {},disabled, filterName, filters, handleF
           />
           {filteredOptions.map(option => (
             <Form.Check
+            disabled={disabled}
               key={option}
               type="checkbox"
               label={option}

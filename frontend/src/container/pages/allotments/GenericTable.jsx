@@ -159,6 +159,10 @@ const GenericTable = ({
   const handleModalClose = () => {
     setShowRowModal(false);
   };
+
+  const clearAllFilters = () => {
+    setFilters({});
+  };
   
 
   const renderPaginationItems = () => {
@@ -191,6 +195,7 @@ const GenericTable = ({
         filterOptions={filterOptions}
         loading={filterLoading}
         getFilterParamName={getFilterParamName}
+        clearAllFilters={clearAllFilters}
       />
       <div className={`results-section ${showFilters ? "" : "full-width"}`}>
         <button className={`show-filters-btn ${showFilters ? "hidden" : ""}`} onClick={toggleFilters} id='view-btn'>

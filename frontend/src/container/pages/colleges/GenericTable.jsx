@@ -198,7 +198,7 @@ const GenericTable = ({
         <div className="table-container">
           <div>
             <span className='allotments-header'>{headerTitle}</span>
-            <Button variant="primary" className="column-toggle-btn" onClick={() => setShowColumnModal(true)}>
+            <Button variant="primary" className="column-toggle-btn" onClick={() => setShowColumnModal(true)} disabled={disabled}>
               View/Hide Columns
             </Button>
           </div>
@@ -259,6 +259,7 @@ const GenericTable = ({
             <Form.Group controlId="rowsPerPage" className="d-flex align-items-center pagination-info">
               <Form.Label className="me-2 mb-0">Rows per page:</Form.Label>
               <Form.Control
+                disabled={disabled}
                 as="select"
                 value={pageSize}
                 onChange={(e) => setPageSize(Number(e.target.value))}
@@ -275,6 +276,7 @@ const GenericTable = ({
             <Form.Group controlId="gotoPage" className="d-flex align-items-center pagination-info">
               <Form.Label className="me-2 mb-0">Go to page:</Form.Label>
               <Form.Control
+                disabled={disabled}
                 type="number"
                 min="1"
                 max={pageCount}
@@ -285,18 +287,18 @@ const GenericTable = ({
               />
             </Form.Group>
             <div className="pagination-controls">
-              <Pagination className="mb-0">
-                <Pagination.First onClick={() => setPage(1)} disabled={!canPreviousPage} />
-                <Pagination.Prev onClick={() => setPage(page - 1)} disabled={!canPreviousPage} />
+              <Pagination className="mb-0" disabled={disabled}>
+                <Pagination.First onClick={() => setPage(1)} disabled={!canPreviousPage || disabled} />
+                <Pagination.Prev onClick={() => setPage(page - 1)} disabled={!canPreviousPage || disabled} />
                 {renderPaginationItems()}
-                <Pagination.Next onClick={() => setPage(page + 1)} disabled={!canNextPage} />
-                <Pagination.Last onClick={() => setPage(pageCount)} disabled={!canNextPage} />
+                <Pagination.Next onClick={() => setPage(page + 1)} disabled={!canNextPage || disabled} />
+                <Pagination.Last onClick={() => setPage(pageCount)} disabled={!canNextPage || disabled} />
               </Pagination>
             </div>
           </div>
         </div>
       </div>
-      <Modal show={showColumnModal} onHide={() => setShowColumnModal(false)}>
+      <Modal show={showColumnModal} disabled={disabled} onHide={() => setShowColumnModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>View/Hide Columns</Modal.Title>
         </Modal.Header>

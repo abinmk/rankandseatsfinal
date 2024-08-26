@@ -182,6 +182,7 @@ const GenericTable = ({
   return (
     <div className="allotments-container">
       <FilterSection
+        disabled={disabled}
         showFilters={showFilters}
         toggleFilters={toggleFilters}
         filters={filters}
@@ -200,7 +201,8 @@ const GenericTable = ({
         <div className="table-container">
           <div>
             <span className='allotments-header'>{headerTitle}</span>
-            <Button variant="primary" className="column-toggle-btn" onClick={() => setShowColumnModal(true)}>
+            <Button variant="primary" className="column-toggle-btn" onClick={() => setShowColumnModal(true)}
+            disabled={disabled}>
               View/Hide Columns
             </Button>
           </div>
@@ -250,7 +252,7 @@ const GenericTable = ({
           <div className="pagination-container">
             <Form.Group controlId="rowsPerPage" className="d-flex align-items-center pagination-info">
               <Form.Label className="me-2 mb-0">Rows per page:</Form.Label>
-              <Form.Control
+              <Form.Control disabled={disabled}
                 as="select"
                 value={pageSize}
                 onChange={(e) => setPageSize(Number(e.target.value))}
@@ -266,7 +268,7 @@ const GenericTable = ({
             </Form.Group>
             <Form.Group controlId="gotoPage" className="d-flex align-items-center pagination-info">
               <Form.Label className="me-2 mb-0">Go to page:</Form.Label>
-              <Form.Control
+              <Form.Control disabled={disabled}
                 type="number"
                 min="1"
                 max={pageCount}

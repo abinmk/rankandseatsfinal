@@ -215,6 +215,7 @@ const GenericTable = ({
   return (
     <div className={`allotments-container ${(showColumnModal || showRowModal) ? "hide-filters" : ""}`}>
       <FilterSection
+       disabled={disabled}
         className={showRowModal ? "blurred" : ""}
         showFilters={showFilters}
         toggleFilters={toggleFilters}
@@ -234,7 +235,7 @@ const GenericTable = ({
         <div className="table-container">
           <div>
             <span className='allotments-header'>{headerTitle}</span>
-            <Button variant="primary" className="column-toggle-btn" onClick={() => setShowColumnModal(true)}>
+            <Button variant="primary" className="column-toggle-btn" disabled={disabled}  onClick={() => setShowColumnModal(true)}>
               View/Hide Columns
             </Button>
           </div>
@@ -314,6 +315,7 @@ const GenericTable = ({
             <Form.Group controlId="rowsPerPage" className="d-flex align-items-center pagination-info">
               <Form.Label className="me-2 mb-0">Rows per page:</Form.Label>
               <Form.Control
+              disabled={disabled}
                 as="select"
                 value={pageSize}
                 onChange={(e) => setPageSize(Number(e.target.value))}
@@ -330,6 +332,7 @@ const GenericTable = ({
             <Form.Group controlId="gotoPage" className="d-flex align-items-center pagination-info">
               <Form.Label className="me-2 mb-0">Go to page:</Form.Label>
               <Form.Control
+              disabled={disabled}
                 type="number"
                 min="1"
                 max={pageCount}
@@ -340,7 +343,8 @@ const GenericTable = ({
               />
             </Form.Group>
             <div className="pagination-controls">
-              <Pagination className="mb-0">
+              <Pagination className="mb-0"
+              disabled={disabled}>
                 <Pagination.First onClick={() => setPage(1)} disabled={!canPreviousPage} />
                 <Pagination.Prev onClick={() => setPage(page - 1)} disabled={!canPreviousPage} />
                 {renderPaginationItems()}

@@ -141,7 +141,7 @@ const FilterItem = ({ title, options = {},disabled, filterName, filters, handleF
                     View More
                   </Button>
                 )}
-                <Button variant="link" className="clear-btn" onClick={clearFilterCategory}>
+                <Button  disabled={disabled} variant="link" className="clear-btn" onClick={clearFilterCategory}>
                   Clear
                 </Button>
               </div>
@@ -156,6 +156,7 @@ const FilterItem = ({ title, options = {},disabled, filterName, filters, handleF
         </Modal.Header>
         <Modal.Body>
           <Form.Control
+          disabled={disabled}
             type="text"
             placeholder={`Search ${title}`}
             className="filter-search"
@@ -164,6 +165,7 @@ const FilterItem = ({ title, options = {},disabled, filterName, filters, handleF
           />
           {filteredOptions.map(option => (
             <Form.Check
+            disabled={disabled}
               key={option}
               type="checkbox"
               label={option}
@@ -171,7 +173,7 @@ const FilterItem = ({ title, options = {},disabled, filterName, filters, handleF
               onChange={(e) => handleCheckboxChange(option, e.target.checked)}
             />
           ))}
-          <Button variant="link" className="clear-category-btn" onClick={clearFilterCategory}>
+          <Button variant="link"  disabled={disabled} className="clear-category-btn" onClick={clearFilterCategory}>
             Clear
           </Button>
         </Modal.Body>
