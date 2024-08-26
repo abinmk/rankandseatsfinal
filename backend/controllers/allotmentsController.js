@@ -63,6 +63,7 @@ exports.getAllotmentData = async (req, res) => {
   try {
     const userId = req.user.userId;
     const user = await User.findById(userId).lean();
+
     if (!user || !user.selectedExams || user.selectedExams.length === 0) {
       return res.status(400).send('No selected exams found for user.');
     }
@@ -73,9 +74,13 @@ exports.getAllotmentData = async (req, res) => {
     const collectionName = `GENERATED_EXAM:${formattedExam}_TYPE:${formattedCounselingType}`;
     console.log(collectionName);
 
-    const { page = 1, limit = 10, state, bondPenaltyRange,totalHospitalBedsRange, ...filters } = req.query;
-    let AllotmentModel;
+    const { page = 1, limit = 10, state, bondPenaltyRange, totalHospitalBedsRange, ...filters } = req.query;
 
+    // Ensure page and limit are valid numbers
+    const pageNum = Math.max(1, parseInt(page, 10) || 1);
+    const limitNum = Math.min(100, parseInt(limit, 10) || 10); // Restrict limit to 100 max
+
+    let AllotmentModel;
     try {
       AllotmentModel = mongoose.model(collectionName);
     } catch (error) {
@@ -95,10 +100,10 @@ exports.getAllotmentData = async (req, res) => {
     const addRangeFilter = (field, range) => {
       if (range) {
         const rangeQuery = {};
-        if (range.min) {
+        if (range.min !== undefined) {
           rangeQuery.$gte = Number(range.min);
         }
-        if (range.max) {
+        if (range.max !== undefined) {
           rangeQuery.$lte = Number(range.max);
         }
         if (Object.keys(rangeQuery).length > 0) {
@@ -127,23 +132,19 @@ exports.getAllotmentData = async (req, res) => {
     }
 
     console.log('Query:', query);
-    if (limit > 100) {
-      return res.status(500).send('Unauthorized!');
-    }
 
     const data = await AllotmentModel.find(query)
-      .skip((page - 1) * limit)
-      .limit(Number(limit))
+      .skip((pageNum - 1) * limitNum)
+      .limit(limitNum)
       .lean();
-    console.log("data---->"+data);
-    const totalItems = await AllotmentModel.countDocuments(query);
 
+    const totalItems = await AllotmentModel.countDocuments(query);
     const encryptedData = encrypt(JSON.stringify(data));
 
     res.json({
       data: encryptedData,
-      currentPage: Number(page),
-      totalPages: Math.ceil(totalItems / limit),
+      currentPage: pageNum,
+      totalPages: Math.ceil(totalItems / limitNum),
       totalItems,
     });
   } catch (error) {
@@ -151,6 +152,7 @@ exports.getAllotmentData = async (req, res) => {
     res.status(500).send('Failed to fetch allotment data.');
   }
 };
+
 
 
 

@@ -2,15 +2,19 @@ const mongoose = require('mongoose');
 
 exports.getFeesData = async (req, res) => {
   try {
-    const { page = 1, limit = 10, bondPenaltyRange, ...filters } = req.query;
+    // Ensure page is at least 1 and limit is a valid number
+    let { page = 1, limit = 10, bondPenaltyRange, ...filters } = req.query;
+    page = Math.max(1, parseInt(page, 10) || 1);
+    limit = Math.min(100, parseInt(limit, 10) || 10); // Restrict limit to a maximum of 100
+
     const collectionName = 'FEE_RESULT';
-    let AllotmentModel;
+    let FeeModel;
 
     try {
-      AllotmentModel = mongoose.model(collectionName);
+      FeeModel = mongoose.model(collectionName);
     } catch (error) {
       if (error.name === 'MissingSchemaError') {
-        AllotmentModel = mongoose.model(collectionName, new mongoose.Schema({}, { strict: false }), collectionName);
+        FeeModel = mongoose.model(collectionName, new mongoose.Schema({}, { strict: false }), collectionName);
       } else {
         throw error;
       }
@@ -34,9 +38,7 @@ exports.getFeesData = async (req, res) => {
 
     // Process range filters like bondPenaltyRange
     if (bondPenaltyRange) {
-      const min = bondPenaltyRange.min;
-      const max = bondPenaltyRange.max;
-      addRangeFilter('bondPenality', min, max);
+      addRangeFilter('bondPenality', bondPenaltyRange.min, bondPenaltyRange.max);
     }
 
     // Process other filters
@@ -54,23 +56,24 @@ exports.getFeesData = async (req, res) => {
 
     console.log('Query:', query); // Logging the query for debugging
 
-    const data = await AllotmentModel.find(query)
+    const data = await FeeModel.find(query)
       .skip((page - 1) * limit)
       .limit(Number(limit))
       .lean();
-    const totalItems = await AllotmentModel.countDocuments(query);
+    const totalItems = await FeeModel.countDocuments(query);
 
     res.json({
       data,
-      currentPage: Number(page),
+      currentPage: page,
       totalPages: Math.ceil(totalItems / limit),
       totalItems,
     });
   } catch (error) {
-    console.error('Error fetching allotment data:', error);
-    res.status(500).send('Failed to fetch allotment data.');
+    console.error('Error fetching fees data:', error);
+    res.status(500).send('Failed to fetch fees data.');
   }
 };
+
 
 exports.getFilterOptions = async (req, res) => {
   try {

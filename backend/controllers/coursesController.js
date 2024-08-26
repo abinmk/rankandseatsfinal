@@ -2,7 +2,11 @@ const mongoose = require('mongoose');
 
 exports.getCoursesData = async (req, res) => {
   try {
-    const { page = 1, limit = 10, ...filters } = req.query;
+    // Ensure page is at least 1 and limit is a valid number
+    let { page = 1, limit = 10, ...filters } = req.query;
+    page = Math.max(1, parseInt(page, 10) || 1);
+    limit = Math.min(100, parseInt(limit, 10) || 10); // Restrict limit to a maximum of 100
+
     const collectionName = 'COURSE_RESULT'; // Ensure this matches your dataset name
     let CourseModel;
 
@@ -55,7 +59,7 @@ exports.getCoursesData = async (req, res) => {
 
     res.json({
       data,
-      currentPage: Number(page),
+      currentPage: page,
       totalPages: Math.ceil(totalItems / limit),
       totalItems,
     });
@@ -64,6 +68,7 @@ exports.getCoursesData = async (req, res) => {
     res.status(500).send('Failed to fetch course data.');
   }
 };
+
 
 exports.getFilterOptions = async (req, res) => {
   try {

@@ -1,0 +1,224 @@
+.modal-content {
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  background-color: #f7f9fc;
+  padding: 15px;
+}
+
+.modal-header {
+  background: #1e3a8a;
+  color: #ffffff;
+  border-bottom: none;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  padding: 20px 25px;
+  text-align: center;
+  position: relative;
+}
+
+.modal-title {
+  font-weight: 600;
+  font-size: 22px;
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+}
+
+.modal-body {
+  padding: 20px 25px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  line-height: 1.6;
+}
+
+.form-control {
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  padding: 10px 15px;
+  font-size: 15px;
+  color: #1f2937;
+  background-color: #f1f5f9;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  background-color: #ffffff;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.modal-footer {
+  border-top: none;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-primary {
+  background: #3b82f6;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: #a5b2ce;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(37, 99, 235, 0.2);
+}
+
+.btn-secondary {
+  background-color: #9ca3af;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #6b7280;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(107, 114, 128, 0.2);
+}
+
+.icon-info-circle {
+  margin-left: 8px;
+  color: #3b82f6;
+  cursor: pointer;
+}
+
+.icon-info-circle:hover {
+  color: #2563eb;
+}
+
+.modal-footer button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.modal-footer .btn-primary i,
+.modal-footer .btn-secondary i {
+  font-size: 16px;
+}
+
+
+.profile-input {
+  border-radius: 5px;
+  border: 1px solid #ced4da;
+  padding: 10px;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.profile-input:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.modal-close-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.modal-close-btn:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+.modal-save-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.modal-save-btn:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.custom-popup {
+  position: relative;
+  background-color: #ffffff !important;
+  color: white;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  margin: 20px;
+  // backdrop-filter: blur(10px); /* Background blur effect */
+  animation: slideInOut 4s ease-in-out;
+}
+
+.popup-icon {
+  font-size: 24px;
+  margin-right: 10px;
+  align-items: center;
+  animation: scaleInOut 2s ease-in-out;
+}
+
+.popup-message {
+  margin-top: 25px;
+  font-size: 18px !important;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes slideInOut {
+  0% {
+      opacity: 0;
+      transform: translateX(100%);
+  }
+  10% {
+      opacity: 1;
+      transform: translateX(0);
+  }
+  90% {
+      opacity: 1;
+      transform: translateX(0);
+  }
+  100% {
+      opacity: 0;
+      transform: translateX(100%);
+  }
+}
+
+@keyframes scaleInOut {
+  0% {
+      transform: scale(0);
+  }
+  10% {
+      transform: scale(1.2);
+  }
+  90% {
+      transform: scale(1.2);
+  }
+  100% {
+      transform: scale(0);
+  }
+}

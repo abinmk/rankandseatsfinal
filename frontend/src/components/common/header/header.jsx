@@ -10,14 +10,15 @@ import axios from 'axios';
 import { UserContext } from "../../../contexts/UserContext";
 import "./header.scss";
 import axiosInstance from '../../../utils/axiosInstance';
+import "./userProfile.scss";
+import { FaCheckCircle, FaTimesCircle, FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaGraduationCap, FaSave, FaTimes } from 'react-icons/fa';
+
 
 // IMAGES
 import desktoplogo from "../../../assets/images/brand-logos/desktop-dark.png";
 import faces1 from "../../../assets/images/faces/1.jpg";
 
 const Header = ({ local_varaiable, ThemeChanger }) => {
-
-
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [profileData, setProfileData] = useState({
     name: '',
@@ -29,6 +30,7 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
 
   const handleClose = () => setShowProfileModal(false);
   const handleShow = () => setShowProfileModal(true);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   useEffect(() => {
     if (showProfileModal) {
@@ -57,19 +59,23 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
     const { name, value } = e.target;
     setProfileData({ ...profileData, [name]: value });
   };
-
   const handleSave = async () => {
     try {
-      await axiosInstance.put('/profile', profileData);
-      alert('Profile updated successfully!');
-      handleClose();
+      // Simulate an API call to save profile data
+      console.log('Saving profile data:', profileData);
+      setShowConfirmation(true); // Show confirmation popup
+      
+      // Wait for the confirmation popup to be displayed for 3 seconds
+      setTimeout(() => {
+        setShowConfirmation(false); // Hide the confirmation popup
+        //handleClose(); // Close the modal after the confirmation popup
+      }, 3000);
+      
     } catch (error) {
       console.error('Error updating profile:', error);
-      alert('Failed to update profile. Please try again.');
     }
   };
-
-
+  
 
   const location = useLocation();
   const [selectedTab, setSelectedTab] = useState("Allotments");
@@ -88,8 +94,6 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
   const { user, logout } = useContext(UserContext);
 
   const API_URL = import.meta.env.VITE_API_URL;
-
-  
 
   useEffect(() => {
     const path = location.pathname;
@@ -261,45 +265,29 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
     }
   };
 
-  // Fetch available datasets
-  // useEffect(() => {
-  //   const fetchDatasets = async () => {
-  //     try {
-  //       const response = await axios.get(`${API_URL}/dataset/list-generated-datasets`);
-  //       const datasets = response.data.datasets || [];
-  //       const types = datasets.map(dataset => {
-  //         const match = dataset.match(/EXAM:.*_TYPE:(.*)/);          return match ? match[1].replace(/_/g, ' ') : null;
-  //       }).filter(Boolean);
+  const saveUserSelection = async (exam, counselingType) => {
+    try {
+      await axiosInstance.post('/users/save-user-selection', { exam, counselingType });
+      console.log('User selection saved successfully');
+      window.location.reload();
+    } catch (error) {
+      console.error('Error saving user selection', error);
+    }
+  };
 
-  //       setAvailableCounselingTypes(types);
-  //     } catch (error) {
-  //       console.error('Error fetching available datasets', error);
-  //     }
-  //   };
+  const handleExamChange = (e) => {
+    console.log("handle exam change");
+    const selectedExam = e.target.value.toUpperCase().replace(/ /g, '_');
+    setExam(selectedExam);
+    saveUserSelection(selectedExam, counselingType);
+    window.location.reload();
+  };
 
-  //   fetchDatasets();
-  // }, [API_URL]);
-
-  // const saveUserSelection = async (exam, counselingType) => {
-  //   try {
-  //     await axiosInstance.post(`${API_URL}/users/save-user-selection`, { exam, counselingType });
-  //     console.log('User selection saved successfully');
-  //   } catch (error) {
-  //     console.error('Error saving user selection', error);
-  //   }
-  // };
-
-  // const handleExamChange = (e) => {
-  //   const selectedExam = e.target.value.toUpperCase().replace(/ /g, '_');
-  //   setExam(selectedExam);
-  //   saveUserSelection(selectedExam, counselingType);
-  // };
-
-  // const handleCounselingTypeChange = (e) => {
-  //   const selectedCounselingType = e.target.value;
-  //   setCounselingType(selectedCounselingType);
-  //   saveUserSelection(exam, selectedCounselingType);
-  // };
+  const handleCounselingTypeChange = (e) => {
+    const selectedCounselingType = e.target.value;
+    setCounselingType(selectedCounselingType);
+    saveUserSelection(exam, selectedCounselingType);
+  };
 
   const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -307,7 +295,7 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
     const fetchUserSelection = async () => {
       try {
         // Fetch the user's selected exam and counseling type from the backend
-        const response = await  axiosInstance.get(`${apiUrl}/users/exams`);
+        const response = await axiosInstance.get(`${apiUrl}/users/exams`);
         console.log(response);
         const userSelection = response.data.selectedExams[0];
         console.log("user selection "+userSelection);
@@ -344,32 +332,6 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
     fetchUserSelection(); // Fetch user's selected exam and counseling type
     fetchDatasets(); // Fetch available counseling types
   }, []);
-
-  const handleExamChange = (e) => {
-    console.log("handle exam change");
-    const selectedExam = e.target.value.toUpperCase().replace(/ /g, '_');
-    setExam(selectedExam);
-    saveUserSelection(selectedExam, counselingType);
-    window.location.reload();
-  };
-
-  const handleCounselingTypeChange = (e) => {
-    const selectedCounselingType = e.target.value;
-    setCounselingType(selectedCounselingType);
-    saveUserSelection(exam, selectedCounselingType);
-  };
-
-  const saveUserSelection = async (exam, counselingType) => {
-    try {
-      await axiosInstance.post('/users/save-user-selection', { exam, counselingType });
-      console.log('User selection saved successfully');
-      window.location.reload();
-    } catch (error) {
-      console.error('Error saving user selection', error);
-    }
-  };
-
-  
 
   return (
     <Fragment>
@@ -447,19 +409,6 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
                     ))}
                   </SimpleBar>
                 </ul>
-                {/* <div className={`p-3 empty-header-item1 border-top ${notifications.length === 0 ? "d-none" : "d-block"}`}>
-                  <div className="d-grid">
-                    <Link to="#" className="btn btn-primary">View All</Link>
-                  </div>
-                </div>
-                <div className={`p-5 empty-item1 ${notifications.length === 0 ? "d-block" : "d-none"}`}>
-                  <div className="text-center">
-                    <span className="avatar avatar-xl avatar-rounded bg-secondary-transparent">
-                      <i className="bx bx-bell-off bx-tada fs-2"></i>
-                    </span>
-                    <h6 className="fw-semibold mt-3">No New Notifications</h6>
-                  </div>
-                </div> */}
               </Dropdown.Menu>
             </Dropdown>
             <div className="header-element header-fullscreen">
@@ -500,14 +449,19 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
       </Dropdown>
 
       {/* Profile Modal */}
-      <Modal show={showProfileModal} onHide={handleClose}>
+
+      <Modal show={showProfileModal} onHide={handleClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title>User Profile</Modal.Title>
+          <Modal.Title>
+            <FaUser className="me-2" />
+            User Profile
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
+        
           <Form>
             <Form.Group controlId="formName">
-              <Form.Label>Name</Form.Label>
+              <Form.Label><FaUser className="me-2" />Name</Form.Label>
               <Form.Control
                 type="text"
                 name="name"
@@ -517,7 +471,7 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
               />
             </Form.Group>
             <Form.Group controlId="formEmail">
-              <Form.Label>Email</Form.Label>
+              <Form.Label><FaEnvelope className="me-2" />Email</Form.Label>
               <Form.Control
                 type="email"
                 name="email"
@@ -527,7 +481,7 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
               />
             </Form.Group>
             <Form.Group controlId="formMobile">
-              <Form.Label>Mobile Number</Form.Label>
+              <Form.Label><FaPhone className="me-2" />Mobile Number</Form.Label>
               <Form.Control
                 type="text"
                 name="mobileNumber"
@@ -537,43 +491,64 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
               />
             </Form.Group>
             <Form.Group controlId="formState">
-              <Form.Label>State</Form.Label>
+              <Form.Label><FaMapMarkerAlt className="me-2" />State</Form.Label>
               <Form.Control
-                type="text"
+                as="select"
                 name="state"
                 value={profileData.state}
                 onChange={handleChange}
-              />
+              >
+                {['Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal', 'Delhi', 'Jammu & Kashmir', 'Ladakh', 'Lakshadweep', 'Puducherry', 'Andaman & Nicobar Islands', 'Chandigarh', 'Dadra & Nagar Haveli and Daman & Diu'].map((state) => (
+                  <option key={state} value={state}>{state}</option>
+                ))}
+              </Form.Control>
             </Form.Group>
             <Form.Group controlId="formCounseling">
-              <Form.Label>Preferred Counseling</Form.Label>
+              <Form.Label><FaGraduationCap className="me-2" />Preferred Counseling</Form.Label>
               <Form.Control
-                type="text"
+                as="select"
                 name="counseling"
                 value={profileData.counseling}
                 onChange={handleChange}
-              />
+              >
+                <option value="NEET PG">NEET PG</option>
+                <option value="NEET SS">NEET SS</option>
+                <option value="INI CET">INI CET</option>
+              </Form.Control>
             </Form.Group>
             <Form.Group controlId="formSubscription">
-              <Form.Label>Subscription Details</Form.Label>
+              <Form.Label><FaCheckCircle className="me-2" />Subscription Details</Form.Label>
               {renderSubscriptionDetails()} {/* Show subscription status based on paymentStatus */}
             </Form.Group>
           </Form>
+          {showConfirmation && (
+    <div className="custom-popup">
+        <div className="popup-icon">
+            <FaCheckCircle className="text-success" />
+        </div>
+        <div className="popup-message">
+            <strong>Success!</strong> Profile updated successfully!
+        </div>
+    </div>
+)}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="outline-danger" onClick={handleClose}>
+            <FaTimes className="me-2" />
             Close
           </Button>
           <Button variant="primary" onClick={handleSave}>
+            <FaSave className="me-2" />
             Save Changes
           </Button>
         </Modal.Footer>
       </Modal>
-
+      {/* Custom Confirmation Popup */}
 
           </div>
         </div>
       </header>
+   
     </Fragment>
   );
 };
