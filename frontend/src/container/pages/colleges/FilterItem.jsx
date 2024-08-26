@@ -2,11 +2,9 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Form, Accordion, Button, Modal, Row, Col } from 'react-bootstrap';
 import Slider from '@mui/material/Slider';
 import { debounce } from 'lodash';
-import axios from 'axios';
-import CustomPopup from '../custom-popup/custom-popup-filter';
 import { UserContext } from '../../../contexts/UserContext';
 
-const FilterItem = ({ title, options = {},disabled, filterName, filters, handleFilterChange, handleRangeChange, eventKey, viewMore, appliedFiltersCount, getFilterParamName, loading }) => {
+const FilterItem = ({ title, options = {}, disabled, filterName, filters, handleFilterChange, handleRangeChange, eventKey, viewMore, appliedFiltersCount, getFilterParamName, loading }) => {
   const [showModal, setShowModal] = useState(false);
   const [showPaymentPopup, setShowPaymentPopup] = useState(false);
   const [subscriptionStatus, setSubscriptionStatus] = useState(false);
@@ -40,10 +38,9 @@ const FilterItem = ({ title, options = {},disabled, filterName, filters, handleF
       option.toLowerCase().includes(searchTerm.toLowerCase())
     ) : [];
 
-
-    const handleCheckboxChange = (option, checked) => {
-      handleFilterChange(option, checked, filterName);
-    };
+  const handleCheckboxChange = (option, checked) => {
+    handleFilterChange(option, checked, filterName);
+  };
 
   const clearFilterCategory = async () => {
     const isSubscribed = await checkSubscription();
@@ -124,7 +121,7 @@ const FilterItem = ({ title, options = {},disabled, filterName, filters, handleF
                     type="number"
                     value={minValue}
                     onChange={handleMinInputChange}
-                    disabled={loading}
+                    disabled={loading || disabled}
                   />
                 </Col>
                 <Col>
@@ -133,7 +130,7 @@ const FilterItem = ({ title, options = {},disabled, filterName, filters, handleF
                     type="number"
                     value={maxValue}
                     onChange={handleMaxInputChange}
-                    disabled={loading}
+                    disabled={loading || disabled}
                   />
                 </Col>
               </Row>
@@ -141,7 +138,7 @@ const FilterItem = ({ title, options = {},disabled, filterName, filters, handleF
           ) : (
             <>
               <Form.Control
-               disabled={disabled}
+                disabled={disabled}
                 type="text"
                 placeholder={`Search ${title}`}
                 className="filter-search"
@@ -150,7 +147,7 @@ const FilterItem = ({ title, options = {},disabled, filterName, filters, handleF
               />
               {filteredOptions.slice(0, 4).map(option => (
                 <Form.Check
-                disabled={disabled}
+                  disabled={disabled}
                   key={option}
                   type="checkbox"
                   label={option}
@@ -179,7 +176,7 @@ const FilterItem = ({ title, options = {},disabled, filterName, filters, handleF
         </Modal.Header>
         <Modal.Body>
           <Form.Control
-          disabled={disabled}
+            disabled={disabled}
             type="text"
             placeholder={`Search ${title}`}
             className="filter-search"
@@ -188,7 +185,7 @@ const FilterItem = ({ title, options = {},disabled, filterName, filters, handleF
           />
           {filteredOptions.map(option => (
             <Form.Check
-            disabled={disabled}
+              disabled={disabled}
               key={option}
               type="checkbox"
               label={option}
@@ -206,7 +203,6 @@ const FilterItem = ({ title, options = {},disabled, filterName, filters, handleF
           </Button>
         </Modal.Footer>
       </Modal>
-   
     </>
   );
 };

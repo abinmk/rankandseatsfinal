@@ -48,6 +48,10 @@ const Courses = () => {
       setData(response.data.data);
       setPage(response.data.currentPage);
       setTotalPages(response.data.totalPages);
+      if(response.data.totalPages<response.data.currentPage)
+      {
+        setPage(response.data.totalPages);
+      }
     } catch (error) {
       console.error('Error fetching fees data:', error);
     }

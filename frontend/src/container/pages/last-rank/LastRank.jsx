@@ -62,11 +62,13 @@ const LastRank = () => {
           ...adjustedFilters
         }
       });
-
-      console.log('API Response:', response.data);
-      setData(response.data.data); // Correctly update the data
+      setData(response.data.data);
       setPage(response.data.currentPage);
       setTotalPages(response.data.totalPages);
+      if(response.data.totalPages<response.data.currentPage)
+      {
+        setPage(response.data.totalPages);
+      }
     } catch (error) {
       console.error('Error fetching data:', error);
     }

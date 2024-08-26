@@ -51,7 +51,7 @@ const PricingPopup = () => {
 
   const createOrder = async () => {
     try {
-      const orderResponse = await axios.post(`${apiUrl}/payment/create-order`, { amount: 1 });
+      const orderResponse = await axios.post(`${apiUrl}/payment/create-order`, { amount: 1178.82 });
       initializePayment(orderResponse.data.id);
     } catch (error) {
       console.error('Error creating order:', error);
@@ -66,7 +66,7 @@ const PricingPopup = () => {
 //117882
     const options = {
       key: 'rzp_live_Gx5yImqLmw0X6P',
-      amount: 100,
+      amount: 117882,
       currency: 'INR',
       name: 'Rank and Seats',
       description: 'NEET Counselling Plan',

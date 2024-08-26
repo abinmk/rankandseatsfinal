@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback,useContext, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useContext, useMemo } from 'react';
 import axios from 'axios';
 import _ from 'lodash';
 import GenericTable from './GenericTable';
@@ -18,15 +18,12 @@ const Colleges = () => {
   const [filterLoading, setFilterLoading] = useState(true);
 
   const { user } = useContext(UserContext);
-  const [countVal , setCountOf] = useState(0);
+  const [countVal, setCountOf] = useState(0);
   const [subscriptionStatus, setSubscriptionStatus] = useState(false);
   const [showSubscriptionPopup, setShowSubscriptionPopup] = useState(false);
   const [filterCountExceeded, setFilterCountExceed] = useState(false);
-  
 
   const apiUrl = import.meta.env.VITE_API_URL;
-
-
 
   const getFilterParamName = useMemo(() => {
     const filterMapping = {
@@ -58,7 +55,6 @@ const Colleges = () => {
         params[getFilterParamName(filterKey)] = filterValue;
       }
     });
-    console.log('Constructed Filter Params:', params); // Log the constructed filter params
     return params;
   };
 
@@ -66,12 +62,9 @@ const Colleges = () => {
     _.debounce(async (page, pageSize, filters) => {
       setLoading(true);
       try {
-        setCountOf(prevCountVal => {
-          const newCount = prevCountVal + 1;
-          return newCount;
-        });
-        if((countVal>2 && subscriptionStatus==false) || ((page>1 || pageSize>10 ) && subscriptionStatus==false))
-        {
+        setCountOf(prevCountVal => prevCountVal + 1);
+
+        if((countVal > 2 && !subscriptionStatus) || ((page > 1 || pageSize > 10) && !subscriptionStatus)) {
           setShowSubscriptionPopup(true);
           setFilterCountExceed(true);
           return;
@@ -85,16 +78,21 @@ const Colleges = () => {
             ...filterParams
           }
         });
+
         setData(response.data.data);
         setPage(response.data.currentPage);
         setTotalPages(response.data.totalPages);
+
+        if (response.data.totalPages < response.data.currentPage) {
+          setPage(response.data.totalPages);
+        }
       } catch (error) {
         console.error('Error fetching college data:', error);
-      }finally {
+      } finally {
         setLoading(false);
       }
     }, 500),
-    [apiUrl,filters,page]
+    [apiUrl, filters, page, pageSize]
   );
 
   const fetchFilterOptions = useCallback(async () => {
@@ -104,8 +102,9 @@ const Colleges = () => {
       setFilterOptions(response.data);
     } catch (error) {
       console.error('Error fetching filter options:', error);
+    } finally {
+      setFilterLoading(false);
     }
-    setFilterLoading(false);
   }, [apiUrl]);
 
   useEffect(() => {
@@ -145,9 +144,10 @@ const Colleges = () => {
         console.error('Error checking subscription:', error);
       }
     };
-  
+
     checkSubscription();
   }, [apiUrl]);
+
   return (
     <div className="colleges-container">
       <GenericTable
@@ -168,8 +168,8 @@ const Colleges = () => {
         pageSize={pageSize}
         setPageSize={setPageSize}
         getFilterParamName={getFilterParamName}
-        appliedFiltersCount={countAppliedFilters()} // Pass applied filters count
-        disabled = {showSubscriptionPopup && countVal>2}
+        appliedFiltersCount={countAppliedFilters()}
+        disabled={showSubscriptionPopup && countVal > 2}
         showSubscriptionPopup={showSubscriptionPopup}
         setShowSubscriptionPopup={setShowSubscriptionPopup}
       />
