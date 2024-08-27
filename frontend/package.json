@@ -28,6 +28,7 @@
     "@reduxjs/toolkit": "^2.1.0",
     "@simonwep/pickr": "^1.9.0",
     "@types/dragula": "^3.7.4",
+    "antd": "^5.20.3",
     "apexcharts": "^3.47.0",
     "axios": "^1.7.2",
     "bootstrap": "^5.3.3",

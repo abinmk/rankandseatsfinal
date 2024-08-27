@@ -11,7 +11,7 @@ import { UserContext } from "../../../contexts/UserContext";
 import "./header.scss";
 import axiosInstance from '../../../utils/axiosInstance';
 import "./userProfile.scss";
-import { FaCheckCircle, FaTimesCircle, FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaGraduationCap, FaSave, FaTimes } from 'react-icons/fa';
+import { FaCheckCircle,FaUserCircle, FaTimesCircle, FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaGraduationCap, FaSave, FaTimes } from 'react-icons/fa';
 
 
 // IMAGES
@@ -421,20 +421,29 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
               </Link>
             </div>
             <Dropdown className="mainuserProfile">
-        <Dropdown.Toggle variant='' as="a" className="header-link dropdown-toggle" id="mainHeaderProfile" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-          <div className="d-flex align-items-center">
-            <div className="d-sm-flex wd-100p">
-              {/* <div className="avatar avatar-sm">
-                <img alt="avatar" className="rounded-circle" src={faces1} />
-              </div> */}
-              <div className="ms-2 my-auto d-none d-xl-flex">
-                <h6 className="font-weight-semibold mb-0 fs-13 user-name d-sm-block d-none">
-                  {user ? user.name : "Guest"}
-                </h6> {/* Display user name */}
-              </div>
-            </div>
-          </div>
-        </Dropdown.Toggle>
+            <Dropdown.Toggle
+  variant=""
+  as="a"
+  className="header-link dropdown-toggle"
+  id="mainHeaderProfile"
+  data-bs-toggle="dropdown"
+  data-bs-auto-close="outside"
+  aria-expanded="false"
+>
+  <div className="d-flex align-items-center">
+    <div className="d-sm-flex wd-100p">
+      <div className="avatar avatar-sm">
+        <FaUserCircle className="profile-icon" />
+      </div>
+      <div className="ms-2 my-auto d-none d-xl-flex">
+        <h6 className="font-weight-semibold mb-0 fs-13 user-name d-sm-block d-none">
+          {user ? user.name : "Guest"}
+        </h6>
+      </div>
+    </div>
+  </div>
+</Dropdown.Toggle>
+
 
         {user && (
           <Dropdown.Menu as="ul" className="dropdown-menu border-0 main-header-dropdown overflow-hidden header-profile-dropdown" aria-labelledby="mainHeaderProfile">
