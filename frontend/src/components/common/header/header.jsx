@@ -420,7 +420,7 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
                 )}
               </Link>
             </div>
-            <Dropdown className="header-element mainuserProfile">
+            <Dropdown className="mainuserProfile">
         <Dropdown.Toggle variant='' as="a" className="header-link dropdown-toggle" id="mainHeaderProfile" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
           <div className="d-flex align-items-center">
             <div className="d-sm-flex wd-100p">

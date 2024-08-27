@@ -25,7 +25,7 @@ const GenericTable = ({
   showSubscriptionPopup,
   setShowSubscriptionPopup
 }) => {
-  const [showFilters, setShowFilters] = useState(true);
+  const [showFilters, setShowFilters] = useState(false);
   const [showColumnModal, setShowColumnModal] = useState(false);
   const [showRowModal, setShowRowModal] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
