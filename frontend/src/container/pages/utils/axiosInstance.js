@@ -18,10 +18,16 @@ axiosInstance.interceptors.response.use(
     const originalRequest = error.config;
 
     // Handle the 400 response with "Invalid token" message
-    if (error.response.status === 400 && error.response.data === 'Invalid token') {
-      // Log out the user immediately if the token is invalid
+    if (error.response.status === 401 && error.response.data === 'Invalid token') {
+      // Show alert for session expiry
+      alert("Session expired. Please log in again.");
+      console.log("session expired");
+
+      // Remove tokens from localStorage
       localStorage.removeItem('token');
       localStorage.removeItem('refreshToken');
+
+      // Redirect to login after alert is dismissed
       window.location.href = '/login';
       return Promise.reject(error);
     }
@@ -36,9 +42,17 @@ axiosInstance.interceptors.response.use(
         axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
         return axiosInstance(originalRequest);
       } catch (refreshError) {
+        // Show alert for session expiry
+        alert("Session expired. Please log in again.");
+        alert("Session expired. Please log in again.");
+        console.log("session expired");
+
+        // Remove tokens from localStorage
         localStorage.removeItem('token');
         localStorage.removeItem('refreshToken');
-        window.location.href = '/login'; // Redirect to login if refresh fails
+
+        // Redirect to login after alert is dismissed
+        window.location.href = '/login';
         return Promise.reject(refreshError);
       }
     }

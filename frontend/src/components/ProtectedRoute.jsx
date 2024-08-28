@@ -23,6 +23,11 @@ const ProtectedRoute = ({ children, requiredRole, redirectTo = "/login" }) => {
 
   // If no user and no token, redirect to login
   if (!user || !token) {
+    i(user && !token)
+    {
+      alert("Session expired. Please log in again.");
+    }
+    
     return <Navigate to={redirectTo} state={{ from: location }} />;
   }
 
