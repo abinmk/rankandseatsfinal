@@ -155,6 +155,35 @@ const getUser = async (req, res) => {
   }
 };
 
+const getUserDetails = async (req, res) => {
+  try {
+      const users = await User.find();  // Find all users
+      res.json(users);
+  } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+  }
+};
+
+const updateUserDetails = async (req, res) => {
+  try {
+    const { users } = req.body; // Expecting an array of user objects with updated data
+    const bulkOperations = users.map(user => ({
+      updateOne: {
+        filter: { _id: user._id },
+        update: { $set: user },
+      },
+    }));
+
+    await User.bulkWrite(bulkOperations);
+    res.json({ success: true, message: 'Users updated successfully' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+};
+
+
 // Get user's wishlist with filters
 const getWishlist = async (req, res) => {
   try {
@@ -260,5 +289,7 @@ module.exports = {
   getWishlist,
   updateWishlistOrder,
   getFilterOptions,
-  getUserExams
+  getUserExams,
+  getUserDetails,
+  updateUserDetails
 };

@@ -14,5 +14,10 @@ router.get('/get-wishlist', userController.getWishlist);
 router.post('/update-wishlist-order', userController.updateWishlistOrder);
 router.get('/get-filter-options', userController.getFilterOptions);
 router.get('/exams', authMiddleware,userController.getUserExams);
+router.get('/getUserDetails', authMiddleware,userController.getUserDetails);
+router.put('/bulk-update', authMiddleware,userController.updateUserDetails);
+
+
+
 
 module.exports = router;

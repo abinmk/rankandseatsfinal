@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Card, Button, Modal, Tooltip, OverlayTrigger, Navbar } from 'react-bootstrap';
-import { FaUpload, FaBell, FaInfoCircle, FaCalendarAlt, FaRegChartBar, FaArrowLeft } from 'react-icons/fa';
+import { FaUpload,FaUsers, FaBell, FaInfoCircle, FaCalendarAlt, FaRegChartBar, FaArrowLeft } from 'react-icons/fa';
 import Upload from '../generate-data/Upload';
 import AdminInformationAlert from './AdminInformationAlert';
 import AdminAlertsAnnouncements from './AdminAlertsAnnouncements';
 import EventsUpdate from './EventsUpdate';
 import CardsUpdate from './CardsUpdate';
+import AdminUsers from './UserDetails';
 
 const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState(null);
@@ -28,6 +29,8 @@ const AdminDashboard = () => {
         return <EventsUpdate />;
       case 'admin-cards':
         return <CardsUpdate />;
+      case 'admin-users':
+        return <AdminUsers />;
       default:
         return null;
     }
@@ -134,6 +137,21 @@ const AdminDashboard = () => {
                 </Card.Body>
               </Card>
             </Col>
+
+            <Col xl={4} lg={6} md={6} sm={12} className="mb-4">
+            <Card className="h-100 shadow-sm admin-card">
+              <Card.Body className="text-center">
+                <OverlayTrigger placement="top" overlay={renderTooltip('Manage Users')}>
+                  <FaUsers size={50} className="text-dark mb-3" />
+                </OverlayTrigger>
+                <Card.Title>Manage Users</Card.Title>
+                <Card.Text>
+                  View and manage user accounts.
+                </Card.Text>
+                <Button variant="dark" onClick={() => setActiveSection('admin-users')}>Manage Users</Button>
+              </Card.Body>
+            </Card>
+          </Col>
           </Row>
         )}
       </Container>
