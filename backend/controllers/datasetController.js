@@ -357,7 +357,8 @@ const generateCombinedDataset = async (req, res) => {
       const collegeKey = allotment.allottedInstitute.trim().toLowerCase();
       const courseKey = allotment.course.trim().toLowerCase();
       const quotaKey = allotment.allottedQuota.trim().toLowerCase();
-      const feeKey = `${collegeKey}_${courseKey}_${quotaKey}`;
+      const allottedKey = allotment.allottedCategory.trim().toLowerCase();
+      const feeKey = `${collegeKey}_${courseKey}_${quotaKey}_${allottedKey}`;
 
       if (!lastRankMap[feeKey]) {
         const fee = feeMap[feeKey] || {};
@@ -449,20 +450,27 @@ const generateCombinedDataset = async (req, res) => {
         });
       });
     });
-
+    
     // Convert lastRankMap to an array for storage
     const lastRankResult = Object.values(lastRankMap);
+    
     lastRankResult.sort((a, b) => {
+      // Extract the latest year for each entry
       const latestYearA = Math.max(...Object.keys(a.years).map(Number));
       const latestYearB = Math.max(...Object.keys(b.years).map(Number));
-
+    
       if (latestYearA !== latestYearB) {
-        return latestYearA - latestYearB;
+        return latestYearA - latestYearB; // Sort by latest year
       }
-
-      const lastRankA = a.years[latestYearA].rounds['1']?.lastRank || 0;
-      const lastRankB = b.years[latestYearB].rounds['1']?.lastRank || 0;
-
+    
+      // Compare the last rank for round 1 or equivalent round
+      const lastRankA = a.years[latestYearA]?.rounds['1']?.lastRank || Infinity; // Use Infinity if no last rank
+      const lastRankB = b.years[latestYearB]?.rounds['1']?.lastRank || Infinity;
+    
+      // If both lastRankA and lastRankB are Infinity, they lack valid data and should be placed at the end
+      if (lastRankA === Infinity && lastRankB !== Infinity) return 1;
+      if (lastRankB === Infinity && lastRankA !== Infinity) return -1;
+    
       return lastRankA - lastRankB;
     });
     const lastRankResultCollectionName = `LAST_RANK_${examName}`;
