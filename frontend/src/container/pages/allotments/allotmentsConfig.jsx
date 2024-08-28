@@ -45,7 +45,7 @@ export const allotmentsColumns = [
   },
   {
     Header: 'Allotted Category',
-    accessor: 'candidateCategory',
+    accessor: 'allottedCategory',
   },
   {
     Header: 'Fee',
