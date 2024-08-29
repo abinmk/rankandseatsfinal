@@ -353,95 +353,95 @@ const GenericTable = ({
       </Modal>
 
       <Modal show={showRowModal} onHide={handleModalClose} className="custom-modal">
-      <Modal.Header closeButton>
-        <Modal.Title>
-          <div className="college-name">
-            {selectedRowData?.allottedInstitute}
+  <Modal.Header closeButton>
+    <Modal.Title>
+      <div className="college-name">
+        {selectedRowData?.allottedInstitute}
+      </div>
+    </Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    {selectedRowData && (
+      <div className="content-container">
+        <div className="section">
+          <div className="section-header">
+            <h5>General Information</h5>
           </div>
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        {selectedRowData && (
-          <div className="content-container">
-            <div className="section">
-              <div className="section-header">
-                <h5>General Information</h5>
-              </div>
-              <div className="section-content">
-                <p><strong>Institute Type:</strong> {selectedRowData.instituteType}</p>
-                <p><strong>University:</strong> {selectedRowData.universityName}</p>
-                <p><strong>State:</strong> {selectedRowData.state}</p>
-              </div>
-            </div>
-
-            <div className="section">
-              <div className="section-header">
-                <h5>Course Details</h5>
-              </div>
-              <div className="section-content">
-                <p><strong>Course:</strong> {selectedRowData.course}</p>
-                <p><strong>Course Type:</strong> {selectedRowData.courseType}</p>
-                <p><strong>Degree Type:</strong> {selectedRowData.degreeType}</p>
-                <p><strong>Total Seats in Course:</strong> {selectedRowData.totalSeatsInCourse}</p>
-              </div>
-            </div>
-
-            <div className="section">
-              <div className="section-header">
-                <h5>Allotment Information</h5>
-              </div>
-              <div className="section-content">
-                <p><strong>Year:</strong> {selectedRowData.year}</p>
-                <p><strong>Round:</strong> {selectedRowData.round}</p>
-                <p><strong>Rank:</strong> {selectedRowData.rank}</p>
-                <p><strong>Allotted Quota:</strong> {selectedRowData.allottedQuota}</p>
-                <p><strong>Allotted Category:</strong> {selectedRowData.allottedCategory}</p>
-                <p><strong>Candidate Category:</strong> {selectedRowData.candidateCategory}</p>
-              </div>
-            </div>
-
-            <div className="section">
-              <div className="section-header">
-                <h5>Financial Information</h5>
-              </div>
-              <div className="section-content">
-                <p><strong>Fee Amount:</strong> ₹{selectedRowData.feeAmount}</p>
-                <p><strong>NRI Fee:</strong> ₹{selectedRowData.nriFee}</p>
-                <p><strong>Stipend Year 1:</strong> ₹{selectedRowData.stipendYear1}</p>
-                <p><strong>Stipend Year 2:</strong> ₹{selectedRowData.stipendYear2}</p>
-                <p><strong>Stipend Year 3:</strong> ₹{selectedRowData.stipendYear3}</p>
-              </div>
-            </div>
-
-            <div className="section">
-              <div className="section-header">
-                <h5>Bond and Penalty</h5>
-              </div>
-              <div className="section-content">
-                <p><strong>Bond Year:</strong> {selectedRowData.bondYear}</p>
-                <p><strong>Bond Penalty:</strong> ₹{selectedRowData.bondPenality}</p>
-                <p><strong>Seat Leaving Penalty:</strong> ₹{selectedRowData.seatLeavingPenality}</p>
-              </div>
-            </div>
-
-            <div className="section">
-              <div className="section-header">
-                <h5>Additional Information</h5>
-              </div>
-              <div className="section-content">
-                <p><strong>Total Hospital Beds:</strong> {selectedRowData.totalHospitalBeds}</p>
-                <p><strong>Total Seats in College:</strong> {selectedRowData.totalSeatsInCollege}</p>
-              </div>
-            </div>
+          <div className="section-content">
+            <p><strong>Institute Type:</strong> {selectedRowData.instituteType}</p>
+            <p><strong>University:</strong> {selectedRowData.universityName}</p>
+            <p><strong>State:</strong> {selectedRowData.state}</p>
           </div>
-        )}
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleModalClose}>
-          Close
-        </Button>
-      </Modal.Footer>
-    </Modal>
+        </div>
+
+        <div className="section">
+          <div className="section-header">
+            <h5>Course Details</h5>
+          </div>
+          <div className="section-content">
+            <p><strong>Course:</strong> {selectedRowData.course}</p>
+            <p><strong>Course Type:</strong> {selectedRowData.courseType}</p>
+            <p><strong>Degree Type:</strong> {selectedRowData.degreeType}</p>
+            <p><strong>Total Seats in Course:</strong> {selectedRowData.totalSeatsInCourse}</p>
+          </div>
+        </div>
+
+        <div className="section">
+          <div className="section-header">
+            <h5>Allotment Information</h5>
+          </div>
+          <div className="section-content">
+            <p><strong>Year:</strong> {selectedRowData.year}</p>
+            <p><strong>Round:</strong> {selectedRowData.round}</p>
+            <p><strong>Rank:</strong> {selectedRowData.rank}</p>
+            <p><strong>Allotted Quota:</strong> {selectedRowData.allottedQuota}</p>
+            <p><strong>Allotted Category:</strong> {selectedRowData.allottedCategory}</p>
+            <p><strong>Candidate Category:</strong> {selectedRowData.candidateCategory}</p>
+          </div>
+        </div>
+
+        <div className="section">
+          <div className="section-header">
+            <h5>Financial Information</h5>
+          </div>
+          <div className="section-content">
+            <p><strong>Fee Amount:</strong> ₹{selectedRowData.feeAmount}</p>
+            <p><strong>NRI Fee:</strong> ₹{selectedRowData.nriFee}</p>
+            <p><strong>Stipend Year 1:</strong> ₹{selectedRowData.stipendYear1}</p>
+            <p><strong>Stipend Year 2:</strong> ₹{selectedRowData.stipendYear2}</p>
+            <p><strong>Stipend Year 3:</strong> ₹{selectedRowData.stipendYear3}</p>
+          </div>
+        </div>
+
+        <div className="section">
+          <div className="section-header">
+            <h5>Bond and Penalty</h5>
+          </div>
+          <div className="section-content">
+            <p><strong>Bond Year:</strong> {selectedRowData.bondYear}</p>
+            <p><strong>Bond Penalty:</strong> ₹{selectedRowData.bondPenality}</p>
+            <p><strong>Seat Leaving Penalty:</strong> ₹{selectedRowData.seatLeavingPenality}</p>
+          </div>
+        </div>
+
+        <div className="section">
+          <div className="section-header">
+            <h5>Additional Information</h5>
+          </div>
+          <div className="section-content">
+            <p><strong>Total Hospital Beds:</strong> {selectedRowData.totalHospitalBeds}</p>
+            <p><strong>Total Seats in College:</strong> {selectedRowData.totalSeatsInCollege}</p>
+          </div>
+        </div>
+      </div>
+    )}
+  </Modal.Body>
+  <Modal.Footer>
+    <Button variant="secondary" onClick={handleModalClose} className="btn-close-modal">
+      Close
+    </Button>
+  </Modal.Footer>
+</Modal>
   );
     </div>
   );

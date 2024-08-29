@@ -359,9 +359,10 @@ const generateCombinedDataset = async (req, res) => {
       const quotaKey = allotment.allottedQuota.trim().toLowerCase();
       const allottedKey = allotment.allottedCategory.trim().toLowerCase();
       const feeKey = `${collegeKey}_${courseKey}_${quotaKey}_${allottedKey}`;
+      const feeDataKey = `${collegeKey}_${courseKey}_${quotaKey}`;
 
       if (!lastRankMap[feeKey]) {
-        const fee = feeMap[feeKey] || {};
+        const fee = feeMap[feeDataKey] || {};
 
         lastRankMap[feeKey] = {
           collegeName: allotment.allottedInstitute,

@@ -456,7 +456,7 @@ const GenericTable = ({
     </div>
   </Modal.Body>
   <Modal.Footer>
-    <Button variant="secondary" onClick={handleModalClose} className="btn-close-modal">
+    <Button variant="secondary" onClick={handleModalClose}>
       Close
     </Button>
   </Modal.Footer>

@@ -562,7 +562,7 @@ th {
 .custom-modal .modal-header {
     background-color: #003366 !important; /* Navy blue */
     color: white !important;
-    padding: 20px !important;
+    padding: 15px !important; /* Reduced padding */
     text-align: center !important;
     position: relative !important;
   }
@@ -572,13 +572,13 @@ th {
   }
   
   .custom-modal .college-name {
-    font-size: 1.8rem !important;
+    font-size: 1.5rem !important; /* Reduced font size */
     font-weight: bold !important;
     margin-bottom: 5px !important;
   }
   
   .custom-modal .college-location {
-    font-size: 1.2rem !important;
+    font-size: 1rem !important; /* Reduced font size */
     color: #ffffff !important;
     margin-bottom: 10px !important;
   }
@@ -586,13 +586,13 @@ th {
   .custom-modal .info-sections {
     display: flex !important;
     justify-content: space-between !important;
-    gap: 20px !important;
-    margin-top: 20px !important;
+    gap: 15px !important; /* Reduced gap */
+    margin-top: 15px !important; /* Reduced margin */
   }
   
   .custom-modal .info-box {
     background-color: #f2f4f6 !important; /* Light gray */
-    padding: 15px !important;
+    padding: 10px !important; /* Reduced padding */
     border-radius: 8px !important;
     text-align: center !important;
     flex: 1 !important;
@@ -600,25 +600,30 @@ th {
   }
   
   .custom-modal .info-box h4 {
-    font-size: 1.2rem !important;
-    margin-bottom: 10px !important;
+    font-size: 1.1rem !important; /* Reduced font size */
+    margin-bottom: 8px !important; /* Reduced margin */
     color: #003366 !important; /* Navy blue */
   }
   
   .custom-modal .info-box p {
-    font-size: 1.1rem !important;
+    font-size: 1rem !important; /* Reduced font size */
     font-weight: bold !important;
     color: #495057 !important; /* Dark gray */
   }
   
   .custom-modal .table-container {
-    margin-top: 20px !important;
+    margin-top: 15px !important; /* Reduced margin */
+  }
+  .custom-modal .modal-title {
+    font-weight: bold !important;
+    font-size: 2rem !important;
+    color: white !important;
   }
   
   .custom-modal .table-container th,
   .custom-modal .table-container td {
     text-align: center !important;
-    padding: 10px !important;
+    padding: 8px !important; /* Reduced padding */
   }
   
   .custom-modal .table-container th {
@@ -633,7 +638,7 @@ th {
   
   .custom-modal .modal-footer {
     background-color: #e9ecef !important; /* Light gray */
-    padding: 15px 20px !important;
+    padding: 10px 15px !important; /* Reduced padding */
     border-bottom-left-radius: 8px !important;
     border-bottom-right-radius: 8px !important;
     display: flex !important;
@@ -643,8 +648,8 @@ th {
   .custom-modal .btn-close-modal {
     background-color: #007bff !important; /* Bright blue */
     border: none !important;
-    padding: 10px 20px !important;
-    font-size: 1rem !important;
+    padding: 8px 15px !important; /* Reduced padding */
+    font-size: 0.9rem !important; /* Reduced font size */
     border-radius: 30px !important;
     transition: background 0.3s ease !important;
   }
@@ -661,15 +666,15 @@ th {
   
   @media (max-width: 576px) {
     .custom-modal .info-box h4 {
-      font-size: 1rem !important;
+      font-size: 0.9rem !important; /* Further reduced font size for small screens */
     }
   
     .custom-modal .info-box p {
-      font-size: 0.9rem !important;
+      font-size: 0.8rem !important; /* Further reduced font size for small screens */
     }
   
     .custom-modal .table-container th,
     .custom-modal .table-container td {
-      font-size: 0.8rem !important;
+      font-size: 0.7rem !important; /* Further reduced font size for small screens */
     }
   }

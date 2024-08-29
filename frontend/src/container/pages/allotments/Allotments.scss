@@ -770,18 +770,10 @@
   text-align: center !important;
 }
 
-.custom-modal .modal-title {
-  font-weight: bold !important;
-  font-size: 1.5rem !important;
-  color: white !important;
-}
-
 .custom-modal .college-name {
-  font-size: 2rem !important;
+  font-size: 1.8rem !important;
   font-weight: bold !important;
   color: #ffffff !important;
-  margin-bottom: 10px !important;
-  text-align: center !important;
 }
 
 .custom-modal .modal-body {
@@ -842,7 +834,7 @@
   justify-content: flex-end !important;
 }
 
-.custom-modal .modal-footer .btn-secondary {
+.custom-modal .btn-close-modal {
   background-color: #007bff !important; /* Bright blue for primary action */
   border: none !important;
   padding: 10px 20px !important;
@@ -851,7 +843,7 @@
   transition: background 0.3s ease !important;
 }
 
-.custom-modal .modal-footer .btn-secondary:hover {
+.custom-modal .btn-close-modal:hover {
   background-color: #0056b3 !important; /* Darker blue on hover */
 }
 
