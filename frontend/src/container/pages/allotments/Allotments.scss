@@ -874,3 +874,41 @@
     padding: 10px !important;
   }
 }
+
+@media (max-width: 768px) {
+  .custom-modal .modal-dialog {
+    width: 90% !important; /* Reduce width slightly for small screens */
+    margin: 0 auto !important; /* Center horizontally */
+  }
+
+  .custom-modal .modal-content {
+    padding: 15px !important; /* Adjust padding for mobile */
+  }
+
+  .custom-modal .info-sections {
+    flex-direction: column !important; /* Stack info boxes vertically */
+  }
+
+  .custom-modal .info-box {
+    margin-bottom: 10px !important; /* Add space between info boxes */
+  }
+}
+
+@media (max-width: 576px) {
+  .custom-modal .modal-dialog {
+    width: 95% !important; /* Further reduce width for extra small screens */
+    margin: 0 auto !important; /* Ensure horizontal centering */
+  }
+
+  .custom-modal .modal-content {
+    padding: 10px !important; /* Adjust padding further */
+  }
+
+  .custom-modal .info-box h4 {
+    font-size: 1rem !important; /* Adjust font size for small screens */
+  }
+
+  .custom-modal .info-box p {
+    font-size: 0.9rem !important; /* Adjust font size for small screens */
+  }
+}
