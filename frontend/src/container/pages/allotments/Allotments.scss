@@ -761,54 +761,124 @@
   }
 }
 
-
-
-.custom-modal .details-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-}
-
-.custom-modal .section {
-  background-color: #f8f9fa;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.custom-modal .section h5 {
-  font-size: 1.2rem;
-  margin-bottom: 10px;
-  color: #495057;
-}
-
-.custom-modal .section p {
-  margin-bottom: 8px;
-  font-size: 0.95rem;
-  line-height: 1.4;
-  color: #343a40;
-}
-
-.custom-modal .section p strong {
-  color: #007bff;
-}
-
-.custom-modal .modal-body {
-  max-height: 70vh;
-  overflow-y: auto;
-}
-
-.custom-modal .modal-header,
-.custom-modal .modal-footer {
-  background-color: #e9ecef;
-  border: none;
+.custom-modal .modal-header {
+  background-color: #003366 !important; /* Navy blue background */
+  color: white !important;
+  padding: 20px !important;
+  border-top-left-radius: 8px !important;
+  border-top-right-radius: 8px !important;
+  text-align: center !important;
 }
 
 .custom-modal .modal-title {
-  font-weight: bold;
-  color: #343a40;
+  font-weight: bold !important;
+  font-size: 1.5rem !important;
+  color: white !important;
 }
 
-.pagination-hidden{
-display: none;
+.custom-modal .college-name {
+  font-size: 2rem !important;
+  font-weight: bold !important;
+  color: #ffffff !important;
+  margin-bottom: 10px !important;
+  text-align: center !important;
+}
+
+.custom-modal .modal-body {
+  padding: 20px !important;
+  background-color: #f8f9fa !important; /* Light gray background */
+  max-height: 70vh !important;
+  overflow-y: auto !important;
+}
+
+.custom-modal .content-container {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 20px !important;
+}
+
+.custom-modal .section {
+  background-color: white !important;
+  padding: 15px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.custom-modal .section-header {
+  margin-bottom: 10px !important;
+}
+
+.custom-modal .section-header h5 {
+  font-size: 1.3rem !important;
+  color: #003366 !important; /* Navy blue for headers */
+  margin: 0 !important;
+  border-bottom: 2px solid #003366 !important;
+  padding-bottom: 5px !important;
+}
+
+.custom-modal .section-content {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 15px !important;
+}
+
+.custom-modal .section-content p {
+  margin: 0 !important;
+  font-size: 1rem !important;
+  color: #495057 !important; /* Dark gray for text */
+  flex: 1 1 45% !important; /* Flex basis for responsive layout */
+}
+
+.custom-modal .section-content p strong {
+  color: #007bff !important; /* Bright blue for highlighted text */
+}
+
+.custom-modal .modal-footer {
+  background-color: #e9ecef !important; /* Light gray footer */
+  padding: 15px 20px !important;
+  border-bottom-left-radius: 8px !important;
+  border-bottom-right-radius: 8px !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+}
+
+.custom-modal .modal-footer .btn-secondary {
+  background-color: #007bff !important; /* Bright blue for primary action */
+  border: none !important;
+  padding: 10px 20px !important;
+  font-size: 1rem !important;
+  border-radius: 30px !important;
+  transition: background 0.3s ease !important;
+}
+
+.custom-modal .modal-footer .btn-secondary:hover {
+  background-color: #0056b3 !important; /* Darker blue on hover */
+}
+
+@media (max-width: 768px) {
+  .custom-modal .section-content {
+    flex-direction: column !important;
+  }
+
+  .custom-modal .modal-body {
+    padding: 15px !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .custom-modal .section {
+    padding: 10px !important;
+  }
+
+  .custom-modal .section-header h5 {
+    font-size: 1rem !important;
+  }
+
+  .custom-modal .section-content p {
+    font-size: 0.9rem !important;
+  }
+
+  .custom-modal .modal-body {
+    padding: 10px !important;
+  }
 }

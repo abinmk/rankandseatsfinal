@@ -118,6 +118,10 @@ const GenericTable = ({
     setFilteredData(filtered);
   };
 
+  const handleModalClose = () => {
+  setShowRowModal(false); // Assuming setShowRowModal is the state handler to show/hide the modal
+};
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -380,122 +384,83 @@ const GenericTable = ({
 </Modal>
 
 
-      <Modal show={showRowModal && !isModalOpen} onHide={() => setShowRowModal(false)} size='xl' centered>
-  <Modal.Header closeButton className="custom-modal-header">
-    <div className="institute-header">
-      {/* <img src="path_to_logo" alt="Institute Logo" className="institute-logo" /> */}
-      <div className="institute-info">
-      <h4>
-      <a 
-        href="#" 
-        onClick={(e) => {
-          e.preventDefault();
-          handleCollegeClick(selectedRowData?.collegeName);
-        }} 
-        className="college-link"
-      >
-        {selectedRowData?.collegeName}
-      </a>
-    </h4>
-        <p className='state-detail'>{selectedRowData?.state}</p>
-      </div>
-      <div className="institute-state">
-        <div>
-          <span>Year of Establishment</span>
-          <h6>{selectedRowData?.yearOfEstablishment}</h6>
-        </div>
-        <div>
-          <span>No. of Beds</span>
-          <h6>{selectedRowData?.totalHospitalBeds}</h6>
-        </div>
-      </div>
+<Modal show={showRowModal} onHide={handleModalClose} className="custom-modal" centered>
+  <Modal.Header closeButton className="modal-header">
+    <div className="college-header">
+      <h2 className="college-name">{selectedRowData?.collegeName}</h2>
+      <p className="college-location">{selectedRowData?.state}</p>
     </div>
   </Modal.Header>
   <Modal.Body>
-    <div className="course-details">
-      <div className="detail-box-1">
-        <h5>Course Name</h5>
+    <div className="info-sections">
+      <div className="info-box">
+        <h4>Course Name</h4>
         <p>{selectedRowData?.courseName}</p>
       </div>
-      <div className="detail-box-1">
-        <h5>Quota</h5>
+      <div className="info-box">
+        <h4>Quota</h4>
         <p>{selectedRowData?.quota}</p>
       </div>
-      <div className="detail-box-1">
-        <h5>Allotted Category</h5>
+      <div className="info-box">
+        <h4>Allotted Category</h4>
         <p>{selectedRowData?.allottedCategory}</p>
       </div>
     </div>
 
-    <div className="rank-details">
+    <div className="table-container">
       <Table bordered>
         <thead>
           <tr>
             <th>Year</th>
-            {Object.keys(selectedRowData?.years || {}).map(year => (
-              <th key={year} colSpan={Object.keys(selectedRowData?.years[year]?.rounds || {}).length}>
-                {year}
-              </th>
-            ))}
-          </tr>
-          <tr>
             <th>Round</th>
-            {Object.keys(selectedRowData?.years || {}).map(year => (
-              Object.keys(selectedRowData?.years[year]?.rounds || {}).map(round => (
-                <th key={`${year}_${round}`}>R{round}</th>
-              ))
-            ))}
+            <th>Last Rank</th>
+            <th>Total Allotted</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Last Rank</td>
-            {Object.keys(selectedRowData?.years || {}).map(year => (
-              Object.keys(selectedRowData?.years[year]?.rounds || {}).map(round => (
-                <td key={`${year}_${round}`}>
-                  {selectedRowData.years[year].rounds[round]?.lastRank || '-'}
-                </td>
-              ))
-            ))}
-          </tr>
-          <tr>
-            <td>Total Allotted</td>
-            {Object.keys(selectedRowData?.years || {}).map(year => (
-              Object.keys(selectedRowData?.years[year]?.rounds || {}).map(round => (
-                <td key={`${year}_${round}`}>
-                  {selectedRowData.years[year].rounds[round]?.totalAllotted || '-'}
-                </td>
-              ))
-            ))}
-          </tr>
+          {Object.keys(selectedRowData?.years || {}).map((year) =>
+            Object.keys(selectedRowData?.years[year]?.rounds || {}).map((round) => (
+              <tr key={`${year}_${round}`}>
+                <td>{year}</td>
+                <td>R{round}</td>
+                <td>{selectedRowData.years[year].rounds[round]?.lastRank || '-'}</td>
+                <td>{selectedRowData.years[year].rounds[round]?.totalAllotted || '-'}</td>
+              </tr>
+            ))
+          )}
         </tbody>
       </Table>
     </div>
 
-    <div className="additional-details">
-      <div className="detail-box">
-        <h5>Fee Details</h5>
+    <div className="info-sections">
+      <div className="info-box">
+        <h4>Fee Details</h4>
         <p>Course Fees: ₹{selectedRowData?.courseFee}</p>
         <p>Hostel Fees: ₹{selectedRowData?.nriFee}</p>
       </div>
-      <div className="detail-box">
-        <h5>Stipend Details</h5>
+      <div className="info-box">
+        <h4>Stipend Details</h4>
         <p>Year 1: ₹{selectedRowData?.stipendYear1}</p>
         <p>Year 2: ₹{selectedRowData?.stipendYear2}</p>
+        <p>Year 3: ₹{selectedRowData?.stipendYear3}</p>
       </div>
-      <div className="detail-box">
-        <h5>Bond Details</h5>
+      <div className="info-box">
+        <h4>Bond Details</h4>
         <p>Bond Years: {selectedRowData?.bondYear}</p>
         <p>Bond Penalty: ₹{selectedRowData?.bondPenality}</p>
       </div>
-      <div className="detail-box">
-        <h5>Penalties and Deductions</h5>
+      <div className="info-box">
+        <h4>Penalties and Deductions</h4>
         <p>Seat Leaving Penalty: ₹{selectedRowData?.seatLeavingPenality}</p>
       </div>
     </div>
   </Modal.Body>
+  <Modal.Footer>
+    <Button variant="secondary" onClick={handleModalClose} className="btn-close-modal">
+      Close
+    </Button>
+  </Modal.Footer>
 </Modal>
-
     </div>
   );
 };
