@@ -256,43 +256,49 @@ const GenericTable = ({
           />
           </div>
           <div className="pagination-container">
-            <Form.Group controlId="rowsPerPage" className="d-flex align-items-center pagination-info">
-              <Form.Label className="me-2 mb-0">Rows per page:</Form.Label>
-              <Form.Control
-                disabled={disabled}
-                as="select"
-                value={pageSize}
-                onChange={(e) => setPageSize(Number(e.target.value))}
-                className="me-3"
-                style={{ width: 'fit-content',height:'fit-content' }}
-              >
-                {[10, 25, 50, 100].map((size) => (
-                  <option key={size} value={size}>
-                    {size}
-                  </option>
-                ))}
-              </Form.Control>
-            </Form.Group>
-            <Form.Group controlId="gotoPage" className="d-flex align-items-center pagination-info">
-              <Form.Label className="me-2 mb-0">Go to page:</Form.Label>
-              <Form.Control
-                disabled={disabled}
-                type="number"
-                min="1"
-                max={pageCount}
-                value={pageIndex + 1}
-                onChange={(e) => setPage(Number(e.target.value))}
-                className="me-2"
-                style={{ width: 'fit-content', height: 'fit-content' }}
-              />
-            </Form.Group>
-            <div className="pagination-controls">
+            <div className='row-controls'>
+              <div>
+                <Form.Group controlId="rowsPerPage" className="d-flex align-items-center pagination-info">
+                  <Form.Label className="me-2 mb-0">Rows:</Form.Label>
+                  <Form.Control
+                    disabled={disabled}
+                    as="select"
+                    value={pageSize}
+                    onChange={(e) => setPageSize(Number(e.target.value))}
+                    className="me-3"
+                    style={{ width: 'fit-content', height:'40px' }}
+                  >
+                    {[10, 20, 30, 50, 100].map((size) => (
+                      <option key={size} value={size}>
+                        {size}
+                      </option>
+                    ))}
+                  </Form.Control>
+                </Form.Group>
+                </div>
+                <div>
+                <Form.Group controlId="gotoPage" className="d-flex align-items-center pagination-info">
+                  <Form.Label className="me-2 mb-0">Page:</Form.Label>
+                  <Form.Control
+                    disabled={disabled}
+                    type="number"
+                    min="1"
+                    max={pageCount}
+                    value={pageIndex + 1}
+                    onChange={(e) => setPage(Number(e.target.value))}
+                    className="me-2"
+                    style={{ width: 'fit-content', height:'40px' }}
+                  />
+                </Form.Group>
+              </div>
+            </div>
+            <div className={showSubscriptionPopup?"pagination-hidden":"pagination-controls"}>
               <Pagination className="mb-0" disabled={disabled}>
-                <Pagination.First onClick={() => setPage(1)} disabled={!canPreviousPage || disabled} />
-                <Pagination.Prev onClick={() => setPage(page - 1)} disabled={!canPreviousPage || disabled} />
+                <Pagination.First onClick={() => setPage(1)} disabled={!canPreviousPage || showSubscriptionPopup} />
+                <Pagination.Prev onClick={() => setPage(page - 1)} disabled={!canPreviousPage || showSubscriptionPopup} />
                 {renderPaginationItems()}
-                <Pagination.Next onClick={() => setPage(page + 1)} disabled={!canNextPage || disabled} />
-                <Pagination.Last onClick={() => setPage(pageCount)} disabled={!canNextPage || disabled} />
+                <Pagination.Next onClick={() => setPage(page + 1)} disabled={!canNextPage || showSubscriptionPopup} />
+                <Pagination.Last onClick={() => setPage(pageCount)} disabled={!canNextPage || showSubscriptionPopup} />
               </Pagination>
             </div>
           </div>

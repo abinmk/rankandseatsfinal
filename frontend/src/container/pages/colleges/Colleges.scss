@@ -126,51 +126,51 @@
       }
     }
 
-    .pagination-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 20px;
+    // .pagination-container {
+    //   display: flex;
+    //   justify-content: space-between;
+    //   align-items: center;
+    //   margin-top: 20px;
     
-      .pagination-info {
-        display: flex;
-        align-items: center;
-      }
+    //   .pagination-info {
+    //     display: flex;
+    //     align-items: center;
+    //   }
     
-      .pagination-controls {
-        display: flex;
-        align-items: center;
+    //   .pagination-controls {
+    //     display: flex;
+    //     align-items: center;
     
-        .pagination {
-          display: flex;
-          list-style: none;
+    //     .pagination {
+    //       display: flex;
+    //       list-style: none;
     
-          .page-item {
-            margin: 0 5px;
+    //       .page-item {
+    //         margin: 0 5px;
     
-            .page-link {
-              color: var(--primary-color) !important; /* Desired color for pagination links */
-              font-size: 0.75rem; /* Decreased font size */
-              padding: 0.25rem 0.5rem; /* Adjusted padding for smaller buttons */
-              border-radius: 5px; /* Make the buttons slightly rounded */
-              border: 1px solid var(--primary-color); /* Border color */
-              background-color: white; /* Background color */
+    //         .page-link {
+    //           color: var(--primary-color) !important; /* Desired color for pagination links */
+    //           font-size: 0.75rem; /* Decreased font size */
+    //           padding: 0.25rem 0.5rem; /* Adjusted padding for smaller buttons */
+    //           border-radius: 5px; /* Make the buttons slightly rounded */
+    //           border: 1px solid var(--primary-color); /* Border color */
+    //           background-color: white; /* Background color */
     
-              &:hover {
-                color: var(--hover-color) !important; /* Color on hover */
-                background-color: var(--background-color); /* Background color on hover */
-              }
-            }
+    //           &:hover {
+    //             color: var(--hover-color) !important; /* Color on hover */
+    //             background-color: var(--background-color); /* Background color on hover */
+    //           }
+    //         }
     
-            &.active .page-link {
-              background-color: var(--primary-color) !important; /* Desired color for active page */
-              border-color: var(--primary-color) !important;
-              color: white !important;
-            }
-          }
-        }
-      }
-    }
+    //         &.active .page-link {
+    //           background-color: var(--primary-color) !important; /* Desired color for active page */
+    //           border-color: var(--primary-color) !important;
+    //           color: white !important;
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
   }
 
   .clear-filter-actions {
@@ -647,52 +647,6 @@
         font-size: 28px;
         margin-left: 10px;
         color: #585757;
-      }
-    }
-
-    .pagination-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 20px;
-  
-      .pagination-info {
-        display: flex;
-        align-items: center;
-      }
-  
-      .pagination-controls {
-        display: flex;
-        align-items: center;
-  
-        .pagination {
-          display: flex;
-          list-style: none;
-  
-          .page-item {
-            margin: 0 5px;
-  
-            .page-link {
-              color: var(--primary-color) !important; /* Desired color for pagination links */
-              font-size: 0.75rem; /* Decreased font size */
-              padding: 0.25rem 0.5rem; /* Adjusted padding for smaller buttons */
-              border-radius: 5px; /* Make the buttons slightly rounded */
-              border: 1px solid var(--primary-color); /* Border color */
-              background-color: white; /* Background color */
-  
-              &:hover {
-                color: var(--hover-color) !important; /* Color on hover */
-                background-color: var(--background-color); /* Background color on hover */
-              }
-            }
-  
-            &.active .page-link {
-              background-color: var(--primary-color) !important; /* Desired color for active page */
-              border-color: var(--primary-color) !important;
-              color: white !important;
-            }
-          }
-        }
       }
     }
   }

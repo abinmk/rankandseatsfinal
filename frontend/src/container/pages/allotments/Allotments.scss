@@ -125,52 +125,6 @@
         color: #585757;
       }
     }
-
-    .pagination-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 20px;
-    
-      .pagination-info {
-        display: flex;
-        align-items: center;
-      }
-    
-      .pagination-controls {
-        display: flex;
-        align-items: center;
-    
-        .pagination {
-          display: flex;
-          list-style: none;
-    
-          .page-item {
-            margin: 0 5px;
-    
-            .page-link {
-              color: var(--primary-color) !important; /* Desired color for pagination links */
-              font-size: 0.75rem; /* Decreased font size */
-              padding: 0.25rem 0.5rem; /* Adjusted padding for smaller buttons */
-              border-radius: 5px; /* Make the buttons slightly rounded */
-              border: 1px solid var(--primary-color); /* Border color */
-              background-color: white; /* Background color */
-    
-              &:hover {
-                color: var(--hover-color) !important; /* Color on hover */
-                background-color: var(--background-color); /* Background color on hover */
-              }
-            }
-    
-            &.active .page-link {
-              background-color: var(--primary-color) !important; /* Desired color for active page */
-              border-color: var(--primary-color) !important;
-              color: white !important;
-            }
-          }
-        }
-      }
-    }
   }
 
   .clear-filter-actions {
@@ -649,52 +603,6 @@
         color: #585757;
       }
     }
-
-    .pagination-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 20px;
-  
-      .pagination-info {
-        display: flex;
-        align-items: center;
-      }
-  
-      .pagination-controls {
-        display: flex;
-        align-items: center;
-  
-        .pagination {
-          display: flex;
-          list-style: none;
-  
-          .page-item {
-            margin: 0 5px;
-  
-            .page-link {
-              color: var(--primary-color) !important; /* Desired color for pagination links */
-              font-size: 0.75rem; /* Decreased font size */
-              padding: 0.25rem 0.5rem; /* Adjusted padding for smaller buttons */
-              border-radius: 5px; /* Make the buttons slightly rounded */
-              border: 1px solid var(--primary-color); /* Border color */
-              background-color: white; /* Background color */
-  
-              &:hover {
-                color: var(--hover-color) !important; /* Color on hover */
-                background-color: var(--background-color); /* Background color on hover */
-              }
-            }
-  
-            &.active .page-link {
-              background-color: var(--primary-color) !important; /* Desired color for active page */
-              border-color: var(--primary-color) !important;
-              color: white !important;
-            }
-          }
-        }
-      }
-    }
   }
 
   .show-filters-btn {
@@ -910,5 +818,127 @@
 
   .custom-modal .info-box p {
     font-size: 0.9rem !important; /* Adjust font size for small screens */
+  }
+}
+
+.row-controls{
+  display: flex;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+
+  .pagination-info {
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    margin-right: 10px;
+
+    .pagination-info-group {
+      display: flex;
+      align-items: center;
+      margin-right: 15px; /* Space between groups */
+
+      label {
+        font-size: 0.75rem; /* Font size for desktop */
+        margin-right: 5px; /* Space between label and control */
+        white-space: nowrap; /* Prevent label text from wrapping */
+      }
+
+      .form-control {
+        font-size: 0.75rem; /* Font size for desktop */
+        padding: 2px 6px; /* Padding for controls */
+        height: 28px; /* Height for controls */
+        width: auto; /* Auto width for controls */
+      }
+    }
+  }
+
+  .pagination-controls {
+    display: flex;
+    align-items: center;
+
+    .pagination {
+      display: flex;
+      list-style: none;
+
+      .page-item {
+        margin: 0 5px;
+
+        .page-link {
+          color: var(--primary-color) !important; /* Desired color for pagination links */
+          font-size: 0.75rem; /* Font size */
+          padding: 0.25rem 0.5rem; /* Padding for buttons */
+          border-radius: 5px; /* Rounded corners */
+          border: 1px solid var(--primary-color); /* Border color */
+          background-color: white; /* Background color */
+
+          &:hover {
+            color: var(--hover-color) !important; /* Hover color */
+            background-color: var(--background-color); /* Background color on hover */
+          }
+        }
+
+        &.active .page-link {
+          background-color: var(--primary-color) !important; /* Active page color */
+          border-color: var(--primary-color) !important;
+          color: white !important;
+        }
+      }
+    }
+  }
+
+  /* Mobile-specific adjustments */
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .pagination-info {
+      width: 100%;
+      justify-content: space-between;
+      margin-bottom: 10px;
+
+      .pagination-info-group {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        margin-bottom: 5px; /* Space between groups */
+      }
+
+      label, .form-control {
+        font-size: 0.7rem; /* Reduced font size for mobile */
+      }
+
+      label {
+        white-space: nowrap; /* Prevent label text from wrapping */
+      }
+
+      .form-control {
+        width: auto; /* Auto width for mobile */
+        padding: 2px 4px; /* Reduced padding */
+      }
+    }
+
+    .pagination-controls {
+      width: 100%;
+      justify-content: center;
+
+      .pagination {
+        justify-content: center;
+        flex-wrap: wrap; /* Allow wrapping of pagination items on smaller screens */
+
+        .page-item {
+          margin: 2px; /* Reduce margin between page items */
+
+          .page-link {
+            padding: 0.2rem 0.4rem; /* Reduce padding for smaller buttons */
+            font-size: 0.7rem; /* Reduce font size slightly */
+          }
+        }
+      }
+    }
   }
 }
