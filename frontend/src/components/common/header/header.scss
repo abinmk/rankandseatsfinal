@@ -84,17 +84,16 @@
   gap: 10px;
 }
 
-#counseling,
-#exam-name {
-  min-width: 120px;
-  width: fit-content !important;
-  height: 35px;
-}
+// #counseling{
+//   min-width: 120px;
+//   width: fit-content !important;
+//   height: 35px;
+// }
 
 .exam-selection select {
   padding: 5px 10px;
   font-size: 14px;
-  border-radius: 18px;
+  border-radius: 58px;
   border: 1px solid #ccc;
   background-color: #f8f9fa;
   appearance: none;
@@ -137,25 +136,74 @@
   color: #888;
 }
 
+@media (max-width: 700px) {
+    .header-logo img {
+      width: 150px;
+    //display: none; /* Hide the logo in mobile view */
+  }
+  .form-select
+  {
+    width: fit-content;
+    font-size: .1rem;
+  }
+  .dropdown-menu{
+    width: 10px;
+  }
+}
+
+/* General styles for the #exam-name dropdown */
+#exam-name , #counseling {
+  font-size: 10px;
+  padding: 4px 8px; /* Reduce padding for a smaller dropdown */
+  border-radius: 60px; /* Slightly rounded corners */
+  border: 1px solid #ccc; /* Keep a light border for visibility */
+  appearance: none;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns%3D%22http%3A//www.w3.org/2000/svg%22 viewBox%3D%220 0 4 5%22%3E%3Cpath fill%3D%22%23ffffff%22 d%3D%22M2 0L0 2h4zM0 3l2 2 2-2z%22/%3E%3C/svg%3E'); /* Custom icon */
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 8px;
+  min-width: 100px; /* Set a default minimum width */
+  width: auto; /* Allow the width to adjust based on content */
+}
+
+/* Responsive styles to reduce the size further on smaller screens */
+@media (max-width: 525px) {
+  #exam-name ,#counseling{
+    font-size: 10px; /* Further reduce font size */
+    padding: 3px 6px; /* Reduce padding for a smaller dropdown */
+    min-width: 80px; /* Adjust minimum width for mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  #exam-name ,#counseling{
+    font-size: 10px; /* Even smaller font size for very small screens */
+    padding: 3px 6px; /* Tighten padding further */
+    min-width: 30px; /* Minimum width for very small screens */
+  }
+}
 /* Styles for mobile view */
 @media (max-width: 768px) {
-  .header-logo img {
-    display: none; /* Hide the logo in mobile view */
-  }
+  // .header-logo img {
+  //   display: none; /* Hide the logo in mobile view */
+  // }
 
   #selectedTab {
     display: none; /* Hide the header name on mobile */
   }
 
-  .mainuserProfile {
-    float: left;
-    margin-right: 10px;
-  }
+  // .mainuserProfile {
+  //   float: left;
+  //   margin-right: 10px;
+  // }
 }
 
-@media (max-width: 1200px) {
-  .user-name {
-    display: none !important;
+@media (max-width: 1200px) { 
+  // .user-name {
+  //   display: none !important;
+  // }
+  #selectedTab {
+    display: none; /* Hide the header name on mobile */
   }
 }
 

@@ -51,11 +51,19 @@ const Sidebar = ({ local_varaiable, ThemeChanger, sidebarActive, toggleSidebar }
     const theme = store.getState();
     if (window.innerWidth <= 992) {
       ThemeChanger({ ...theme, toggled: "close" });
+      
+      // Hide the sidebar by removing the active class
+      const sidebarElement = document.querySelector(".app-sidebar");
+      if (sidebarElement) {
+        sidebarElement.classList.remove("active");
+      }
     }
+
     const overlayElement = document.querySelector("#responsive-overlay");
     if (overlayElement) {
       overlayElement.classList.remove("active");
     }
+
     if (theme.dataNavLayout === "horizontal" || theme.dataNavStyle === "menu-click" || theme.dataNavStyle === "icon-click") {
       closeMenuFn();
     }

@@ -9,7 +9,7 @@ const icon7 = <i class='bx bxs-heart' ></i>;//wishlist
 
 export const MENUITEMS = [
 	{
-		menutitle: "MAIN",
+		menutitle: "     ",
 	},
 	{
 		title: "Dashboards",
