@@ -1,10 +1,10 @@
 :root {
-    --primary-color: #06295e !important;
-    --hover-color: #015b8f;
-    --accent-color: #0056b3;
-    --background-color: #fffcfc;
-    --text-color: #333;
-  }
+  --primary-color: #223D6E;
+  --hover-color: #01378f;
+  --accent-color: #0056b3;
+  --background-color: #fffcfc;
+  --text-color: #333;
+}
   
   /* Generic Table Styles */
   .generic-table-container {
@@ -185,36 +185,6 @@
       .clear-btn,
       .clear-all-btn {
         margin-right: 10px;
-      }
-    }
-  
-    .show-filters-btn {
-      position: fixed;
-      left: 0px;
-      top: 75%;
-      z-index: 1001;
-      display: flex;
-      align-items: center;
-      background-color: var(--primary-color);
-      font-size: 1rem;
-      color: white;
-      padding: 6px 120px;
-      border: none;
-      border-radius: 0px 0px 300px 300px;
-      cursor: pointer;
-      transform: rotate(-90deg);
-      transform-origin: left top;
-  
-      &:hover {
-        background-color: var(--hover-color);
-      }
-  
-      &.hidden {
-        display: none;
-      }
-  
-      i {
-        margin-right: 8px; /* Space between icon and text */
       }
     }
   
@@ -667,7 +637,7 @@
       z-index: 1001;
       display: flex;
       align-items: center;
-      background-color:#0056b3;
+      background-color:var(--primary-color);
       font-size: 1rem;
       color: white;
       padding: 6px 120px;
@@ -678,7 +648,7 @@
       transform-origin: left top;
   
       &:hover {
-        background-color: #0b2c65;
+        background-color:var(--hover-color);
       }
   
       &.hidden {
