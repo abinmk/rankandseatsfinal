@@ -7,6 +7,30 @@
   align-items: center;
   gap: 1px; /* Reduced gap between elements */
 }
+.dropdown-menu{
+  z-index: 1050 !important;
+  height: fit-content !important;
+  padding: 0px !important;
+}
+
+.sidebar {
+  /* Default state, maybe hidden */
+  display: none !important;
+}
+.menu-icon{
+  font-size: 2rem !important;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+.sidebar.open {
+  /* When toggled open */
+  display: block !important;
+}
+
+.sidebar.close {
+  /* When toggled close */
+  display: none !important;
+}
 
 .user-profile{
   display: flex !important;
@@ -28,8 +52,11 @@
 
 .header-link .profile-icon {
   color: #ffffff;
-  font-size: 1.5rem; /* Adjust icon size */
-  margin: 0% !important;
+  font-size: 1.5rem !important; /* Adjust icon size */
+  margin-right: auto !important;
+  margin-left: auto !important;
+  margin-top: auto !important;
+  margin-bottom: auto !important;
 }
 
 .header-element h3 {
