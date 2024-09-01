@@ -178,8 +178,34 @@
 @media (max-width: 480px) {
   #exam-name ,#counseling{
     font-size: 10px; /* Even smaller font size for very small screens */
-    padding: 3px 6px; /* Tighten padding further */
+    padding: 4px 6px; /* Tighten padding further */
     min-width: 30px; /* Minimum width for very small screens */
+  }
+}
+@media (max-width: 450px) {
+  #exam-name ,#counseling{
+    font-size: 8px; /* Even smaller font size for very small screens */
+    padding: 4px 4px; /* Tighten padding further */
+    min-width: fit-content; /* Minimum width for very small screens */
+    margin:0x !important;
+  }
+    .header-logo img {
+   width: 120px;
+   padding: 0px;
+   margin:0px !important;
+  }
+}
+@media (max-width: 391px) {
+  #exam-name ,#counseling{
+    font-size: 8px; /* Even smaller font size for very small screens */
+    padding: 4px 3px; /* Tighten padding further */
+    min-width: fit-content; /* Minimum width for very small screens */
+    margin:0x !important;
+  }
+    .header-logo img {
+   width: 120px;
+   padding: 0px;
+   margin:0px !important;
   }
 }
 /* Styles for mobile view */
