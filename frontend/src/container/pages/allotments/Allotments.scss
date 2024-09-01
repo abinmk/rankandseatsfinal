@@ -733,6 +733,36 @@
   .custom-modal .modal-body {
     padding: 15px !important;
   }
+  
+  .show-filters-btn {
+    position: fixed;
+    left: 0px;
+    top: 60vh !important;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    background-color:--primary-color;
+    font-size: .6rem !important;
+    color: white;
+    padding: 3px 60px !important;
+    border: none;
+    border-radius: 0px 0px 300px 300px;
+    cursor: pointer;
+    transform: rotate(-90deg);
+    transform-origin: left top;
+
+    &:hover {
+      background-color:var(--hover-color);
+    }
+
+    &.hidden {
+      display: none;
+    }
+
+    i {
+      margin-right: 8px; /* Space between icon and text */
+    }
+  }
 }
 
 @media (max-width: 576px) {

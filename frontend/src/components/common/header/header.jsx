@@ -75,7 +75,38 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
       console.error('Error updating profile:', error);
     }
   };
-  
+
+  const [menuitems, setMenuitems] = useState(MENUITEMS);
+	function closeMenuFn() {
+		const closeMenuRecursively = (items) => {
+			items?.forEach((item) => {
+				item.active = false;
+				closeMenuRecursively(item.children);
+			});
+		};
+		closeMenuRecursively(MENUITEMS);
+		setMenuitems((arr) => [...arr]);
+	}
+
+  function menuClose() {
+    const theme = store.getState();
+    if (window.innerWidth <= 992) {
+      ThemeChanger({ ...theme, toggled: "close" });
+    } else {
+      ThemeChanger({ ...theme, toggled: local_varaiable.toggled ? local_varaiable.toggled : "" });
+    }
+  }
+
+  function closeMenuFn() {
+    const closeMenuRecursively = (items) => {
+      items?.forEach((item) => {
+        item.active = false;
+        closeMenuRecursively(item.children);
+      });
+    };
+    closeMenuRecursively(MENUITEMS);
+    setMenuitems((arr) => [...arr]);
+  }
 
   const location = useLocation();
   const [selectedTab, setSelectedTab] = useState("Allotments");
@@ -112,6 +143,7 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
     } else if (path.includes("dashboard")) {
       setSelectedTab("Dashboard");
     }
+   // menuClose();
   }, [location]);
 
   const handleNotificationClose = (index) => {
@@ -301,7 +333,6 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
         console.log("user selection "+userSelection);
 
         if (userSelection.exam) {
-          console.log("exam data is " + userSelection.exam);
           setExam(userSelection.exam); // Update the exam state with the user's selected exam
         }
 

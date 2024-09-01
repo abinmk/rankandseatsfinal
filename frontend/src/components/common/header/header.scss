@@ -1,18 +1,22 @@
 /* Default styles for desktop view */
-.header-content-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
+.header-content-left,
 .header-content-right {
   display: flex;
+  margin: 0% !important;
+  padding: 0% !important;
   align-items: center;
-  gap: 10px;
+  gap: 1px; /* Reduced gap between elements */
+}
+
+.user-profile{
+  display: flex !important;
+}
+.username-flex{
+  display: flex !important;
 }
 
 .header-logo img {
-  width: 220px; /* Default size for desktop */
+  width: 200px; /* Slightly reduced size */
   border-radius: 10px;
 }
 
@@ -23,8 +27,9 @@
 }
 
 .header-link .profile-icon {
-  font-size: 24px; /* Size of the profile icon */
-  color: #ffffff; /* Icon color */
+  color: #ffffff;
+  font-size: 1.5rem; /* Adjust icon size */
+  margin: 0% !important;
 }
 
 .header-element h3 {
@@ -40,10 +45,9 @@
 .header-container {
   position: relative;
   z-index: 1050 !important;
-  width: 100%;
+  width: 90%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   background-color: #223D6E;
 }
 
@@ -53,7 +57,7 @@
   font-weight: 500;
   align-items: center;
   margin: 0;
-  font-size: 32px;
+  font-size: 1.6rem;
 }
 
 .main-header-container, .app-header {
@@ -78,21 +82,14 @@
   color: #fff;
 }
 
-.exam-selection {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-// #counseling{
-//   min-width: 120px;
-//   width: fit-content !important;
-//   height: 35px;
-// }
-
 .exam-selection select {
-  padding: 5px 10px;
-  font-size: 14px;
+  min-width: 60px;
+  max-width: 100px;
+  width: 100%;
+}
+.exam-selection select {
+  padding: 6px 8px !important;
+  font-size: .8rem !important;
   border-radius: 58px;
   border: 1px solid #ccc;
   background-color: #f8f9fa;
@@ -112,7 +109,7 @@
 .header-element.notifications-dropdown .dropdown-menu .dropdown-item {
   display: flex;
   align-items: center;
-  padding: 10px;
+  padding: 5px;
   border-bottom: 1px solid #f1f1f1;
 }
 
@@ -122,9 +119,6 @@
 
 .header-element.notifications-dropdown .dropdown-menu .dropdown-item img {
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  margin-right: 10px;
 }
 
 .header-element.notifications-dropdown .dropdown-item .notification-text {
@@ -136,114 +130,32 @@
   color: #888;
 }
 
-@media (max-width: 700px) {
-    .header-logo img {
-      width: 150px;
-    //display: none; /* Hide the logo in mobile view */
-  }
-  .form-select
-  {
-    width: fit-content;
-    font-size: .1rem;
-  }
-  .dropdown-menu{
-    width: 10px;
-  }
-}
-
 /* General styles for the #exam-name dropdown */
-#exam-name , #counseling {
+#exam-name, #counseling {
   font-size: 10px;
-  padding: 4px 8px; /* Reduce padding for a smaller dropdown */
-  border-radius: 60px; /* Slightly rounded corners */
-  border: 1px solid #ccc; /* Keep a light border for visibility */
+  padding: 3.5px 8px !important;
+  border-radius: 60px;
+  border: 1px solid #ccc;
   appearance: none;
-  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns%3D%22http%3A//www.w3.org/2000/svg%22 viewBox%3D%220 0 4 5%22%3E%3Cpath fill%3D%22%23ffffff%22 d%3D%22M2 0L0 2h4zM0 3l2 2 2-2z%22/%3E%3C/svg%3E'); /* Custom icon */
+  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns%3D%22http%3A//www.w3.org/2000/svg%22 viewBox%3D%220 0 4 5%22%3E%3Cpath fill%3D%22%23ffffff%22 d%3D%22M2 0L0 2h4zM0 3l2 2 2-2z%22/%3E%3C/svg%3E');
   background-repeat: no-repeat;
   background-position: right 10px center;
   background-size: 8px;
-  min-width: 100px; /* Set a default minimum width */
-  width: auto; /* Allow the width to adjust based on content */
-}
-
-/* Responsive styles to reduce the size further on smaller screens */
-@media (max-width: 525px) {
-  #exam-name ,#counseling{
-    font-size: 10px; /* Further reduce font size */
-    padding: 3px 6px; /* Reduce padding for a smaller dropdown */
-    min-width: 80px; /* Adjust minimum width for mobile */
-  }
-}
-
-@media (max-width: 480px) {
-  #exam-name ,#counseling{
-    font-size: 10px; /* Even smaller font size for very small screens */
-    padding: 4px 6px; /* Tighten padding further */
-    min-width: 30px; /* Minimum width for very small screens */
-  }
-}
-@media (max-width: 450px) {
-  #exam-name ,#counseling{
-    font-size: 8px; /* Even smaller font size for very small screens */
-    padding: 4px 4px; /* Tighten padding further */
-    min-width: fit-content; /* Minimum width for very small screens */
-    margin:0x !important;
-  }
-    .header-logo img {
-   width: 120px;
-   padding: 0px;
-   margin:0px !important;
-  }
-}
-@media (max-width: 391px) {
-  #exam-name ,#counseling{
-    font-size: 8px; /* Even smaller font size for very small screens */
-    padding: 4px 3px; /* Tighten padding further */
-    min-width: fit-content; /* Minimum width for very small screens */
-    margin:0x !important;
-  }
-    .header-logo img {
-   width: 120px;
-   padding: 0px;
-   margin:0px !important;
-  }
-}
-/* Styles for mobile view */
-@media (max-width: 768px) {
-  // .header-logo img {
-  //   display: none; /* Hide the logo in mobile view */
-  // }
-
-  #selectedTab {
-    display: none; /* Hide the header name on mobile */
-  }
-
-  // .mainuserProfile {
-  //   float: left;
-  //   margin-right: 10px;
-  // }
-}
-
-@media (max-width: 1200px) { 
-  // .user-name {
-  //   display: none !important;
-  // }
-  #selectedTab {
-    display: none; /* Hide the header name on mobile */
-  }
+  min-width: 100px !important;
+  margin: 0% !important;
 }
 
 /* Custom Dropdown Styles */
 .exam-selection-container {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 5px; /* Reduced gap between elements */
 }
 
 .custom-dropdown {
-  background-color: #223D6E; /* Match background to your project's color scheme */
+  background-color: #223D6E;
   color: #ffffff;
-  border: 1px solid #4a5f85; /* Slight border for better visibility */
+  border: 1px solid #4a5f85;
   border-radius: 18px;
   padding: 8px 16px;
   display: flex;
@@ -254,7 +166,7 @@
 }
 
 .custom-dropdown:hover {
-  background-color: #1b3558; /* Slight hover effect */
+  background-color: #1b3558;
   color: #ffffff;
 }
 
@@ -279,12 +191,11 @@
   color: #223D6E;
 }
 
-
 .exam-selection {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 5px; /* Reduced gap between elements */
 }
 
 .form-select {
@@ -319,3 +230,279 @@
   color: #223D6E;
   background-color: white;
 }
+
+/* Adjust logo size and margins */
+.header-logo img {
+  width: 150px;
+  margin: 0;
+  padding: 0;
+}
+
+/* Adjust padding and margin for smaller screens */
+.header-content-left, .header-content-right {
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Reduce gap */
+  flex-wrap: nowrap; /* Prevent wrapping */
+}
+
+/* Ensure profile icon is visible */
+.profile-icon {
+  font-size: 1.5rem !important;
+  margin: 0% !important;
+}
+
+
+
+/* Ensure that the profile dropdown fits well */
+.mainuserProfile {
+  margin: 0% !important;
+  padding: 0% !important;
+  .header-link.dropdown-toggle {
+    display: flex;
+    padding: 0% !important;
+    align-items: center;
+    gap: 1px;
+    margin: 0px !important;
+  }
+}
+
+/* Ensure full-width dropdown on small screens */
+.header-element.notifications-dropdown .dropdown-menu {
+  margin: 0px !important;
+  width: 100%; /* Ensure dropdown takes full width on mobile *//* Align to the right */
+  left: auto; /* Reset left alignment */
+}
+
+
+
+/* Header Container */
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #223D6E;
+  padding: 0.5rem 1rem;
+  position: relative;
+  z-index: 1050;
+  width: 100%;
+}
+
+.header-content-left,
+.header-content-right {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: nowrap;
+}
+
+.header-logo img {
+  width: 190px;
+  border-radius: 10px;
+}
+
+.header-element h2, .header-element h3 {
+  margin: 0;
+  color: #fff;
+}
+
+.header-element h2 {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.header-element h3 {
+  font-size: 18px;
+  font-weight: normal;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.profile-icon {
+  color: #ffffff;
+  font-size: 1.5rem !important;
+  margin: 0% !important;
+}
+
+.mainuserProfile {
+  display: flex;
+  align-items: center;
+}
+
+.mainuserProfile .header-link.dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+}
+.user-name-unit{
+  display: flex;
+}
+
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (max-width: 1200px) {
+  /* Your styles here */
+}
+
+@media (max-width: 1080px) {
+  #selectedTab{
+    font-size: 1.5rem !important;
+  }
+}
+
+@media (max-width: 1000px) {
+  #selectedTab{
+    display: none !important;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (max-width: 680px) {
+  /* Your styles here */
+  .user-name{
+    display: none !important;
+  }
+}
+
+/* Adjust dropdown size for screens up to 600px */
+@media (max-width: 600px) {
+  #exam-name, #counseling {
+    font-size: 0.7rem !important;
+    max-width: fit-content !important;
+    padding: 2.5px 8px !important;
+    width: 100%; /* Make the dropdown full-width */
+    box-sizing: border-box; /* Ensure padding is included in the width */
+  }
+
+  .header-logo img {
+    height: 35px !important;
+    width: auto;
+  }
+
+  .profile-icon{
+    font-size: 1.3rem !important;
+  }
+
+  .header-element.notifications-dropdown .dropdown-menu .dropdown-item img {
+    margin: 0% !important;
+    padding: 0% !important;
+    width: 50%;
+  }
+
+  .form-select {
+    //width: 100%; /* Ensure form-select takes up full available width */
+    padding: 0% !important;
+    margin: 0% !important;
+  }
+}
+
+/* Adjust dropdown size for screens up to 480px */
+/* Adjust dropdown size for screens up to 480px */
+@media (max-width: 480px) {
+
+  select#exam-name, select#counseling {
+    font-size: 0.6rem !important;
+    padding: 2.5px 8px !important;
+    width: 100% !important; /* Force the dropdown to take up the full width of its container */
+    max-width: 100px !important; /* Set a maximum width to restrict its size */
+    box-sizing: border-box !important; /* Ensure padding is included in the width calculation */
+    min-width: 70px !important;
+  }
+
+  .header-logo img {
+    height: 30px !important;
+    width: auto;
+  }
+  
+  .header-container {
+    margin: 0% !important;
+    padding: 0% !important;
+  }
+}
+@media (max-width: 380px) {
+
+  select#exam-name, select#counseling {
+    font-size: 0.5rem !important;
+    padding: 2.5px 8px !important;
+    width: 100% !important; /* Force the dropdown to take up the full width of its container */
+    max-width: 100px !important; /* Set a maximum width to restrict its size */
+    box-sizing: border-box !important; /* Ensure padding is included in the width calculation */
+    min-width: 60px !important;
+  }
+
+  .header-logo img {
+    height: 30px !important;
+    width: auto;
+  }
+  
+  .header-container {
+    margin: 0% !important;
+    padding: 0% !important;
+  }
+  .profile-icon{
+    font-size: 1.2rem !important;
+  }
+}
+
+@media (max-width: 360px) {
+
+  select#exam-name, select#counseling {
+    font-size: 0.5rem !important;
+    padding: 2px 8px !important;
+    width: 100% !important; /* Force the dropdown to take up the full width of its container */
+    max-width: 100px !important; /* Set a maximum width to restrict its size */
+    box-sizing: border-box !important; /* Ensure padding is included in the width calculation */
+    min-width: 60px !important;
+  }
+
+  .header-logo img {
+    height: 25px !important;
+    width: auto;
+  }
+  
+  .header-container {
+    margin: 0% !important;
+    padding: 0% !important;
+  }
+
+  .profile-icon{
+    font-size: 1.2rem !important;
+  }
+}
+
+@media (max-width: 340px) {
+
+  select#exam-name, select#counseling {
+    font-size: 0.5rem !important;
+    padding: 1.8px 8px !important;
+    width: 100% !important; /* Force the dropdown to take up the full width of its container */
+    max-width: 100px !important; /* Set a maximum width to restrict its size */
+    box-sizing: border-box !important; /* Ensure padding is included in the width calculation */
+    min-width: 60px !important;
+  }
+
+  .header-logo img {
+    height: 22px !important;
+    width: auto;
+  }
+  .profile-icon{
+    font-size: 1.2rem !important;
+  }
+  .header-container {
+    margin: 0% !important;
+    padding: 0% !important;
+  }
+}
+
+/* Adjust dropdown size for screens up to 400px */
+// @media (max-width: 400px) {
+//   #exam-name, #counseling {
+//     font-size: 0.5rem !important;
+//     padding: 1px 4px !important;
+//     width: 100%; /* Make the dropdown full-width */
+//     max-width: fit-content !important;
+//   }
+// }
