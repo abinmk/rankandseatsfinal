@@ -52,7 +52,7 @@
     }
 
     .table-container {
-      height: calc(100vh - 140px);
+      height: calc(100vh - 170px);
       width: 95%;
       overflow: hidden;
       box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
@@ -732,6 +732,12 @@
     flex-direction: column !important;
   }
 
+  .table-container{
+    width: 90% !important;
+    margin-top: auto !important;
+    margin-bottom: auto !important;
+  }
+
   .custom-modal .modal-body {
     padding: 15px !important;
   }
@@ -782,6 +788,11 @@
 
   .custom-modal .modal-body {
     padding: 10px !important;
+  }
+  .table-container{
+    width: 90% !important;
+    margin-top: auto !important;
+    margin-bottom: auto !important;
   }
 }
 

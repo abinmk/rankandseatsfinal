@@ -5,6 +5,7 @@ import { Table, Modal, Button, Form, Pagination } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FaHeart } from 'react-icons/fa';
 import axios from 'axios';
+import "./ChoiceList.scss";
 
 const GenericTable = ({
   columns,
