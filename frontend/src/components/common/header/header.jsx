@@ -252,7 +252,7 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
                 <img src={desktoplogo} alt="logo" className="desktop-logo" />
               </Link>
             </div>
-            <div className="exam-selection d-flex ms-3">
+            <div className="exam-selection d-flex">
               <select value={exam} onChange={handleExamChange} className="form-select me-2" id="exam-name">
                 <option value="NEET_PG">NEET PG</option>
               </select>
@@ -321,12 +321,12 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
             </div>
             <Dropdown className="mainuserProfile">
               <Dropdown.Toggle variant="" as="a" className="header-link dropdown-toggle" id="mainHeaderProfile" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                <div className="d-flex align-items-center">
-                  <div className="d-sm-flex wd-100p">
+                <div className="d-flex">
+                  <div className="d-sm-flex  profile-icon-div">
                     <div className="avatar avatar-sm">
-                      <FaUserCircle className="profile-icon" />
+                      <FaUserCircle className="profile-icon-custom" />
                     </div>
-                    <div className="ms-2 my-auto d-none d-xl-flex">
+                    <div className="ms-2 my-auto user-name-div">
                       <h6 className="font-weight-semibold mb-0 fs-13 user-name d-sm-block d-none">
                         {user ? user.name : "Guest"}
                       </h6>

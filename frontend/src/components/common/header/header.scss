@@ -50,7 +50,7 @@
   margin: 0;
 }
 
-.header-link .profile-icon {
+.header-link .profile-icon-custom {
   color: #ffffff;
   font-size: 1.5rem !important; /* Adjust icon size */
   margin-right: auto !important;
@@ -273,12 +273,6 @@
   flex-wrap: nowrap; /* Prevent wrapping */
 }
 
-/* Ensure profile icon is visible */
-.profile-icon {
-  font-size: 1.5rem !important;
-  margin: 0% !important;
-}
-
 
 
 /* Ensure that the profile dropdown fits well */
@@ -347,10 +341,13 @@
   white-space: nowrap;
 }
 
-.profile-icon {
+.profile-icon-custom{
   color: #ffffff;
   font-size: 1.5rem !important;
   margin: 0% !important;
+}
+.profile-icon-div{
+  margin-left:10px !important ;
 }
 
 .mainuserProfile {
@@ -367,6 +364,14 @@
 .user-name-unit{
   display: flex;
 }
+
+.user-name-div{
+  display: block !important;
+}
+
+// @media (min-width: 720px) {
+
+// }
 
 
 /* Extra large devices (large desktops, 1200px and up) */
@@ -392,6 +397,13 @@
   .user-name{
     display: none !important;
   }
+
+  .profile-icon-div{
+    margin-right:10px !important ;
+  }
+  .header-container{
+    display: none !important;
+  }
 }
 
 /* Adjust dropdown size for screens up to 600px */
@@ -407,10 +419,6 @@
   .header-logo img {
     height: 35px !important;
     width: auto;
-  }
-
-  .profile-icon{
-    font-size: 1.3rem !important;
   }
 
   .header-element.notifications-dropdown .dropdown-menu .dropdown-item img {
@@ -445,8 +453,13 @@
   }
   
   .header-container {
+    display: none;
     margin: 0% !important;
     padding: 0% !important;
+  }
+  .profile-icon-custom{
+    font-size: 1rem !important;
+    width: 1.2rem !important;
   }
 }
 @media (max-width: 380px) {
@@ -468,9 +481,6 @@
   .header-container {
     margin: 0% !important;
     padding: 0% !important;
-  }
-  .profile-icon{
-    font-size: 1.2rem !important;
   }
 }
 
@@ -494,10 +504,6 @@
     margin: 0% !important;
     padding: 0% !important;
   }
-
-  .profile-icon{
-    font-size: 1.2rem !important;
-  }
 }
 
 @media (max-width: 340px) {
@@ -514,9 +520,6 @@
   .header-logo img {
     height: 22px !important;
     width: auto;
-  }
-  .profile-icon{
-    font-size: 1.2rem !important;
   }
   .header-container {
     margin: 0% !important;
