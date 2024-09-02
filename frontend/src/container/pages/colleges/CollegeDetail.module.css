@@ -150,6 +150,10 @@
 .totalCoursesContainer svg {
   margin-right: 10px !important;
 }
+.totalSeats{
+  font-size: 1.1rem !important;
+  font-weight: 800;
+}
 
 /* button {
   background-color: #002e5b !important;

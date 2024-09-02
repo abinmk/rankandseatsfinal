@@ -24,6 +24,14 @@
   }
 }
 
+a.side-menu__item:hover{
+  color: #007bff !important;
+ 
+}
+.app-sidebar{
+  z-index: 1050 !important;
+}
+
 .side-menu__icon {
   margin-right: .4rem !important;
   font-size: 1.4rem !important; /* Increase icon size */
@@ -34,13 +42,16 @@
   }
 
 &:hover {
-  color: #007bff !important; /* Change text color for active item */
+  a.side-menu__item:hover{
+    color: #007bff !important;
+   
+  }
 }
 }
 
 .side-menu__label {
   flex-grow: 1 !important;
-  font-size: 1.1rem !important; /* Increase label font size */
+  font-size: 1.2rem !important; /* Increase label font size */
   display: flex !important;
   align-items: center !important;
   &.active {
@@ -52,6 +63,8 @@
 }
 
 .main-menu-container {
+  // margin-top: 10vh !important;
+  z-index: 1050 !important;
   .main-menu {
       .slide__category {
           padding: 1.1rem 1.1rem 0.6rem !important; /* Adjust padding */
@@ -73,8 +86,12 @@
 
 .main-menu .side-menu__item.active {
   font-size: 24px !important; /* Increase font size */
-  color:  #007bff !important; /* Add a left border to the active item */
+  color:  rgb(0, 94, 255) !important; /* Add a left border to the active item */
 }
+.main-menu .side-menu__item.active .side-menu__label{
+  color:  rgb(0, 94, 255) !important; /* Add a left border to the active item */ 
+}
+
 
 @media (max-width: 992px) {
   .sidebar {

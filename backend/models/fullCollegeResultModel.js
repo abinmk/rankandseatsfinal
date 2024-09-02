@@ -18,6 +18,7 @@ const fullCollegeResultSchema = new mongoose.Schema({
     courses: [
         {
             courseName: String,
+            totalSeatsInCourse:Number,
             quotas: [
                 {
                     quota: String,

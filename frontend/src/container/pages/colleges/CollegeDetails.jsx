@@ -93,13 +93,14 @@ const CollegeDetail = () => {
               <Accordion.Item eventKey={courseIndex.toString()} key={courseIndex}>
                 <Accordion.Header>{course.courseName}</Accordion.Header>
                 <Accordion.Body>
+                <div className={styles.totalSeats}>Total seats : {course.totalSeatsInCourse}</div>
+                <br></br>
                   <div className="table-responsive">
                     <table className={`table ${styles.smallFont} table-striped table-bordered`}>
                       <thead className={styles.tableHeader}>
                         <tr>
                           <th>Quota</th>
                           <th>Course Fee</th>
-                          <th>NRI Fee</th>
                           <th>Stipend Year 1</th>
                           <th>Stipend Year 2</th>
                           <th>Stipend Year 3</th>
@@ -113,7 +114,6 @@ const CollegeDetail = () => {
                           <tr key={quotaIndex}>
                             <td>{quota.quota}</td>
                             <td>₹{quota.courseFee}</td>
-                            <td>₹{quota.nriFee}</td>
                             <td>₹{quota.stipendYear1}</td>
                             <td>₹{quota.stipendYear2}</td>
                             <td>₹{quota.stipendYear3}</td>

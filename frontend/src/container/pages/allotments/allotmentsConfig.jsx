@@ -29,7 +29,7 @@ export const allotmentsColumns = [
         href={`/college/${encodeURIComponent(value)}`}
         target="_blank"
         rel="noopener noreferrer"
-        style={{ color: 'blue', textDecoration: 'underline' }}
+        style={{ color: 'blue', textDecoration: 'none' }}
       >
         {value}
       </a>

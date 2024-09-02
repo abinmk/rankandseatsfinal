@@ -280,7 +280,7 @@ const GenericTable = ({
             <td key={key} {...rest}>
               {cell.column.id === 'collegeName' ? (
                 <span
-                  style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}
+                  style={{ cursor: 'pointer', color: 'blue', textDecoration: 'none' }}
                   onClick={(e) => {
                     e.stopPropagation(); // Prevent triggering the row click
                     handleCollegeClick(row.original.collegeName);

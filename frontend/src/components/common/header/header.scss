@@ -8,13 +8,15 @@
   gap: 1px; /* Reduced gap between elements */
 }
 .dropdown-menu{
-  z-index: 1050 !important;
+  z-index: 800 !important;
   height: fit-content !important;
   padding: 0px !important;
 }
 
 .sidebar {
   /* Default state, maybe hidden */
+  z-index: 1050 !important;
+
   display: none !important;
 }
 .menu-icon{
@@ -71,7 +73,7 @@
 
 .header-container {
   position: relative;
-  z-index: 1050 !important;
+  z-index: 800 !important;
   width: 90%;
   display: flex;
   align-items: center;
@@ -90,6 +92,7 @@
 .main-header-container, .app-header {
   background-color: rgb(34, 61, 110) !important;
   width: 100%;
+  z-index: 800 !important;
   display: flex;
 }
 
@@ -305,7 +308,7 @@
   background-color: #223D6E;
   padding: 0.5rem 1rem;
   position: relative;
-  z-index: 1050;
+  z-index: 800 !important;
   width: 100%;
 }
 

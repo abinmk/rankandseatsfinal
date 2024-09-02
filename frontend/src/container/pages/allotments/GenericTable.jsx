@@ -260,7 +260,7 @@ const GenericTable = ({
                           <td key={key} {...rest}>
                             {cell.column.id === 'allottedInstitute' ? (
                               <span
-                                style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}
+                                style={{ cursor: 'pointer', color: 'blue', textDecoration: 'none' }}
                                 onClick={(e) => {
                                   e.stopPropagation(); // Prevent row click event
                                   handleCollegeClick(row);
@@ -408,11 +408,10 @@ const GenericTable = ({
 
         <div className="section">
           <div className="section-header">
-            <h5>Financial Information</h5>
+            <h5>Fee & Stipend</h5>
           </div>
           <div className="section-content">
             <p><strong>Fee Amount:</strong> ₹{selectedRowData.feeAmount}</p>
-            <p><strong>NRI Fee:</strong> ₹{selectedRowData.nriFee}</p>
             <p><strong>Stipend Year 1:</strong> ₹{selectedRowData.stipendYear1}</p>
             <p><strong>Stipend Year 2:</strong> ₹{selectedRowData.stipendYear2}</p>
             <p><strong>Stipend Year 3:</strong> ₹{selectedRowData.stipendYear3}</p>
@@ -424,7 +423,7 @@ const GenericTable = ({
             <h5>Bond and Penalty</h5>
           </div>
           <div className="section-content">
-            <p><strong>Bond Year:</strong> {selectedRowData.bondYear}</p>
+            <p><strong>Bond (in years):</strong> {selectedRowData.bondYear}</p>
             <p><strong>Bond Penalty:</strong> ₹{selectedRowData.bondPenality}</p>
             <p><strong>Seat Leaving Penalty:</strong> ₹{selectedRowData.seatLeavingPenality}</p>
           </div>
