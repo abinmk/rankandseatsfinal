@@ -817,7 +817,7 @@
 
 @media (max-width: 576px) {
   .custom-modal .modal-dialog {
-    width: 95% !important; /* Further reduce width for extra small screens */
+    width: 100% !important; /* Further reduce width for extra small screens */
     margin: 0 auto !important; /* Ensure horizontal centering */
   }
 
