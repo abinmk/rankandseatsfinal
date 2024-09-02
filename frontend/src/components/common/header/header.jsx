@@ -267,7 +267,7 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
             <h3 className="ms-3" id="selectedTab">{selectedTab}</h3>
           </div>
           <div className="header-content-right">
-            <Dropdown className="header-element notifications-dropdown" autoClose="outside">
+            {/* <Dropdown className="header-element notifications-dropdown" autoClose="outside">
               <Dropdown.Toggle variant='' className="header-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" id="messageDropdown" aria-expanded="false">
                 <i className="bx bx-bell bx-flip-horizontal header-link-icon ionicon"></i>
                 <span className="badge bg-info rounded-pill header-icon-badge pulse pulse-secondary" id="notification-icon-badge">{notifications.length}</span>
@@ -309,7 +309,7 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
                   </SimpleBar>
                 </ul>
               </Dropdown.Menu>
-            </Dropdown>
+            </Dropdown> */}
             <div className="header-element header-fullscreen">
               <Link aria-label="anchor" onClick={toggleFullScreen} to="#" className="header-link">
                 {fullScreen ? (

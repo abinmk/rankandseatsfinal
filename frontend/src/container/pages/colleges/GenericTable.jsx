@@ -5,6 +5,7 @@ import { Table, Modal, Button, Form, Pagination } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import CustomPopup from '../custom-popup/custom-popup-filter';
+import "./Colleges.scss";
 
 const GenericTable = ({
   data,
@@ -179,7 +180,7 @@ const GenericTable = ({
   };
 
   return (
-    <div className="allotments-container">
+    <div className="colleges-container">
       <FilterSection
         disabled={disabled}
         showFilters={showFilters}

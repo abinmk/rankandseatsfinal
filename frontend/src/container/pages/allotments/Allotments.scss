@@ -574,7 +574,6 @@
       }
     }
   }
-
   .show-filters-btn {
     position: fixed;
     left: 0px;
@@ -582,7 +581,7 @@
     z-index: 100;
     display: flex;
     align-items: center;
-    background-color:--primary-color;
+    background-color:var(--primary-color);
     font-size: 1rem;
     color: white;
     padding: 6px 120px;
@@ -638,6 +637,9 @@
     }
   }
 }
+
+
+
 
 .custom-modal .modal-header {
   background-color: #003366 !important; /* Navy blue background */
@@ -741,7 +743,7 @@
     z-index: 100;
     display: flex;
     align-items: center;
-    background-color:--primary-color;
+    background-color:--primary-color !important;
     font-size: .8rem !important;
     color: white;
     padding: 8px 60px !important;

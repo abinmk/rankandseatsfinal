@@ -1,187 +1,202 @@
 .collegeDetailContainer {
-  background-color: #f4f7fa;
-  max-width: 80%;
-  margin: 20px auto;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  font-family: 'Roboto', sans-serif;
-  color: #333;
+  background-color: #f4f7fa !important;
+  max-width: 75% !important; /* Default width for large screens */
+  margin: 20px auto !important;
+  padding: 20px !important;
+  border-radius: 15px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+  font-family: 'Roboto', sans-serif !important;
+  color: #333 !important;
 }
 
 .topSection {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #ffffff;
-  border-radius: 15px;
-  padding: 20px;
-  border: 1px solid #ddd;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  display: flex !important;
+  flex-direction: column !important; /* Stack elements for better mobile layout */
+  justify-content: space-between !important;
+  align-items: flex-start !important; /* Align items to the start for better readability */
+  background-color: #ffffff !important;
+  border-radius: 15px !important;
+  padding: 15px !important; /* Reduced padding for mobile */
+  border: 1px solid #ddd !important;
+  margin-bottom: 20px !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
 }
 
 .collegeHeader {
-  background-color: #002e5b;
-  color: white;
-  padding: 20px;
-  border-radius: 12px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  background-color: #002e5b !important;
+  color: white !important;
+  padding: 15px !important; /* Reduced padding for mobile */
+  border-radius: 12px !important;
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important; /* Stack content vertically */
+  align-items: flex-start !important; /* Align items to the start for better readability */
 }
 
-.collegeHeader h1 {
-  font-size: 28px;
-  font-weight: bold;
-  margin: 0;
+.headerCollegeName {
+  font-size: 2rem !important; /* Larger font size for desktop */
+  font-weight: bold !important;
+  margin: 0 !important;
 }
 
-.collegeHeader .badges {
-  display: flex;
-  gap: 20px;
-}
-
-.badge-custom {
-  background-color: #f7931e;
-  color: white;
-  padding: 10px 15px;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 500;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.badges {
+  display: flex !important;
+  gap: 10px !important; /* Reduced gap between badges for mobile */
+  flex-wrap: wrap !important; /* Allow badges to wrap if necessary */
+  margin-top: 10px !important; /* Add space between header and badges */
 }
 
 .detailSection {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin-top: 20px;
-  gap: 20px;
+  display: flex !important;
+  flex-direction: column !important; /* Stack columns for better mobile layout */
+  justify-content: space-between !important;
+  margin-top: 20px !important;
+  gap: 20px !important;
 }
 
 .detailsColumn {
-  flex: 1;
-  min-width: 300px;
-  background-color: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  border: 1px solid #ddd;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  flex: 1 !important;
+  min-width: 100% !important; /* Full width on mobile */
+  background-color: #fff !important;
+  border-radius: 12px !important;
+  padding: 15px !important; /* Reduced padding for mobile */
+  border: 1px solid #ddd !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
 }
 
 .detailsColumn p {
-  margin: 12px 0;
-  font-size: 16px;
-  color: #555;
-  display: flex;
-  align-items: center;
+  margin: 12px 0 !important;
+  font-size: 16px !important;
+  color: #555 !important;
+  display: flex !important;
+  align-items: center !important;
 }
 
 .detailsColumn p strong {
-  margin-right: 5px;
+  margin-right: 5px !important;
 }
 
 .detailsColumn p svg {
-  margin-right: 10px;
-  color: #002e5b;
+  margin-right: 10px !important;
+  color: #002e5b !important;
 }
 
 .mapContainer {
-  width: 400px;
-  height: 250px;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: 100% !important; /* Full width on mobile */
+  height: 40vh !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
 }
 
 .coursesSection {
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 15px;
-  border: 1px solid #ddd;
-  margin-top: 30px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  background-color: #ffffff !important;
+  padding: 20px !important;
+  border-radius: 15px !important;
+  border: 1px solid #ddd !important;
+  margin-top: 30px !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
 }
 
 .coursesSection h2 {
-  margin-bottom: 20px;
-  font-size: 22px;
-  font-weight: bold;
-  color: #002e5b;
+  margin-bottom: 20px !important;
+  font-size: 22px !important;
+  font-weight: bold !important;
+  color: #002e5b !important;
 }
 
 .tableHeader {
-  background-color: #002e5b;
-  color: white;
-  font-weight: bold;
+  background-color: #002e5b !important;
+  color: white !important;
+  font-weight: bold !important;
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
-  background-color: #f9f9f9;
+  background-color: #f9f9f9 !important;
 }
 
 .totalSeatsContainer {
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border: 1px solid #ddd;
-  margin-top: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  background-color: #ffffff !important;
+  padding: 20px !important;
+  border-radius: 12px !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  border: 1px solid #ddd !important;
+  margin-top: 20px !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
 }
 
 .totalSeatsContainer p {
-  font-size: 20px;
-  font-weight: bold;
-  color: #555;
+  font-size: 20px !important;
+  font-weight: bold !important;
+  color: #555 !important;
 }
 
 .totalSeatsContainer .seatsCount {
-  font-size: 48px;
-  font-weight: bold;
-  color: #002e5b;
+  font-size: 48px !important;
+  font-weight: bold !important;
+  color: #002e5b !important;
 }
 
 .totalCoursesContainer p {
-  font-size: 18px;
-  font-weight: bold;
-  color: #002e5b;
-  display: flex;
-  align-items: center;
+  font-size: 18px !important;
+  font-weight: bold !important;
+  color: #002e5b !important;
+  display: flex !important;
+  align-items: center !important;
 }
 
 .totalCoursesContainer svg {
-  margin-right: 10px;
+  margin-right: 10px !important;
 }
 
-button {
-  background-color: #002e5b;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease;
-}
+/* button {
+  background-color: #002e5b !important;
+  color: white !important;
+  border: none !important;
+  padding: 10px 20px !important;
+  border-radius: 8px !important;
+  font-size: 16px !important;
+  font-weight: bold !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important;
+  transition: background-color 0.3s ease !important;
+} 
 
 button:hover {
-  background-color: #cde5ff;
-}
+  background-color: #cde5ff !important;
+} */
 
 .smallFont {
-  font-size: 14px;
+  font-size: 14px !important;
 }
 
 
-.headerCollegeName{
-  font-size: 2rem !important; /* Example style */
-  color: #ffffff; /* Ensure the color is correctly set */
-  font-weight: bold; /* Adjust weight if needed */
+@media (max-width: 768px) {
+  .collegeDetailContainer {
+    max-width: 100% !important; /* Utilize more area on mobile */
+    padding: 15px !important;
+  }
+
+  .headerCollegeName {
+    font-size: 1.5rem !important; /* Slightly smaller for mobile */
+  }
+
+  .detailSection {
+    flex-direction: column !important; /* Stack elements for better mobile layout */
+  }
+
+  .detailsColumn {
+    min-width: 100% !important;
+    padding: 15px !important;
+  }
+
+  .mapContainer {
+    width: 100% !important; /* Full width on mobile */
+  }
+
+  .table-responsive {
+    overflow-x: auto !important; /* Make table scrollable horizontally on mobile */
+  }
 }

@@ -198,7 +198,7 @@ const GenericTable = ({
         clearAllFilters={clearAllFilters}
       />
       <div className={`results-section ${showFilters ? "" : "full-width"}`}>
-        <button className={`show-filters-btn ${showFilters ? "hidden" : ""}`} onClick={toggleFilters} id='view-btn'>
+        <button className={`show-filters-btn ${showFilters ? "hidden" : ""}`} onClick={toggleFilters}>
           <i className="bi bi-funnel"></i> All Filters
         </button>
         <div className="table-container">

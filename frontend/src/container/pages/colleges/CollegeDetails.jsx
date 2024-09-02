@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Accordion, Card } from 'react-bootstrap';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-import { FaUniversity, FaTrain, FaPlane, FaGlobe, FaMapMarkerAlt, FaBed, FaPhone, FaClipboardList, FaMap, FaCalendar, FaBuilding } from 'react-icons/fa';
+import { FaUniversity, FaTrain, FaPlane, FaGlobe, FaMapMarkerAlt, FaBed, FaPhone, FaClipboardList, FaCalendar } from 'react-icons/fa';
 import styles from './CollegeDetail.module.css';
 
 const CollegeDetail = () => {
@@ -93,36 +93,38 @@ const CollegeDetail = () => {
               <Accordion.Item eventKey={courseIndex.toString()} key={courseIndex}>
                 <Accordion.Header>{course.courseName}</Accordion.Header>
                 <Accordion.Body>
-                  <table className={`table ${styles.smallFont} table-striped table-bordered`}>
-                    <thead className={styles.tableHeader}>
-                      <tr>
-                        <th>Quota</th>
-                        <th>Course Fee</th>
-                        <th>NRI Fee</th>
-                        <th>Stipend Year 1</th>
-                        <th>Stipend Year 2</th>
-                        <th>Stipend Year 3</th>
-                        <th>Bond Year</th>
-                        <th>Bond Penalty</th>
-                        <th>Seat Leaving Penalty</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {course.quotas.map((quota, quotaIndex) => (
-                        <tr key={quotaIndex}>
-                          <td>{quota.quota}</td>
-                          <td>₹{quota.courseFee}</td>
-                          <td>₹{quota.nriFee}</td>
-                          <td>₹{quota.stipendYear1}</td>
-                          <td>₹{quota.stipendYear2}</td>
-                          <td>₹{quota.stipendYear3}</td>
-                          <td>{quota.bondYear} years</td>
-                          <td>₹{quota.bondPenality}</td>
-                          <td>₹{quota.seatLeavingPenality}</td>
+                  <div className="table-responsive">
+                    <table className={`table ${styles.smallFont} table-striped table-bordered`}>
+                      <thead className={styles.tableHeader}>
+                        <tr>
+                          <th>Quota</th>
+                          <th>Course Fee</th>
+                          <th>NRI Fee</th>
+                          <th>Stipend Year 1</th>
+                          <th>Stipend Year 2</th>
+                          <th>Stipend Year 3</th>
+                          <th>Bond Year</th>
+                          <th>Bond Penalty</th>
+                          <th>Seat Leaving Penalty</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {course.quotas.map((quota, quotaIndex) => (
+                          <tr key={quotaIndex}>
+                            <td>{quota.quota}</td>
+                            <td>₹{quota.courseFee}</td>
+                            <td>₹{quota.nriFee}</td>
+                            <td>₹{quota.stipendYear1}</td>
+                            <td>₹{quota.stipendYear2}</td>
+                            <td>₹{quota.stipendYear3}</td>
+                            <td>{quota.bondYear} years</td>
+                            <td>₹{quota.bondPenality}</td>
+                            <td>₹{quota.seatLeavingPenality}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </Accordion.Body>
               </Accordion.Item>
             ))}
