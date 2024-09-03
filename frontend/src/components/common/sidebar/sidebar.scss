@@ -44,14 +44,12 @@ a.side-menu__item:hover{
 &:hover {
   a.side-menu__item:hover{
     color: #007bff !important;
-   
+  }
   }
 }
-}
-
 .side-menu__label {
   flex-grow: 1 !important;
-  font-size: 1.2rem !important; /* Increase label font size */
+  font-size: 1rem !important; /* Increase label font size */
   display: flex !important;
   align-items: center !important;
   &.active {
