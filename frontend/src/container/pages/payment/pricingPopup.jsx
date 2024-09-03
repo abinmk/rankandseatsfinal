@@ -76,7 +76,7 @@ const PricingPopup = () => {
       prefill: {
         name: user.name,
         email: user.email,
-        contact: user.phone,
+        contact: user.mobileNumber,
       },
       theme: {
         color: '#3399cc',

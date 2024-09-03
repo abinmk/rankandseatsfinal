@@ -12,7 +12,6 @@
   color: #555 !important;
   display: flex !important;
   align-items: center !important;
-  z-index: 1050; /* Ensure it appears above other elements */
   transition: background-color 0.3s, color 0.3s !important;
 
   &.active {
@@ -28,8 +27,9 @@ a.side-menu__item:hover{
   color: #007bff !important;
  
 }
-.app-sidebar{
-  z-index: 1050 !important;
+
+.main-sidebar{
+  z-index: 9999 !important;
 }
 
 .side-menu__icon {
@@ -61,8 +61,6 @@ a.side-menu__item:hover{
 }
 
 .main-menu-container {
-  // margin-top: 10vh !important;
-  z-index: 1050 !important;
   .main-menu {
       .slide__category {
           padding: 1.1rem 1.1rem 0.6rem !important; /* Adjust padding */
@@ -99,7 +97,6 @@ a.side-menu__item:hover{
   .sidebar.active {
     display: block;
     position: absolute;
-    z-index: 9999;
     width: 250px;
     height: 100vh;
     background: #fff;

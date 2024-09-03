@@ -8,14 +8,14 @@
   gap: 1px; /* Reduced gap between elements */
 }
 .dropdown-menu{
-  z-index: 800 !important;
+  z-index: 99999 !important;
   height: fit-content !important;
   padding: 0px !important;
 }
 
 .sidebar {
   /* Default state, maybe hidden */
-  z-index: 1050 !important;
+  z-index: 900 !important;
 
   display: none !important;
 }
@@ -89,11 +89,15 @@
   font-size: 1.6rem;
 }
 
-.main-header-container, .app-header {
+.main-header-container{
   background-color: rgb(34, 61, 110) !important;
   width: 100%;
   z-index: 800 !important;
   display: flex;
+}
+
+.app-header{
+  background-color: rgb(34, 61, 110) !important;
 }
 
 .header-content-right .header-element .header-link-icon {
@@ -278,10 +282,13 @@
 
 
 
+
+
 /* Ensure that the profile dropdown fits well */
 .mainuserProfile {
   margin: 0% !important;
   padding: 0% !important;
+  z-index: 99999 !important;
   .header-link.dropdown-toggle {
     display: flex;
     padding: 0% !important;
@@ -289,6 +296,10 @@
     gap: 1px;
     margin: 0px !important;
   }
+}
+
+.mainuserProfile  {
+  z-index: 10000; /* Ensure the dropdown menu appears above everything */
 }
 
 /* Ensure full-width dropdown on small screens */
@@ -356,6 +367,7 @@
 .mainuserProfile {
   display: flex;
   align-items: center;
+  z-index: 9999 !important;
 }
 
 .mainuserProfile .header-link.dropdown-toggle {
@@ -363,6 +375,7 @@
   align-items: center;
   gap: 5px;
   margin: 0;
+  z-index: 9999 !important;
 }
 .user-name-unit{
   display: flex;

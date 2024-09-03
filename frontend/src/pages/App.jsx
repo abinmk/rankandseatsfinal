@@ -36,7 +36,7 @@ function App() {
                 <Outlet context={{ exam, counselingType ,setCounselingType,setExam}} />
               </div>
             </div>
-            {showFooter && <Footer />}
+            {showFooter && <Footer bg="light"/>}
           </div>
           <Tabtotop />
         </div>

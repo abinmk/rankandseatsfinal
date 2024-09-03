@@ -1,4 +1,4 @@
-.footer {
+.footer-light {
     background-color: #f8f9fa;
     padding: 10px 0;
     .highlighted-text {
@@ -9,10 +9,31 @@
       margin: 0;
     }
     .designer-link {
-      color: #6c757d; // Bootstrap secondary color for a greyed-out look
+      color: #808183; // Bootstrap secondary color for a greyed-out look
       text-decoration: none;
       &:hover {
         color: #5a6268; // Darker grey on hover
+      }
+    }
+  }
+
+
+  .footer-dark {
+    background-color: #555555;
+    padding: 10px 0;
+    .highlighted-text {
+      font-weight: bold;
+      color: #007bff; // Customize the color as per your theme
+    }
+    .text-muted {
+      margin: 0;
+      color: #d2d3d6 !important;
+    }
+    .designer-link {
+      color: #7c7f81 !important; // Bootstrap secondary color for a greyed-out look
+      text-decoration: none;
+      &:hover {
+        color: #ff8771; // Darker grey on hover
       }
     }
   }

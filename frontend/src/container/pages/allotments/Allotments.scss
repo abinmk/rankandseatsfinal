@@ -579,7 +579,7 @@
     position: fixed;
     left: 0px;
     top: 75%;
-    z-index: 100;
+    z-index: 10 !important;
     display: flex;
     align-items: center;
     background-color:var(--primary-color);

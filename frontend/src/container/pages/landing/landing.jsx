@@ -1,7 +1,9 @@
 
-import React, { FC, Fragment, useEffect } from "react";
-import { Accordion, Button, Card, Col, Nav, Row, Tab } from "react-bootstrap";
+import React, { FC, Fragment, useContext, useEffect,useState } from "react";
+import { Accordion,Form, Button, Dropdown,Modal, Card, Col, Nav, Row, Tab } from "react-bootstrap";
 import { Helmet, HelmetProvider } from "react-helmet-async";
+import { FaCheckCircle, FaUserCircle, FaTimesCircle, FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaGraduationCap, FaSave, FaTimes } from 'react-icons/fa';
+import axiosInstance from '../../../utils/axiosInstance';
 import { connect } from "react-redux";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
@@ -10,33 +12,50 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { ThemeChanger } from "../../../redux/action";
 import store from "../../../redux/store";
-import faces1 from "../../../assets/images/faces/1.jpg";
 import { Link } from "react-router-dom";
-import "./nav.scss"
-
-//IMAGES
-import togglelogo from "../../../assets/images/brand-logos/toggle-logo.png";
-import toggledark from "../../../assets/images/brand-logos/toggle-dark.png";
+import "./nav.scss";
 import desktoplogo from "../../../assets/images/brand-logos/desktop-logo.png";
 import desktopdark from "../../../assets/images/brand-logos/desktop-dark.png";
-import landing1 from "../../../assets/images/media/landing/1.png";
-import landing3 from "../../../assets/images/media/landing/3.png";
-import landing4 from "../../../assets/images/media/landing/4.png";
-import landing5 from "../../../assets/images/media/landing/5.png";
-import landing6 from "../../../assets/images/media/landing/6.png";
-import landing7 from "../../../assets/images/media/landing/7.png";
-import faces4 from "../../../assets/images/faces/4.jpg";
-import faces12 from "../../../assets/images/faces/12.jpg";
-import faces9 from "../../../assets/images/faces/9.jpg";
-import faces2 from "../../../assets/images/faces/2.jpg";
-import faces5 from "../../../assets/images/faces/5.jpg";
-import faces8 from "../../../assets/images/faces/8.jpg";
-import faces11 from "../../../assets/images/faces/11.jpg";
-import faces15 from "../../../assets/images/faces/15.jpg";
 import Navbar1 from "./navbar";
 import PricingPopup from "../payment/pricingPopup";
 
+import { UserContext } from "../../../contexts/UserContext";
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+
+
 const Landing = () => {
+
+const {user,logout} = useContext(UserContext);
+const [showProfileModal, setShowProfileModal] = useState(false);
+  const [profileData, setProfileData] = useState({
+    name: '',
+    email: '',
+    mobileNumber: '',
+    state: '',
+    counseling: '',
+  });
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [selectedTab, setSelectedTab] = useState("Allotments");
+  const [exam, setExam] = useState("NEET_PG");
+  const [counselingType, setCounselingType] = useState("");
+  const [availableCounselingTypes, setAvailableCounselingTypes] = useState([]);
+
+
+  useEffect(() => {
+    if (showProfileModal) {
+      const fetchProfileData = async () => {
+        try {
+          const response = await axiosInstance.get('/profile');
+          setProfileData(response.data);
+        } catch (error) {
+          console.error('Error fetching profile data:', error);
+        }
+      };
+      fetchProfileData();
+    }
+  }, [showProfileModal]);
 
 	useEffect(() => {
 		function handleResize() {
@@ -66,6 +85,43 @@ const Landing = () => {
 			}
 		};
 	}, []);
+
+	const handleChange = (e) => {
+		const { name, value } = e.target;
+		setProfileData({ ...profileData, [name]: value });
+	  };
+	
+	  const renderSubscriptionDetails = () => {
+		if (profileData.paymentStatus === 'Paid') {
+		  return <div className="text-success">Subscription Status: Active</div>;
+		} else {
+		  return <div className="text-danger">Subscription Status: Inactive</div>;
+		}
+	  };
+
+	const handleSave = async () => {
+		try {
+		  setShowConfirmation(true);
+		  setTimeout(() => {
+			setShowConfirmation(false);
+		  }, 3000);
+		} catch (error) {
+		  console.error('Error updating profile:', error);
+		}
+	  };
+	
+	  const handleClose = () => setShowProfileModal(false);
+	const handleShow = () => setShowProfileModal(true);
+
+
+	const handleLogout = () => {
+		// Perform your logout operations here, e.g., clearing tokens, user data, etc.
+		logout();
+	
+		// Redirect to the home page after logout
+		navigate('/home');
+	  };
+
 
 	const Switchericon = () => {
 		document.querySelector(".offcanvas-end")?.classList.toggle("show");
@@ -126,19 +182,20 @@ const Landing = () => {
 
 	const onScroll = () => {
 		const sections = document.querySelectorAll(".side-menu__item");
-		const scrollPos =
-			window.scrollY ||
-			document.documentElement.scrollTop ||
-			(document.querySelector("body")?.scrollTop || 0);
-
+		const scrollPos = window.scrollY || document.documentElement.scrollTop || (document.querySelector("body")?.scrollTop || 0);
+	
+		// const profileIcon = document.getElementById("profile-icon-land");
+	
+		let activeSectionFound = false;
+	
 		sections.forEach((elem) => {
 			const value = elem.getAttribute("href") ?? "";
 			const fragmentIndex = value.indexOf("#");
 			const fragment = fragmentIndex !== -1 ? value.substring(fragmentIndex + 1) : "";
-
+	
 			if (fragment) {
 				const refElement = document.getElementById(fragment);
-
+	
 				if (refElement) {
 					const scrollTopMinus = scrollPos + 73;
 					if (
@@ -146,13 +203,24 @@ const Landing = () => {
 						refElement.offsetTop + refElement.offsetHeight > scrollTopMinus
 					) {
 						elem.classList.add("active");
+						activeSectionFound = true;
 					} else {
 						elem.classList.remove("active");
 					}
 				}
 			}
 		});
+	
+		// Change icon color based on whether an active section was found
+		// if (activeSectionFound) {
+		// 	profileIcon.style.color = "white"; // Set to the desired active color
+		// } else {
+		// 	profileIcon.style.color = "#333"; // Default color (dark grey)
+		// }
 	};
+	
+	// Attach the scroll event listener
+	window.addEventListener("scroll", onScroll);
 	useEffect(() => {
 		window.addEventListener("scroll", onScroll);
 
@@ -180,33 +248,64 @@ const Landing = () => {
 					<body className="landing-body landing-alert"></body>
 				</Helmet>
 
-				<header className="app-header">
+		<header className="app-header">
+      <div className="">
+        <Link to={`${import.meta.env.BASE_URL}dashboards/`}>
+          <img src={desktopdark} alt="logo" id="logo-mobile"  />
+        </Link>
+      </div>
+	  <div className="d-flex">
+								{/* <Link to={`${import.meta.env.BASE_URL}login/`} className="btn btn-wave btn-success">
+								Dashboard
+								</Link> */}
 
-					<div className="main-header-container container-fluid">
-
-						<div className="header-content-left">
-
-							<div className="header-element">
-								<div className="horizontal-logo">
-									<Link to={`${import.meta.env.BASE_URL}dashboards/`} className="header-logo">
-										{/* <img src={togglelogo} alt="logo" className="toggle-logo" />
-										<img src={toggledark} alt="logo" className="toggle-dark" /> */}
-									</Link>
-								</div>
-							</div>
-							<div className="header-element">
-								<Link aria-label="anchor" to="#" className="sidemenu-toggle header-link" data-bs-toggle="sidebar">
-									<span className="open-toggle">
-										<i className="ri-menu-3-line fs-20"></i>
-									</span>
+								{user ? (
+									<>
+								<Link to={`${import.meta.env.BASE_URL}dashboards`} className="btn btn-wav btn-success dashboard-btn-mobile">
+									Dashboard
 								</Link>
+								<Dropdown className="mainuserProfile">
+              <Dropdown.Toggle variant="" as="a" className="header-link dropdown-toggle" id="mainHeaderProfile" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                <div className="d-flex">
+                  <div className="d-sm-flex  profile-icon-div">
+                    <div className=" ">
+					<FontAwesomeIcon icon={faUser} className="profile-icon-filled" />
+                    </div>
+                    {/* <div className="ms-2 my-auto user-name-div">
+                      <h6 className="font-weight-semibold mb-0 fs-13 user-name d-sm-block d-none">
+                        {user ? user.name : "Guest"}
+                      </h6>
+                    </div> */}
+                  </div>
+                </div>
+              </Dropdown.Toggle>
+
+              {user && (
+         <Dropdown.Menu as="ul" className="dropdown-menu border-0 main-header-dropdown overflow-hidden header-profile-dropdown" aria-labelledby="mainHeaderProfile">
+         <Dropdown.Item as="li" className="border-0" onClick={handleShow}>
+         <button type="button" className="btn btn-link p-0 m-0 d-flex align-items-center" onClick={handleShow} style={{ color: 'inherit', textDecoration: 'none' }}>
+           <i className="fs-13 me-2 bx bx-user"></i>Profile
+         </button>
+         </Dropdown.Item>
+         <Dropdown.Item as="li" className="border-0">
+           <button type="button" className="btn btn-link p-0 m-0 d-flex align-items-center" onClick={handleLogout} style={{ color: 'inherit', textDecoration: 'none' }}>
+             <i className="fs-13 me-2 bx bx-arrow-to-right"></i>Log Out
+           </button>
+         </Dropdown.Item>
+       </Dropdown.Menu>
+              )}
+            </Dropdown>
+								{/* <Link onclick={logout} to={`${import.meta.env.BASE_URL}home/`} className="btn btn-wave btn-danger">
+								Logout
+							</Link> */}
+							</>
+								) : (
+								<Link to={`${import.meta.env.BASE_URL}login/`} className="btn btn-wave btn-danger login-btn-mobile">
+									Login
+								</Link>
+								)}
 							</div>
-
-						</div>
-
-					</div>
-
-				</header>
+   		</header>
 				<div id="responsive-overlay"></div>
 				<aside className="app-sidebar d-none d-lg-block" id="sidebar">
 					<div className="container p-0">
@@ -231,17 +330,157 @@ const Landing = () => {
 								<path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path>
 							</svg>
 							</div>
-							<div className="d-lg-flex d-none">
-							<div className="btn-list d-xl-flex d-none">
-								<Link to={`${import.meta.env.BASE_URL}login/`} className="btn btn-wave btn-success">
+							<div className="d-flex">
+							<div className="btn-list d-flex">
+								{/* <Link to={`${import.meta.env.BASE_URL}login/`} className="btn btn-wave btn-success">
 								Dashboard
+								</Link> */}
+
+								{user ? (
+									<>
+								<Link to={`${import.meta.env.BASE_URL}dashboards`} className="btn btn-success">
+									Dashboard
 								</Link>
+								<Dropdown className="mainuserProfile">
+              <Dropdown.Toggle variant="" as="a" className="header-link dropdown-toggle" id="mainHeaderProfile" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                <div className="d-flex">
+                  <div className="d-sm-flex  profile-icon-div">
+                    <div className="avatar avatar-sm ">
+					<FontAwesomeIcon icon={faUser} className="profile-icon-filled" />
+
+                    </div>
+                    {/* <div className="ms-2 my-auto user-name-div">
+                      <h6 className="font-weight-semibold mb-0 fs-13 user-name d-sm-block d-none">
+                        {user ? user.name : "Guest"}
+                      </h6>
+                    </div> */}
+                  </div>
+                </div>
+              </Dropdown.Toggle>
+
+              {user && (
+         <Dropdown.Menu as="ul" className="dropdown-menu border-0 main-header-dropdown overflow-hidden header-profile-dropdown" aria-labelledby="mainHeaderProfile">
+         <Dropdown.Item as="li" className="border-0" onClick={handleShow}>
+         <button type="button" className="btn btn-link p-0 m-0 d-flex align-items-center" onClick={handleShow} style={{ color: 'inherit', textDecoration: 'none' }}>
+           <i className="fs-13 me-2 bx bx-user"></i>Profile
+         </button>
+         </Dropdown.Item>
+         <Dropdown.Item as="li" className="border-0">
+           <button type="button" className="btn btn-link p-0 m-0 d-flex align-items-center" onClick={handleLogout} style={{ color: 'inherit', textDecoration: 'none' }}>
+             <i className="fs-13 me-2 bx bx-arrow-to-right"></i>Log Out
+           </button>
+         </Dropdown.Item>
+       </Dropdown.Menu>
+              )}
+            </Dropdown>
+								{/* <Link onclick={logout} to={`${import.meta.env.BASE_URL}home/`} className="btn btn-wave btn-danger">
+								Logout
+							</Link> */}
+							</>
+								) : (
+								<Link to={`${import.meta.env.BASE_URL}login/`} className="btn btn-wave btn-danger">
+									Login
+								</Link>
+								)}
 							</div>
 							</div>
 						</nav>
 						</div>
 					</div>
 					</aside>
+
+					<Modal show={showProfileModal} onHide={handleClose} centered>
+              <Modal.Header closeButton>
+                <Modal.Title>
+                  <FaUser className="me-2" />
+                  User Profile
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Form>
+                  <Form.Group controlId="formName">
+                    <Form.Label><FaUser className="me-2" />Name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="name"
+                      value={profileData.name}
+                      onChange={handleChange}
+                      disabled
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="formEmail">
+                    <Form.Label><FaEnvelope className="me-2" />Email</Form.Label>
+                    <Form.Control
+                      type="email"
+                      name="email"
+                      value={profileData.email}
+                      onChange={handleChange}
+                      disabled
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="formMobile">
+                    <Form.Label><FaPhone className="me-2" />Mobile Number</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="mobileNumber"
+                      value={profileData.mobileNumber}
+                      onChange={handleChange}
+                      disabled
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="formState">
+                    <Form.Label><FaMapMarkerAlt className="me-2" />State</Form.Label>
+                    <Form.Control
+                      as="select"
+                      name="state"
+                      value={profileData.state}
+                      onChange={handleChange}
+                    >
+                      {['Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal', 'Delhi', 'Jammu & Kashmir', 'Ladakh', 'Lakshadweep', 'Puducherry', 'Andaman & Nicobar Islands', 'Chandigarh', 'Dadra & Nagar Haveli and Daman & Diu'].map((state) => (
+                        <option key={state} value={state}>{state}</option>
+                      ))}
+                    </Form.Control>
+                  </Form.Group>
+                  <Form.Group controlId="formCounseling">
+                    <Form.Label><FaGraduationCap className="me-2" />Preferred Counseling</Form.Label>
+                    <Form.Control
+                      as="select"
+                      name="counseling"
+                      value={profileData.counseling}
+                      onChange={handleChange}
+                    >
+                      <option value="NEET PG">NEET PG</option>
+                      <option value="NEET SS">NEET SS</option>
+                      <option value="INI CET">INI CET</option>
+                    </Form.Control>
+                  </Form.Group>
+                  <Form.Group controlId="formSubscription">
+                    <Form.Label><FaCheckCircle className="me-2" />Subscription Details</Form.Label>
+                    {renderSubscriptionDetails()}
+                  </Form.Group>
+                </Form>
+                {showConfirmation && (
+                  <div className="custom-popup">
+                    <div className="popup-icon">
+                      <FaCheckCircle className="text-success" />
+                    </div>
+                    <div className="popup-message">
+                      <strong>Success!</strong> Profile updated successfully!
+                    </div>
+                  </div>
+                )}
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="outline-danger" onClick={handleClose}>
+                  <FaTimes className="me-2" />
+                  Close
+                </Button>
+                <Button variant="primary" onClick={handleSave}>
+                  <FaSave className="me-2" />
+                  Save Changes
+                </Button>
+              </Modal.Footer>
+            </Modal>
 
 				<div className="main-content landing-main">
 
