@@ -5,8 +5,6 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import { FaCheckCircle, FaUserCircle, FaTimesCircle, FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaGraduationCap, FaSave, FaTimes } from 'react-icons/fa';
 import axiosInstance from '../../../utils/axiosInstance';
 import { connect } from "react-redux";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination } from "swiper/modules";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
@@ -210,13 +208,6 @@ const [showProfileModal, setShowProfileModal] = useState(false);
 				}
 			}
 		});
-	
-		// Change icon color based on whether an active section was found
-		// if (activeSectionFound) {
-		// 	profileIcon.style.color = "white"; // Set to the desired active color
-		// } else {
-		// 	profileIcon.style.color = "#333"; // Default color (dark grey)
-		// }
 	};
 	
 	// Attach the scroll event listener
@@ -228,18 +219,6 @@ const [showProfileModal, setShowProfileModal] = useState(false);
 			window.removeEventListener("scroll", onScroll);
 		};
 	}, []);
-
-	function menuClose() {
-
-		const theme = store.getState();
-		if (window.innerWidth <= 992) {
-			ThemeChanger({ ...theme, toggled: "close" });
-		}
-		const overlayElement = document.querySelector("#responsive-overlay");
-		if (overlayElement) {
-			overlayElement.classList.remove("active");
-		}
-	}
 
 	return (
 		<Fragment>

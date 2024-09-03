@@ -13,81 +13,125 @@
   display: flex !important;
   align-items: center !important;
   transition: background-color 0.3s, color 0.3s !important;
-
-  &.active {
-      color: #007bff !important; /* Change text color for active item */
-
-  }
-  &:hover {
-    color: #007bff !important; /* Change text color for active item */
-  }
 }
 
-a.side-menu__item:hover{
-  color: #007bff !important;
- 
+.side-menu__item.active {
+  color: #007bff !important; /* Change text color for active item */
 }
 
-.main-sidebar{
+.side-menu__item:hover {
+  color: #007bff !important; /* Change text color on hover */
+}
+
+.main-sidebar {
   z-index: 9999 !important;
 }
 
 .side-menu__icon {
-  margin-right: .4rem !important;
+  margin-right: 0.4rem !important;
   font-size: 1.4rem !important; /* Increase icon size */
   display: flex !important;
   align-items: center !important;
-  &.active {
-    color: #007bff !important; /* Change text color for active item */
-  }
-
-&:hover {
-  a.side-menu__item:hover{
-    color: #007bff !important;
-  }
-  }
 }
+
+.side-menu__icon.active,
+.side-menu__item.active .side-menu__icon {
+  color: #007bff !important; /* Change icon color for active item */
+}
+
+.side-menu__icon:hover {
+  color: #007bff !important; /* Change icon color on hover */
+}
+
 .side-menu__label {
   flex-grow: 1 !important;
   font-size: 1rem !important; /* Increase label font size */
   display: flex !important;
   align-items: center !important;
-  &.active {
-    color: #007bff !important; /* Change text color for active item */
-  }
-  &:hover {
-    color: #007bff !important; /* Change text color for active item */
-  }
 }
 
-.main-menu-container {
-  .main-menu {
-      .slide__category {
-          padding: 1.1rem 1.1rem 0.6rem !important; /* Adjust padding */
-      }
-
-      .slide {
-          &.has-sub > .side-menu__item {
-              font-weight: 600 !important;
-          }
-      }
-  }
+.main-menu-container .main-menu .slide__category {
+  padding: 1.1rem 1.1rem 0.6rem !important; /* Adjust padding */
 }
 
 .main-menu .side-menu__item {
   font-size: 19px !important; /* Increase the font size */
   padding: 16px 21px !important; /* Increase padding */
-  color: #475476 !important; /* Set color to black or your preferred color */
+  color: #475476 !important; /* Set color to your preferred color */
 }
 
 .main-menu .side-menu__item.active {
   font-size: 24px !important; /* Increase font size */
-  color:  rgb(0, 94, 255) !important; /* Add a left border to the active item */
-}
-.main-menu .side-menu__item.active .side-menu__label{
-  color:  rgb(0, 94, 255) !important; /* Add a left border to the active item */ 
+  color: rgb(0, 94, 255) !important; /* Add a left border to the active item */
 }
 
+.main-menu .side-menu__item.active .side-menu__label {
+  color: rgb(0, 94, 255) !important; /* Color for active item */
+}
+
+.side-menu {
+  width: 250px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background-color: #fff;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out !important; /* Smooth transition */
+  padding: 0; /* Remove padding to fix extra space issue */
+}
+
+.menu-item {
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  color: #333;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.menu-item:hover {
+  background-color: #007bff; /* Background color on hover */
+  color: white; /* Text color on hover */
+}
+
+.menu-item i {
+  margin-right: 10px;
+  font-size: 1.2rem;
+  transition: transform 0.3s;
+}
+
+.menu-item:hover i {
+  transform: rotate(15deg) scale(1.1) !important; /* Rotate and scale the icon on hover */
+}
+
+.sidebar-menu {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.side-menu-logo {
+  display: none;
+}
+
+/* Show logo only on screens smaller than 768px */
+@media (max-width: 768px) {
+  .side-menu-logo {
+    display: block !important;
+    padding: 10px 0; /* Add padding to ensure it aligns well with other items */
+    text-align: center; /* Center the logo */
+  }
+
+  .side-menu {
+    width: 100%;
+  }
+
+  .side-menu-item {
+    justify-content: center;
+  }
+
+  .side-menu-title {
+    display: none;
+  }
+}
 
 @media (max-width: 992px) {
   .sidebar {
@@ -106,4 +150,34 @@ a.side-menu__item:hover{
   .sidebar .sidebar-content {
     padding: 15px;
   }
+}
+
+/* Adjustments for spacing and alignment to remove unwanted space */
+.side-menu-item {
+  position: relative;
+  padding: 16px 20px !important; /* Ensure consistent padding */
+}
+
+.menu-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 3px;
+  background-color: #007bff;
+  transform: scaleY(0);
+  transition: transform 0.3s;
+}
+
+.menu-item.active::before,
+.menu-item:hover::before {
+  transform: scaleY(1) !important;
+}
+
+.side-menu {
+  background-color: #fff;
+  padding: 10px;
+  transition: width 0.3s ease;
+  width: 240px;
 }

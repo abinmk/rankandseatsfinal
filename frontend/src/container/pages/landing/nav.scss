@@ -38,12 +38,12 @@
 
   .profile-icon-filled {
     font-size: 1rem;
-    color: #0b0d59; /* Blue fill */
+    color: #0c275e; /* Blue fill */
     background-color: white; /* White border */
     padding: 10px;
     border-radius: 50%; /* Circular shape */
     // border-color: #0b0d59;
-    border: 2px solid rgb(59, 59, 65); /* White border */
+    border: 2px solid rgb(210, 214, 216); /* White border */
     margin-top: auto !important;
     margin-bottom: auto !important;
     width: 16px;
@@ -117,14 +117,13 @@
   }
 
   #logo-mobile{
-    height: 2rem !important;
-    margin-left: 30px;
-    margin-right: 20px;
+    height: 2.5rem !important;
+    margin-left: 20px;
+    margin-right: 10px;
   }
   @media (max-width: 1200px) {
     .profile-icon-filled {
-      width: 10px;
-      height: 10px;
+      float: right !important;
     }
     
     .login-btn-mobile {
