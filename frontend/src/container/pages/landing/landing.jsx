@@ -369,12 +369,12 @@ const [showProfileModal, setShowProfileModal] = useState(false);
 					</aside>
 
 					<Modal show={showProfileModal} onHide={handleClose} centered>
-              <Modal.Header closeButton>
-                <Modal.Title>
-                  <FaUser className="me-2" />
-                  User Profile
-                </Modal.Title>
-              </Modal.Header>
+            <Modal.Header closeButton style={{ backgroundColor: '#223D6E', color: 'white', position: 'relative' }}>
+            <Modal.Title style={{ display: 'flex', alignItems: 'center', color: 'white', fontSize: '1.5rem', fontWeight: 'bold' }}>
+              <FaUser className="me-2" style={{ fontSize: '2rem', color: 'white' }} />
+              User Profile
+            </Modal.Title>
+          </Modal.Header>
               <Modal.Body>
                 <Form>
                   <Form.Group controlId="formName">

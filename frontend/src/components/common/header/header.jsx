@@ -353,11 +353,11 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
 
             <Modal show={showProfileModal} onHide={handleClose} centered>
             <Modal.Header closeButton style={{ backgroundColor: '#223D6E', color: 'white', position: 'relative' }}>
-  <Modal.Title style={{ display: 'flex', alignItems: 'center', color: 'white', fontSize: '1.5rem', fontWeight: 'bold' }}>
-    <FaUser className="me-2" style={{ fontSize: '2rem', color: 'white' }} />
-    User Profile
-  </Modal.Title>
-</Modal.Header>
+            <Modal.Title style={{ display: 'flex', alignItems: 'center', color: 'white', fontSize: '1.5rem', fontWeight: 'bold' }}>
+              <FaUser className="me-2" style={{ fontSize: '2rem', color: 'white' }} />
+              User Profile
+            </Modal.Title>
+          </Modal.Header>
               <Modal.Body>
                 <Form>
                   <Form.Group controlId="formName">
