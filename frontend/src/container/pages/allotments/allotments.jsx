@@ -66,61 +66,65 @@ const Allotments = () => {
     return (filterKey) => filterMapping[filterKey] || filterKey;
   }, []);
 
+  const buildFilterParams = (filters) => {
+    const params = {};
+    Object.keys(filters).forEach((filterKey) => {
+      const filterValue = filters[filterKey];
+      if (typeof filterValue === 'object' && filterValue !== null && !Array.isArray(filterValue)) {
+        if (filterValue.min !== undefined) {
+          params[`${getFilterParamName(filterKey)}[min]`] = filterValue.min;
+        }
+        if (filterValue.max !== undefined) {
+          params[`${getFilterParamName(filterKey)}[max]`] = filterValue.max;
+        }
+      } else if (Array.isArray(filterValue) && filterValue.length > 0) {
+        params[getFilterParamName(filterKey)] = filterValue;
+      } else if (filterValue !== undefined && filterValue !== null && filterValue !== '') {
+        params[getFilterParamName(filterKey)] = filterValue;
+      }
+    });
+    return params;
+  };
+
   const fetchData = useCallback(
     _.debounce(async (page, pageSize, filters, counselingType) => {
       setLoading(true);
-      console.log("page=="+page);
       try {
-        setCountOf(prevCountVal => {
-          const newCount = prevCountVal + 1;
-          return newCount;
-        });
-        if((countVal>2 && subscriptionStatus==false) || ((page>1 || pageSize>10 ) && subscriptionStatus==false))
-        {
+        const token = localStorage.getItem('token');
+        const filterParams = buildFilterParams(filters);
+
+        // Check for subscription limit
+        setCountOf((prev) => prev + 1);
+        if ((countVal > 2 && !subscriptionStatus) || ((page > 1 || pageSize > 10) && !subscriptionStatus)) {
           setShowSubscriptionPopup(true);
-          setFilterCountExceed(true);
           return;
         }
 
-        const token = localStorage.getItem('token');
         const response = await axiosInstance.get(`${apiUrl}/allotments`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          params: {
-            page,
-            limit: pageSize,
-            counselingType,
-            ...filters,
-          },
+          params: { page, limit: pageSize, counselingType, ...filterParams },
         });
-    
-        
-        // Check if the response indicates an invalid token
+
         if (response.data === 'Invalid token.') {
           alert('Session expired. Please log in again.');
-          localStorage.removeItem('token'); // Remove token from localStorage
-          window.location.href = '/login'; // Redirect to login page
-          return; // Stop further execution
+          localStorage.removeItem('token');
+          window.location.href = '/login';
+          return;
         }
-  
-        // Decrypt the data
+
         const decryptedData = JSON.parse(decrypt(response.data.data));
-          setData(decryptedData);
-          setPage(response.data.currentPage);
-          setTotalPages(response.data.totalPages);
-          if(response.data.totalPages<response.data.currentPage)
-          {
-            setPage(response.data.totalPages);
-          }
-  
-      }
-     catch (error) {
+        setData(decryptedData);
+        setPage(response.data.currentPage);
+        setTotalPages(response.data.totalPages);
+
+        if (response.data.totalPages < response.data.currentPage) setPage(response.data.totalPages);
+      } catch (error) {
         if (error.response && error.response.status === 401) {
-          // Handle token expiration
           alert('Session expired. Please log in again.');
-          localStorage.removeItem('token'); // Remove token from localStorage
-          window.location.href = '/login'; // Redirect to login page
+          localStorage.removeItem('token');
+          window.location.href = '/login';
         } else {
           console.error('Error fetching allotment data:', error);
         }
@@ -128,7 +132,7 @@ const Allotments = () => {
         setLoading(false);
       }
     }, 500),
-    [apiUrl,filters,page]
+    [subscriptionStatus, apiUrl] // Ensure stable dependencies
   );
   
   
@@ -172,13 +176,15 @@ const Allotments = () => {
   }, [apiUrl, exam]);
 
   useEffect(() => {
-    fetchData(page, pageSize, filters, counselingType);
-    fetchWishlist();
-  }, [fetchData, fetchWishlist, filters, page, pageSize, counselingType, exam]);
+    fetchData(page, pageSize, filters);
+    return () => {
+      fetchData.cancel();
+    };
+  }, [fetchData, filters, page, pageSize]);
 
   useEffect(() => {
     fetchFilterOptions();
-  }, [fetchFilterOptions, counselingType]);
+  }, [fetchFilterOptions]);
 
   const addToWishlist = async (examName, allotment) => {
     try {
@@ -208,7 +214,6 @@ const Allotments = () => {
   };
 
   const countAppliedFilters = () => {
-    
     let count = 0;
     for (const key in filters) {
       if (Array.isArray(filters[key])) {
@@ -224,19 +229,22 @@ const Allotments = () => {
     return count;
   };
 
-useEffect(() => {
-  const checkSubscription = async () => {
-    try {
-      const response = await axiosInstance.post(`${apiUrl}/payment/check-subscription`, { userId: user._id });
-      const isSubscribed = response.data.status === 'paid';
-      setSubscriptionStatus(isSubscribed);
-    } catch (error) {
-      console.error('Error checking subscription:', error);
-    }
-  };
 
-  checkSubscription();
-}, [apiUrl,filters]);
+  useEffect(() => {
+    const checkSubscription = async () => {
+      try {
+        if (user && user._id) {  // Ensure user is loaded and has a valid _id
+          const response = await axiosInstance.post(`${apiUrl}/payment/check-subscription`, { userId: user._id });
+          const isSubscribed = response.data.status === 'paid';
+          setSubscriptionStatus(isSubscribed);
+        }
+      } catch (error) {
+        console.error('Error checking subscription:', error);
+      }
+    };
+  
+    checkSubscription();
+  }, [apiUrl, user]); // Now it only triggers when user is available
 
 
   return (
