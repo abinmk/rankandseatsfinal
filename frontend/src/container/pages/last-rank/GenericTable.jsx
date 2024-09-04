@@ -365,9 +365,9 @@ const GenericTable = ({
         </div>
       </div>
       <Modal show={showColumnModal} onHide={() => setShowColumnModal(false)}>
-  <Modal.Header closeButton>
-    <Modal.Title>View/Hide Columns</Modal.Title>
-  </Modal.Header>
+      <Modal.Header closeButton style={{ backgroundColor: '#223D6E' }}>
+      <Modal.Title style={{ color: 'white' }}>View/Hide Columns</Modal.Title>
+    </Modal.Header>
   <Modal.Body>
     {allColumns
       .filter((column) => !/^\d{4}_R\d+$/.test(column.id)) // Filters out columns with IDs like "2024_R1", "2023_R2", etc.
