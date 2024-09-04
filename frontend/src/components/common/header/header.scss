@@ -213,6 +213,19 @@
   width: 100%;
 }
 
+.modal-header .btn-close {
+  background-color: #ffffff !important; /* White background */
+  border-radius: 50%; /* Circular shape */
+  color: #223D6E !important; /* Blue color for the icon */
+  opacity: 1; /* Remove opacity */
+  padding: 5px; /* Slight padding */
+}
+
+.modal-header .btn-close:hover {
+  background-color: #FF5A5F !important; /* Change background on hover */
+  color: white !important; /* White close icon on hover */
+}
+
 .custom-dropdown-menu .dropdown-item {
   padding: 10px 20px;
   color: #223D6E;

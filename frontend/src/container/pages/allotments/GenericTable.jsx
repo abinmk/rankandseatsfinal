@@ -377,6 +377,8 @@ const GenericTable = ({
             <p><strong>Institute Type:</strong> {selectedRowData.instituteType}</p>
             <p><strong>University:</strong> {selectedRowData.universityName}</p>
             <p><strong>State:</strong> {selectedRowData.state}</p>
+            <p><strong>Beds:</strong> {selectedRowData.totalHospitalBeds}</p>
+            <p><strong>PG Seats:</strong> {selectedRowData.totalSeatsInCollege}</p>
           </div>
         </div>
 
@@ -428,21 +430,11 @@ const GenericTable = ({
             <p><strong>Seat Leaving Penalty:</strong> ₹{selectedRowData.seatLeavingPenality}</p>
           </div>
         </div>
-
-        <div className="section">
-          <div className="section-header">
-            <h5>Additional Information</h5>
-          </div>
-          <div className="section-content">
-            <p><strong>Total Hospital Beds:</strong> {selectedRowData.totalHospitalBeds}</p>
-            <p><strong>Total Seats in College:</strong> {selectedRowData.totalSeatsInCollege}</p>
-          </div>
-        </div>
       </div>
     )}
   </Modal.Body>
   <Modal.Footer>
-    <Button variant="secondary" onClick={handleModalClose} className="btn-close-modal">
+    <Button variant="secondary" onClick={handleModalClose}>
       Close
     </Button>
   </Modal.Footer>
