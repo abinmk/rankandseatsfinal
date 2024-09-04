@@ -132,7 +132,7 @@ const CollegeDetail = () => {
           <GoogleMap
             mapContainerClassName={styles.mapContainer}
             center={position}
-            zoom={15}
+            zoom={16}
             onClick={handleMapClick}
           >
             <Marker position={position} />
