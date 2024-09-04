@@ -299,9 +299,9 @@ const GenericTable = ({
         </div>
       </div>
       <Modal show={showColumnModal} onHide={() => setShowColumnModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>View/Hide Columns</Modal.Title>
-        </Modal.Header>
+      <Modal.Header closeButton style={{ backgroundColor: '#223D6E' }}>
+      <Modal.Title style={{ color: 'white' }}>View/Hide Columns</Modal.Title>
+    </Modal.Header>
         <Modal.Body>
           {allColumns.map((column) => (
             <Form.Check
