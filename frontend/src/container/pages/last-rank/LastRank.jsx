@@ -1,5 +1,6 @@
-import React, { useState,useContext, useEffect, useCallback } from 'react';
+import React, { useState, useEffect,useMemo, useCallback, useContext } from 'react';
 import axios from 'axios';
+import _ from 'lodash';
 import GenericTable from './GenericTable';
 import { LastRankColumns, LastRankFiltersConfig } from './lastRankConfig';
 import axiosInstance from '../../../utils/axiosInstance';
@@ -8,9 +9,13 @@ import './LastRank.scss';
 import Modal from 'react-bootstrap/Modal';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
+
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const LastRank = () => {
+  const [selectedRowData, setSelectedRowData] = useState(null);
+  const [showRowModal, setShowRowModal] = useState(false);
+
   const [data, setData] = useState([]);
   const [filterOptions, setFilterOptions] = useState({});
   const [filters, setFilters] = useState({});
@@ -19,95 +24,119 @@ const LastRank = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [filterLoading, setFilterLoading] = useState(true);
-  const [selectedRowData, setSelectedRowData] = useState(null);
-  const [showRowModal, setShowRowModal] = useState(false);
 
   const { user } = useContext(UserContext);
-  const [countVal , setCountOf] = useState(0);
+  const [countVal, setCountOf] = useState(0);
   const [subscriptionStatus, setSubscriptionStatus] = useState(false);
   const [showSubscriptionPopup, setShowSubscriptionPopup] = useState(false);
   const [filterCountExceeded, setFilterCountExceed] = useState(false);
 
-  const fetchData = useCallback(async (page, pageSize, filters) => {
-    setLoading(true);
-    try {
-      const adjustedFilters = {};
+  const apiUrl = import.meta.env.VITE_API_URL;
 
-      setCountOf(prevCountVal => {
-        const newCount = prevCountVal + 1;
-        return newCount;
-      });
-      if((countVal>2 && subscriptionStatus==false) || ((page>1 || pageSize>10 ) && subscriptionStatus==false))
-        {
+  const getFilterParamName = useMemo(() => {
+    const filterMapping = {
+      stateOptions: 'state',
+      quotaOptions: 'quota',
+      collegeNameOptions: 'collegeName',
+      courseNameOptions: 'courseName',
+    };
+    return (filterKey) => filterMapping[filterKey] || filterKey;
+  }, []);
+
+  const buildFilterParams = (filters) => {
+    const params = {};
+    Object.keys(filters).forEach((filterKey) => {
+      const filterValue = filters[filterKey];
+      if (typeof filterValue === 'object' && filterValue !== null && !Array.isArray(filterValue)) {
+        if (filterValue.min !== undefined) {
+          params[`${getFilterParamName(filterKey)}[min]`] = filterValue.min;
+        }
+        if (filterValue.max !== undefined) {
+          params[`${getFilterParamName(filterKey)}[max]`] = filterValue.max;
+        }
+      } else if (Array.isArray(filterValue) && filterValue.length > 0) {
+        params[getFilterParamName(filterKey)] = filterValue;
+      } else if (filterValue !== undefined && filterValue !== null && filterValue !== '') {
+        params[getFilterParamName(filterKey)] = filterValue;
+      }
+    });
+    return params;
+  };
+
+  const fetchData = useCallback(
+    _.debounce(async (page, pageSize, filters) => {
+      setLoading(true);
+      try {
+        setCountOf(prevCountVal => prevCountVal + 1);
+
+        if((countVal > 2 && !subscriptionStatus) || ((page > 1 || pageSize > 10) && !subscriptionStatus)) {
           setShowSubscriptionPopup(true);
           setFilterCountExceed(true);
           return;
         }
-      for (const key in filters) {
-        if (filters[key]) {
-          let field = key;
-          if (key === 'stateOptions') field = 'state';
-          if (key === 'quotaOptions') field = 'quota';
-          if (key === 'collegeNameOptions') field = 'collegeName';
-          if (key === 'courseNameOptions') field = 'courseName';
 
-          adjustedFilters[field] = filters[key];
-        }
-      }
+        const filterParams = buildFilterParams(filters);
+        const response = await axiosInstance.get(`${apiUrl}/lastrank`, {
+          params: {
+            page,
+            limit: pageSize,
+            ...filterParams
+          }
+        });
 
-      const response = await axiosInstance.get(`${apiUrl}/lastrank`, {
-        params: {
-          page,
-          limit: pageSize,
-          ...adjustedFilters
+        setData(response.data.data);
+        setPage(response.data.currentPage);
+        setTotalPages(response.data.totalPages);
+
+        if (response.data.totalPages < response.data.currentPage) {
+          setPage(response.data.totalPages);
         }
-      });
-      setData(response.data.data);
-      setPage(response.data.currentPage);
-      setTotalPages(response.data.totalPages);
-      if(response.data.totalPages<response.data.currentPage)
-      {
-        setPage(response.data.totalPages);
+      } catch (error) {
+        console.error('Error fetching college data:', error);
+      } finally {
+        setLoading(false);
       }
+    }, 500),
+    [apiUrl, filters, page, pageSize]
+  );
+
+  const fetchFilterOptions = useCallback(async () => {
+    setFilterLoading(true);
+    try {
+      const response = await axiosInstance.get(`${apiUrl}/lastrank/filters`);
+      setFilterOptions(response.data);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching filter options:', error);
+    } finally {
+      setFilterLoading(false);
     }
-    setLoading(false);
-  }, [filters,page]);
+  }, [apiUrl]);
 
   useEffect(() => {
     fetchData(page, pageSize, filters);
+    return () => {
+      fetchData.cancel();
+    };
   }, [fetchData, filters, page, pageSize]);
 
   useEffect(() => {
-    const fetchFilterOptions = async () => {
-      setFilterLoading(true);
-      try {
-        const response = await axiosInstance.get(`${apiUrl}/lastrank/filters`);
-        setFilterOptions(response.data);
-      } catch (error) {
-        console.error('Error fetching filter options:', error);
-      }
-      setFilterLoading(false);
-    };
-
     fetchFilterOptions();
-  }, []);
+  }, [fetchFilterOptions]);
 
-  const handleDetailClick = (year, round, details) => {
-    const roundData = details.years[year].rounds[round];
-    setSelectedRowData({
-      ...details,
-      year,
-      round,
-      roundData
-    });
-    setShowRowModal(true);
-  };
-
-  const handleModalClose = () => {
-    setShowRowModal(false);
-    setDataClose
+  const countAppliedFilters = () => {
+    let count = 0;
+    for (const key in filters) {
+      if (Array.isArray(filters[key])) {
+        count += filters[key].length;
+      } else if (filters[key] && typeof filters[key] === 'object') {
+        if (filters[key].min !== undefined || filters[key].max !== undefined) {
+          count += 1;
+        }
+      } else if (filters[key]) {
+        count += 1;
+      }
+    }
+    return count;
   };
 
   useEffect(() => {
@@ -120,12 +149,27 @@ const LastRank = () => {
         console.error('Error checking subscription:', error);
       }
     };
-  
+
     checkSubscription();
   }, [apiUrl]);
 
+  const handleDetailClick = (year, round, details) => {
+    const roundData = details.years[year].rounds[round];
+    setSelectedRowData({
+      ...details,
+      year,
+      round,
+      roundData,
+    });
+    setShowRowModal(true);
+  };
+
+  const handleModalClose = () => {
+    setShowRowModal(false);
+  };
+
   return (
-    <div className={`fees-container ${showRowModal ? "hide-filters" : ""}`}>
+    <div className={`fees-container ${showRowModal ? 'hide-filters' : ''}`}>
       <GenericTable
         data={data}
         filtersConfig={LastRankFiltersConfig}
@@ -143,7 +187,7 @@ const LastRank = () => {
         setPageSize={setPageSize}
         columns={LastRankColumns(data, handleDetailClick)}
         isModalOpen={showRowModal}
-        disabled = {showSubscriptionPopup && countVal>2}
+        disabled={showSubscriptionPopup && countVal > 2}
         showSubscriptionPopup={showSubscriptionPopup}
         setShowSubscriptionPopup={setShowSubscriptionPopup}
       />
@@ -155,12 +199,21 @@ const LastRank = () => {
         <Modal.Body>
           {selectedRowData && (
             <>
-              <p><strong>Year:</strong> {selectedRowData.year}</p>
-              <p><strong>Round:</strong> {selectedRowData.round}</p>
-              {/* <p><strong>Course:</strong> {selectedRowData.roundData.course}</p> */}
-              <p><strong>Last Rank:</strong> {selectedRowData.roundData.lastRank}</p>
-              <p><strong>Total Allotted:</strong> {selectedRowData.roundData.totalAllotted}</p>
-              <p><strong>Allotted Candidates Details:</strong></p>
+              <p>
+                <strong>Year:</strong> {selectedRowData.year}
+              </p>
+              <p>
+                <strong>Round:</strong> {selectedRowData.round}
+              </p>
+              <p>
+                <strong>Last Rank:</strong> {selectedRowData.roundData.lastRank}
+              </p>
+              <p>
+                <strong>Total Allotted:</strong> {selectedRowData.roundData.totalAllotted}
+              </p>
+              <p>
+                <strong>Allotted Candidates Details:</strong>
+              </p>
               <div className="custom-table">
                 <Table striped bordered hover responsive>
                   <thead>
