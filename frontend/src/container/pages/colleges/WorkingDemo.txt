@@ -1,0 +1,80 @@
+import React, { useEffect, useState } from 'react';
+import axios from 'axios'; // Make sure you have axios imported
+import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
+import styles from './CollegeDetail.module.css';
+
+// Function to expand short URL using unshorten.me
+const expandShortUrl = async (shortUrl) => {
+  try {
+    // API request to unshorten.me
+    const response = await axios.get(`https://unshorten.me/json/${encodeURIComponent(shortUrl)}`);
+    
+    // Check if the response has a resolved URL
+    if (response.data && response.data.resolved_url) {
+      console.log("Expanded URL:", response.data.resolved_url);
+      return response.data.resolved_url;
+    } else {
+      console.log("No resolved URL found.");
+      return null;
+    }
+  } catch (error) {
+    console.error('Error expanding short URL:', error);
+    return null;
+  }
+};
+
+// Function to extract coordinates from Google Maps URL
+const extractCoordinatesFromUrl = (url) => {
+  const regex = /@([-0-9.]+),([-0-9.]+),/;
+  const match = url.match(regex);
+  if (match) {
+    return { lat: parseFloat(match[1]), lng: parseFloat(match[2]) };
+  }
+  return { lat: 26.9124, lng: 75.7873 }; // Default position in case of error
+};
+
+const CollegeDetail = () => {
+  const [position, setPosition] = useState({ lat: 26.9124, lng: 75.7873 });
+  
+  useEffect(() => {
+    const fetchExpandedUrl = async () => {
+      const mapLink = "https://maps.app.goo.gl/oaAGt5EdVAAw3pJP8"; // Example short URL
+      
+      // Wait for the expanded URL
+      const expandedUrl = await expandShortUrl(mapLink);
+      
+      if (expandedUrl) {
+        // Extract coordinates from the expanded URL
+        const coords = extractCoordinatesFromUrl(expandedUrl);
+        console.log(coords);
+        setPosition(coords);
+      }
+    };
+
+    fetchExpandedUrl();
+  }, []);
+
+  // Using useJsApiLoader from @react-google-maps/api for optimized loading
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY, // Replace with your actual key
+    libraries: ['places'],
+  });
+
+  if (!isLoaded) {
+    return <div>Loading Map...</div>;
+  }
+
+  return (
+    <div className={styles.mapContainer}>
+      <GoogleMap
+        mapContainerClassName={styles.mapContainer}
+        center={position}
+        zoom={15}
+      >
+        <Marker position={position} />
+      </GoogleMap>
+    </div>
+  );
+};
+
+export default CollegeDetail;

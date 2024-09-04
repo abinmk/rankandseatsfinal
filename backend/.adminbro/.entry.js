@@ -7,5 +7,3 @@ import Component3 from '../components/DeleteByCategory'
 AdminBro.UserComponents.Component3 = Component3
 import Component4 from '../components/DeleteByCategory'
 AdminBro.UserComponents.Component4 = Component4
-import Component5 from '../components/DeleteByCategory'
-AdminBro.UserComponents.Component5 = Component5

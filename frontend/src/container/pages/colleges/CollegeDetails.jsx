@@ -1,10 +1,48 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { GoogleMap, useJsApiLoader, Marker,LoadScript } from '@react-google-maps/api';
 import { Accordion, Card } from 'react-bootstrap';
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { FaUniversity, FaTrain, FaPlane, FaGlobe, FaMapMarkerAlt, FaBed, FaPhone, FaClipboardList, FaCalendar } from 'react-icons/fa';
 import styles from './CollegeDetail.module.css';
+
+
+const expandShortUrl = async (shortUrl) => {
+  try {
+    // API request to unshorten.me
+    const response = await axios.get(`https://unshorten.me/json/${encodeURIComponent(shortUrl)}`);
+    
+    // Check if the response has a resolved URL
+    if (response.data && response.data.resolved_url) {
+      console.log("Expanded URL:", response.data.resolved_url);
+      return response.data.resolved_url;
+    } else {
+      console.log("No resolved URL found.");
+      return null;
+    }
+  } catch (error) {
+    console.error('Error expanding short URL:', error);
+    return null;
+  }
+};
+
+// Function to extract coordinates from Google Maps URL
+// Improved extraction logic with better logging
+const extractCoordinatesFromUrl = (url) => {
+  console.log("Expanded URL: ", url); // Log the expanded URL
+  const regex = /@([-0-9.]+),([-0-9.]+),/;
+  const match = url.match(regex);
+  
+  if (match) {
+    const lat = parseFloat(match[1]);
+    const lng = parseFloat(match[2]);
+    console.log("Extracted Coordinates: ", { lat, lng }); // Log the extracted coordinates
+    return { lat, lng };
+  } else {
+    console.log("No coordinates found in the URL.");
+    return { lat: 26.9124, lng: 75.7873 }; // Default coordinates
+  }
+};
 
 const CollegeDetail = () => {
   const { collegeName } = useParams();
@@ -12,17 +50,36 @@ const CollegeDetail = () => {
   const [loading, setLoading] = useState(true);
   const [position, setPosition] = useState({ lat: 0, lng: 0 });
 
+  // Using useJsApiLoader from @react-google-maps/api for optimized loading
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY, // Replace with your actual key
+    libraries: ['places'],
+  });
+
+  const handleMapClick = () => {
+    const googleMapsUrl =  college.locationMapLink;
+    window.open(googleMapsUrl, '_blank'); // Open Google Maps in a new tab
+  };
+
+
+
   useEffect(() => {
     const fetchCollegeDetails = async () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/colleges/${encodeURIComponent(collegeName)}`);
         setCollege(response.data);
         
-        if (response.data.latitude && response.data.longitude) {
-          setPosition({ lat: response.data.latitude, lng: response.data.longitude });
-        } else {
-          setPosition({ lat: 26.9124, lng: 75.7873 });
-        }
+          const mapLink = response.data.locationMapLink; // Example short URL
+          
+          // Wait for the expanded URL
+          const expandedUrl = await expandShortUrl(mapLink);
+          
+          if (expandedUrl) {
+            // Extract coordinates from the expanded URL
+            const coords = extractCoordinatesFromUrl(expandedUrl);
+            console.log(coords);
+            setPosition(coords);
+          }
       } catch (error) {
         console.error('Error fetching college details:', error);
       } finally {
@@ -72,15 +129,14 @@ const CollegeDetail = () => {
           <p><FaMapMarkerAlt /> <strong>Address:</strong> {college.address}</p>
         </div>
         <div className={styles.mapContainer}>
-          <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
-            <GoogleMap
-              mapContainerClassName={styles.mapContainer}
-              center={position}
-              zoom={15}
-            >
-              <Marker position={position} />
-            </GoogleMap>
-          </LoadScript>
+          <GoogleMap
+            mapContainerClassName={styles.mapContainer}
+            center={position}
+            zoom={15}
+            onClick={handleMapClick}
+          >
+            <Marker position={position} />
+          </GoogleMap>
         </div>
       </div>
 
