@@ -171,9 +171,9 @@ const FilterItem = ({ title, options = {}, disabled, filterName, filters, handle
       </Accordion.Item>
 
       <Modal show={showModal} onHide={handleModalClose} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>{title}</Modal.Title>
-        </Modal.Header>
+      <Modal.Header closeButton style={{ backgroundColor: '#223D6E' }}>
+      <Modal.Title style={{ color: 'white' }}>{title}</Modal.Title>
+    </Modal.Header>
         <Modal.Body>
           <Form.Control
             disabled={disabled}
