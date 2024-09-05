@@ -752,6 +752,7 @@
 @media (max-width: 768px) {
   .view-more-modal .modal-dialog {
     max-width: 95%; /* Make the modal a bit smaller for smaller screens */
+    width: 80% !important;
   }
 
   .view-more-modal .modal-body {

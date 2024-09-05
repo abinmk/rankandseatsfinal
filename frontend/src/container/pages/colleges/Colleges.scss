@@ -738,29 +738,3 @@
 display: none;
 }
 
-.view-more-modal .modal-dialog {
-  max-width: 90%; /* Ensure the modal does not overflow horizontally */
-  width: 60%; /* Make sure it adjusts well for smaller screens */
-  margin: auto; /* Center the modal horizontally */
-}
-
-.view-more-modal .modal-content {
-  max-height: 80vh; /* Set max height to 80% of viewport height */
-  overflow: hidden; /* Hide overflow on the entire modal */
-}
-
-.view-more-modal .modal-body {
-  max-height: 60vh; /* Set a max height for the modal body */
-  overflow-y: auto; /* Make the modal body scrollable */
-  padding: 1rem; /* Adjust padding as necessary */
-}
-
-@media (max-width: 768px) {
-  .view-more-modal .modal-dialog {
-    max-width: 95%; /* Make the modal a bit smaller for smaller screens */
-  }
-
-  .view-more-modal .modal-body {
-    max-height: 50vh; /* Reduce the body height a bit more for small screens */
-  }
-}
