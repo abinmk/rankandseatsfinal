@@ -191,6 +191,7 @@ const GenericTable = ({
         filterOptions={filterOptions}
         loading={filterLoading}
         getFilterParamName={getFilterParamName}
+        setShowFilters={setShowFilters}
         clearAllFilters={clearAllFilters}
         handleSliderChange={handleSliderChange} // Pass the handler to FilterSection
       />

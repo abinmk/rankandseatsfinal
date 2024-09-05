@@ -191,6 +191,7 @@ const GenericTable = ({
         loading={filterLoading}
         getFilterParamName={getFilterParamName} // Pass this function to FilterSection
         clearAllFilters={clearAllFilters}
+        setShowFilters={setShowFilters}
       />
       <div className={`results-section ${showFilters ? "" : "full-width"}`}>
         <button className={`show-filters-btn ${showFilters ? "hidden" : ""}`} onClick={toggleFilters} id='view-btn'>
@@ -199,7 +200,7 @@ const GenericTable = ({
         <div className="table-container">
           <div>
             <span className='allotments-header'>{headerTitle}</span>
-            <Button variant="primary" className="column-toggle-btn" onClick={() => setShowColumnModal(true)} disabled={disabled}>
+            <Button variant="primary" className="column-toggle-btn" onClick={() => {setShowColumnModal(true);setShowFilters(false)}} disabled={disabled}>
               View/Hide Columns
             </Button>
           </div>

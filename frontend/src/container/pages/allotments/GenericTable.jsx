@@ -35,6 +35,7 @@ const GenericTable = ({
   
 }) => {
   const [showFilters, setShowFilters] = useState(false);
+  const [showResult, setShowResult] = useState(false);
   const [showColumnModal, setShowColumnModal] = useState(false);
   const [showRowModal, setShowRowModal] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
@@ -201,14 +202,14 @@ const GenericTable = ({
         <button className={`show-filters-btn ${showFilters ? "hidden" : ""}`} onClick={toggleFilters}>
           <i className="bi bi-funnel"></i> All Filters
         </button>
-        <div className="table-container">
+        <div className={`table-container ${showResult ? "" : ""}`} >
           <div>
             <span className='allotments-header'>{headerTitle}</span>
-            <Button variant="primary" className="column-toggle-btn" disabled={disabled} onClick={() => setShowColumnModal(true)}>
+            <Button variant="primary" className="column-toggle-btn" disabled={disabled} onClick={() => {setShowFilters(false);setShowColumnModal(true);}}>
               View/Hide Columns
             </Button>
           </div>
-          <div className="table-wrapper">
+          <div className={`table-wrapper`}>
             <Table {...getTableProps()} className="tableCustom" disabled={disabled}>
               <thead>
                 {headerGroups.map((headerGroup) => (

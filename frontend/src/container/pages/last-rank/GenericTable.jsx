@@ -231,6 +231,7 @@ const GenericTable = ({
         getFilterParamName={getFilterParamName}
         clearAllFilters={clearAllFilters}
         handleSliderChange={handleSliderChange}
+        setShowFilters={setShowFilters}
       />
       <div className={`results-section ${showFilters ? "" : "full-width"}`}>
         <button className={`show-filters-btn ${showFilters ? "hidden" : ""}`} onClick={toggleFilters} id='view-btn'>

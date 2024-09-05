@@ -4,7 +4,7 @@ import Slider from '@mui/material/Slider';
 import { debounce } from 'lodash';
 import { UserContext } from '../../../contexts/UserContext';
 
-const FilterItem = ({ title, options = {}, disabled, filterName, filters, handleFilterChange, handleRangeChange, eventKey, viewMore, appliedFiltersCount, getFilterParamName, loading }) => {
+const FilterItem = ({ title, options = {}, disabled,setShowFilters, filterName, filters, handleFilterChange, handleRangeChange, eventKey, viewMore, appliedFiltersCount, getFilterParamName, loading }) => {
   const [showModal, setShowModal] = useState(false);
   const [showPaymentPopup, setShowPaymentPopup] = useState(false);
   const [subscriptionStatus, setSubscriptionStatus] = useState(false);
@@ -81,8 +81,14 @@ const FilterItem = ({ title, options = {}, disabled, filterName, filters, handle
     debouncedHandleRangeChange([minValue, value]);
   };
 
-  const handleModalClose = () => setShowModal(false);
-  const handleModalOpen = () => setShowModal(true);
+  const handleModalClose = () => {
+    setShowModal(false);
+    setShowFilters(true);
+  };
+  const handleModalOpen = () => {
+    setShowModal(true);
+    setShowFilters(false);
+  };
 
   const resetFilter = async () => {
     const isSubscribed = await checkSubscription();
@@ -170,7 +176,7 @@ const FilterItem = ({ title, options = {}, disabled, filterName, filters, handle
         </Accordion.Body>
       </Accordion.Item>
 
-      <Modal show={showModal} onHide={handleModalClose} centered>
+      <Modal show={showModal} onHide={handleModalClose} className='view-more-modal' centered>
       <Modal.Header closeButton style={{ backgroundColor: '#223D6E' }}>
       <Modal.Title style={{ color: 'white' }}>{title}</Modal.Title>
     </Modal.Header>

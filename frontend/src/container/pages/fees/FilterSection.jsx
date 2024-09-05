@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Accordion, Spinner } from 'react-bootstrap';
 import FilterItem from './FilterItem';
 
-const FilterSection = ({ showFilters,disabled, toggleFilters, filters, setFilters, filterOptions, loading, getFilterParamName, clearAllFilters }) => {
+const FilterSection = ({ showFilters,disabled,setShowFilters, toggleFilters, filters, setFilters, filterOptions, loading, getFilterParamName, clearAllFilters }) => {
   const handleFilterChange = (value, checked, filterName) => {
     const filterParamName = getFilterParamName(filterName);
     setFilters((prevFilters) => {
@@ -60,6 +60,7 @@ const FilterSection = ({ showFilters,disabled, toggleFilters, filters, setFilter
               appliedFiltersCount={appliedFiltersCount(filterName)}
               getFilterParamName={getFilterParamName}
               loading={loading} // Pass the loading state
+              setShowFilters={setShowFilters}
             />
           ))}
         </Accordion>
