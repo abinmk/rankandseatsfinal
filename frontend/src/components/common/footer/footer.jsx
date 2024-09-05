@@ -11,9 +11,9 @@ const Footer = ({ bg }) => {
           <span className="text-muted small">
             &copy; <span id="year">2024</span> <span className="highlighted-text">Rank & Seats</span>. All Rights Reserved.
           </span>
-          <span className="text-muted small">
+          {/* <span className="text-muted small">
             Designed by <a href="https://www.sysbitech.com/" target="_blank" rel="noopener noreferrer" className="designer-link">Sysbreeze</a>
-          </span>
+          </span> */}
         </div>
       </footer>
     </Fragment>

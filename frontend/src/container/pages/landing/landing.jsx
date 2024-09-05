@@ -2050,9 +2050,8 @@ Kerala-670731</Link>
     </section>
 	<div className="landing-main-footer py-4">
   <span className="footer-text">
-    © <span id="year">2024</span> <Link to="" className="footer-link">Rank & Seats</Link>
-    Designed by <Link to="https://www.sysbitech.com/" target="_blank" className="footer-link">Sysbreeze</Link>
-    All rights reserved
+    © <span id="year">2024</span> <Link to="" className="footer-link">Rank & Seats.</Link>
+    All rights reserved.
   </span>
 </div>
 

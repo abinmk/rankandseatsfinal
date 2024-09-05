@@ -60,6 +60,7 @@ const FilterSection = ({ showFilters,showSubscriptionPopup, toggleFilters, filte
               appliedFiltersCount={appliedFiltersCount(filterName)}
               getFilterParamName={getFilterParamName}
               loading={loading} // Pass the loading state
+              toggleFilterSection={toggleFilters}
             />
           ))}
         </Accordion>
