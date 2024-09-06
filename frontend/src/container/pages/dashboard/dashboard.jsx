@@ -117,7 +117,7 @@ const Sales = () => {
   useEffect(() => {
     const fetchAlert = async () => {
       try {
-        const { data } = await axios.get(`${apiUrl}/admin-data/get-information-alert`);
+        const { data } = await axiosInstance.get(`${apiUrl}/admin-data/get-information-alert`);
         if (data) {
           setInformationAlert(data.text);
         }
@@ -132,7 +132,7 @@ const Sales = () => {
   useEffect(() => {
     const fetchAlerts = async () => {
       try {
-        const { data } = await axios.get(`${apiUrl}/admin-data/get-alerts-announcements`);
+        const { data } = await axiosInstance.get(`${apiUrl}/admin-data/get-alerts-announcements`);
         setAlerts(data.alerts);
       } catch (error) {
         console.error("Error fetching alerts:", error);

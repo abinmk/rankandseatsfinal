@@ -4,6 +4,7 @@ import { Form, Button, Card, Container, Alert, Spinner, OverlayTrigger, Tooltip 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Import the styles for the editor
 import { FaSave, FaInfoCircle } from 'react-icons/fa';
+import axiosInstance from "../utils/axiosInstance";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -16,7 +17,7 @@ const AdminInformationAlert = () => {
   useEffect(() => {
     const fetchAlert = async () => {
       try {
-        const { data } = await axios.get(`${apiUrl}/admin-data/get-information-alert`);
+        const { data } = await axiosInstance.get(`${apiUrl}/admin-data/get-information-alert`);
         if (data) {
           setAlertText(data.text);
         }
@@ -33,7 +34,7 @@ const AdminInformationAlert = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${apiUrl}/admin-data/post-information-alert`, { text: alertText });
+      await axiosInstance.post(`${apiUrl}/admin-data/post-information-alert`, { text: alertText });
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 3000);
     } catch (error) {

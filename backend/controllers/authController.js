@@ -97,6 +97,7 @@ exports.sendOtp = async (req, res) => {
 
 exports.verifyOtp = async (req, res) => {
   const { mobileNumber, code } = req.body;
+  let timeOut = "72h";
   try {
     const response = await axios.post('https://api.msg91.com/api/v5/otp/verify', {
       authkey: MSG91_API_KEY,
@@ -113,7 +114,12 @@ exports.verifyOtp = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '48h' });
+    if(user.isAdmin)
+    {
+      timeOut = "4h"
+    }
+
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: timeOut });
     user.currentToken = token;  // Save token in the database
     await user.save();  // Save the updated user document
 

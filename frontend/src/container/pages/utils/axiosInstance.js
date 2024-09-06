@@ -21,7 +21,6 @@ axiosInstance.interceptors.response.use(
     if (error.response.status === 401 && error.response.data === 'Invalid token') {
       // Show alert for session expiry
       alert("Session expired. Please log in again.");
-      console.log("session expired");
 
       // Remove tokens from localStorage
       localStorage.removeItem('token');
@@ -43,7 +42,6 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(originalRequest);
       } catch (refreshError) {
         // Show alert for session expiry
-        alert("Session expired. Please log in again.");
         alert("Session expired. Please log in again.");
         console.log("session expired");
 
