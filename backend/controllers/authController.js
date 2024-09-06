@@ -33,7 +33,7 @@ exports.sendOtpRegister = async (req, res) => {
 
 exports.verifyOtpRegister = async (req, res) => {
   const { name, email, mobileNumber, state, counseling, code } = req.body;
-  
+
   try {
     const isValid = await axios.post('https://api.msg91.com/api/v5/otp/verify', {
       authkey: MSG91_API_KEY,
@@ -48,8 +48,12 @@ exports.verifyOtpRegister = async (req, res) => {
 
     if (isValid) {
       const newUser = await User.create({ name, email, mobileNumber, state, counseling });
+
       const token = jwt.sign({ userId: newUser._id }, JWT_SECRET, { expiresIn: '48h' });
-      res.status(200).send({ token, user: newUser });  // Include the user in the response
+      newUser.currentToken = token;  // Save token in the database
+      await newUser.save();  // Save the updated user document
+
+      res.status(200).send({ token, user: newUser });
     } else {
       res.status(400).send({ message: 'Invalid OTP' });
     }
@@ -105,7 +109,14 @@ exports.verifyOtp = async (req, res) => {
     }
 
     const user = await User.findOne({ mobileNumber });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '48h' });
+    user.currentToken = token;  // Save token in the database
+    await user.save();  // Save the updated user document
+
     res.status(200).json({ token, user });
 
   } catch (error) {

@@ -22,6 +22,7 @@ const wishlistSchema = new mongoose.Schema({
 
 // Main User Schema
 const userSchema = new mongoose.Schema({
+  currentToken :{type:String,default:null},
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   mobileNumber: { type: String, required: true, unique: true },
