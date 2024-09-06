@@ -5,6 +5,7 @@ import { GoogleMap, useJsApiLoader, Marker,LoadScript } from '@react-google-maps
 import { Accordion, Card } from 'react-bootstrap';
 import { FaUniversity, FaTrain, FaPlane, FaGlobe, FaMapMarkerAlt, FaBed, FaPhone, FaClipboardList, FaCalendar } from 'react-icons/fa';
 import styles from './CollegeDetail.module.css';
+import axiosInstance from '../utils/axiosInstance';
 
 
 const expandShortUrl = async (shortUrl) => {
@@ -66,7 +67,7 @@ const CollegeDetail = () => {
   useEffect(() => {
     const fetchCollegeDetails = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/colleges/${encodeURIComponent(collegeName)}`);
+        const response = await axiosInstance.get(`${import.meta.env.VITE_API_URL}/colleges/${encodeURIComponent(collegeName)}`);
         setCollege(response.data);
         
           const mapLink = response.data.locationMapLink; // Example short URL

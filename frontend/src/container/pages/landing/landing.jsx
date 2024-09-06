@@ -473,10 +473,9 @@ const [showProfileModal, setShowProfileModal] = useState(false);
 								<div className="row justify-content-center">
 								<div className="col-xxl-9 col-xl-8 col-lg-12 col-md-12">
 									<div className="py-lg-5 text-center">
-										<p className="landing-banner-heading text-fixed-white mb-1">Achieve your dreams with <span className="">us!</span></p>
-										<div className="fs-16 mb-4 text-fixed-white op-8 px-4">Your gateway to accurate rankings and seat allotments</div>
-										<Link to={`${import.meta.env.BASE_URL}lastrank/`} className="m-1 btn btn-lg btn-success" target="_blank"> Explore Rankings <i className="ri-arrow-right-line ms-2 align-middle"></i> </Link>
-										<Link to={`${import.meta.env.BASE_URL}allotments/`} className="m-1 btn btn-lg btn-light" target="_blank"> View Seat Allotments <i className="ri-eye-line ms-2 align-middle"></i> </Link>
+										<p className="landing-banner-heading text-fixed-white mb-1">Your One Stop Platform for NEET PG Counselling</p>
+										<div className="fs-16 mb-4 text-fixed-white op-8 px-4">Get your facts and figures straight to make an informed decision and do justice to your hard earned rank.</div>
+										<Link to={`${import.meta.env.BASE_URL}allotments/`} className="m-1 btn btn-lg btn-success" target="_blank"> Explore Now <i className="ri-arrow-right-line ms-2 align-middle"></i> </Link>
 									</div>
 								</div>
 							</div>
@@ -503,7 +502,7 @@ const [showProfileModal, setShowProfileModal] = useState(false);
                         <p className="text-muted">Benefit from our expert support and guidance tailored for NEET PG aspirants.</p>
 						<Link to={`${import.meta.env.BASE_URL}allotments/`}>
 						<Button variant="primary" size="lg" className="w-100 animate__animated animate__pulse">
-							Get Support for NEET PG
+							Explore Now
 						</Button>
 						</Link>              
 					</Card.Body>
@@ -542,271 +541,173 @@ const [showProfileModal, setShowProfileModal] = useState(false);
 </section>
 
 
-					{/* <section className="section section-background section-style" id="exam-categories">
-    <div className="container text-center">
-        <p className="fs-12 fw-semibold text-primary mb-1"><span className="landing-section-heading">EXAM CATEGORIES</span></p>
-        <h4 className="fw-semibold mb-2">Choose Your Exam Category</h4>
-        <div className="row justify-content-center">
-            <Col xl={6}>
-                <p className="text-muted fs-15 mb-5 fw-normal">Select the category of exams to explore resources, guidance, and support tailored to your needs.</p>
-            </Col>
-        </div>
-        <div className="row justify-content-center">
-            <Col xl={3} lg={4} md={6} sm={12} className="mb-3">
-                <Button variant="primary" size="lg" className="w-100 mb-2">NEET PG</Button>
-            </Col>
-            <Col xl={3} lg={4} md={6} sm={12} className="mb-3">
-                <Button variant="success" size="lg" className="w-100 mb-2">NEET SS</Button>
-            </Col>
-            <Col xl={3} lg={4} md={6} sm={12} className="mb-3">
-                <Button variant="info" size="lg" className="w-100 mb-2">INI CET</Button>
-            </Col>
-        </div>
+<section className="section section-background section-style" id="features">
+  <div className="container text-center">
+    <p className="fs-12 fw-semibold text-primary mb-1">
+      <span className="landing-section-heading">FEATURES</span>
+    </p>
+    <h4 className="fw-semibold mb-2">
+      Our consultancy offers numerous advanced features.
+    </h4>
+    <div className="row justify-content-center">
+      <Col xl={6}>
+        <p className="text-muted fs-15 mb-5 fw-normal">
+          Our services include the most advanced features to enhance your educational journey, ensuring optimal performance and success.
+        </p>
+      </Col>
     </div>
-</section> */}
 
-					<section className="section section-background section-style " id="features">
-						<div className="container text-center">
-							<p className="fs-12 fw-semibold text-primary mb-1"><span className="landing-section-heading">FEATURES</span></p>
-							<h4 className="fw-semibold mb-2">Our consultancy offers numerous advanced features.</h4>
-							<div className="row justify-content-center">
-								<Col xl={6}>
-									<p className="text-muted fs-15 mb-5 fw-normal">Our services include the most advanced features to enhance your educational journey, ensuring optimal performance and success.</p>
-								</Col>
-							</div>
-							<div className="row text-start">
-								<div className="col-12 col-md-3">
-									<div className="card custom-card card-style-angle border">
-										<div className="card-body rounded m-2 text-center">
-											<div className="features-icon m-auto mb-2 bg-primary-transparent">
-												<svg className="svg-primary shadow-lg" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 24 24">
-													<path
-														d="M7.00293 8.05957a3 3 0 1 1 3-3A3.00328 3.00328 0 0 1 7.00293 8.05957zm0-4a1 1 0 1 0 1 1A1.0013 1.0013 0 0 0 7.00293 4.05957zM17.00293 12.05957a3 3 0 1 1 3-3A3.00328 3.00328 0 0 1 17.00293 12.05957zm0-4a1 1 0 1 0 1 1A1.0013 1.0013 0 0 0 17.00293 8.05957zM7.00293 22.05957a3 3 0 1 1 3-3A3.00328 3.00328 0 0 1 7.00293 22.05957zm0-4a1 1 0 1 0 1 1A1.0013 1.0013 0 0 0 7.00293 18.05957z" />
-													<path opacity=".3"
-														d="M17.00293,12.05957a2.98168,2.98168,0,0,1-1.15424-.2323,2.00186,2.00186,0,0,1-1.84576,1.2323h-4a3.95376,3.95376,0,0,0-2,.55646V7.87531a2.80519,2.80519,0,0,1-2-.00007v8.3686a2.89912,2.89912,0,0,1,2.1543.048,2.00179,2.00179,0,0,1,1.8457-1.23224h4a4.00437,4.00437,0,0,0,3.90619-3.15509A2.96013,2.96013,0,0,1,17.00293,12.05957Z" />
-												</svg>
-											</div>
-											<h6 className="fw-semibold mx-1">
-												Expert Guidance
-											</h6>
-											<p className="text-muted mb-2 mx-1">
-												Our team provides expert guidance to help you navigate your educational journey.
-											</p>
-											<Link className="fs-12 mx-1 text-primary" to={`${import.meta.env.BASE_URL}allotments/`}>Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
-										</div>
-									</div>
-								</div>
-								<div className="col-12 col-md-3">
-									<div className="card custom-card border card-style-angle">
-										<div className="card-body text-center rounded m-2">
-											<div className="features-icon mb-2 m-auto bg-secondary-transparent">
-												<svg className="svg-secondary shadow-lg" xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 24 24" viewBox="0 0 24 24">
-													<path
-														d="M12,15.89355c-0.17551-0.00004-0.34792-0.04618-0.5-0.13378l-9-5.19727c-0.47839-0.27632-0.64221-0.88814-0.36589-1.36653C2.22187,9.04403,2.34806,8.91784,2.5,8.83008l9-5.19336c0.30964-0.17774,0.69036-0.17774,1,0l9,5.19336c0.4784,0.27632,0.64221,0.88814,0.36589,1.36653c-0.08776,0.15194-0.21395,0.27813-0.36589,0.36589l-9,5.19727C12.34792,15.84737,12.17551,15.89351,12,15.89355z" />
-													<path opacity=".3"
-														d="M21.5,13.43359l-2.48682-1.435L12.5,15.75977c-0.1521,0.08759-0.32452,0.13373-0.5,0.13379c-0.17548-0.00006-0.3479-0.0462-0.5-0.13379L4.98682,11.9986L2.5,13.43359c-0.15192,0.08771-0.27814,0.21393-0.36591,0.36584C1.85779,14.27783,2.02161,14.88965,2.5,15.16602l9,5.19727c0.1521,0.08759,0.32452,0.13373,0.5,0.13379c0.17554-0.00006,0.3479-0.0462,0.5-0.13379l9-5.19727c0.15192-0.08777,0.27814-0.21399,0.36591-0.36591C22.14221,14.32172,21.97839,13.7099,21.5,13.43359z" />
-												</svg>
-											</div>
-											<h6 className="fw-semibold mx-1">
-												Personalized Support
-											</h6>
-											<p className="text-muted mb-2 mx-1">
-												Receive tailored guidance and support to navigate your educational journey.
-											</p>
-											<Link className="fs-12 mx-1 text-primary" to={`${import.meta.env.BASE_URL}allotments/`}>Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
-										</div>
-									</div>
-								</div>
-								<div className="col-12 col-md-3">
-									<div className="card custom-card card-style-angle border">
-										<div className="card-body text-center rounded m-2">
-											<div className="features-icon mb-2 m-auto bg-warning-transparent">
-												<svg className="svg-warning shadow-lg" xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 24 24" viewBox="0 0 24 24">
-													<path
-														d="M16,11H8c-0.55197,0.00031-0.99969-0.44689-1-0.99886C7,10.00076,7,10.00038,7,10V6C6.99969,5.44803,7.44689,5.00031,7.99886,5C7.99924,5,7.99962,5,8,5h8c0.55197-0.00031,0.99969,0.44689,1,0.99886C17,5.99924,17,5.99962,17,6v4c0.00031,0.55197-0.44689,0.99969-0.99886,1C16.00076,11,16.00038,11,16,11z" />
-													<path opacity=".3"
-														d="M18,2H6C4.89545,2,4,2.89545,4,4v16c0,1.10455,0.89545,2,2,2h12c1.10455,0,2-0.89545,2-2V4C20,2.89545,19.10455,2,18,2z M17,6v4c0.00031,0.55194-0.4469,0.99969-0.99884,1C16.00073,11,16.00037,11,16,11H8c-0.55194,0.00031-0.99969-0.4469-1-0.99884C7,10.00073,7,10.00037,7,10V6C6.99969,5.44806,7.4469,5.00031,7.99884,5C7.99927,5,7.99963,5,8,5h8c0.55194-0.00031,0.99969,0.4469,1,0.99884C17,5.99927,17,5.99963,17,6z" />
-													<circle cx="8" cy="14" r="1" />
-													<circle cx="8" cy="18" r="1" />
-													<circle cx="12" cy="18" r="1" />
-													<circle cx="16" cy="18" r="1" />
-													<circle cx="16" cy="14" r="1" />
-													<circle cx="12" cy="14" r="1" />
-												</svg>
-											</div>
-											<h6 className="fw-semibold mx-1">
-												Responsive Design
-											</h6>
-											<p className="text-muted mb-2 mx-1">
-												Our platform is built with a responsive design to ensure a seamless experience across all devices.
-											</p>
-											<Link className="fs-12 mx-1 text-primary" to={`${import.meta.env.BASE_URL}allotments/`}>Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
-										</div>
-									</div>
-								</div>
-								<div className="col-12 col-md-3">
-									<div className="card custom-card card-style-angle border">
-										<div className="card-body text-center rounded m-2">
-											<div className="features-icon mb-2 m-auto bg-info-transparent">
-												<svg className="svg-info shadow-lg" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 24 24">
-													<path opacity=".3"
-														d="M21,22H14a.99974.99974,0,0,1-1-1V14a.99974.99974,0,0,1,1-1h7a.99974.99974,0,0,1,1,1v7A.99974.99974,0,0,1,21,22Z" />
-													<path
-														d="M7.91406 17.5l2.793-2.793A.99989.99989 0 0 0 9.293 13.293L6.5 16.08594 3.707 13.293A.99989.99989 0 0 0 2.293 14.707l2.793 2.793L2.293 20.293A.99989.99989 0 1 0 3.707 21.707l2.793-2.793 2.793 2.793A.99989.99989 0 0 0 10.707 20.293zM21 11H14a1.00009 1.00009 0 0 1-.89453-1.44727l3.5-7a1.04127 1.04127 0 0 1 1.78906 0l3.5 7A1.00009 1.00009 0 0 1 21 11z" />
-													<path opacity=".3"
-														d="M6.5,11A4.5,4.5,0,1,1,11,6.5,4.50491,4.50491,0,0,1,6.5,11Z" />
-												</svg>
-											</div>
-											<h6 className="fw-semibold mx-1">
-												Diverse Resources
-											</h6>
-											<p className="text-muted mb-2 mx-1">
-												Access a wide variety of resources to support your educational journey and success.
-											</p>
-											<Link className="fs-12 mx-1 text-primary" to={`${import.meta.env.BASE_URL}allotments/`}>Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
-										</div>
-									</div>
-								</div>
-								<div className="col-12 col-md-3">
-									<div className="card custom-card card-style-angle border">
-										<div className="card-body text-center rounded m-2">
-											<div className="features-icon mb-2 m-auto bg-pink-transparent">
-												<svg className="svg-pink shadow-lg" xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 24 24" viewBox="0 0 24 24">
-													<path opacity=".3"
-														d="M8.44444,3.11121c-1.10457,0-2,0.89543-2,2v13.55556c-0.00003,1.22729-0.99493,2.22219-2.22222,2.22223h14.44445C20.50762,20.889,22,19.39662,22,17.55567c0,0,0-0.00001,0-0.00001V5.11121c0-1.10457-0.89543-2-2-2L8.44444,3.11121z" />
-													<path
-														d="M6.44446,18.66675V7.55603H4c-1.10455,0-2,0.89539-2,1.99994v9.33301c0,1.10461,0.89545,2,2,2h0.22223C5.44952,20.88898,6.4444,19.89404,6.44446,18.66675z" />
-													<path
-														d="M17,9.0001h-6c-0.55229,0-1-0.44771-1-1s0.44771-1,1-1h6c0.55228,0,1,0.44772,1,1S17.55228,9.0001,17,9.0001z M17,13.0001h-1c-0.55229,0-1-0.44771-1-1s0.44771-1,1-1h1c0.55228,0,1,0.44771,1,1S17.55228,13.0001,17,13.0001z M12,13.0001h-1c-0.55229,0-1-0.44771-1-1s0.44771-1,1-1h1c0.55229,0,1,0.44771,1,1S12.55229,13.0001,12,13.0001z M17,17.0001h-1c-0.55229,0-1-0.44772-1-1c0-0.55229,0.44771-1,1-1h1c0.55228,0,1,0.44771,1,1C18,16.55238,17.55228,17.0001,17,17.0001z M12,17.0001h-1c-0.55229,0-1-0.44772-1-1c0-0.55229,0.44771-1,1-1h1c0.55229,0,1,0.44771,1,1C13,16.55238,12.55229,17.0001,12,17.0001z" />
-												</svg>
-											</div>
-											<h6 className="fw-semibold mx-1">
-												Comprehensive Resources
-											</h6>
-											<p className="text-muted mb-2 mx-1">
-												Access a wide range of resources and tools to support your educational journey and success.
-											</p>
-											<Link className="fs-12 mx-1 text-primary" to={`${import.meta.env.BASE_URL}allotments/`}>Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
-										</div>
-									</div>
-								</div>
-								<div className="col-12 col-md-3">
-									<div className="card custom-card card-style-angle border">
-										<div className="card-body text-center rounded m-2">
-											<div className="features-icon mb-2 m-auto bg-purple-transparent">
-												<svg className="svg-purple shadow-lg" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 24 24">
-													<rect width="18" height="6" x="3" y="3" opacity=".3" rx="2" />
-													<rect width="18" height="6" x="3" y="9" opacity=".3" rx="2" />
-													<rect width="18" height="6" x="3" y="15" opacity=".3" rx="2" />
-													<circle cx="18" cy="6" r="1" />
-													<circle cx="18" cy="12" r="1" />
-													<circle cx="18" cy="18" r="1" />
-													<circle cx="15" cy="6" r="1" />
-													<circle cx="15" cy="12" r="1" />
-													<circle cx="15" cy="18" r="1" />
-													<path
-														d="M9 7H6A1 1 0 0 1 6 5H9A1 1 0 0 1 9 7zM9 13H6a1 1 0 0 1 0-2H9a1 1 0 0 1 0 2zM9 19H6a1 1 0 0 1 0-2H9a1 1 0 0 1 0 2z" />
-												</svg>
-											</div>
-											<h6 className="fw-semibold mx-1">
-												Built for Students
-											</h6>
-											<p className="text-muted mb-2 mx-1">
-												Our platform is designed with students in mind, offering a wealth of resources and tools.
-											</p>
-											<Link className="fs-12 mx-1 text-primary" to={`${import.meta.env.BASE_URL}allotments/`}>Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
-										</div>
-									</div>
-								</div>
-								<div className="col-12 col-md-3">
-									<div className="card custom-card card-style-angle border">
-										<div className="card-body text-center rounded m-2">
-											<div className="features-icon mb-2 m-auto bg-success-transparent">
-												<svg className="svg-success shadow-lg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-													<path opacity=".3"
-														d="M20,8.99969l-7-7H7a3,3,0,0,0-3,3v14a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3Z" />
-													<path
-														d="M20 8.99969H15a2 2 0 0 1-2-2v-5zM19 22a.99974.99974 0 0 1-1-1V19a1 1 0 0 1 2 0v2A.99974.99974 0 0 1 19 22zM19 17a1.03391 1.03391 0 0 1-.71-.29.99108.99108 0 0 1-.21045-1.08984A1.14883 1.14883 0 0 1 18.29 15.29a1.02673 1.02673 0 0 1 .32959-.21.91433.91433 0 0 1 .76025 0 1.03418 1.03418 0 0 1 .33008.21 1.15772 1.15772 0 0 1 .21.33008A.98919.98919 0 0 1 19.71 16.71a1.15384 1.15384 0 0 1-.33008.21A.9994.9994 0 0 1 19 17zM15 18H9a1 1 0 0 1 0-2h6a1 1 0 0 1 0 2zM15 14H9a1 1 0 0 1 0-2h6a1 1 0 0 1 0 2zM10 10H9A1 1 0 0 1 9 8h1a1 1 0 0 1 0 2z" />
-												</svg>
-											</div>
-											<h6 className="fw-semibold mx-1">
-												Detailed Documentation
-											</h6>
-											<p className="text-muted mb-2 mx-1">
-												Our documentation provides detailed guidance to help you make the most of our services.
-											</p>
-											<Link className="fs-12 mx-1 text-primary" to={`${import.meta.env.BASE_URL}allotments/`}>Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
-										</div>
-									</div>
-								</div>
-								<div className="col-12 col-md-3">
-									<div className="card custom-card card-style-angle border">
-										<div className="card-body text-center rounded m-2">
-											<div className="features-icon mb-2 m-auto bg-danger-transparent">
-												<svg className="svg-danger shadow-lg" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 24 24">
-													<path opacity=".3"
-														d="M11,22A9,9,0,0,1,11,4a.99943.99943,0,0,1,1,1v7h7a.99943.99943,0,0,1,1,1A9.00984,9.00984,0,0,1,11,22Z" />
-													<path
-														d="M21,10H15a.99943.99943,0,0,1-1-1V3a.99943.99943,0,0,1,1-1,7.0018,7.0018,0,0,1,7,7A.99943.99943,0,0,1,21,10Z" />
-												</svg>
-											</div>
-											<h6 className="fw-semibold mx-1">
-												Comprehensive Charts
-											</h6>
-											<p className="text-muted mb-2 mx-1">
-												Utilize our comprehensive charts to gain insights and make informed decisions.
-											</p>
-											<Link className="fs-12 mx-1 text-primary" to={`${import.meta.env.BASE_URL}allotments/`}>Read More<i className="ri-arrow-right-s-line align-middle"></i></Link>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</section>
-					<section className="section" id="about">
-						{/* <img src={landing4} alt="img" className="banner-png2 op-1" />
-						<img src={landing7} alt="img" className="banner-png4" /> */}
-						<div className="container text-center">
-							<p className="fs-12 fw-semibold text-primary mb-1"><span className="landing-section-heading">ABOUT US</span></p>
-							<h4 className="fw-semibold mb-2">Empowering Your Educational Journey</h4>
-							<div className="row justify-content-center">
-								<Col xl={6}>
-									<p className="text-muted fs-15 mb-5 fw-normal">Our consultancy offers tailored solutions and support to ensure your success. Discover the range of services we provide to help you achieve your academic goals.</p>
-								</Col>
-							</div>
-							<Row>
-								<Col xl={5} className="customize-image">
-									{/* <img src={landing1} alt="" className="custmize-img" /> */}
-								</Col>
-								<Col lg={7} className="text-start">
-									<p className="h4 mb-0"> Get to Know Us</p>
-									<p className="mb-4 sub-text">Explore our diverse range of services and gain insight into our areas of specialization.</p>
-									<ul className="list-unstyled fw-500 mb-4">
-										<li className="list-item mb-2">
-											<div className="d-flex align-items-start">
-												<span className="me-1 text-primary op-8"><i className="bx bx-radio-circle-marked fs-20"></i></span>
-												<div>
-													<h6 className="fs-15">Creative Solutions</h6>
-													<p className="op-8">We provide innovative solutions tailored to your educational needs.</p>
-												</div>
-											</div>
-										</li>
-										<li className="list-item mb-2">
-											<div className="d-flex align-items-start">
-												<span className="me-1 text-primary op-8"><i className="bx bx-radio-circle-marked fs-20"></i></span>
-												<div>
-													<h6 className="fs-15">Quality & Clean Code</h6>
-													<p className="op-8 mb-0">Our platform is built with quality and clean code to ensure a smooth and efficient experience.</p>
-												</div>
-											</div>
-										</li>
-									</ul>
-									<Link to={`${import.meta.env.BASE_URL}dashboards/`} className="btn btn-primary btn-lg me-2">Get Started Now</Link>
-									<Link to={`${import.meta.env.BASE_URL}allotments/`} className="btn btn-primary-transparent btn-lg">Learn More</Link>
-								</Col>
-							</Row>
-						</div>
-					</section>
+    <div className="row text-start">
+      {/* Feature Card 1 */}
+      <div className="col-12 col-md-3 d-flex">
+        <div className="card custom-card card-style-angle border flex-fill">
+          <div className="card-body rounded m-2 text-center d-flex flex-column">
+            <div className="features-icon d-flex justify-content-center align-items-center m-auto mb-2 bg-success-transparent">
+              <i className="ri-notification-3-line ri-2x"></i>
+            </div>
+            <h6 className="fw-semibold mx-1">Alerts and Notifications</h6>
+            <p className="text-muted mb-2 mx-1 text-justify">
+              Stay informed with our real-time alerts and notifications, even via WhatsApp.
+            </p>
+            <Link className="fs-12 mt-auto text-primary" to={`${import.meta.env.BASE_URL}allotments/`}>
+              Read More<i className="ri-arrow-right-s-line align-middle"></i>
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Feature Card 2 */}
+      <div className="col-12 col-md-3 d-flex">
+        <div className="card custom-card card-style-angle border flex-fill">
+          <div className="card-body rounded m-2 text-center d-flex flex-column">
+            <div className="features-icon d-flex justify-content-center align-items-center m-auto mb-2 bg-secondary-transparent">
+              <i className="ri-customer-service-2-line ri-2x"></i>
+            </div>
+            <h6 className="fw-semibold mx-1">Personalized Support</h6>
+            <p className="text-muted mb-2 mx-1 text-justify">
+              Tailored guidance to ensure you navigate through your educational journey efficiently.
+            </p>
+            <Link className="fs-12 mt-auto text-primary" to={`${import.meta.env.BASE_URL}allotments/`}>
+              Read More<i className="ri-arrow-right-s-line align-middle"></i>
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Feature Card 3 */}
+      <div className="col-12 col-md-3 d-flex">
+        <div className="card custom-card card-style-angle border flex-fill">
+          <div className="card-body rounded m-2 text-center d-flex flex-column">
+            <div className="features-icon d-flex justify-content-center align-items-center m-auto mb-2 bg-warning-transparent">
+              <i className="ri-coins-line ri-2x"></i>
+            </div>
+            <h6 className="fw-semibold mx-1">Fee, Bond, and Stipend</h6>
+            <p className="text-muted mb-2 mx-1 text-justify">
+              Access detailed information on fees, bonds, and stipends for every course and institution.
+            </p>
+            <Link className="fs-12 mt-auto text-primary" to={`${import.meta.env.BASE_URL}allotments/`}>
+              Read More<i className="ri-arrow-right-s-line align-middle"></i>
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Feature Card 4 */}
+      <div className="col-12 col-md-3 d-flex">
+        <div className="card custom-card card-style-angle border flex-fill">
+          <div className="card-body rounded m-2 text-center d-flex flex-column">
+            <div className="features-icon d-flex justify-content-center align-items-center m-auto mb-2 bg-info-transparent">
+              <i className="ri-bar-chart-2-line ri-2x"></i>
+            </div>
+            <h6 className="fw-semibold mx-1">Last Ranks</h6>
+            <p className="text-muted mb-2 mx-1 text-justify">
+              See the closing ranks of each course and institution to help guide your decisions.
+            </p>
+            <Link className="fs-12 mt-auto text-primary" to={`${import.meta.env.BASE_URL}allotments/`}>
+              Read More<i className="ri-arrow-right-s-line align-middle"></i>
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Repeat similar blocks for the rest of the feature cards */}
+
+      {/* Example for Info on Institutes */}
+      <div className="col-12 col-md-3 d-flex">
+        <div className="card custom-card card-style-angle border flex-fill">
+          <div className="card-body rounded m-2 text-center d-flex flex-column">
+            <div className="features-icon d-flex justify-content-center align-items-center m-auto mb-2 bg-pink-transparent">
+              <i className="ri-building-line ri-2x"></i>
+            </div>
+            <h6 className="fw-semibold mx-1">Info on Institutes</h6>
+            <p className="text-muted mb-2 mx-1 text-justify">
+              Get details about bed strength, location, and other vital data on participating institutes.
+            </p>
+            <Link className="fs-12 mt-auto text-primary" to={`${import.meta.env.BASE_URL}allotments/`}>
+              Read More<i className="ri-arrow-right-s-line align-middle"></i>
+            </Link>
+          </div>
+        </div>
+      </div>
+
+	  <div className="col-12 col-md-3 d-flex">
+  <div className="card custom-card card-style-angle border flex-fill">
+    <div className="card-body rounded m-2 text-center d-flex flex-column">
+      <div className="features-icon d-flex justify-content-center align-items-center m-auto mb-2 bg-purple-transparent">
+        <i className="ri-user-line ri-2x"></i>
+      </div>
+      <h6 className="fw-semibold mx-1">Admitted Students</h6>
+      <p className="text-muted mb-2 mx-1 text-justify">
+        Details of the admitted students of the previous 3 years in each college along with their domiciliary states listed out, making your enquiries easier.
+      </p>
+      <Link className="fs-12 mt-auto text-primary" to={`${import.meta.env.BASE_URL}allotments/`}>
+        Read More<i className="ri-arrow-right-s-line align-middle"></i>
+      </Link>
+    </div>
+  </div>
+</div>
+
+
+
+      {/* Example for Filters */}
+      <div className="col-12 col-md-3 d-flex">
+        <div className="card custom-card card-style-angle border flex-fill">
+		<div className="card-body rounded m-2 text-center d-flex flex-column">
+      <div className="features-icon d-flex justify-content-center align-items-center m-auto mb-2 bg-success-transparent">
+        <i className="ri-filter-3-line ri-2x"></i>
+      </div>
+      <h6 className="fw-semibold mx-1">Filters</h6>
+      <p className="text-muted mb-2 mx-1 text-justify">
+	  Dozens of filters that'll let you sort through your options and make comparisons easier. You get to filter the colleges and courses on the basis of state, rank, type of course, and what not.    </p>
+      <Link className="fs-12 mt-auto text-primary" to={`${import.meta.env.BASE_URL}allotments/`}>
+        Read More<i className="ri-arrow-right-s-line align-middle"></i>
+      </Link>
+    </div>
+        </div>
+      </div>
+
+      {/* Example for Your Choice Wishlist */}
+      <div className="col-12 col-md-3 d-flex">
+        <div className="card custom-card card-style-angle border flex-fill">
+          <div className="card-body rounded m-2 text-center d-flex flex-column">
+            <div className="features-icon d-flex justify-content-center align-items-center m-auto mb-2 bg-danger-transparent">
+              <i className="ri-heart-line ri-2x"></i>
+            </div>
+            <h6 className="fw-semibold mx-1">Your Choice Wishlist</h6>
+            <p className="text-muted mb-2 mx-1 text-justify">
+              Save and organize your preferred courses in colleges and have them ready for choice filling.
+            </p>
+            <Link className="fs-12 mt-auto text-primary" to={`${import.meta.env.BASE_URL}allotments/`}>
+              Read More<i className="ri-arrow-right-s-line align-middle"></i>
+            </Link>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+					{/* <section className="section" id="about">*/}
 
 
 					{/* <section className="section landing-Features" id="statistics">
@@ -1833,7 +1734,7 @@ const [showProfileModal, setShowProfileModal] = useState(false);
 							</Swiper>
 						</div>
 					</section> */}
-					<section className="section section-background section-style" id="contact">
+					{/* <section className="section section-background section-style" id="contact">
       <div className="container text-center">
         <p className="fs-12 fw-semibold text-primary mb-1"><span className="landing-section-heading">CONTACT US</span></p>
         <h4 className="fw-semibold mb-2">Have any questions? We would love to hear from you.</h4>
@@ -1945,107 +1846,86 @@ const [showProfileModal, setShowProfileModal] = useState(false);
           </div>
         </div>
       </div>
-    </section>
+    </section> */}
 	<section className="section landing-footer text-fixed-white">
       <div className="container">
-        <Row>
-          <Col xl={4}>
-            <div className="px-4">
-              <p className="fw-semibold mb-3">
-                <Link aria-label="anchor" to="/">
-                  <img src={desktopdark} width={"300px"}alt="Rank and Seats Logo" />
-                </Link>
-              </p>
-              <p className="mb-2 op-6 fw-normal">
-                Rank and Seats is your trusted partner in navigating the complexities of NEET counseling. We provide comprehensive data and insights to help you make informed decisions about your future.
-              </p>
-              <p className="mb-0 op-6 fw-normal">Your success is our priority. Let's achieve it together.</p>
+	  <Row className="justify-content-center my-0">
+  <Col xl={2} lg={3} md={4} className="mb-4">
+    <div className="px-4">
+      <h6 className="fw-semibold mb-3 text-fixed-white">PAGES</h6>
+      <ul className="list-unstyled op-6 fw-normal landing-footer-list">
+        <li>
+          <a href="/about-us" className="text-fixed-white" target="_blank" rel="noopener noreferrer">About Us</a>
+        </li>
+        <li>
+          <a href="/contact-us" className="text-fixed-white" target="_blank" rel="noopener noreferrer">Contact Us</a>
+        </li>
+        <li>
+          <a href="/pricing" className="text-fixed-white" target="_blank" rel="noopener noreferrer">Pricing</a>
+        </li>
+        <li>
+          <a href="/features" className="text-fixed-white" target="_blank" rel="noopener noreferrer">Features</a>
+        </li>
+      </ul>
+    </div>
+  </Col>
+  <Col xl={2} lg={3} md={4} className="mb-4">
+    <div className="px-4">
+      <h6 className="fw-semibold mb-3 text-fixed-white">INFO</h6>
+      <ul className="list-unstyled op-6 fw-normal landing-footer-list">
+        <li>
+          <Link to="/privacy-policy" className="text-fixed-white">Privacy Policy</Link>
+        </li>
+        <li>
+          <Link to="/terms-and-conditions" className="text-fixed-white">Terms & Conditions</Link>
+        </li>
+        <li>
+          <Link to="/cancellation-refund-policy" className="text-fixed-white">Cancellation/Refund Policy</Link>
+        </li>
+      </ul>
+    </div>
+  </Col>
+  <Col xl={3} lg={6} md={8} className="mb-4">
+    <div className="px-4">
+      <h6 className="fw-semibold text-fixed-white mb-3">CONTACT US</h6>
+      <ul className="list-unstyled fw-normal landing-footer-list">
+        <li>
+          <Link to="#" className="text-fixed-white op-6"><i className="ri-mail-line me-1 align-middle"></i> support@rankandseats.com</Link>
+        </li>
+        <li>
+          <Link to="#" className="text-fixed-white op-6"><i className="ri-phone-line me-1 align-middle"></i> +91 80 75 91 92 24</Link>
+        </li>
+        <li className="mt-3">
+          <p className="mb-2 fw-semibold op-8">FOLLOW US ON :</p>
+          <div className="mb-0 justify-content-center">
+            <div className="btn-list d-inline-flex gap-2">
+              <a href="https://facebook.com/rankandseats" target="_blank" rel="noopener noreferrer">
+                <Button variant="" type="button" aria-label="Facebook" className="btn btn-sm btn-icon btn-primary-light btn-wave waves-effect waves-light">
+                  <i className="ri-facebook-line fw-bold"></i>
+                </Button>
+              </a>
+              <a href="https://twitter.com/rankandseats" target="_blank" rel="noopener noreferrer">
+                <Button variant="" type="button" aria-label="Twitter" className="btn btn-sm btn-icon btn-secondary-light btn-wave waves-effect waves-light">
+                  <i className="ri-twitter-line fw-bold"></i>
+                </Button>
+              </a>
+              <a href="https://instagram.com/rankandseats" target="_blank" rel="noopener noreferrer">
+                <Button variant="" type="button" aria-label="Instagram" className="btn btn-sm btn-icon btn-warning-light btn-wave waves-effect waves-light">
+                  <i className="ri-instagram-line fw-bold"></i>
+                </Button>
+              </a>
+              <a href="https://youtube.com/rankandseats" target="_blank" rel="noopener noreferrer">
+                <Button variant="" type="button" aria-label="YouTube" className="btn btn-sm btn-icon btn-danger-light btn-wave waves-effect waves-light">
+                  <i className="ri-youtube-line fw-bold"></i>
+                </Button>
+              </a>
             </div>
-          </Col>
-          <Col xl={2}>
-            <div className="px-4">
-              <h6 className="fw-semibold mb-3 text-fixed-white mb-2">PAGES</h6>
-              <ul className="list-unstyled op-6 fw-normal landing-footer-list">
-                <li>
-                  <a href="/about-us" className="text-fixed-white" target="_blank" rel="noopener noreferrer">About Us</a>
-                </li>
-                <li>
-                  <a href="/contact-us" className="text-fixed-white" target="_blank" rel="noopener noreferrer">Contact Us</a>
-                </li>
-                <li>
-                  <a href="/pricing" className="text-fixed-white" target="_blank" rel="noopener noreferrer">Pricing</a>
-                </li>
-                <li>
-                  <a href="/features" className="text-fixed-white" target="_blank" rel="noopener noreferrer">Features</a>
-                </li>
-              </ul>
-            </div>
-          </Col>
-          <Col xl={2}>
-            <div className="px-4">
-              <h6 className="fw-semibold mb-3 text-fixed-white mb-2">INFO</h6>
-              <ul className="list-unstyled op-6 fw-normal landing-footer-list">
-                <li>
-                  <Link to="/privacy-policy" className="text-fixed-white">Privacy Policy</Link>
-                </li>
-                <li>
-                  <Link to="/terms-and-conditions" className="text-fixed-white">Terms & Conditions</Link>
-                </li>
-                <li>
-                  <Link to="/cancellation-refund-policy" className="text-fixed-white">Cancellation/Refund Policy</Link>
-                </li>
-              </ul>
-            </div>
-          </Col>
-          <Col xl={4}>
-            <div className="px-4">
-              <h6 className="fw-semibold text-fixed-white mb-2">CONTACT US</h6>
-              <ul className="list-unstyled fw-normal landing-footer-list">
-                <li>
-                  <Link to="#" className="text-fixed-white op-6"><i className="ri-home-4-line me-1 align-middle"></i> Rankseats Solutions LLP
-C/o Kayalody Arcade
-Thettamala Road
-Vellamunda, Wayanad
-Kerala-670731</Link>
-                </li>
-                <li>
-                  <Link to="#" className="text-fixed-white op-6"><i className="ri-mail-line me-1 align-middle"></i> support@rankandseats.com</Link>
-                </li>
-                <li>
-                  <Link to="#" className="text-fixed-white op-6"><i className="ri-phone-line me-1 align-middle"></i> +91 80 75 91 92 24</Link>
-                </li>
-                <li className="mt-3">
-                  <p className="mb-2 fw-semibold op-8">FOLLOW US ON :</p>
-				  <div className="mb-0">
-  <div className="btn-list">
-    <a href="https://facebook.com/rankandseats" target="_blank" rel="noopener noreferrer">
-      <Button variant="" type="button" aria-label="Facebook" className="btn btn-sm btn-icon btn-primary-light btn-wave waves-effect waves-light">
-        <i className="ri-facebook-line fw-bold"></i>
-      </Button>
-    </a>
-    <a href="https://twitter.com/rankandseats" target="_blank" rel="noopener noreferrer">
-      <Button variant="" type="button" aria-label="Twitter" className="btn btn-sm btn-icon btn-secondary-light btn-wave waves-effect waves-light">
-        <i className="ri-twitter-line fw-bold"></i>
-      </Button>
-    </a>
-    <a href="https://instagram.com/rankandseats" target="_blank" rel="noopener noreferrer">
-      <Button variant="" type="button" aria-label="Instagram" className="btn btn-sm btn-icon btn-warning-light btn-wave waves-effect waves-light">
-        <i className="ri-instagram-line fw-bold"></i>
-      </Button>
-    </a>
-    <a href="https://youtube.com/rankandseats" target="_blank" rel="noopener noreferrer">
-      <Button variant="" type="button" aria-label="YouTube" className="btn btn-sm btn-icon btn-danger-light btn-wave waves-effect waves-light">
-        <i className="ri-youtube-line fw-bold"></i>
-      </Button>
-    </a>
-  </div>
-</div>
-
-                </li>
-              </ul>
-            </div>
-          </Col>
-        </Row>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </Col>
+</Row>
       </div>
     </section>
 	<div className="landing-main-footer py-4">

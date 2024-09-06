@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import axiosInstance from '../utils/axiosInstance';
 import './GenerateResults.css';
 
 function GenerateResults() {
@@ -20,7 +21,7 @@ function GenerateResults() {
   const handleGenerateData = async () => {
     try {
       // Replace with your actual API URL
-      const response = await axios.post(`${API_URL}/dataset/generate-full-college-result`);
+      const response = await axiosInstance.post(`${API_URL}/dataset/generate-full-college-result`);
       
       if (response.status === 200) {
         alert('College data generated successfully!');
@@ -37,7 +38,7 @@ function GenerateResults() {
   const fetchAvailableAllotments = async (exam, type) => {
     try {
       console.log(`Fetching available allotments for exam: ${exam}, type: ${type}`);
-      const response = await axios.get(`${API_URL}/dataset/list-available-allotments`, {
+      const response = await axiosInstance.get(`${API_URL}/dataset/list-available-allotments`, {
         params: { examName: `${exam}_${type}` },
       });
       console.log('Available allotments response:', response.data);
@@ -56,7 +57,7 @@ function GenerateResults() {
 
     setIsLoading(true);
     try {
-      await axios.post(`${API_URL}/dataset/generate-combined-dataset`, {
+      await axiosInstance.post(`${API_URL}/dataset/generate-combined-dataset`, {
         examName: `EXAM:${exam}_TYPE:${examType}`,
         rounds: selectedAllotments,
       });

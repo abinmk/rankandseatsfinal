@@ -98,7 +98,7 @@ const Colleges = () => {
   const fetchFilterOptions = useCallback(async () => {
     setFilterLoading(true);
     try {
-      const response = await axios.get(`${apiUrl}/fees/filters`);
+      const response = await axiosInstance.get(`${apiUrl}/fees/filters`);
       setFilterOptions(response.data);
     } catch (error) {
       console.error('Error fetching filter options:', error);
