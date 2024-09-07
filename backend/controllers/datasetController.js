@@ -102,7 +102,7 @@ const uploadCollege = (req, res) => {
 
       const colleges = rows.map(row => ({
         collegeName: row[0],
-        hospitalNameWithPlace: row[1],
+        collegeAddress: row[1],
         state: row[2],
         universityName: row[3],
         instituteType: row[4],
@@ -113,9 +113,11 @@ const uploadCollege = (req, res) => {
         distanceFromRailwayStation: Number(row[9]) || 0,
         nearestAirport: row[10],
         distanceFromAirport: Number(row[11]) || 0,
-        phoneNumber: row[12],
-        website: row[13]
+        phoneNumber: row[12] || 0,
+        website: row[13] || 0
       }));
+
+      console.log("colleges is fine");
 
       // Optional: Delete existing data if needed
       await College.deleteMany({});
@@ -326,6 +328,7 @@ const generateCombinedDataset = async (req, res) => {
           distanceFromAirport: collegeDetails.distanceFromAirport || 0,
           phoneNumber: collegeDetails.phoneNumber || '',
           website: collegeDetails.website || '',
+          collegeAddress: collegeDetails.collegeAddress || '',
           courses: {},
         };
       }
@@ -561,6 +564,7 @@ const generateCombinedDataset = async (req, res) => {
     const fullCollegeResultData = Object.values(fullCollegeResultMap).map(college => {
       return {
         collegeName: college.collegeName,
+        collegeAddress:college.collegeAddress,
         state: college.state,
         instituteType: college.instituteType,
         universityName: college.universityName,

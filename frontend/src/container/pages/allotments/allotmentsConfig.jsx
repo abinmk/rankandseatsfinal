@@ -50,18 +50,22 @@ export const allotmentsColumns = [
   {
     Header: 'Fee',
     accessor: 'feeAmount',
+    Cell: ({ value }) => `₹${new Intl.NumberFormat('en-IN').format(value)}`
   },
   {
     Header: 'Stipend Year 1',
     accessor: 'stipendYear1',
+    Cell: ({ value }) => `₹${new Intl.NumberFormat('en-IN').format(value)}`
   },
   {
     Header: 'Bond',
     accessor: 'bondYear',
+    Cell: ({ value }) => `${value} years`
   },
   {
     Header: 'Bond Penalty',
     accessor: 'bondPenality',
+    Cell: ({ value }) => `₹${new Intl.NumberFormat('en-IN').format(value)}`
   },
   {
     Header: 'Beds',

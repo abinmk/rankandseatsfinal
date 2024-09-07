@@ -45,7 +45,7 @@ const defaultMenuItems = [
         dirchange: false,
     },
     {
-        title: "Fee, Stipend & Bonds",
+        title: "Fee, Stipend & Bond",
         icon: icon4,
         path: `${import.meta.env.BASE_URL}fees`,
         type: "link",

@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const fullCollegeResultSchema = new mongoose.Schema({
     collegeName: String,
     state: String,
+    collegeAddress:String,
     instituteType: String,
     universityName: String,
     yearOfEstablishment: Number,

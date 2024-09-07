@@ -127,7 +127,7 @@ const CollegeDetail = () => {
           <p><FaPlane /> <strong>Nearest Airport:</strong> {college.nearestAirport} ({college.distanceFromAirport} km)</p>
           <p><FaPhone /> <strong>Phone Number:</strong> {college.phoneNumber}</p>
           <p><FaGlobe /> <strong>Website:</strong> <a href={college.website} target="_blank" rel="noopener noreferrer">{college.website}</a></p>
-          <p><FaMapMarkerAlt /> <strong>Address:</strong> {college.address}</p>
+          <p><FaMapMarkerAlt /> <strong>Address:</strong> {college.collegeAddress}</p>
         </div>
         <div className={styles.mapContainer}>
           <GoogleMap
@@ -168,16 +168,16 @@ const CollegeDetail = () => {
                       </thead>
                       <tbody>
                         {course.quotas.map((quota, quotaIndex) => (
-                          <tr key={quotaIndex}>
-                            <td>{quota.quota}</td>
-                            <td>₹{quota.courseFee}</td>
-                            <td>₹{quota.stipendYear1}</td>
-                            <td>₹{quota.stipendYear2}</td>
-                            <td>₹{quota.stipendYear3}</td>
-                            <td>{quota.bondYear} years</td>
-                            <td>₹{quota.bondPenality}</td>
-                            <td>₹{quota.seatLeavingPenality}</td>
-                          </tr>
+                        <tr key={quotaIndex}>
+                        <td>{quota.quota}</td>
+                        <td>{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(quota.courseFee)}</td>
+                        <td>{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(quota.stipendYear1)}</td>
+                        <td>{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(quota.stipendYear2)}</td>
+                        <td>{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(quota.stipendYear3)}</td>
+                        <td>{quota.bondYear} years</td>
+                        <td>{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(quota.bondPenality)}</td>
+                        <td>{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(quota.seatLeavingPenality)}</td>
+                      </tr>
                         ))}
                       </tbody>
                     </table>

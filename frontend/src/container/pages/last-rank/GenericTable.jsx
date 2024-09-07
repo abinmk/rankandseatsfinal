@@ -439,25 +439,25 @@ const GenericTable = ({
     </div>
 
     <div className="info-sections">
-      <div className="info-box">
+    <div className="info-box">
         <h4>Fee Details</h4>
-        <p>Course Fees: ₹{selectedRowData?.courseFee}</p>
-        <p>Hostel Fees: ₹{selectedRowData?.nriFee}</p>
+        <p>Course Fees: {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(selectedRowData?.courseFee)}</p>
+        <p>Hostel Fees: {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(selectedRowData?.nriFee)}</p>
       </div>
       <div className="info-box">
         <h4>Stipend Details</h4>
-        <p>Year 1: ₹{selectedRowData?.stipendYear1}</p>
-        <p>Year 2: ₹{selectedRowData?.stipendYear2}</p>
-        <p>Year 3: ₹{selectedRowData?.stipendYear3}</p>
+        <p>Year 1: {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(selectedRowData?.stipendYear1)}</p>
+        <p>Year 2: {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(selectedRowData?.stipendYear2)}</p>
+        <p>Year 3: {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(selectedRowData?.stipendYear3)}</p>
       </div>
       <div className="info-box">
         <h4>Bond Details</h4>
         <p>Bond Years: {selectedRowData?.bondYear}</p>
-        <p>Bond Penalty: ₹{selectedRowData?.bondPenality}</p>
+        <p>Bond Penalty: {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(selectedRowData?.bondPenality)}</p>
       </div>
       <div className="info-box">
         <h4>Penalties and Deductions</h4>
-        <p>Seat Leaving Penalty: ₹{selectedRowData?.seatLeavingPenality}</p>
+        <p>Seat Leaving Penalty: {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(selectedRowData?.seatLeavingPenality)}</p>
       </div>
     </div>
   </Modal.Body>

@@ -151,6 +151,7 @@ const Allotments = () => {
   
       // Set the filter options and rank range from the decrypted data
       setFilterOptions(decryptedData);
+      fetchWishlist();
       setRankRange({ min: decryptedData.rankRange.min, max: decryptedData.rankRange.max });
     } catch (error) {
       console.error('Error fetching filter options:', error);
@@ -159,6 +160,7 @@ const Allotments = () => {
     }
   }, [apiUrl, counselingType]);
 
+  
   const fetchWishlist = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
@@ -173,7 +175,7 @@ const Allotments = () => {
     } catch (error) {
       console.error('Error fetching wishlist:', error);
     }
-  }, [apiUrl, exam]);
+  }, [apiUrl, exam,counselingType]);
 
   useEffect(() => {
     fetchData(page, pageSize, filters);

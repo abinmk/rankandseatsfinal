@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const collegeSchema = new mongoose.Schema({
   collegeShortName: { type: String, required: false },
   collegeAddress: { type: String, required: false },
+  website: { type: String, required: false },
+  phoneNumber: { type: String, required: false },
   collegeName: { type: String, required: false },
   universityName: { type: String, required: false },
   state: { type: String, required: false },

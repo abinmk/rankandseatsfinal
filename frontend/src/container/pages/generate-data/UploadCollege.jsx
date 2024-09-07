@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import "./UploadCollege.css";
+import axiosInstance from '../utils/axiosInstance';
 
 const UploadCollege = () => {
   const [collegeFile, setCollegeFile] = useState(null);
@@ -24,7 +25,7 @@ const UploadCollege = () => {
     setIsLoading(true);
 
     try {
-      await axios.post(`${API_URL}/dataset/upload-college`, formData, {
+      await axiosInstance.post(`${API_URL}/dataset/upload-college`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
