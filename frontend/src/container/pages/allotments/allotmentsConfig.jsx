@@ -60,7 +60,7 @@ export const allotmentsColumns = [
   {
     Header: 'Bond',
     accessor: 'bondYear',
-    Cell: ({ value }) => `${value} years`
+    Cell: ({ value }) => `${value}`
   },
   {
     Header: 'Bond Penalty',

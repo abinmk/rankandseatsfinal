@@ -414,10 +414,10 @@ const GenericTable = ({
           <h5>Fee & Stipend</h5>
         </div>
         <div className="section-content">
-          <p><strong>Fee Amount:</strong> {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(selectedRowData.feeAmount)}</p>
-          <p><strong>Stipend Year 1:</strong> {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(selectedRowData.stipendYear1)}</p>
-          <p><strong>Stipend Year 2:</strong> {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(selectedRowData.stipendYear2)}</p>
-          <p><strong>Stipend Year 3:</strong> {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(selectedRowData.stipendYear3)}</p>
+          <p><strong>Fee Amount:</strong> {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0  }).format(selectedRowData.feeAmount)}</p>
+          <p><strong>Stipend Year 1:</strong> {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0  }).format(selectedRowData.stipendYear1)}</p>
+          <p><strong>Stipend Year 2:</strong> {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' ,maximumFractionDigits: 0 }).format(selectedRowData.stipendYear2)}</p>
+          <p><strong>Stipend Year 3:</strong> {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0  }).format(selectedRowData.stipendYear3)}</p>
         </div>
       </div>
 
@@ -427,8 +427,8 @@ const GenericTable = ({
         </div>
         <div className="section-content">
           <p><strong>Bond (in years):</strong> {selectedRowData.bondYear}</p>
-          <p><strong>Bond Penalty:</strong> {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(selectedRowData.bondPenality)}</p>
-          <p><strong>Seat Leaving Penalty:</strong> {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(selectedRowData.seatLeavingPenality)}</p>
+          <p><strong>Bond Penalty:</strong> {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' ,maximumFractionDigits: 0 }).format(selectedRowData.bondPenality)}</p>
+          <p><strong>Seat Leaving Penalty:</strong> {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' ,maximumFractionDigits: 0 }).format(selectedRowData.seatLeavingPenality)}</p>
         </div>
       </div>
       </div>
