@@ -1,5 +1,5 @@
 export const LastRankColumns = (data, handleDetailClick) => {
-  const years = Object.keys(data[0]?.years || {}).sort((a, b) => b - a).slice(0, 3); // Sort and get the latest 3 years
+  const years = Object.keys(data[0]?.years || {}).sort((a, b) => b - a).slice(0, 3); // Get the latest 3 years
   const rounds = ['1', '2', '3', '4'];
 
   const columns = [
@@ -8,37 +8,41 @@ export const LastRankColumns = (data, handleDetailClick) => {
     { Header: 'State', accessor: 'state' },
     { Header: 'College', accessor: 'collegeName' },
     { Header: 'Course', accessor: 'courseName' },
-    ...years.map((year) => ({
-      Header: year, // Main header
-      columns: rounds.map((round) => ({
-        Header: `R${round}`, // Sub-headers
-        id: `${year}_R${round}`, // Unique ID based on year and round
-        accessor: (row) => row.years[year]?.rounds[round]?.lastRank || '-',
-        Cell: ({ row }) => {
-          const roundData = row.original.years[year]?.rounds[round];
-          if (roundData) {
-            const lastRank = roundData.lastRank;
-            const totalAllotted = roundData.totalAllotted;
-            return (
-              <span
-                onClick={() => handleDetailClick(year, round, row.original)}
-                style={{ cursor: 'pointer', color: 'blue', textAlign: 'center' }}
-              >
-                {`${lastRank} (${totalAllotted})`}
-              </span>
-            );
-          }
-          return '-';
-        },
-        disableSortBy: true, // Disable sorting on round columns
-        style: { textAlign: 'center' }, // Center align the content
-      })),
-    })),
+    ...years.flatMap((year) => (
+      rounds
+        .filter(round => data.some(row => row.years[year]?.rounds[round])) // Filter out rounds with no data
+        .map((round) => ({
+          Header: () => (
+            <div style={{ whiteSpace: 'pre-wrap', textAlign: '' }}>
+              {`${year}\nR${round}`} {/* Ensure year and round are on separate lines */}
+            </div>
+          ),
+          id: `${year}_R${round}`, // Unique ID
+          accessor: (row) => row.years[year]?.rounds[round]?.lastRank || '-',
+          Cell: ({ row }) => {
+            const roundData = row.original.years[year]?.rounds[round];
+            if (roundData) {
+              const lastRank = roundData.lastRank;
+              const totalAllotted = roundData.totalAllotted;
+              return (
+                <span
+                  onClick={() => handleDetailClick(year, round, row.original)}
+                  style={{ cursor: 'pointer', color: 'blue', textAlign: 'center' }}
+                >
+                  {`${lastRank}\n(${totalAllotted})`}
+                </span>
+              );
+            }
+            return '-';
+          },
+          disableSortBy: true,
+          style: { textAlign: '', whiteSpace: 'pre-wrap' }, // Center-align with multi-line support
+        }))
+    )),
   ];
 
   return columns;
 };
-
 
 
 

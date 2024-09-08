@@ -10,12 +10,12 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 // Sample data for Cards section
 const Cardsdata = [
-  { title: "Institutes", text1: "1320", icon1: "fe fe-shopping-cart", color1: "primary", color2: "primary", text2: "View More" },
-  { title: "MD/MS Seats", text1: "35200", icon1: "fe fe-user-check", color1: "success", color2: "success", text2: "View More" },
-  { title: "DNB Seats", text1: "4523", icon1: "fe fe-user-plus", color1: "info", color2: "info", text2: "View More" },
-  { title: "Diploma Seats", text1: "2812", icon1: "fe fe-users", color1: "warning", color2: "warning", text2: "View More" },
-  { title: "Active Subscribers", text1: "2812", icon1: "fe fe-check-circle", color1: "danger", color2: "danger", text2: "View More" },
-  { title: "Total Seats", text1: "50000", icon1: "fe fe-award", color1: "secondary", color2: "secondary", text2: "View More" },
+  { title: "Institutes", text1: "1753", icon1: "fe fe-home", color1: "primary", color2: "primary", text2: "View More" },
+  { title: "MD/MS Seats", text1: "45866", icon1: "fe fe-book-open", color1: "success", color2: "success", text2: "View More" },
+  { title: "DNB Seats", text1: "5275", icon1: "fe fe-book", color1: "info", color2: "info", text2: "View More" },
+  { title: "Diploma Seats", text1: "3890", icon1: "fe fe-award", color1: "warning", color2: "warning", text2: "View More" },
+  { title: "Govt MD/MS Seats", text1: "25218", icon1: "fe fe-shield", color1: "danger", color2: "danger", text2: "View More" },
+  { title: "Deemed Seats", text1: "5536", icon1: "fe fe-briefcase", color1: "secondary", color2: "secondary", text2: "View More" },
 ];
 
 const Sales = () => {

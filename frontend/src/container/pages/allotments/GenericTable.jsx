@@ -391,7 +391,6 @@ const GenericTable = ({
             <p><strong>Course:</strong> {selectedRowData.course}</p>
             <p><strong>Course Type:</strong> {selectedRowData.courseType}</p>
             <p><strong>Degree Type:</strong> {selectedRowData.degreeType}</p>
-            <p><strong>Total Seats in Course:</strong> {selectedRowData.totalSeatsInCourse}</p>
           </div>
         </div>
 

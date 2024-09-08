@@ -577,17 +577,19 @@ const generateCombinedDataset = async (req, res) => {
         distanceFromAirport: college.distanceFromAirport,
         phoneNumber: college.phoneNumber,
         website: college.website,
-        courses: Object.values(college.courses).map(course => {
-          // Find matching seat data for the college and course
+
+        courses: Object.values(college.courses)
+        .sort((a, b) => a.courseName.localeCompare(b.courseName)) // Sort courses alphabetically
+        .map(course => {
           const matchingSeats = seats.find(seat => 
             seat.collegeName === college.collegeName && 
             seat.courseName === course.courseName
           );
-    
+
           return {
             courseName: course.courseName,
             quotas: Object.values(course.quotas),
-            totalSeatsInCourse: matchingSeats ? matchingSeats.seats : 0 // Default to 0 if no match is found
+            totalSeatsInCourse: matchingSeats ? matchingSeats.seats : 0
           };
         })
       };

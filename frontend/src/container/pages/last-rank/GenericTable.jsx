@@ -371,7 +371,7 @@ const GenericTable = ({
     </Modal.Header>
   <Modal.Body>
     {allColumns
-      .filter((column) => !/^\d{4}_R\d+$/.test(column.id)) // Filters out columns with IDs like "2024_R1", "2023_R2", etc.
+ // Filters out columns with IDs like "2024_R1", "2023_R2", etc.
       .map((column) => (
         <Form.Check
           key={column.id}
