@@ -107,7 +107,7 @@ const CollegeDetail = () => {
           <div>
             <p className={styles.headerCollegeName}>{college.collegeName}</p>
             <div className={styles.badges}>
-              <span className={styles.badgeCustom}>Government Institute</span>
+              <span className={styles.badgeCustom}>Institute Type: {college.instituteType}</span>
               <span className={styles.badgeCustom}>State: {college.state}</span>
             </div>
           </div>
