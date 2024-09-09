@@ -83,8 +83,8 @@ const PricingPopup = () => {
       },
       modal: {
         ondismiss: () => {
-          setIsProcessing(false); // Stop processing if user cancels payment
-          setIsLoading(false); // Hide loading indicator if payment modal is dismissed
+          setIsProcessing(false);
+          setIsLoading(false);
         },
       },
     };
@@ -135,9 +135,9 @@ const PricingPopup = () => {
 
   return (
     <>
-      <Button variant="primary" onClick={handleSubscribeClick} className="pricing-btn" disabled={isLoading || isProcessing}>
-        {isLoading ? <Spinner animation="border" size="sm" /> : 'Subscribe Now !'}
-      </Button>
+ <Button variant="primary" onClick={handleSubscribeClick} className="pricing-btn" disabled={isLoading || isProcessing}>
+  {isLoading ? <Spinner animation="border" size="sm" /> : 'Subscribe Now!'}
+</Button>
 
       <PlanDetailsPopup show={showPlanDetails} handleClose={handlePlanDetailsClose} handlePaymentProceed={handlePaymentProceed} />
 

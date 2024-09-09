@@ -29,10 +29,18 @@
   0% {
     box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.7);
   }
-  70% {
-    box-shadow: 0 0 0 20px rgba(0, 123, 255, 0);
+  50% {
+    box-shadow: 0 0 0 10px rgba(0, 123, 255, 0);
   }
   100% {
     box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
   }
+}
+
+.pricing-btn {
+  width: 100%;
+  padding: 10px;
+  font-size: 18px;
+  animation: pulse 1.5s infinite;
+  cursor: pointer;
 }
