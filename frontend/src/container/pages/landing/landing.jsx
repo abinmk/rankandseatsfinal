@@ -531,7 +531,7 @@ const [showProfileModal, setShowProfileModal] = useState(false);
     <p className="fs-12 fw-semibold text-primary mb-1">
       <span className="landing-section-heading">FEATURES</span>
     </p>
-    <h4 className="fw-semibold mb-2">
+    {/* <h4 className="fw-semibold mb-2">
       Our consultancy offers numerous advanced features.
     </h4>
     <div className="row justify-content-center">
@@ -540,7 +540,7 @@ const [showProfileModal, setShowProfileModal] = useState(false);
           Our services include the most advanced features to enhance your educational journey, ensuring optimal performance and success.
         </p>
       </Col>
-    </div>
+    </div> */}
 
     <div className="row text-start">
       {/* Feature Card 1 */}
@@ -699,10 +699,10 @@ const [showProfileModal, setShowProfileModal] = useState(false);
     <p className="fs-12 fw-semibold text-primary mb-1">
       <span className="landing-section-heading">PRICING</span>
     </p>
-    <h4 className="fw-semibold mb-2">Affordable Plan for Your Educational Needs</h4>
+    <h4 className="fw-semibold mb-2">NEET PG 2024</h4>
     <Col xl={6} className="mx-auto">
       <p className="text-muted fs-15 mb-3 fw-normal">
-        Choose the plan that suits your requirements. Our affordable plan ensures that you get the best value for your educational journey.
+	  Everything you need to navigate NEET PG Counselling 2024. Secure the best possible seat and do justice to your hard-earned rank. 
       </p>
     </Col>
     <div className="row justify-content-center mt-4">
@@ -720,7 +720,7 @@ const [showProfileModal, setShowProfileModal] = useState(false);
                 </div>
               </div>
               <div className="fs-25 fw-bold mb-1 price-class">
-                ₹999<sub className="text-muted fw-semibold fs-11">+ GST / Per Year</sub>
+                ₹999<sub className="text-muted fw-semibold fs-11">+ GST</sub>
               </div>
               <div className="mb-1 text-muted">
                 Get full access to all features to help you in your NEET counselling journey.
@@ -751,8 +751,9 @@ const [showProfileModal, setShowProfileModal] = useState(false);
               <p className="text-muted mt-2 fs-14">
                 <strong>Validity:</strong> Till the conclusion of NEET PG Counselling 2024 (AIQ & all States).
               </p>
+			  <PricingPopup />
               <div className="text-center mt-4">
-                <PricingPopup />
+                
               </div>
             </div>
           </div>
@@ -807,7 +808,7 @@ const [showProfileModal, setShowProfileModal] = useState(false);
           <Link to="#" className="text-fixed-white op-6"><i className="ri-mail-line me-1 align-middle"></i> support@rankandseats.com</Link>
         </li>
         <li>
-          <Link to="#" className="text-fixed-white op-6"><i className="ri-phone-line me-1 align-middle"></i> +91 80 75 91 92 24</Link>
+          <Link to="#" className="text-fixed-white op-6"><i className="ri-phone-line me-1 align-middle"></i> +91 89 21 35 03 51</Link>
         </li>
         <li className="mt-3">
           <p className="mb-2 fw-semibold op-8">FOLLOW US ON :</p>
