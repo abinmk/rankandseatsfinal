@@ -153,3 +153,137 @@
     }
   }
   
+  .content-text li span {
+    color: #6c757d; /* Grey color */
+  }
+  
+  .price-class {
+    color: #656050; /* Dark Yellow for price */
+  }
+  
+  .content-text i {
+    color: #28a745; /* Green for checkmarks */
+  }
+  
+  .text-muted {
+    color: #adb5bd !important; /* Light grey for muted text */
+  }
+.section-style {
+  padding: 50px 0;
+  background-color: #ffffff;
+}
+
+.custom-card {
+  background-color: #001f3f; /* Navy Blue */
+  border-radius: 16px;
+  transition: transform 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  color: #ffffff;
+}
+.text-icon{
+  color: #faba65;
+}
+.custom-card:hover {
+  transform: scale(1.02);
+}
+
+.fs-25 {
+  font-size: 2rem;
+  color: #ffc107; /* Dark Yellow */
+}
+
+.fs-14 {
+  color: #d3d3d3; /* Light grey for content */
+}
+
+.btn-lg {
+  background-color: #ffc107; /* Dark Yellow */
+  color: #001f3f;
+  border: none;
+  padding: 10px 25px;
+  font-size: 16px;
+  border-radius: 8px;
+}
+
+.btn-lg:hover {
+  background-color: #e0a800;
+  color: rgb(213, 251, 255);
+}
+
+.badge {
+  background-color: #17a2b8;
+  color: #ffffff;
+}
+
+.price-class{
+  color: #052688 !important;
+  font-size: 2.5rem !important;
+}
+
+.content-text{
+  color: #a6ff00 !important;
+}
+
+ul.feature-list {
+  list-style: none;
+  padding-left: 0;
+  color: #c12828 !important;
+}
+
+ul.feature-list li {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #000 !important;
+}
+
+ul.feature-list li i {
+  color: #28a745; /* Green check icon */
+  margin-right: 10px;
+}
+
+.container-price{
+  background-color: #e2e9ec !important;
+}
+/* Desktop and larger screens */
+@media (min-width: 992px) {
+  .pricing-card {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+}
+
+/* Mobile and smaller screens */
+@media (max-width: 991px) {
+  .pricing-card {
+    padding: 15px;
+  }
+
+  .price-class {
+    font-size: 2rem !important
+  }
+
+  .content-text li {
+    font-size: 13px;
+  }
+}
+
+/* General enhancements */
+.custom-card {
+  border-radius: 12px;
+}
+
+.price-class {
+  font-size: 32px;
+}
+
+.content-text {
+  font-size: 14px !important;
+  color: #3fdb0c !important; /* Grey */
+}
+
+.content-text i {
+  color: #28a745 !important; /* Success green */
+}

@@ -51,7 +51,7 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
       setSelectedTab("Last Ranks");
       closeSidebar();
     } else if (path.includes("fees")) {
-      setSelectedTab("Fee, Stipend & Bonds");
+      setSelectedTab("Fee, Stipend & Bond");
       closeSidebar();
     } else if (path.includes("courses")) {
       setSelectedTab("Courses");

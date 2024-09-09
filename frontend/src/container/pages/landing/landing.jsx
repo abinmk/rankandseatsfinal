@@ -476,13 +476,6 @@ const [showProfileModal, setShowProfileModal] = useState(false);
 					</div>
 					<section className="section section-background section-style" id="exam-prep">
     <div className="container text-center">
-        <p className="fs-12 fw-semibold text-primary mb-1"><span className="landing-section-heading">PREPARE WITH US</span></p>
-        <h4 className="fw-semibold mb-2">Your Path to Success Starts Here</h4>
-        <div className="row justify-content-center">
-            <Col xl={6}>
-                <p className="text-muted fs-15 mb-5 fw-normal">Our consultancy provides unparalleled support to help you navigate your exam preparations. Explore our specialized support services for each exam category below.</p>
-            </Col>
-        </div>
         <div className="row justify-content-center">
             <Col xl={3} lg={4} md={6} sm={12} className="mb-3">
                 <div className="card custom-card text-center border">
@@ -575,7 +568,7 @@ const [showProfileModal, setShowProfileModal] = useState(false);
             <div className="features-icon d-flex justify-content-center align-items-center m-auto mb-2 bg-secondary-transparent">
               <i className="ri-customer-service-2-line ri-2x"></i>
             </div>
-            <h6 className="fw-semibold mx-1">Personalized Support</h6>
+            <h6 className="fw-semibold mx-1">Previous Year Allotments</h6>
             <p className="text-muted mb-2 mx-1 text-justify">
               Tailored guidance to ensure you navigate through your educational journey efficiently.
             </p>
@@ -595,7 +588,7 @@ const [showProfileModal, setShowProfileModal] = useState(false);
             </div>
             <h6 className="fw-semibold mx-1">Fee, Bond, and Stipend</h6>
             <p className="text-muted mb-2 mx-1 text-justify">
-			Get the up-to-date information on each course offered by each institution. No more rampaging through the web to find the latest fee structure, stipend, and bond details.
+			All India and state allotment details of the last 3 years listed for you in a comprehensible manner. Alloted quota, candidate category, or seat type - you name it, and we have it.
             </p>
             <Link className="fs-12 mt-auto text-primary" to={`${import.meta.env.BASE_URL}allotments/`}>
               Read More<i className="ri-arrow-right-s-line align-middle"></i>
@@ -701,76 +694,73 @@ const [showProfileModal, setShowProfileModal] = useState(false);
 </section>
 
 
-<section className="section section-background section-style" id="pricing">
-      <div className="container text-center">
-        <p className="fs-12 fw-semibold text-primary mb-1"><span className="landing-section-heading">PRICING</span></p>
-        <h4 className="fw-semibold mb-2">Affordable Plan for Your Educational Needs</h4>
-        <Col xl={6} className="mx-auto">
-          <p className="text-muted fs-15 mb-3 fw-normal">
-            Choose the plan that suits your requirements. Our affordable plan ensures that you get the best value for your educational journey.
-          </p>
-        </Col>
-        <div className="row justify-content-center mt-4">
-        <Col xl={4} lg={6} md={8} sm={10}>
-  <div className="card custom-card overflow-hidden">
-    <div className="card-body p-0">
-      <div className="p-4 pricing-card">
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <div className="d-flex">
-            <i className="ti ti-free-rights fs-24 text-primary me-1"></i>
-            <div className="fs-18 fw-semibold">Rank and Seats</div>
+<section className="section section-background container-price section-style" id="pricing">
+  <div className="container text-center">
+    <p className="fs-12 fw-semibold text-primary mb-1">
+      <span className="landing-section-heading">PRICING</span>
+    </p>
+    <h4 className="fw-semibold mb-2">Affordable Plan for Your Educational Needs</h4>
+    <Col xl={6} className="mx-auto">
+      <p className="text-muted fs-15 mb-3 fw-normal">
+        Choose the plan that suits your requirements. Our affordable plan ensures that you get the best value for your educational journey.
+      </p>
+    </Col>
+    <div className="row justify-content-center mt-4">
+      <Col xl={4} lg={6} md={8} sm={10}>
+        <div className="card custom-card overflow-hidden shadow-sm">
+          <div className="card-body p-0">
+            <div className="p-4 pricing-card">
+              <div className="d-flex justify-content-between align-items-center mb-3">
+                <div className="d-flex align-items-left">
+				<i className="fas fa-crown fs-32 text-icon me-2"></i>
+                  <div className="fs-24">Premium Access</div>
+                </div>
+                <div>
+                  <span className="badge bg-success-transparent">NEET PG 2024</span>
+                </div>
+              </div>
+              <div className="fs-25 fw-bold mb-1 price-class">
+                ₹999<sub className="text-muted fw-semibold fs-11">+ GST / Per Year</sub>
+              </div>
+              <div className="mb-1 text-muted">
+                Get full access to all features to help you in your NEET counselling journey.
+              </div>
+              <div className="fs-12 mb-3">
+                {/* <u>One-Time Fee</u> */}
+              </div>
+              <ul className=" content-text mb-0">
+                {[
+                  "Up-to-date Info on 2024 NEET PG Counselling (AIQ, DNB, Deemed & All States)",
+				  "Institute Details - Contact, Infrastructure & Connectivity",
+                  "Previous Year Allotments - (2021, 2022 & 2023)",
+                  "Details of Admitted Students - (2021, 2022 & 2023)",
+                  "Previous Years’ Last Ranks",
+                  "Latest Fee Structure",
+                  "Latest Stipend Information",
+                  "Bond & Seat Leaving Penalty",
+                  "Seat Matrix , Courses",
+                  "My Choice Wishlist",
+                  "Alerts & Updates",
+                ].map((feature, index) => (
+                  <li className="d-flex align-items-start mb-2" key={index}>
+                    <i className="ri-checkbox-circle-line fs-15 text-success me-2"></i>
+                    <span className="fs-14">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="text-muted mt-2 fs-14">
+                <strong>Validity:</strong> Till the conclusion of NEET PG Counselling 2024 (AIQ & all States).
+              </p>
+              <div className="text-center mt-4">
+                <PricingPopup />
+              </div>
+            </div>
           </div>
-          <div>
-            <span className="badge bg-success-transparent">For NEET Aspirants</span>
-          </div>
         </div>
-        <div className="fs-25 fw-bold mb-1">
-          ₹999<sub className="text-muted fw-semibold fs-11">+ GST / Per Year</sub>
-        </div>
-        <div className="mb-1 text-muted">
-          Get full access to all features to help you in your NEET counselling journey.
-        </div>
-        <div className="fs-12 mb-3">
-          <u>One-Time Fee</u>
-        </div>
-        <ul className="list-unstyled mb-0">
-          <li className="d-flex align-items-center mb-3">
-            <span className="me-2">
-              <i className="ri-checkbox-circle-line fs-15 text-success"></i>
-            </span>
-            <span>
-              <strong className="me-1 d-inline-block">Full Access</strong> to All Features
-            </span>
-          </li>
-          <li className="d-flex align-items-center mb-3">
-            <span className="me-2">
-              <i className="ri-checkbox-circle-line fs-15 text-success"></i>
-            </span>
-            <span>
-              <strong className="me-1 d-inline-block">All</strong> Counselings
-            </span>
-          </li>
-          <li className="d-flex align-items-center mb-3">
-            <span className="me-2">
-              <i className="ri-checkbox-circle-line fs-15 text-success"></i>
-            </span>
-            <span>
-              <strong className="me-1 d-inline-block">Wishlist</strong> Creation
-            </span>
-          </li>
-          <li className="d-grid">
-            <PricingPopup />
-          </li>
-        </ul>
-      </div>
+      </Col>
     </div>
   </div>
-</Col>
-
-        </div>
-      </div>
-    </section>
-				
+</section>
 	<section className="section landing-footer text-fixed-white">
       <div className="container">
 	  <Row className="justify-content-center my-0">
