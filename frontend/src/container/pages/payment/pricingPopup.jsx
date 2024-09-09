@@ -135,7 +135,7 @@ const PricingPopup = () => {
 
   return (
     <>
- <Button variant="primary" onClick={handleSubscribeClick} className="pricing-btn" disabled={isLoading || isProcessing}>
+<Button variant="primary" onClick={handleSubscribeClick} className="pricing-btn" disabled={isLoading || isProcessing}>
   {isLoading ? <Spinner animation="border" size="sm" /> : 'Subscribe Now'}
 </Button>
 

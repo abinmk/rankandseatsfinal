@@ -1,10 +1,10 @@
 .pricing-btn {
-  width: 100%;
-  padding: 10px;
+  width: 100%; /* Make the button full width */
+  padding: 15px 0; /* Adjust padding for better click area */
   font-size: 18px;
-  animation: pulse 2s infinite;
+  text-align: center; /* Center the text */
+  display: inline-block; /* Ensure it's treated as a block for full width */
 }
-
 .pricing-modal .modal-header-custom {
   background-color: #f8f9fa;
   border-bottom: none;

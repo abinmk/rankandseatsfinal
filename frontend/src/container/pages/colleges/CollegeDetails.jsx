@@ -161,7 +161,7 @@ const CollegeDetail = () => {
                           <th>Stipend Year 1</th>
                           <th>Stipend Year 2</th>
                           <th>Stipend Year 3</th>
-                          <th>Bond Year</th>
+                          <th>Bond (in years)</th>
                           <th>Bond Penalty</th>
                           <th>Seat Leaving Penalty</th>
                         </tr>
@@ -170,13 +170,13 @@ const CollegeDetail = () => {
                         {course.quotas.map((quota, quotaIndex) => (
                         <tr key={quotaIndex}>
                         <td>{quota.quota}</td>
-                        <td>{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(quota.courseFee)}</td>
-                        <td>{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(quota.stipendYear1)}</td>
-                        <td>{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(quota.stipendYear2)}</td>
-                        <td>{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(quota.stipendYear3)}</td>
-                        <td>{quota.bondYear} years</td>
-                        <td>{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(quota.bondPenality)}</td>
-                        <td>{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(quota.seatLeavingPenality)}</td>
+                        <td>{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0 }).format(quota.courseFee)}</td>
+                        <td>{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' ,maximumFractionDigits: 0}).format(quota.stipendYear1)}</td>
+                        <td>{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0 }).format(quota.stipendYear2)}</td>
+                        <td>{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' ,maximumFractionDigits: 0}).format(quota.stipendYear3)}</td>
+                        <td>{quota.bondYear}</td>
+                        <td>{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0 }).format(quota.bondPenality)}</td>
+                        <td>{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0 }).format(quota.seatLeavingPenality)}</td>
                       </tr>
                         ))}
                       </tbody>

@@ -196,6 +196,49 @@
   color: #d3d3d3; /* Light grey for content */
 }
 
+ul.content-text {
+  padding-left: 0; /* Remove any padding */
+  text-align: left; /* Align text to the left */
+}
+
+ul.content-text li {
+  display: block; /* Ensure each list item behaves as a block */
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #000;
+  line-height: 1.5;
+}
+
+ul.content-text li span {
+  white-space: normal; /* Prevent extra spaces or line breaks */
+  display: inline-block;
+}
+
+ul.content-text li i {
+  margin-right: 8px; /* Add spacing between icon and text */
+}
+
+.content-text {
+  padding-left: 0 !important; /* Remove default padding from ul */
+  margin: 0% !important;
+  float: left !important;
+  list-style-type: none; /* Remove bullet points */
+}
+
+.content-text li {
+  display: flex;
+  align-items: center; /* Ensure icon and text are vertically aligned */
+}
+
+.content-text i {
+  margin-right: 10px; /* Space between icon and text */
+}
+
+.fs-14 {
+  font-size: 14px;
+  color: #6c757d; /* Grey color for the text */
+}
+
 .btn-lg {
   background-color: #ffc107; /* Dark Yellow */
   color: #001f3f;

@@ -722,32 +722,28 @@ const [showProfileModal, setShowProfileModal] = useState(false);
               <div className="fs-25 fw-bold mb-1 price-class">
                 ₹999<sub className="text-muted fw-semibold fs-11">+ GST</sub>
               </div>
-              <div className="mb-1 text-muted">
-                Get full access to all features to help you in your NEET counselling journey.
-              </div>
               <div className="fs-12 mb-3">
-                {/* <u>One-Time Fee</u> */}
               </div>
-              <ul className=" content-text mb-0">
-                {[
-                  "Up-to-date Info on 2024 NEET PG Counselling (AIQ, DNB, Deemed & All States)",
-				  "Institute Details - Contact, Infrastructure & Connectivity",
-                  "Previous Year Allotments - (2021, 2022 & 2023)",
-                  "Details of Admitted Students - (2021, 2022 & 2023)",
-                  "Previous Years’ Last Ranks",
-                  "Latest Fee Structure",
-                  "Latest Stipend Information",
-                  "Bond & Seat Leaving Penalty",
-                  "Seat Matrix , Courses",
-                  "My Choice Wishlist",
-                  "Alerts & Updates",
-                ].map((feature, index) => (
-                  <li className="d-flex align-items-start mb-2" key={index}>
-                    <i className="ri-checkbox-circle-line fs-15 text-success me-2"></i>
-                    <span className="fs-14">{feature}</span>
-                  </li>
-                ))}
-              </ul>
+			  <ul className=" content-text mb-0">
+  {[
+    "Up-to-date Info on 2024 NEET PG Counselling (AIQ, DNB, Deemed & All States)",
+    "Institute Details - Contact, Infrastructure & Connectivity",
+    "Previous Year Allotments - (2021, 2022 & 2023)",
+    "Details of Admitted Students - (2021, 2022 & 2023)",
+    "Previous Years’ Last Ranks",
+    "Latest Fee Structure",
+    "Latest Stipend Information",
+    "Bond & Seat Leaving Penalty",
+    "Seat Matrix, Courses",
+    "My Choice Wishlist",
+    "Alerts & Updates",
+  ].map((feature, index) => (
+    <li className="d-flex align-items-start mb-2" key={index}>
+      <i className="ri-checkbox-circle-line fs-15 text-success me-2"></i>
+      <span className="fs-14">{feature}</span>
+    </li>
+  ))}
+</ul>
               <p className="text-muted mt-2 fs-14">
                 <strong>Validity:</strong> Till the conclusion of NEET PG Counselling 2024 (AIQ & all States).
               </p>
