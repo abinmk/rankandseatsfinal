@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import './ManageGeneratedDatasets.css';
+import axiosInstance from '../utils/axiosInstance';
 
 const ManageGeneratedDatasets = () => {
   const [datasets, setDatasets] = useState([]);
@@ -11,7 +11,7 @@ const ManageGeneratedDatasets = () => {
 
   const fetchDatasets = async () => {
     try {
-      const response = await axios.get('http://localhost:5001/api/generated-datasets');
+      const response = await axiosInstance.get('http://localhost:5001/api/generated-datasets');
       setDatasets(response.data);
     } catch (error) {
       console.error('Error fetching datasets:', error);
@@ -20,7 +20,7 @@ const ManageGeneratedDatasets = () => {
 
   const handleUpdate = async (id, displayName, includeInAllotments) => {
     try {
-      await axios.put(`http://localhost:5001/api/generated-datasets/${id}`, {
+      await axiosInstance.put(`http://localhost:5001/api/generated-datasets/${id}`, {
         displayName,
         includeInAllotments
       });
@@ -32,7 +32,7 @@ const ManageGeneratedDatasets = () => {
 
   const handleSelectDataset = async (displayName) => {
     try {
-      await axios.post('http://localhost:5001/api/generated-datasets/select', {
+      await axiosInstance.post('http://localhost:5001/api/generated-datasets/select', {
         selectedDataset: displayName
       });
       fetchDatasets(); // Refresh the datasets

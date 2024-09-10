@@ -1,7 +1,7 @@
 // src/components/UploadCourse.js
 import React, { useState } from 'react';
-import axios from 'axios';
 import "./UploadCourse.css";
+import axiosInstance from '../utils/axiosInstance';
 
 const UploadCourse = () => {
   const [courseFile, setCourseFile] = useState(null);
@@ -25,7 +25,7 @@ const UploadCourse = () => {
     setIsLoading(true);
 
     try {
-      await axios.post(`${API_URL}/dataset/upload-course`, formData, {
+      await axiosInstance.post(`${API_URL}/dataset/upload-course`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

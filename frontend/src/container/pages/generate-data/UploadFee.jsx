@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import './UploadFee.css';
+import axiosInstance from '../utils/axiosInstance';
 
 const UploadFee = () => {
   const [file, setFile] = useState(null);
@@ -20,7 +20,7 @@ const UploadFee = () => {
     formData.append('file', file);
 
     try {
-      await axios.post(`${API_URL}/dataset/upload-fee`, formData, {
+      await axiosInstance.post(`${API_URL}/dataset/upload-fee`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

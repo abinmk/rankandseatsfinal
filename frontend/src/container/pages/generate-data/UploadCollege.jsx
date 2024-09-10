@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import "./UploadCollege.css";
 import axiosInstance from '../utils/axiosInstance';
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import "./UploadRound.css";
+import axiosInstance from '../utils/axiosInstance';
 
 const UploadRound = () => {
   const [file, setFile] = useState(null);
@@ -48,7 +48,7 @@ const UploadRound = () => {
     setIsLoading(true);
 
     try {
-      await axios.post(`${API_URL}/dataset/upload-round`, formData, {
+      await axiosInstance.post(`${API_URL}/dataset/upload-round`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

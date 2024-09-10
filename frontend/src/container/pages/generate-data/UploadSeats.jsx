@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import './UploadSeats.css';
+import axiosInstance from '../utils/axiosInstance';
 
 const UploadSeats = () => {
   const [file, setFile] = useState(null);
@@ -20,7 +20,7 @@ const UploadSeats = () => {
     formData.append('file', file);
 
     try {
-      await axios.post(`${API_URL}/dataset/upload-seats`, formData, {
+      await axiosInstance.post(`${API_URL}/dataset/upload-seats`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
