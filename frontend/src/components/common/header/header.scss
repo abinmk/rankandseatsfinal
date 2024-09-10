@@ -446,8 +446,8 @@
   }
 
   .header-logo img {
-    height: 35px !important;
-    width: auto;
+    width: 150px !important;
+    height: auto !important;
   }
 
   .header-element.notifications-dropdown .dropdown-menu .dropdown-item img {
@@ -484,8 +484,8 @@
   }
 
   .header-logo img {
-    height: 30px !important;
-    width: auto;
+    width: 120px !important;
+    height: auto !important;
   }
   
   .header-container {
@@ -510,8 +510,8 @@
   }
 
   .header-logo img {
-    height: 30px !important;
-    width: auto;
+    width: 115px !important;
+    height: auto !important;
   }
   
   .header-container {
@@ -532,8 +532,8 @@
   }
 
   .header-logo img {
-    height: 25px !important;
-    width: auto;
+    width: 110px !important;
+    height: auto !important;
   }
   
   .header-container {
@@ -542,7 +542,7 @@
   }
 }
 
-@media (max-width: 340px) {
+@media (max-width: 350px) {
 
   select#exam-name, select#counseling {
     font-size: 0.5rem !important;
@@ -554,8 +554,8 @@
   }
 
   .header-logo img {
-    height: 22px !important;
-    width: auto;
+    width: 100px !important;
+    height: auto !important;
   }
   .header-container {
     margin: 0% !important;
@@ -563,12 +563,63 @@
   }
 }
 
-/* Adjust dropdown size for screens up to 400px */
-// @media (max-width: 400px) {
-//   #exam-name, #counseling {
-//     font-size: 0.5rem !important;
-//     padding: 1px 4px !important;
-//     width: 100%; /* Make the dropdown full-width */
-//     max-width: fit-content !important;
-//   }
-// }
+@media (max-width: 340px) {
+
+  select#exam-name, select#counseling {
+    font-size: 0.4rem !important;
+    padding: 1.6px 8px !important;
+    width: 100% !important; /* Force the dropdown to take up the full width of its container */
+    max-width: 100px !important; /* Set a maximum width to restrict its size */
+    box-sizing: border-box !important; /* Ensure padding is included in the width calculation */
+    min-width: 60px !important;
+  }
+
+  .header-logo img {
+    width: 80px !important;
+    height: auto !important;
+  }
+  .header-container {
+    margin: 0% !important;
+    padding: 0% !important;
+  }
+}
+@media (max-width: 330px) {
+
+  select#exam-name, select#counseling {
+    font-size: 0.4rem !important;
+    padding: 1.6px 8px !important;
+    width: 100% !important; /* Force the dropdown to take up the full width of its container */
+    max-width: 100px !important; /* Set a maximum width to restrict its size */
+    box-sizing: border-box !important; /* Ensure padding is included in the width calculation */
+    min-width: 60px !important;
+  }
+
+  .header-logo img {
+    width: 70px !important;
+    height: auto !important;
+  }
+  .header-container {
+    margin: 0% !important;
+    padding: 0% !important;
+  }
+}
+@media (max-width: 325px) {
+
+  select#exam-name, select#counseling {
+    font-size: 0.4rem !important;
+    padding: 1.6px 8px !important;
+    width: 100% !important; /* Force the dropdown to take up the full width of its container */
+    max-width: 100px !important; /* Set a maximum width to restrict its size */
+    box-sizing: border-box !important; /* Ensure padding is included in the width calculation */
+    min-width: 60px !important;
+  }
+
+  .header-logo img {
+    width: 65px !important;
+    height: auto !important;
+  }
+  .header-container {
+    margin: 0% !important;
+    padding: 0% !important;
+  }
+}
