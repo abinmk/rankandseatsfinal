@@ -54,7 +54,7 @@ exports.getFeesData = async (req, res) => {
       }
     }
 
-    console.log('Query:', query); // Logging the query for debugging
+    // console.log('Query:', query); // Logging the query for debugging
 
     const data = await FeeModel.find(query)
       .skip((page - 1) * limit)

@@ -19,7 +19,7 @@ const getLastRanks = async (req, res) => {
     const formattedExam = exam.replace(/\s+/g, '_');
     const formattedCounselingType = counselingType.replace(/\s+/g, '_');
     const collectionName = `LAST_RANK_EXAM:${formattedExam}_TYPE:${formattedCounselingType}`;
-    console.log("counseling with collection name:" + collectionName);
+    // console.log("counseling with collection name:" + collectionName);
     let LastRankModel;
 
     try {
@@ -36,7 +36,7 @@ const getLastRanks = async (req, res) => {
 
     // Convert quotaOptions[] to quota in the query
     if (quotaOptions) {
-      console.log('Quota Options:', quotaOptions); // Log quotaOptions
+      // console.log('Quota Options:', quotaOptions); // Log quotaOptions
       query.quota = Array.isArray(quotaOptions) ? { $in: quotaOptions } : quotaOptions;
     }
 
@@ -57,7 +57,7 @@ const getLastRanks = async (req, res) => {
     // Process other filters
     for (const key in filters) {
       if (filters[key]) {
-        console.log(`Filter: ${key}, Value: ${filters[key]}`);
+        // console.log(`Filter: ${key}, Value: ${filters[key]}`);
         if (key.endsWith('Range')) {
           const field = key.replace('Range', '');
           addRangeFilter(field, filters[key]);
@@ -67,17 +67,17 @@ const getLastRanks = async (req, res) => {
       }
     }
 
-    console.log('Query:', query); // Logging the query for debugging
+    // console.log('Query:', query); // Logging the query for debugging
 
     const data = await LastRankModel.find(query)
       .skip((page - 1) * limit)
       .limit(Number(limit))
       .lean();
 
-    console.log('Data:', data); // Log the fetched data
+    // console.log('Data:', data); // Log the fetched data
 
     if (data.length === 0) {
-      console.log('No matching records found.');
+      // console.log('No matching records found.');
     }
 
     const totalItems = await LastRankModel.countDocuments(query);
@@ -121,7 +121,7 @@ const getLastRankFilters = async (req, res) => {
       const formattedExam = exam.replace(/\s+/g, '_');
       const formattedCounselingType = counselingType.replace(/\s+/g, '_');
       const collectionName = `LAST_RANK_EXAM:${formattedExam}_TYPE:${formattedCounselingType}`;
-      console.log("counseling with collection name:" + collectionName);
+      // console.log("counseling with collection name:" + collectionName);
       let LastRankModel;
       try {
         LastRankModel = mongoose.model(collectionName);

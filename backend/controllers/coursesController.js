@@ -49,7 +49,7 @@ exports.getCoursesData = async (req, res) => {
       }
     }
 
-    console.log('Query:', query); // Logging the query for debugging
+    // console.log('Query:', query); // Logging the query for debugging
 
     const data = await CourseModel.find(query)
       .skip((page - 1) * limit)

@@ -44,12 +44,12 @@ const uploadAllotment = (req, res) => {
     if (err instanceof multer.MulterError || err) {
       return res.status(500).send({ message: err.message });
     }
-    console.log(req.body);
-    console.log({ round: req.body.round, year: req.body.year });
+    // console.log(req.body);
+    // console.log({ round: req.body.round, year: req.body.year });
     
     const { examName, round, year } = req.body;
     const filePath = path.join(__dirname, '..', 'uploads', req.file.filename);
-    console.log({ examName,round, year }); // Check for undefined values here
+    // console.log({ examName,round, year }); // Check for undefined values here
     const collectionName = `${examName}_${year}_${round}`;
 
     const AllotmentModel = getModel(collectionName);
@@ -117,7 +117,7 @@ const uploadCollege = (req, res) => {
         website: row[13] || 0
       }));
 
-      console.log("colleges is fine");
+      // console.log("colleges is fine");
 
       // Optional: Delete existing data if needed
       await College.deleteMany({});

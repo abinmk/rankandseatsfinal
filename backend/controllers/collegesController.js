@@ -9,11 +9,11 @@ const FullCollegeResult = require('../models/fullCollegeResultModel');
 exports.getCollegesDataById = async (req, res) => {
   try {
       const collegeId = req.params.id;
-      console.log('Received ID:', collegeId); // Log the received ID
+      // console.log('Received ID:', collegeId); // Log the received ID
 
       // Fetch the college details by ID from the CollegeResult collection
       const college = await CollegeResult.findById(collegeId);
-      console.log('Found College:', college); // Log the found document
+      // console.log('Found College:', college); // Log the found document
 
       if (!college) {
           return res.status(404).json({ message: 'College not found' });
@@ -87,7 +87,7 @@ exports.getCollegesData = async (req, res) => {
       }
     }
 
-    console.log('Query:', query); // Logging the query for debugging
+    // console.log('Query:', query); // Logging the query for debugging
 
     const data = await CollegeModel.find(query)
       .skip((page - 1) * limit)
@@ -151,7 +151,7 @@ exports.getCollegeByName = async (req, res) => {
   const { collegeName } = req.params;
   
   try {
-      console.log('Entered method to fetch college by name:', collegeName);
+      // console.log('Entered method to fetch college by name:', collegeName);
 
       const college = await FullCollegeResult.findOne({ collegeName });
 

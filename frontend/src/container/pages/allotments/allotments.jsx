@@ -44,7 +44,7 @@ const Allotments = () => {
 
   const apiUrl = import.meta.env.VITE_API_URL;
   const { exam, counselingType } = useOutletContext(); // Retrieve exam and counselingType from context
-  console.log(exam + counselingType + "Exam+counselingType");
+  // console.log(exam + counselingType + "Exam+counselingType");
 
   const getFilterParamName = useMemo(() => {
     const filterMapping = {
@@ -143,11 +143,11 @@ const Allotments = () => {
         params: { counselingType },
       });
   
-      console.log('Encrypted data:', response.data);
+      // console.log('Encrypted data:', response.data); 
       const decryptedString = decrypt(response.data.data);
-      console.log('Decrypted data (string):', decryptedString);
+      // console.log('Decrypted data (string):', decryptedString);
       const decryptedData = JSON.parse(decryptedString);
-      console.log('Decrypted data (JSON):', decryptedData);
+      // console.log('Decrypted data (JSON):', decryptedData);
   
       // Set the filter options and rank range from the decrypted data
       setFilterOptions(decryptedData);
@@ -164,7 +164,7 @@ const Allotments = () => {
   const fetchWishlist = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
-      console.log(exam);
+      // console.log(exam);
       const response = await axiosInstance.get(`${apiUrl}/wishlist`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -199,7 +199,7 @@ const Allotments = () => {
         },
       });
 
-      console.log('Wishlist updated:', response.data);
+      // console.log('Wishlist updated:', response.data);
       fetchWishlist();
     } catch (error) {
       console.error('Error adding to wishlist:', error.response?.data || error.message);

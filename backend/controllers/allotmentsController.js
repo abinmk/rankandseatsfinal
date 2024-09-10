@@ -72,7 +72,7 @@ exports.getAllotmentData = async (req, res) => {
     const formattedExam = exam.replace(/\s+/g, '_');
     const formattedCounselingType = counselingType.replace(/\s+/g, '_');
     const collectionName = `GENERATED_EXAM:${formattedExam}_TYPE:${formattedCounselingType}`;
-    console.log(collectionName);
+    // console.log(collectionName);
 
     const { page = 1, limit = 10, state, bondPenaltyRange, totalHospitalBedsRange, ...filters } = req.query;
 
@@ -131,7 +131,7 @@ exports.getAllotmentData = async (req, res) => {
       addRangeFilter('totalHospitalBeds', totalHospitalBedsRange);
     }
 
-    console.log('Query:', query);
+    // console.log('Query:', query);
 
     const data = await AllotmentModel.find(query)
       .skip((pageNum - 1) * limitNum)

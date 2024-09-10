@@ -31,7 +31,7 @@ exports.createOrder = async (req, res) => {
 };
 
 exports.verifyPayment = async (req, res) => {
-  console.log('Request body:', req.body); // Log request body to check the data
+  // console.log('Request body:', req.body); // Log request body to check the data
   try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature, userId } = req.body;
 

@@ -11,7 +11,7 @@ exports.sendOtpRegister = async (req, res) => {
   try {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-    console.log(`Sending OTP to ${mobileNumber}`); // Remove OTP logging for production
+    // console.log(`Sending OTP to ${mobileNumber}`); // Remove OTP logging for production
 
     const response = await axios.post('https://api.msg91.com/api/v5/otp', {
       authkey: MSG91_API_KEY,
@@ -22,7 +22,7 @@ exports.sendOtpRegister = async (req, res) => {
       name: name
     });
 
-    console.log('OTP sent successfully:', response.data);
+    // console.log('OTP sent successfully:', response.data);
     res.status(200).json({ message: 'OTP sent successfully' });
 
   } catch (error) {
@@ -75,7 +75,7 @@ exports.sendOtp = async (req, res) => {
     user.otp = otp;
     await user.save();
 
-    console.log(`Sending OTP to ${mobileNumber}`); // Remove OTP logging for production
+    // console.log(`Sending OTP to ${mobileNumber}`); // Remove OTP logging for production
 
     const response = await axios.post('https://api.msg91.com/api/v5/otp', {
       authkey: MSG91_API_KEY,
@@ -86,7 +86,7 @@ exports.sendOtp = async (req, res) => {
       template_id: TEMPLATE_ID
     });
 
-    console.log('OTP sent successfully:', response.data);
+    // console.log('OTP sent successfully:', response.data);
     res.status(200).json({ message: 'OTP sent successfully' });
 
   } catch (error) {

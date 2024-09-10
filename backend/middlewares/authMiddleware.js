@@ -11,7 +11,6 @@ module.exports = async (req, res, next) => {
     req.user = decoded;
 
     const user = await User.findById(decoded.userId);
-    console.log(user);
     if (!user) {
       return res.status(401).json({ message: 'User not found' });
     }

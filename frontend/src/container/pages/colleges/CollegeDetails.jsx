@@ -15,10 +15,10 @@ const expandShortUrl = async (shortUrl) => {
     
     // Check if the response has a resolved URL
     if (response.data && response.data.resolved_url) {
-      console.log("Expanded URL:", response.data.resolved_url);
+      // console.log("Expanded URL:", response.data.resolved_url);
       return response.data.resolved_url;
     } else {
-      console.log("No resolved URL found.");
+      // console.log("No resolved URL found.");
       return null;
     }
   } catch (error) {
@@ -30,17 +30,17 @@ const expandShortUrl = async (shortUrl) => {
 // Function to extract coordinates from Google Maps URL
 // Improved extraction logic with better logging
 const extractCoordinatesFromUrl = (url) => {
-  console.log("Expanded URL: ", url); // Log the expanded URL
+  // console.log("Expanded URL: ", url); // Log the expanded URL
   const regex = /@([-0-9.]+),([-0-9.]+),/;
   const match = url.match(regex);
   
   if (match) {
     const lat = parseFloat(match[1]);
     const lng = parseFloat(match[2]);
-    console.log("Extracted Coordinates: ", { lat, lng }); // Log the extracted coordinates
+    // console.log("Extracted Coordinates: ", { lat, lng }); // Log the extracted coordinates
     return { lat, lng };
   } else {
-    console.log("No coordinates found in the URL.");
+    // console.log("No coordinates found in the URL.");
     return { lat: 26.9124, lng: 75.7873 }; // Default coordinates
   }
 };
@@ -78,7 +78,7 @@ const CollegeDetail = () => {
           if (expandedUrl) {
             // Extract coordinates from the expanded URL
             const coords = extractCoordinatesFromUrl(expandedUrl);
-            console.log(coords);
+            // console.log(coords);
             setPosition(coords);
           }
       } catch (error) {

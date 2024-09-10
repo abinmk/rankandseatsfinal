@@ -4,12 +4,10 @@ const Allotment = require('../models/Allotment');
 
 exports.addToWishlist = async (req, res) => {
   try {
-    console.log("Add to wishlist");
     const { examName, allotment } = req.body; // Destructure allotment instead of _id
     const userId = req.user.userId; // Assuming userId is set in req.user by middleware
 
     if (!examName || !allotment || !allotment._id) {
-      console.log("Invalid request data");
       return res.status(400).json({ message: 'Invalid request data' });
     }
 

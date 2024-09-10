@@ -68,17 +68,13 @@ const updateExamSelection = async (req, res) => {
   try {
     // Get user ID from authentication middleware
     const userId = req.user.userId; // Assuming req.user is set by the auth middleware
-    console.log("userId=="+userId);
 
     // Extract exam and counselingType from request body
     const { exam, counselingType } = req.body;
-    console.log("exam=="+exam);
-    console.log("counselingType=="+counselingType);
-    
+
 
     // Find the user by ID
     const user = await User.findById(userId);
-    console.log("user=="+user);
 
     // Check if user exists
     if (!user) {
