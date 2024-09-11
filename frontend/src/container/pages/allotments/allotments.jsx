@@ -30,6 +30,7 @@ const Allotments = () => {
   const [filterOptions, setFilterOptions] = useState({});
   const [filters, setFilters] = useState({});
   const [page, setPage] = useState(1);
+  const [currentFilters, setCurrentFilters] = useState({});
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -92,34 +93,43 @@ const Allotments = () => {
       try {
         const token = localStorage.getItem('token');
         const filterParams = buildFilterParams(filters);
-
+  
+        // Detect if filters have changed
+        const filtersChanged = JSON.stringify(filters) !== JSON.stringify(currentFilters);
+        
+        if (filtersChanged) {
+          setPage(1); // Reset to page 1 on filter change
+          setCurrentFilters(filters); // Update the current filters state
+          page = 1; // Set page to 1 if filters changed
+        }
+  
         // Check for subscription limit
         setCountOf((prev) => prev + 1);
         if ((countVal > 2 && !subscriptionStatus) || ((page > 1 || pageSize > 10) && !subscriptionStatus)) {
           setShowSubscriptionPopup(true);
           return;
         }
-
+  
         const response = await axiosInstance.get(`${apiUrl}/allotments`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
           params: { page, limit: pageSize, counselingType, ...filterParams },
         });
-
+  
         if (response.data === 'Invalid token.') {
           alert('Session expired. Please log in again.');
           localStorage.removeItem('token');
           window.location.href = '/login';
           return;
         }
-
+  
         const decryptedData = JSON.parse(decrypt(response.data.data));
         setData(decryptedData);
         setPage(response.data.currentPage);
         setTotalPages(response.data.totalPages);
-
-        if (response.data.totalPages < response.data.currentPage) setPage(response.data.totalPages);
+  
+        if (response.data.totalPages < response.data.currentPage) setPage(1);
       } catch (error) {
         if (error.response && error.response.status === 401) {
           alert('Session expired. Please log in again.');
@@ -132,7 +142,7 @@ const Allotments = () => {
         setLoading(false);
       }
     }, 500),
-    [subscriptionStatus, apiUrl] // Ensure stable dependencies
+    [currentFilters, subscriptionStatus, apiUrl] // Ensure stable dependencies
   );
   
   
@@ -142,14 +152,9 @@ const Allotments = () => {
       const response = await axiosInstance.get(`${apiUrl}/allotments/filters`, {
         params: { counselingType },
       });
-  
-      // console.log('Encrypted data:', response.data); 
+
       const decryptedString = decrypt(response.data.data);
-      // console.log('Decrypted data (string):', decryptedString);
       const decryptedData = JSON.parse(decryptedString);
-      // console.log('Decrypted data (JSON):', decryptedData);
-  
-      // Set the filter options and rank range from the decrypted data
       setFilterOptions(decryptedData);
       fetchWishlist();
       setRankRange({ min: decryptedData.rankRange.min, max: decryptedData.rankRange.max });

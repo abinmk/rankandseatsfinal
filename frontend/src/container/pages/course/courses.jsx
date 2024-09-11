@@ -23,6 +23,8 @@ const Colleges = () => {
   const [showSubscriptionPopup, setShowSubscriptionPopup] = useState(false);
   const [filterCountExceeded, setFilterCountExceed] = useState(false);
 
+  const [currentFilters, setCurrentFilters] = useState({});
+
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const getFilterParamName = useMemo(() => {
@@ -58,18 +60,30 @@ const Colleges = () => {
     return params;
   };
 
+
+  
   const fetchData = useCallback(
     _.debounce(async (page, pageSize, filters) => {
       setLoading(true);
       try {
         setCountOf(prevCountVal => prevCountVal + 1);
-
-        if((countVal > 2 && !subscriptionStatus) || ((page > 1 || pageSize > 10) && !subscriptionStatus)) {
+  
+        // Detect if filters have changed
+        const filtersChanged = JSON.stringify(filters) !== JSON.stringify(currentFilters);
+        
+        if (filtersChanged) {
+          setPage(1); // Reset to page 1 on filter change
+          setCurrentFilters(filters); // Update the filters state
+          page = 1; // Ensure page is 1
+        }
+  
+        // Subscription check
+        if ((countVal > 2 && !subscriptionStatus) || ((page > 1 || pageSize > 10) && !subscriptionStatus)) {
           setShowSubscriptionPopup(true);
           setFilterCountExceed(true);
           return;
         }
-
+  
         const filterParams = buildFilterParams(filters);
         const response = await axiosInstance.get(`${apiUrl}/courses`, {
           params: {
@@ -78,21 +92,21 @@ const Colleges = () => {
             ...filterParams
           }
         });
-
+  
         setData(response.data.data);
         setPage(response.data.currentPage);
         setTotalPages(response.data.totalPages);
-
+  
         if (response.data.totalPages < response.data.currentPage) {
-          setPage(response.data.totalPages);
+          setPage(1);
         }
       } catch (error) {
-        console.error('Error fetching college data:', error);
+        console.error('Error fetching course data:', error);
       } finally {
         setLoading(false);
       }
     }, 500),
-    [apiUrl, filters, page, pageSize]
+    [apiUrl, currentFilters, subscriptionStatus, countVal]
   );
 
   const fetchFilterOptions = useCallback(async () => {
