@@ -458,43 +458,27 @@ const generateCombinedDataset = async (req, res) => {
     // Convert lastRankMap to an array for storage
     const lastRankResult = Object.values(lastRankMap);
     
-    // lastRankResult.sort((a, b) => {
-    //   // Extract the latest year for each entry
-    //   const latestYearA = Math.max(...Object.keys(a.years).map(Number));
-    //   const latestYearB = Math.max(...Object.keys(b.years).map(Number));
-    
-    //   if (latestYearA !== latestYearB) {
-    //     return latestYearA - latestYearB; // Sort by latest year
-    //   }
-    
-    //   // Compare the last rank for round 1 or equivalent round
-    //   const lastRankA = a.years[latestYearA]?.rounds['1']?.lastRank || Infinity; // Use Infinity if no last rank
-    //   const lastRankB = b.years[latestYearB]?.rounds['1']?.lastRank || Infinity;
-    
-    //   // If both lastRankA and lastRankB are Infinity, they lack valid data and should be placed at the end
-    //   if (lastRankA === Infinity && lastRankB !== Infinity) return 1;
-    //   if (lastRankB === Infinity && lastRankA !== Infinity) return -1;
-    
-    //   return lastRankA - lastRankB;
-    // });
-
     lastRankResult.sort((a, b) => {
-      const latestYearA = Math.max(...Object.keys(a.years).map(Number));
-      const latestYearB = Math.max(...Object.keys(b.years).map(Number));
+      // Get the latest year with valid data for each entry
+      const validYearsA = Object.keys(a.years).filter(year => a.years[year].rounds['1']?.lastRank !== undefined);
+      const validYearsB = Object.keys(b.years).filter(year => b.years[year].rounds['1']?.lastRank !== undefined);
+      
+      const latestYearA = validYearsA.length > 0 ? Math.max(...validYearsA.map(Number)) : -Infinity;
+      const latestYearB = validYearsB.length > 0 ? Math.max(...validYearsB.map(Number)) : -Infinity;
     
+      // Prioritize entries with valid data
       if (latestYearA !== latestYearB) {
-        return latestYearA - latestYearB; // Sort by latest year
+        return latestYearB - latestYearA; // Sort by latest valid year in descending order
       }
     
+      // Compare the last rank for the latest available round
       const lastRankA = a.years[latestYearA]?.rounds['1']?.lastRank || Infinity;
       const lastRankB = b.years[latestYearB]?.rounds['1']?.lastRank || Infinity;
     
-      // Ensure entries with rank 0 are treated like Infinity and move to the end
-      if (lastRankA === 0) return 1;
-      if (lastRankB === 0) return -1;
-    
       return lastRankA - lastRankB;
     });
+
+    
     const lastRankResultCollectionName = `LAST_RANK_${examName}`;
     const LastRankResultModel = getModel(lastRankResultCollectionName);
 
