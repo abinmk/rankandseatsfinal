@@ -23,7 +23,7 @@ const Colleges = () => {
   const [showSubscriptionPopup, setShowSubscriptionPopup] = useState(false);
   const [filterCountExceeded, setFilterCountExceed] = useState(false);
 
-  const [currentFilters, setCurrentFilters] = useState({});
+  const [previousFilters, setPreviousFilters] = useState(null);
 
   const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -61,53 +61,60 @@ const Colleges = () => {
   };
 
 
+  const [filterCount, setFilterCount] = useState(0);
+
+// Detect when filters change and update the filter count
+useEffect(() => {
+  const filterParams = buildFilterParams(filters);
+  const appliedFilters = Object.keys(filterParams).length; // Track the number of active filters
+  if (appliedFilters !== filterCount) {
+    setFilterCount(appliedFilters);
+    setPage(1); // Reset to page 1 when filter changes
+  }
+}, [filters]);
+
+useEffect(() => {
+  if (JSON.stringify(filters) !== JSON.stringify(previousFilters)) {
+    setPage(1); // Reset to page 1
+    setPreviousFilters(filters); // Update previous filters
+  }
+}, [filters]);
+
   
-  const fetchData = useCallback(
-    _.debounce(async (page, pageSize, filters) => {
-      setLoading(true);
-      try {
-        setCountOf(prevCountVal => prevCountVal + 1);
-  
-        // Detect if filters have changed
-        const filtersChanged = JSON.stringify(filters) !== JSON.stringify(currentFilters);
-        
-        if (filtersChanged) {
-          setPage(1); // Reset to page 1 on filter change
-          setCurrentFilters(filters); // Update the filters state
-          page = 1; // Ensure page is 1
-        }
-  
-        // Subscription check
-        if ((countVal > 2 && !subscriptionStatus) || ((page > 1 || pageSize > 10) && !subscriptionStatus)) {
-          setShowSubscriptionPopup(true);
-          setFilterCountExceed(true);
-          return;
-        }
-  
-        const filterParams = buildFilterParams(filters);
-        const response = await axiosInstance.get(`${apiUrl}/courses`, {
-          params: {
-            page,
-            limit: pageSize,
-            ...filterParams
-          }
-        });
-  
-        setData(response.data.data);
-        setPage(response.data.currentPage);
-        setTotalPages(response.data.totalPages);
-  
-        if (response.data.totalPages < response.data.currentPage) {
-          setPage(1);
-        }
-      } catch (error) {
-        console.error('Error fetching course data:', error);
-      } finally {
-        setLoading(false);
+const fetchData = useCallback(
+  _.debounce(async (page, pageSize, filters) => {
+    setLoading(true);
+    try {
+      if((countVal > 2 && !subscriptionStatus) || ((page > 1 || pageSize > 10) && !subscriptionStatus)) {
+        setShowSubscriptionPopup(true);
+        setFilterCountExceed(true);
+        return;
       }
-    }, 500),
-    [apiUrl, currentFilters, subscriptionStatus, countVal]
-  );
+
+      const filterParams = buildFilterParams(filters);
+      const response = await axiosInstance.get(`${apiUrl}/courses`, {
+        params: {
+          page,
+          limit: pageSize,
+          ...filterParams
+        }
+      });
+
+      setData(response.data.data);
+      setPage(response.data.currentPage);
+      setTotalPages(response.data.totalPages);
+
+      if (response.data.totalPages < response.data.currentPage) {
+        setPage(1);
+      }
+    } catch (error) {
+      console.error('Error fetching course data:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, 500),
+  [apiUrl, filters, page, pageSize, countVal]
+);
 
   const fetchFilterOptions = useCallback(async () => {
     setFilterLoading(true);

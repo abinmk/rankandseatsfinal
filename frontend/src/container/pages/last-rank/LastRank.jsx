@@ -15,6 +15,7 @@ const apiUrl = import.meta.env.VITE_API_URL;
 const LastRank = () => {
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [showRowModal, setShowRowModal] = useState(false);
+  const [previousFilters, setPreviousFilters] = useState(null);
 
   const [data, setData] = useState([]);
   const [filterOptions, setFilterOptions] = useState({});
@@ -31,9 +32,9 @@ const LastRank = () => {
   const [showSubscriptionPopup, setShowSubscriptionPopup] = useState(false);
   const [filterCountExceeded, setFilterCountExceed] = useState(false);
 
-  const [currentFilters, setCurrentFilters] = useState({});
-
   const apiUrl = import.meta.env.VITE_API_URL;
+
+  
 
   const getFilterParamName = useMemo(() => {
     const filterMapping = {
@@ -65,29 +66,18 @@ const LastRank = () => {
     return params;
   };
 
-
-  
   const fetchData = useCallback(
     _.debounce(async (page, pageSize, filters) => {
       setLoading(true);
       try {
         setCountOf(prevCountVal => prevCountVal + 1);
-  
-        // Check if filters have changed
-        const filtersChanged = JSON.stringify(filters) !== JSON.stringify(currentFilters);
-  
-        if (filtersChanged) {
-          setPage(1); // Reset page to 1 when filters change
-          setCurrentFilters(filters); // Update filter state
-          page = 1;
-        }
-  
-        if ((countVal > 2 && !subscriptionStatus) || ((page > 1 || pageSize > 10) && !subscriptionStatus)) {
+
+        if((countVal > 2 && !subscriptionStatus) || ((page > 1 || pageSize > 10) && !subscriptionStatus)) {
           setShowSubscriptionPopup(true);
           setFilterCountExceed(true);
           return;
         }
-  
+
         const filterParams = buildFilterParams(filters);
         const response = await axiosInstance.get(`${apiUrl}/lastrank`, {
           params: {
@@ -96,22 +86,23 @@ const LastRank = () => {
             ...filterParams
           }
         });
-  
+
         setData(response.data.data);
         setPage(response.data.currentPage);
         setTotalPages(response.data.totalPages);
-  
+
         if (response.data.totalPages < response.data.currentPage) {
-          setPage(1);
+          setPage(response.data.totalPages);
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching college data:', error);
       } finally {
         setLoading(false);
       }
     }, 500),
-    [apiUrl, currentFilters, subscriptionStatus, countVal]
+    [apiUrl, filters, page, pageSize]
   );
+
   const fetchFilterOptions = useCallback(async () => {
     setFilterLoading(true);
     try {
@@ -123,6 +114,13 @@ const LastRank = () => {
       setFilterLoading(false);
     }
   }, [apiUrl]);
+
+  useEffect(() => {
+    if (JSON.stringify(filters) !== JSON.stringify(previousFilters)) {
+      setPage(1); // Reset to page 1
+      setPreviousFilters(filters); // Update previous filters
+    }
+  }, [filters]);
 
   useEffect(() => {
     fetchData(page, pageSize, filters);

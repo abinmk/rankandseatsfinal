@@ -17,13 +17,12 @@ const Colleges = () => {
   const [loading, setLoading] = useState(true);
   const [filterLoading, setFilterLoading] = useState(true);
 
-  const [currentFilters, setCurrentFilters] = useState({});
-
   const { user } = useContext(UserContext);
   const [countVal, setCountOf] = useState(0);
   const [subscriptionStatus, setSubscriptionStatus] = useState(false);
   const [showSubscriptionPopup, setShowSubscriptionPopup] = useState(false);
   const [filterCountExceeded, setFilterCountExceed] = useState(false);
+  const [previousFilters, setPreviousFilters] = useState(null);
 
   const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -60,30 +59,25 @@ const Colleges = () => {
     return params;
   };
 
+  useEffect(() => {
+    if (JSON.stringify(filters) !== JSON.stringify(previousFilters)) {
+      setPage(1); // Reset to page 1
+      setPreviousFilters(filters); // Update previous filters
+    }
+  }, [filters]);
 
-  
   const fetchData = useCallback(
     _.debounce(async (page, pageSize, filters) => {
       setLoading(true);
       try {
         setCountOf(prevCountVal => prevCountVal + 1);
-  
-        // Detect if filters have changed
-        const filtersChanged = JSON.stringify(filters) !== JSON.stringify(currentFilters);
-        
-        if (filtersChanged) {
-          setPage(1); // Reset to page 1 on filter change
-          setCurrentFilters(filters); // Update the filters state
-          page = 1; // Ensure page is 1
-        }
-  
-        // Subscription check
-        if ((countVal > 2 && !subscriptionStatus) || ((page > 1 || pageSize > 10) && !subscriptionStatus)) {
+
+        if((countVal > 2 && !subscriptionStatus) || ((page > 1 || pageSize > 10) && !subscriptionStatus)) {
           setShowSubscriptionPopup(true);
           setFilterCountExceed(true);
           return;
         }
-  
+
         const filterParams = buildFilterParams(filters);
         const response = await axiosInstance.get(`${apiUrl}/colleges`, {
           params: {
@@ -92,13 +86,13 @@ const Colleges = () => {
             ...filterParams
           }
         });
-  
+
         setData(response.data.data);
         setPage(response.data.currentPage);
         setTotalPages(response.data.totalPages);
-  
+
         if (response.data.totalPages < response.data.currentPage) {
-          setPage(1);//response.data.totalPages
+          setPage(1);
         }
       } catch (error) {
         console.error('Error fetching college data:', error);
@@ -106,7 +100,7 @@ const Colleges = () => {
         setLoading(false);
       }
     }, 500),
-    [apiUrl, currentFilters, subscriptionStatus, countVal] // Added stable dependencies
+    [apiUrl, filters, page, pageSize]
   );
 
   const fetchFilterOptions = useCallback(async () => {

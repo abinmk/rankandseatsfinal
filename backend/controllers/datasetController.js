@@ -458,8 +458,27 @@ const generateCombinedDataset = async (req, res) => {
     // Convert lastRankMap to an array for storage
     const lastRankResult = Object.values(lastRankMap);
     
+    // lastRankResult.sort((a, b) => {
+    //   // Extract the latest year for each entry
+    //   const latestYearA = Math.max(...Object.keys(a.years).map(Number));
+    //   const latestYearB = Math.max(...Object.keys(b.years).map(Number));
+    
+    //   if (latestYearA !== latestYearB) {
+    //     return latestYearA - latestYearB; // Sort by latest year
+    //   }
+    
+    //   // Compare the last rank for round 1 or equivalent round
+    //   const lastRankA = a.years[latestYearA]?.rounds['1']?.lastRank || Infinity; // Use Infinity if no last rank
+    //   const lastRankB = b.years[latestYearB]?.rounds['1']?.lastRank || Infinity;
+    
+    //   // If both lastRankA and lastRankB are Infinity, they lack valid data and should be placed at the end
+    //   if (lastRankA === Infinity && lastRankB !== Infinity) return 1;
+    //   if (lastRankB === Infinity && lastRankA !== Infinity) return -1;
+    
+    //   return lastRankA - lastRankB;
+    // });
+
     lastRankResult.sort((a, b) => {
-      // Extract the latest year for each entry
       const latestYearA = Math.max(...Object.keys(a.years).map(Number));
       const latestYearB = Math.max(...Object.keys(b.years).map(Number));
     
@@ -467,13 +486,12 @@ const generateCombinedDataset = async (req, res) => {
         return latestYearA - latestYearB; // Sort by latest year
       }
     
-      // Compare the last rank for round 1 or equivalent round
-      const lastRankA = a.years[latestYearA]?.rounds['1']?.lastRank || Infinity; // Use Infinity if no last rank
+      const lastRankA = a.years[latestYearA]?.rounds['1']?.lastRank || Infinity;
       const lastRankB = b.years[latestYearB]?.rounds['1']?.lastRank || Infinity;
     
-      // If both lastRankA and lastRankB are Infinity, they lack valid data and should be placed at the end
-      if (lastRankA === Infinity && lastRankB !== Infinity) return 1;
-      if (lastRankB === Infinity && lastRankA !== Infinity) return -1;
+      // Ensure entries with rank 0 are treated like Infinity and move to the end
+      if (lastRankA === 0) return 1;
+      if (lastRankB === 0) return -1;
     
       return lastRankA - lastRankB;
     });

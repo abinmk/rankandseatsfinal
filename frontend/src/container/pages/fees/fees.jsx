@@ -22,8 +22,7 @@ const Colleges = () => {
   const [subscriptionStatus, setSubscriptionStatus] = useState(false);
   const [showSubscriptionPopup, setShowSubscriptionPopup] = useState(false);
   const [filterCountExceeded, setFilterCountExceed] = useState(false);
-
-  const [currentFilters, setCurrentFilters] = useState({});
+  const [previousFilters, setPreviousFilters] = useState(null);
 
   const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -59,29 +58,27 @@ const Colleges = () => {
     });
     return params;
   };
-
-
   
+
+  useEffect(() => {
+    if (JSON.stringify(filters) !== JSON.stringify(previousFilters)) {
+      setPage(1); // Reset to page 1
+      setPreviousFilters(filters); // Update previous filters
+    }
+  }, [filters]);
+
   const fetchData = useCallback(
     _.debounce(async (page, pageSize, filters) => {
       setLoading(true);
       try {
         setCountOf(prevCountVal => prevCountVal + 1);
-  
-        const filtersChanged = JSON.stringify(filters) !== JSON.stringify(currentFilters);
-        
-        if (filtersChanged) {
-          setPage(1); // Reset page to 1 when filters change
-          setCurrentFilters(filters); // Update filter state
-          page = 1; // Ensure page is reset
-        }
-  
+
         if((countVal > 2 && !subscriptionStatus) || ((page > 1 || pageSize > 10) && !subscriptionStatus)) {
           setShowSubscriptionPopup(true);
           setFilterCountExceed(true);
           return;
         }
-  
+
         const filterParams = buildFilterParams(filters);
         const response = await axiosInstance.get(`${apiUrl}/fees`, {
           params: {
@@ -90,21 +87,21 @@ const Colleges = () => {
             ...filterParams
           }
         });
-  
+
         setData(response.data.data);
         setPage(response.data.currentPage);
         setTotalPages(response.data.totalPages);
-  
+
         if (response.data.totalPages < response.data.currentPage) {
-          setPage(1);
+          setPage(response.data.totalPages);
         }
       } catch (error) {
-        console.error('Error fetching fees data:', error);
+        console.error('Error fetching college data:', error);
       } finally {
         setLoading(false);
       }
     }, 500),
-    [apiUrl, currentFilters, subscriptionStatus, countVal]
+    [apiUrl, filters, page, pageSize]
   );
 
   const fetchFilterOptions = useCallback(async () => {
