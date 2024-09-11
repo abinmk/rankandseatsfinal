@@ -131,16 +131,27 @@ const AlertsUpdate = () => {
                     </Form.Group>
                   </Col>
                   <Col md={3}>
-                    <Form.Group controlId={`alertCallToAction-${index}`}>
-                      <Form.Label>Call to Action <Badge bg="info">Required</Badge></Form.Label>
-                      <Form.Control
-                        type="text"
-                        value={alert.callToAction}
-                        onChange={(e) => handleChange(index, 'callToAction', e.target.value)}
-                        required
-                      />
-                    </Form.Group>
-                  </Col>
+                  <Form.Group controlId={`alertCallToAction-${index}`}>
+                    <Form.Label>Call to Action <Badge bg="info">Required</Badge></Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={alert.callToActionText || ''}
+                      placeholder="Enter button text (e.g., 'Download Now')"
+                      onChange={(e) => handleChange(index, 'callToActionText', e.target.value)} // New text for the link
+                      required
+                    />
+                  </Form.Group>
+                  <Form.Group controlId={`alertCallToActionLink-${index}`}>
+                    <Form.Label>Link <Badge bg="info">Required</Badge></Form.Label>
+                    <Form.Control
+                      type="url"
+                      value={alert.callToAction || ''}
+                      placeholder="Enter the link URL"
+                      onChange={(e) => handleChange(index, 'callToAction', e.target.value)} // The actual link
+                      required
+                    />
+                  </Form.Group>
+                </Col>
                   <Col md={1} className="text-end">
                     <OverlayTrigger
                       placement="top"

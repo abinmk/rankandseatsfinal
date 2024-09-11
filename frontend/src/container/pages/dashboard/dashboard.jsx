@@ -345,7 +345,11 @@ const Sales = () => {
                         <td className="text-start">{alert.counselingType}</td>
                         <td className="text-start">{alert.title}</td>
                         <td className="text-start">{alert.details}</td>
-                        <td className="text-start">{alert.callToAction}</td>
+                        <td className="text-start">
+                        <a href={alert.callToAction} target="_blank" rel="noopener noreferrer">
+                          {alert.callToActionText || 'Click Here'}
+                        </a>
+                      </td>
                       </tr>
                     ))}
                   </tbody>

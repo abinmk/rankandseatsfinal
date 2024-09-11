@@ -18,7 +18,11 @@ const alertSchema = new mongoose.Schema({
     required: true
   },
   callToAction: {
-    type: String,
+    type: String, // This is the URL field
+    required: true
+  },
+  callToActionText: {
+    type: String, // New field for custom link text
     required: true
   }
 });
