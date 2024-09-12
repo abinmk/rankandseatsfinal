@@ -8,6 +8,10 @@ export const LastRankColumns = (data, handleDetailClick) => {
     { Header: 'State', accessor: 'state' },
     { Header: 'College', accessor: 'collegeName' },
     { Header: 'Course', accessor: 'courseName' },
+    { Header: 'Course Fee', accessor: 'courseFee', 
+    Cell: ({ value }) => `₹${new Intl.NumberFormat('en-IN').format(value)}`
+  },
+
     ...years.flatMap((year) => (
       rounds
         .filter(round => data.some(row => row.years[year]?.rounds[round])) // Filter out rounds with no data
@@ -48,9 +52,9 @@ export const LastRankColumns = (data, handleDetailClick) => {
 
 
 export const LastRankFiltersConfig = [
-  { id: 'collegeName', label: 'College Name', type: 'select', options: [] },
-  { id: 'courseName', label: 'Course Name', type: 'select', options: [] },
-  { id: 'state', label: 'State', type: 'select', options: [] },
-  { id: 'instituteType', label: 'Institute Type', type: 'select', options: [] },
-  { id: 'quota', label: 'Quota', type: 'select', options: [] },
+  // { id: 'collegeName', label: 'College Name', type: 'select', options: [] },
+  // { id: 'courseName', label: 'Course Name', type: 'select', options: [] },
+  // { id: 'state', label: 'State', type: 'select', options: [] },
+  // { id: 'instituteType', label: 'Institute Type', type: 'select', options: [] },
+  // { id: 'quota', label: 'Quota', type: 'select', options: [] },
 ];

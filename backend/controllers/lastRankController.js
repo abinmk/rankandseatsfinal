@@ -19,7 +19,6 @@ const getLastRanks = async (req, res) => {
     const formattedExam = exam.replace(/\s+/g, '_');
     const formattedCounselingType = counselingType.replace(/\s+/g, '_');
     const collectionName = `LAST_RANK_EXAM:${formattedExam}_TYPE:${formattedCounselingType}`;
-    // console.log("counseling with collection name:" + collectionName);
     let LastRankModel;
 
     try {
@@ -34,13 +33,10 @@ const getLastRanks = async (req, res) => {
 
     const query = {};
 
-    // Convert quotaOptions[] to quota in the query
     if (quotaOptions) {
-      // console.log('Quota Options:', quotaOptions); // Log quotaOptions
       query.quota = Array.isArray(quotaOptions) ? { $in: quotaOptions } : quotaOptions;
     }
 
-    // Utility function to add range filters
     const addRangeFilter = (field, range) => {
       const rangeQuery = {};
       if (range.min !== undefined) {
@@ -105,6 +101,8 @@ const getLastRanks = async (req, res) => {
   }
 };
 
+
+
   
   
 
@@ -132,18 +130,40 @@ const getLastRankFilters = async (req, res) => {
           throw error;
         }
       }
+      
   
       // Fetch distinct values for each filterable field
-      const quotaOptions = await LastRankModel.distinct('quota');
-      const stateOptions = await LastRankModel.distinct('state');
-      const courseNameOptions = await LastRankModel.distinct('courseName');
-      const collegeNameOptions = await LastRankModel.distinct('collegeName');
+      // const round = await LastRankModel.distinct('round');
+      // const year = await LastRankModel.distinct('years);
+      const allottedQuota = await LastRankModel.distinct('quota');
+      const allottedCategory = await LastRankModel.distinct('allottedCategory');
+      const state = await LastRankModel.distinct('state');
+      const institute = await LastRankModel.distinct('collegeName');
+      const instituteType = await LastRankModel.distinct('instituteType');
+      const university = await LastRankModel.distinct('universityName');
+      const course = await LastRankModel.distinct('courseName');
+      const courseType = await LastRankModel.distinct('courseType');
+      const degreeType = await LastRankModel.distinct('degreeType');
+      const courseFee = await LastRankModel.distinct('courseFee');
+      const bond = await LastRankModel.distinct('bondYear');
+      const bondPenality = await LastRankModel.distinct('BondPenality');
+      const beds = await LastRankModel.distinct('Beds');
   
       res.json({
-        quotaOptions,
-        stateOptions,
-        courseNameOptions,
-        collegeNameOptions
+        // round,
+        allottedQuota,
+        allottedCategory,
+        state,
+        institute,
+        instituteType,
+        university,
+        course,
+        courseType,
+        degreeType,
+        // courseFee,
+        // bond,
+        // bondPenality,
+        // beds
       });
     } catch (error) {
       console.error('Error fetching filter options for last rank:', error);
