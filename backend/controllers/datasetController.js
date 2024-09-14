@@ -26,6 +26,7 @@ const storage = multer.diskStorage({
   }
 });
 
+
 const upload = multer({ storage: storage }).single('file');
 
 // Function to dynamically get or create a model
@@ -315,7 +316,7 @@ const generateCombinedDataset = async (req, res) => {
         const collegeDetails = collegeMap[collegeKey] || {};
 
         fullCollegeResultMap[collegeKey] = {
-          collegeName: fee.collegeName,
+          collegeName: fee.collegeName || '',
           state: collegeDetails.state || '',
           instituteType: collegeDetails.instituteType || '',
           universityName: collegeDetails.universityName || '',
