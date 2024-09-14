@@ -351,7 +351,7 @@ const generateCombinedDataset = async (req, res) => {
           stipendYear3: fee.stipendYear3 || 0,
           bondYear: fee.bondYear || 0,
           bondPenality: fee.bondPenality || 0,
-          seatLeavingPenality: fee.seatLeavingPenality || 0,
+          seatLeavingPenality: fee.seatLeavingPenality || '',
         };
       }
     });

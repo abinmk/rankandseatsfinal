@@ -93,6 +93,26 @@ const GenericTable = ({
     return filterMapping[filterKey] || filterKey;
   };
 
+  const formatLargeNumbersInString = (str) => {
+    // Regular expression to find numeric values
+    const regex = /(\d+)(?:\.\d{1,2})?/g;
+  
+    return str.replace(regex, (match) => {
+      // Convert the matched number to an integer
+      const number = parseInt(match, 10);
+      
+      // Check if the number is greater than 10,000
+      if (number > 10000) {
+        // Format the number as currency
+        return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(number);
+      }
+      
+      // Return the number as is if it's not greater than 10,000
+      return match;
+    });
+  };
+  
+
   const buildFilterParams = () => {
     const params = {};
     Object.keys(filters).forEach((filterKey) => {
@@ -427,7 +447,8 @@ const GenericTable = ({
         <div className="section-content">
           <p><strong>Bond (in years):</strong> {selectedRowData.bondYear}</p>
           <p><strong>Bond Penalty:</strong> {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' ,maximumFractionDigits: 0 }).format(selectedRowData.bondPenality)}</p>
-          <p><strong>Seat Leaving Penalty:</strong> {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' ,maximumFractionDigits: 0 }).format(selectedRowData.seatLeavingPenality)}</p>
+          <p><strong>Seat Leaving Penalty:</strong> {formatLargeNumbersInString(selectedRowData.seatLeavingPenality)}</p>
+     
         </div>
       </div>
       </div>
