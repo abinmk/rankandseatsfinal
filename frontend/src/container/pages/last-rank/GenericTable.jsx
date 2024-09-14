@@ -90,19 +90,23 @@ const GenericTable = ({
   };
 
   const formatLargeNumbersInString = (str) => {
+    if (typeof str !== 'string') {
+      return str; // Return the input as is if it's not a string
+    }
+  
     // Regular expression to find numeric values
     const regex = /(\d+)(?:\.\d{1,2})?/g;
   
     return str.replace(regex, (match) => {
       // Convert the matched number to an integer
       const number = parseInt(match, 10);
-      
+  
       // Check if the number is greater than 10,000
       if (number > 10000) {
         // Format the number as currency
         return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(number);
       }
-      
+  
       // Return the number as is if it's not greater than 10,000
       return match;
     });
@@ -233,6 +237,8 @@ const GenericTable = ({
     const url = `/college/${encodedCollegeName}`;
     window.open(url, '_blank'); // Opens in a new tab
   };
+
+  const penalty = selectedRowData?.seatLeavingPenality ?? 0; 
   
   
 
@@ -477,7 +483,7 @@ const GenericTable = ({
       </div>
       <div className="info-box">
         <h4>Penalties and Deductions</h4>
-        <p>Seat Leaving Penalty: {formatLargeNumbersInString(selectedRowData.seatLeavingPenality)}</p>
+        <p>Seat Leaving Penalty: {formatLargeNumbersInString(penalty)}</p>
      
      </div>
     </div>
