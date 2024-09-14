@@ -234,6 +234,7 @@ const GenericTable = ({
     window.open(url, '_blank'); // Opens in a new tab
   };
   
+  
 
   return (
     <div className={`allotments-container ${(showColumnModal || showRowModal) ? "hide-filters" : ""}`}>
@@ -477,7 +478,8 @@ const GenericTable = ({
       <div className="info-box">
         <h4>Penalties and Deductions</h4>
         <p>Seat Leaving Penalty: {formatLargeNumbersInString(selectedRowData.seatLeavingPenality)}</p>
-      </div>
+     
+     </div>
     </div>
   </Modal.Body>
   <Modal.Footer>
