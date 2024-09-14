@@ -381,7 +381,7 @@ const generateCombinedDataset = async (req, res) => {
           stipendYear3: fee.stipendYear3 || 0,
           bondYear: fee.bondYear || 0,
           bondPenality: fee.bondPenality || 0,
-          seatLeavingPenality: fee.seatLeavingPenality || 0,
+          seatLeavingPenality: fee.seatLeavingPenality || '',
           instituteType: collegeMap[collegeKey]?.instituteType || '',
           universityName: collegeMap[collegeKey]?.universityName || '',
           state: collegeMap[collegeKey]?.state || '',
@@ -441,7 +441,7 @@ const generateCombinedDataset = async (req, res) => {
             stipendYear3: fee.stipendYear3 || 0,
             bondYear: fee.bondYear || 0,
             bondPenality: fee.bondPenality || 0,
-            seatLeavingPenality: fee.seatLeavingPenality || 0,
+            seatLeavingPenality: fee.seatLeavingPenality || '',
           };
         }
       }
@@ -502,7 +502,7 @@ const generateCombinedDataset = async (req, res) => {
         stipendYear3: Number(fee.stipendYear3) || 0,
         bondYear: Number(fee.bondYear) || 0,
         bondPenality: Number(fee.bondPenality) || 0,
-        seatLeavingPenality: Number(fee.seatLeavingPenality) || 0,
+        seatLeavingPenality: Number(fee.seatLeavingPenality) || '',
         quota: fee.quota || "",
         instituteType: college.instituteType || "",
         totalHospitalBeds: Number(college.totalHospitalBeds) || 0,
@@ -629,7 +629,7 @@ const generateCombinedDataset = async (req, res) => {
         bondYear: fee.bondYear || 0,
         totalHospitalBeds: collegeMap[allotment.allottedInstitute.trim().toLowerCase()]?.totalHospitalBeds|| 0,
         bondPenality: fee.bondPenality || 0,
-        seatLeavingPenality: fee.seatLeavingPenality || 0,
+        seatLeavingPenality: fee.seatLeavingPenality || '',
         instituteType: collegeMap[allotment.allottedInstitute.trim().toLowerCase()]?.instituteType || '',
         universityName: collegeMap[allotment.allottedInstitute.trim().toLowerCase()]?.universityName || '',
         state: collegeMap[allotment.allottedInstitute.trim().toLowerCase()]?.state || '',
