@@ -4,15 +4,15 @@ const Allotment = require('../models/Allotment');
 
 exports.addToWishlist = async (req, res) => {
   try {
-    const { examName, allotment } = req.body; // Destructure allotment instead of _id
-    const userId = req.user.userId; // Assuming userId is set in req.user by middleware
+    const { examName, allotment } = req.body;
+    const userId = req.user.userId;
 
-    if (!examName || !allotment || !allotment._id) {
+    if (!examName || !allotment || !allotment._id || !allotment.uuid) {
       return res.status(400).json({ message: 'Invalid request data' });
     }
 
-    // Validate that allotment._id is a valid ObjectId
     const allotmentId = allotment._id;
+    const allotmentUUID = allotment.uuid;
 
     if (!mongoose.Types.ObjectId.isValid(allotmentId)) {
       return res.status(400).json({ message: 'Invalid allotment ID format' });
@@ -29,7 +29,7 @@ exports.addToWishlist = async (req, res) => {
     let wishlist = user.wishlist.find(w => w.examName === examName);
 
     if (!wishlist) {
-      // If no wishlist exists for this exam and counseling type, create a new one
+      // Create a new wishlist entry if not exists
       wishlist = {
         examName,
         items: [],
@@ -37,23 +37,25 @@ exports.addToWishlist = async (req, res) => {
       user.wishlist.push(wishlist);
     }
 
-    // Check if the allotment is already in the wishlist
-    const itemExists = wishlist.items.some(item => item.allotmentId.equals(allotmentId));
+    // Check if an allotment with the same UUID already exists in the wishlist
+    const itemExists = wishlist.items.some(item => item.uuid === allotmentUUID);
 
     if (!itemExists) {
-      // Add the allotment to the wishlist
+      // Add the allotment with the UUID to the wishlist
       wishlist.items.push({
-        allotmentId: mongoose.Types.ObjectId(allotmentId), // Ensure this is an ObjectId
+        allotmentId: mongoose.Types.ObjectId(allotmentId), // Ensure ObjectId
+        uuid: allotmentUUID, // Store the UUID
         allotment, // Store the full allotment object
       });
+
+      // Save the updated user document
+      await user.save();
+
+      res.status(200).json({ message: 'Item added to wishlist successfully', wishlist: user.wishlist });
     } else {
-      return res.status(400).json({ message: 'Item already in wishlist' });
+      return res.status(400).json({ message: 'Item already in wishlist based on UUID' });
     }
 
-    // Save the user with the updated wishlist
-    await user.save();
-
-    res.status(200).json({ message: 'Item added to wishlist successfully', wishlist: user.wishlist });
   } catch (error) {
     console.error('Error adding to wishlist:', error);
     res.status(500).json({ message: 'Failed to add to wishlist.', error: error.message });
@@ -177,14 +179,14 @@ exports.getWishlist = async (req, res) => {
   exports.removeFromWishlist = async (req, res) => {
     try {
       const userId = req.user.userId;  // Assuming you have middleware to get the user ID from the token
-      const { allotmentId } = req.body;
+      const { uuid } = req.body;  // Use uuid instead of allotmentId
   
-      if (!allotmentId) {
+      if (!uuid) {
         return res.status(400).json({ message: 'Invalid request data' });
       }
   
       // Find the user
-      let user = await User.findById(userId).lean();
+      let user = await User.findById(userId);
   
       if (!user || !user.selectedExams || user.selectedExams.length === 0) {
         return res.status(400).send('No selected exams found for user.');
@@ -203,8 +205,8 @@ exports.getWishlist = async (req, res) => {
         return res.status(404).json({ message: 'Wishlist not found for this exam' });
       }
   
-      // Find the index of the item to remove
-      const itemIndex = wishlist.items.findIndex(item => item.allotmentId.equals(allotmentId));
+      // Find the index of the item to remove based on the uuid
+      const itemIndex = wishlist.items.findIndex(item => item.uuid === uuid);
   
       if (itemIndex === -1) {
         return res.status(404).json({ message: 'Item not found in wishlist' });
@@ -214,7 +216,7 @@ exports.getWishlist = async (req, res) => {
       wishlist.items.splice(itemIndex, 1);
   
       // Save the updated user document
-      await User.updateOne({ _id: userId }, { wishlist: user.wishlist });
+      await user.save();
   
       res.status(200).json({ message: 'Item removed from wishlist successfully', wishlist: user.wishlist });
     } catch (error) {

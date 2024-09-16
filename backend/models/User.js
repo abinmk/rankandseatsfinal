@@ -11,6 +11,7 @@ const examSelectionSchema = new mongoose.Schema({
 const wishlistItemSchema = new mongoose.Schema({
   allotmentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Allotment', required: true },
   allotment: { type: mongoose.Schema.Types.Mixed, required: true },
+  uuid: { type: String, required: true },
 });
 
 // Schema for wishlist grouped by exam and counseling type

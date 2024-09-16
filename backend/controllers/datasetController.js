@@ -612,6 +612,11 @@ const generateCombinedDataset = async (req, res) => {
     // Clear existing data and insert new generated exam data
     await GeneratedExamModel.deleteMany({});
 
+    const generateUniqueId = (allotment) => {
+      const { allottedInstitute, allottedQuota, course, allottedCategory } = allotment;
+      return `${allottedInstitute.trim().toLowerCase()}_${allottedQuota.trim().toLowerCase()}_${course.trim().toLowerCase()}_${allottedCategory.trim().toLowerCase()}`;
+    };
+
     const generatedExamData = combinedAllotments.map(allotment => {
       const key = `${allotment.allottedInstitute.trim().toLowerCase()}_${allotment.course.trim().toLowerCase()}_${allotment.allottedQuota.trim().toLowerCase()}_${allotment.allottedCategory.trim().toLowerCase()}`;
       const feeKey = `${allotment.allottedInstitute.trim().toLowerCase()}_${allotment.course.trim().toLowerCase()}_${allotment.allottedQuota.trim().toLowerCase()}`;
@@ -620,6 +625,7 @@ const generateCombinedDataset = async (req, res) => {
 
       return {
         ...allotment,
+        uuid:generateUniqueId(allotment),
         examName: examName,
         feeAmount: fee.courseFee || 0,
         nriFee: fee.nriFee || 0,

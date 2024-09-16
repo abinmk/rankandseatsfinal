@@ -263,17 +263,23 @@ const GenericTable = ({
                       onClick={() => handleRowClick(row)}
                     >
                       <td>
-                        <FaHeart
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            if (wishlist.some(item => item.allotmentId === row.original._id)) {
-                              removeFromWishlist(row.original._id);
-                            } else {
-                              addToWishlist(row.original.examName, row.original); // Pass both parameters to the function
-                            }
-                          }}
-                          style={{ color: wishlist.some(item => item.allotmentId === row.original._id) ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5rem' }}
-                        />
+                      <FaHeart
+                      onClick={(e) => {
+                        e.stopPropagation();
+
+                        // Check if the current row's UUID exists in the wishlist
+                        if (wishlist.some(item => item.uuid === row.original.uuid)) {
+                          removeFromWishlist(row.original.uuid); // Remove by UUID
+                        } else {
+                          addToWishlist(row.original.examName, row.original); // Pass both parameters, including UUID
+                        }
+                      }}
+                      style={{
+                        color: wishlist.some(item => item.uuid === row.original.uuid) ? 'navy' : 'grey', // Check by UUID
+                        cursor: 'pointer',
+                        fontSize: '1.5rem'
+                      }}
+                    />
                       </td>
                       {row.cells.map((cell) => {
                         const { key, ...rest } = cell.getCellProps();

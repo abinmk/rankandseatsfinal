@@ -203,17 +203,15 @@ const Allotments = () => {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-
-      // console.log('Wishlist updated:', response.data);
       fetchWishlist();
     } catch (error) {
       console.error('Error adding to wishlist:', error.response?.data || error.message);
     }
   };
 
-  const removeFromWishlist = async (allotmentId) => {
+  const removeFromWishlist = async (uuid) => {
     try {
-      await axiosInstance.post(`${apiUrl}/wishlist/remove`, { examName: exam, allotmentId });
+      await axiosInstance.post(`${apiUrl}/wishlist/remove`, { examName: exam, uuid });
       fetchWishlist();
     } catch (error) {
       console.error('Error removing from wishlist:', error);
