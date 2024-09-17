@@ -250,43 +250,55 @@ exports.getWishlist = async (req, res) => {
   
   exports.updateWishlistOrder = async (req, res) => {
     try {
-      const { examName, updatedOrder } = req.body;
-      const userId = req.user.userId; // Assuming the user is authenticated and req.user is populated correctly
+      const { draggedItemId, targetItemId, direction } = req.body; // The `direction` tells if it’s moving up or down
+      const userId = req.user.userId;
   
       const user = await User.findById(userId);
-  
       if (!user) {
         return res.status(404).json({ message: 'User not found.' });
       }
-      const examNameModified = `EXAM:NEET_PG_TYPE:ALL_INDIA`;
   
-      const examWishlist = user.wishlist.find(w => w.examName === examNameModified);
+      const { exam, counselingType } = user.selectedExams[0];
+      const formattedExam = exam.replace(/\s+/g, '_');
+      const formattedCounselingType = counselingType.replace(/\s+/g, '_');
+      const examName = `EXAM:${formattedExam}_TYPE:${formattedCounselingType}`;
   
+      const examWishlist = user.wishlist.find(w => w.examName === examName);
       if (!examWishlist) {
         return res.status(404).json({ message: 'Wishlist not found for the specified exam.' });
       }
   
-      // Create a map of allotmentId to the corresponding item
-      const itemMap = new Map();
-      examWishlist.items.forEach(item => {
-        itemMap.set(item.allotmentId.toString(), item);
-      });
+      // Find the dragged item and remove it from its current position
+      const draggedItemIndex = examWishlist.items.findIndex(item => item.uuid === draggedItemId);
+      if (draggedItemIndex === -1) {
+        return res.status(400).json({ message: `Invalid dragged item UUID: ${draggedItemId}` });
+      }
+      const [draggedItem] = examWishlist.items.splice(draggedItemIndex, 1); // Remove the dragged item
   
-      // Reorder items based on the updatedOrder array
-      const reorderedItems = [];
-      for (const id of updatedOrder) {
-        const item = itemMap.get(id);
-        if (item) {
-          reorderedItems.push(item);
-        } else {
-          return res.status(400).json({ message: `Invalid allotment ID: ${id}` });
+      // Determine the new position based on the direction of the drag
+      if (targetItemId) {
+        const targetItemIndex = examWishlist.items.findIndex(item => item.uuid === targetItemId);
+        if (targetItemIndex === -1) {
+          return res.status(400).json({ message: `Invalid target item UUID: ${targetItemId}` });
         }
+  
+        let newIndex;
+        if (direction === 'up') {
+          // If dragging upwards, insert just above the target item
+          newIndex = targetItemIndex;
+        } else if (direction === 'down') {
+          // If dragging downwards, insert just below the target item
+          newIndex = targetItemIndex + 1;
+        }
+  
+        // Insert the dragged item at the new index
+        examWishlist.items.splice(newIndex, 0, draggedItem);
+      } else {
+        // If no `targetItemId` is provided, move the dragged item to the end
+        examWishlist.items.push(draggedItem);
       }
   
-      // Replace the items with the reordered list
-      examWishlist.items = reorderedItems;
-  
-      // Save the updated user document
+      // Save the updated user data
       await user.save();
   
       res.status(200).json({ message: 'Wishlist order updated successfully', wishlist: examWishlist.items });
@@ -346,55 +358,44 @@ exports.getWishlist = async (req, res) => {
   };
   
 
-  exports.removeFromWishlist = async (req, res) => {
-    try {
-      const userId = req.user.userId;  // Assuming you have middleware to get the user ID from the token
-      const { uuid } = req.body;  // Use uuid instead of allotmentId
-  
-      if (!uuid) {
-        return res.status(400).json({ message: 'Invalid request data' });
-      }
-  
-      // Find the user
-      let user = await User.findById(userId);
-  
-      if (!user || !user.selectedExams || user.selectedExams.length === 0) {
-        return res.status(400).send('No selected exams found for user.');
-      }
-  
-      // Use the first selected exam to generate examName
-      const { exam, counselingType } = user.selectedExams[0];
-      const formattedExam = exam.replace(/\s+/g, '_');
-      const formattedCounselingType = counselingType.replace(/\s+/g, '_');
-      const examName = `EXAM:${formattedExam}_TYPE:${formattedCounselingType}`;
-  
-      // Find the wishlist entry for the exam and counseling type
-      let wishlist = user.wishlist.find(w => w.examName === examName);
-  
-      if (!wishlist) {
-        return res.status(404).json({ message: 'Wishlist not found for this exam' });
-      }
-  
-      // Find the index of the item to remove based on the uuid
-      const itemIndex = wishlist.items.findIndex(item => item.uuid === uuid);
-  
-      if (itemIndex === -1) {
-        return res.status(404).json({ message: 'Item not found in wishlist' });
-      }
-  
-      // Remove the item from the wishlist
-      wishlist.items.splice(itemIndex, 1);
-  
-      // Save the updated user document
-      await user.save();
-  
-      res.status(200).json({ message: 'Item removed from wishlist successfully', wishlist: user.wishlist });
-    } catch (error) {
-      console.error('Error removing from wishlist:', error);
-      res.status(500).json({ message: 'Failed to remove from wishlist.', error: error.message });
-    }
-  };
+exports.removeFromWishlist = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { uuid } = req.body;
 
+    if (!uuid) {
+      return res.status(400).json({ message: 'Invalid request data' });
+    }
+
+    let user = await User.findById(userId);
+    if (!user || !user.selectedExams || user.selectedExams.length === 0) {
+      return res.status(400).send('No selected exams found for user.');
+    }
+
+    const { exam, counselingType } = user.selectedExams[0];
+    const formattedExam = exam.replace(/\s+/g, '_');
+    const formattedCounselingType = counselingType.replace(/\s+/g, '_');
+    const examName = `EXAM:${formattedExam}_TYPE:${formattedCounselingType}`;
+
+    let wishlist = user.wishlist.find(w => w.examName === examName);
+    if (!wishlist) {
+      return res.status(404).json({ message: 'Wishlist not found for this exam' });
+    }
+
+    const itemIndex = wishlist.items.findIndex(item => item.uuid === uuid);
+    if (itemIndex === -1) {
+      return res.status(404).json({ message: 'Item not found in wishlist' });
+    }
+
+    wishlist.items.splice(itemIndex, 1);
+    await user.save();
+
+    res.status(200).json({ message: 'Item removed from wishlist successfully', wishlist: user.wishlist });
+  } catch (error) {
+    console.error('Error removing from wishlist:', error);
+    res.status(500).json({ message: 'Failed to remove from wishlist.', error: error.message });
+  }
+};
   exports.removeFromWishlistAllIndia = async (req, res) => {
     try {
       const userId = req.user.userId;  // Assuming you have middleware to get the user ID from the token
@@ -447,21 +448,19 @@ exports.getWishlist = async (req, res) => {
   
   exports.getFilterOptions = async (req, res) => {
     try {
-      const userId = req.user.userId;  // Assuming you have middleware to get the user ID from the token
+      const userId = req.user.userId;  // Get the user ID from the token (assuming authentication middleware)
       const user = await User.findById(userId).lean();
-      
+  
       if (!user || !user.selectedExams || user.selectedExams.length === 0) {
         return res.status(400).send('No selected exams found for user.');
       }
   
       // Use the first selected exam
       const { exam, counselingType } = user.selectedExams[0];
-      
+  
       // Format exam and counselingType by replacing spaces with underscores
       const formattedExam = exam.replace(/\s+/g, '_');
       const formattedCounselingType = counselingType.replace(/\s+/g, '_');
-  
-      // Generate the examName
       const examName = `EXAM:${formattedExam}_TYPE:${formattedCounselingType}`;
   
       // Find the wishlist for this specific exam
@@ -471,7 +470,7 @@ exports.getWishlist = async (req, res) => {
         return res.status(404).json({ message: 'Wishlist not found for this exam' });
       }
   
-      // Extract filters from the wishlist items
+      // Extract filter options from the wishlist items
       const institutesSet = new Set();
       const coursesSet = new Set();
       const categoriesSet = new Set();
@@ -484,18 +483,20 @@ exports.getWishlist = async (req, res) => {
         }
       });
   
+      // Convert Sets to Arrays
       const institutes = Array.from(institutesSet);
       const courses = Array.from(coursesSet);
       const categories = Array.from(categoriesSet);
   
+      // Return the filter options
       res.status(200).json({
         institutes,
         courses,
         categories,
       });
     } catch (error) {
-      console.error('Error fetching filters:', error);
-      res.status(500).send('Failed to fetch filters.');
+      console.error('Error fetching filter options:', error);
+      res.status(500).json({ message: 'Failed to fetch filter options.', error: error.message });
     }
   };
   
