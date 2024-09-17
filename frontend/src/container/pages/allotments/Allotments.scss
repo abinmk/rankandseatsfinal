@@ -987,3 +987,36 @@
     }
   }
 }
+
+/* Container for custom styling */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+}
+
+/* Increase the size of the checkbox */
+.checkbox-container input[type="checkbox"] {
+  width: 18px; /* Adjust width */
+  height: 18px; /* Adjust height */
+  cursor: pointer; /* Ensure the cursor is a pointer */
+  margin-right: 8px; /* Space between checkbox and label */
+}
+
+/* Increase the size of the checkbox label */
+.checkbox-label {
+  font-size: .9rem; /* Adjust font size */
+  cursor: pointer;
+  transition: color 0.8s ease, transform 0.3s ease; /* Smooth transition for color and scaling */
+}
+
+/* Scale up the label on hover */
+.checkbox-label:hover {
+  color: #0056b3; /* Darker blue for hover effect */
+  transform: scale(1.05); /* Scale up by 5% */
+}
+
+/* Apply color change when the checkbox is checked */
+.checkbox-label.checked {
+  color: #184678; /* Blue for selected/checked state */
+  font-weight: 600; /* Slightly bolder text for checked state */
+}

@@ -280,7 +280,7 @@ const GenericTable = ({
                 {headerGroups.map((headerGroup) => (
                   <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
                       <th>
-                      <FaHeart
+                      <FaHeart className='heart-icon'
                       disabled={disabled}
                         onClick={() => toggleAllWishlist()}
                         style={{ color: wishlist.length === data.length ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5rem' }}

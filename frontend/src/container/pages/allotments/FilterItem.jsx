@@ -88,72 +88,88 @@ const FilterItem = ({ title, options = {}, disabled, filterName, filters, handle
         <Accordion.Header>
           {title} ({appliedFiltersCount})
         </Accordion.Header>
-        <Accordion.Body className='sliderFilter' disabled={disabled}>
-          {isRangeFilter ? (
-            <>
-              <Slider
-                getAriaLabel={() => 'Range'}
-                value={[minValue, maxValue]}
-                onChange={handleSliderChange}
-                onChangeCommitted={handleSliderChangeCommitted}
-                valueLabelDisplay="auto"
-                min={options.min}
-                max={options.max}
+     
+    <Accordion.Body className='sliderFilter' disabled={disabled}>
+      {isRangeFilter ? (
+        <>
+          <Slider
+            getAriaLabel={() => 'Range'}
+            value={[minValue, maxValue]}
+            onChange={handleSliderChange}
+            onChangeCommitted={handleSliderChangeCommitted}
+            valueLabelDisplay="auto"
+            min={options.min}
+            max={options.max}
+            disabled={loading}
+          />
+          <Row>
+            <Col>
+              <Form.Label>Min:</Form.Label>
+              <Form.Control
+                type="number"
+                value={minValue}
+                onChange={handleMinInputChange}
                 disabled={loading}
               />
-              <Row>
-                <Col>
-                  <Form.Label>Min:</Form.Label>
-                  <Form.Control
-                    type="number"
-                    value={minValue}
-                    onChange={handleMinInputChange}
-                    disabled={loading}
-                  />
-                </Col>
-                <Col>
-                  <Form.Label>Max:</Form.Label>
-                  <Form.Control
-                    type="number"
-                    value={maxValue}
-                    onChange={handleMaxInputChange}
-                    disabled={loading}
-                  />
-                </Col>
-              </Row>
-            </>
-          ) : (
-            <>
+            </Col>
+            <Col>
+              <Form.Label>Max:</Form.Label>
               <Form.Control
-                type="text"
-                placeholder={`Search ${title}`}
-                className="filter-search"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                type="number"
+                value={maxValue}
+                onChange={handleMaxInputChange}
+                disabled={loading}
               />
-              {filteredOptions.slice(0, 4).map(option => (
-                <Form.Check
-                  key={option}
-                  type="checkbox"
-                  label={option}
-                  disabled={disabled}
-                  checked={filters[filterParamName]?.includes(option)}
-                  onChange={(e) => handleCheckboxChange(option, e.target.checked)}
-                />
-              ))}
-              <div className="filter-actions">
-                {viewMore && (
-                  <Button variant="link" className="view-more-btn" onClick={handleModalOpen}>
-                    View More
-                  </Button>
-                )}
-                <Button  disabled={disabled} variant="link" className="clear-btn" onClick={clearFilterCategory}>
-                  Clear
-                </Button>
-              </div>
-            </>
-          )}
-        </Accordion.Body>
+            </Col>
+          </Row>
+        </>
+      ) : (
+        <>
+          <Form.Control
+            type="text"
+            placeholder={`Search ${title}`}
+            className="filter-search"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          {filteredOptions.slice(0, 4).map(option => {
+            const checkboxId = `checkbox-${option}`; // Ensure unique ID
+            return (
+              <Form.Check
+              key={option}
+              type="checkbox"
+              id={checkboxId}
+              // Use a container to ensure proper alignment and styling
+              className="checkbox-container"
+              label={
+                <span className={`checkbox-label ${filters[filterParamName]?.includes(option) ? 'checked' : ''}`}>
+                  {option}
+                </span>
+              }
+              disabled={disabled}
+              checked={filters[filterParamName]?.includes(option)}
+              onChange={(e) => handleCheckboxChange(option, e.target.checked)}
+            />
+            );
+          })}
+          <div className="filter-actions">
+            {viewMore && (
+              <Button variant="link" className="view-more-btn" onClick={handleModalOpen}>
+                View More
+              </Button>
+            )}
+            <Button
+              disabled={disabled}
+              variant="link"
+              className="clear-btn"
+              onClick={clearFilterCategory}
+            >
+              Clear
+            </Button>
+          </div>
+        </>
+      )}
+    </Accordion.Body>
       </Accordion.Item>
 
       <Modal show={showModal} onHide={handleModalClose} className='view-more-modal' centered>
