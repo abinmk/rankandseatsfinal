@@ -10,14 +10,6 @@ export const allotmentsColumns = [
     accessor: 'round',
   },
   {
-    Header: 'Quota',
-    accessor: 'allottedQuota',
-  },
-  {
-    Header: 'Category',
-    accessor: 'allottedCategory',
-  },
-  {
     Header: 'State',
     accessor: 'state',
   },
@@ -44,12 +36,20 @@ export const allotmentsColumns = [
     accessor: 'course',
   },
   {
+    Header: 'Quota',
+    accessor: 'allottedQuota',
+  },
+  {
+    Header: 'Category',
+    accessor: 'allottedCategory',
+  },
+  {
     Header: 'Seats',
     accessor: 'seats',
   },
   {
     Header: 'Virtual Seats',
-    accessor: 'Virtual Seats',
+    accessor: 'virtualSeats',
   },
   {
     Header: 'Beds',

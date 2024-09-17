@@ -110,7 +110,7 @@ const AdmittedStudents = () => {
           return;
         }
   
-        const response = await axiosInstance.get(`${apiUrl}/allotments`, {
+        const response = await axiosInstance.get(`${apiUrl}/admittedStudents`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -149,7 +149,7 @@ const AdmittedStudents = () => {
   const fetchFilterOptions = useCallback(async () => {
     setFilterLoading(true);
     try {
-      const response = await axiosInstance.get(`${apiUrl}/allotments/filters`, {
+      const response = await axiosInstance.get(`${apiUrl}/admittedStudents/filters`, {
         params: { counselingType },
       });
 

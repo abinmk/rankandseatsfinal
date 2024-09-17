@@ -20,12 +20,12 @@ const UploadAdmittedStudents = () => {
     formData.append('file', file);
 
     try {
-      await axiosInstance.post(`${API_URL}/dataset/upload-seats`, formData, {
+      await axiosInstance.post(`${API_URL}/dataset/upload-admittedstudents`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-      alert('Seats data uploaded successfully');
+      alert('Admitted Student data uploaded successfully');
       setFile(null);
     } catch (error) {
       console.error('Error uploading seats data', error);

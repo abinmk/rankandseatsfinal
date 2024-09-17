@@ -23,6 +23,7 @@ const lastRankRoutes = require('./routes/lastRankRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const informationAlertRoutes = require('./routes/informationAlertRoutes'); 
 const profileRoutes = require('./routes/profileRoutes');
+const admittedStudentsRoutes = require('./routes/admittedStudentsRoutes');
 
 const app = express();
 const port = process.env.PORT || 5001;
@@ -353,6 +354,7 @@ app.use('/api/wishlist', authMiddleware, wishlistRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/dataset', datasetRoutes);
 app.use('/api/allotments', authMiddleware, allotmentsRoutes);
+app.use('/api/admittedStudents', authMiddleware, admittedStudentsRoutes);
 app.use('/api/seatMatrix', authMiddleware, seatMatrixRoutes);
 app.use('/api/colleges', collegesRoutes);
 app.use('/api/courses', coursesRoutes);

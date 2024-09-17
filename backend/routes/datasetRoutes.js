@@ -5,6 +5,7 @@ const authMiddleware = require('../middlewares/authMiddleware');
 
 router.post('/upload-round',authMiddleware, datasetController.uploadAllotment);
 router.post('/upload-seatmatrix',authMiddleware, datasetController.uploadSeatMatrix);
+router.post('/upload-admittedstudents',authMiddleware, datasetController.uploadAdmittedStudents);
 router.post('/upload-course',authMiddleware, datasetController.uploadCourse);
 router.post('/upload-college',authMiddleware, datasetController.uploadCollege);
 router.post('/upload-fee',authMiddleware, datasetController.uploadFee);

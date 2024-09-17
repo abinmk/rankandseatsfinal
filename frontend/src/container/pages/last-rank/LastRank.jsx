@@ -126,6 +126,7 @@ const LastRank = () => {
     try {
       const response = await axiosInstance.get(`${apiUrl}/lastrank/filters`);
       setFilterOptions(response.data);
+      fetchWishlist();
     } catch (error) {
       console.error('Error fetching filter options:', error);
     } finally {

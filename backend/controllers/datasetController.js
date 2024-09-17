@@ -5,6 +5,7 @@ const readExcelFile = require('read-excel-file/node');
 const { MongoClient } = require('mongodb');
 const fs = require('fs');
 const Seat = require('../models/Seats'); // Adjust the path if needed
+const AdmittedStudents = require('../models/AdmittedStudents'); // Adjust the path if needed
 
 
 
@@ -179,6 +180,49 @@ const uploadCollege = (req, res) => {
     } catch (err) {
       console.error('Error processing college upload:', err);
       res.status(500).send({ message: 'Failed to process college file.', error: err.message });
+    }
+  });
+};
+
+const uploadAdmittedStudents = (req, res) => {
+  upload(req, res, async function (err) {
+    if (err instanceof multer.MulterError || err) {
+      return res.status(500).send({ message: err.message });
+    }
+
+    const filePath = path.join(__dirname, '..', 'uploads', req.file.filename);
+
+    try {
+      const rows = await readExcelFile(filePath, { sheet: 'Sheet1' }); // Adjust sheet name if needed
+      rows.shift(); // Remove header row
+
+      const seatsData = rows.map(row => ({
+        admittedYear: row[0],
+        instituteState: row[1],
+        allottedInstitute: row[2],
+        course: row[3],
+        studentName: row[4],
+        studentState: row[5],
+        admittedBy: row[6],
+      }));
+
+      // Optional: Delete existing data if needed
+      await AdmittedStudents.deleteMany({});
+
+      // Insert new data
+      await batchInsert(AdmittedStudents, seatsData);
+
+      // Delete the uploaded file from the server
+      fs.unlink(filePath, (unlinkErr) => {
+        if (unlinkErr) {
+          console.error('Failed to delete uploaded file:', unlinkErr);
+        }
+      });
+
+      res.send('Seats data has been successfully saved to MongoDB.');
+    } catch (err) {
+      console.error('Error processing seats upload:', err);
+      res.status(500).send('Failed to process seats file.');
     }
   });
 };
@@ -1135,7 +1179,8 @@ module.exports = {
   uploadSeats,
   uploadSeatMatrix,
   listAvailableSeatMatrix,
-  generateCombinedMatrix
+  generateCombinedMatrix,
+  uploadAdmittedStudents
 };
 
 

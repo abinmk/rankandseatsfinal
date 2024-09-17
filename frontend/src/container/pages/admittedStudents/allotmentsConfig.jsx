@@ -3,23 +3,11 @@ import React from 'react';
 export const allotmentsColumns = [
   {
     Header: 'Year',
-    accessor: 'year',
-  },
-  {
-    Header: 'Round',
-    accessor: 'round',
-  },
-  {
-    Header: 'Rank',
-    accessor: 'rank',
-  }, 
-  {
-    Header: 'Allotted Quota',
-    accessor: 'allottedQuota',
+    accessor: 'admittedYear',
   },
   {
     Header: 'State',
-    accessor: 'state',
+    accessor: 'instituteState',
   },
   {
     Header: 'Institute',
@@ -36,40 +24,21 @@ export const allotmentsColumns = [
     ),
   },
   {
-    Header: 'Institute Type',
-    accessor: 'instituteType',
-  },
-  {
     Header: 'Course',
     accessor: 'course',
   },
   {
-    Header: 'Allotted Category',
-    accessor: 'allottedCategory',
+    Header: 'Name of the Student',
+    accessor: 'studentName',
   },
   {
-    Header: 'Fee',
-    accessor: 'feeAmount',
-    Cell: ({ value }) => `₹${new Intl.NumberFormat('en-IN').format(value)}`
+    Header: 'State of the Student',
+    accessor: 'studentState',
   },
+
   {
-    Header: 'Stipend Year 1',
-    accessor: 'stipendYear1',
-    Cell: ({ value }) => `₹${new Intl.NumberFormat('en-IN').format(value)}`
-  },
-  {
-    Header: 'Bond',
-    accessor: 'bondYear',
-    Cell: ({ value }) => `${value}`
-  },
-  {
-    Header: 'Bond Penalty',
-    accessor: 'bondPenality',
-    Cell: ({ value }) => `₹${new Intl.NumberFormat('en-IN').format(value)}`
-  },
-  {
-    Header: 'Beds',
-    accessor: 'totalHospitalBeds',
+    Header: 'Admitted Through',
+    accessor: 'admittedBy',
   },
 ];
 

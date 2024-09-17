@@ -258,7 +258,7 @@ const SeatMatrix = () => {
         data={data}
         columns={allotmentsColumns}
         filtersConfig={allotmentsFiltersConfig}
-        headerTitle="Seat Matrix"
+        headerTitle="Seat Matrix - All India"
         filters={filters}
         setFilters={setFilters}
         page={page}
