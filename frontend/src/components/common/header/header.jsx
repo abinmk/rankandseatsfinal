@@ -65,6 +65,12 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
     } else if (path.includes("dashboard")) {
       setSelectedTab("Dashboard");
       closeSidebar();
+    }else if (path.includes("seatmatrix")) {
+      setSelectedTab("Seat Matrix - All India");
+      closeSidebar();
+    }else if (path.includes("admitted")) {
+      setSelectedTab("Admitted Students");
+      closeSidebar();
     }
   }, [location]);
 

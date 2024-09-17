@@ -411,6 +411,7 @@ const generateCombinedMatrix = async (req, res) => {
         const fee = feeMap[feeDataKey] || {};
 
         lastRankMap[feeKey] = {
+          examName: examName,
           collegeName: allotment.allottedInstitute,
           courseName: allotment.course,
           quota: allotment.allottedQuota,
@@ -606,6 +607,11 @@ const generateCombinedDataset = async (req, res) => {
 
     // Merge fullCollegeResultMap with allotment data for additional details like ranks
     combinedAllotments.forEach(allotment => {
+
+      const generateUniqueId = (allotment) => {
+        const { allottedInstitute, allottedQuota, course, allottedCategory } = allotment;
+        return `${allottedInstitute.trim().toLowerCase()}_${allottedQuota.trim().toLowerCase()}_${course.trim().toLowerCase()}_${allottedCategory.trim().toLowerCase()}`;
+      };
       const collegeKey = allotment.allottedInstitute.trim().toLowerCase();
       const courseKey = allotment.course.trim().toLowerCase();
       const quotaKey = allotment.allottedQuota.trim().toLowerCase();
@@ -617,6 +623,8 @@ const generateCombinedDataset = async (req, res) => {
         const fee = feeMap[feeDataKey] || {};
 
         lastRankMap[feeKey] = {
+          examName: examName,
+          uuid:generateUniqueId(allotment),
           collegeName: allotment.allottedInstitute,
           courseName: allotment.course,
           quota: allotment.allottedQuota,

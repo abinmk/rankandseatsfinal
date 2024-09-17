@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 
 const LastRankSchema = new mongoose.Schema({
+  uuid:{ type: String, required: true },
+  examName: { type: String, required: true },
   collegeName: { type: String, required: true },
   courseName: { type: String, required: true },
   courseFee: { type: Number, required: true },

@@ -5,6 +5,7 @@ import { Table, Modal, Button, Form, Pagination } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './LastRank.scss';
 import CustomPopup from '../custom-popup/custom-popup-filter';
+import { FaHeart } from 'react-icons/fa';
 
 const GenericTable = ({
   data,
@@ -25,7 +26,10 @@ const GenericTable = ({
   isModalOpen,
   disabled,
   showSubscriptionPopup,
-  setShowSubscriptionPopup
+  setShowSubscriptionPopup,
+  wishlist,
+  addToWishlist,
+  removeFromWishlist
 }) => {
   const [showFilters, setShowFilters] = useState(false);
   const [showColumnModal, setShowColumnModal] = useState(false);
@@ -275,6 +279,13 @@ const GenericTable = ({
               <thead>
                 {headerGroups.map((headerGroup) => (
                   <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
+                      <th>
+                      <FaHeart
+                      disabled={disabled}
+                        onClick={() => toggleAllWishlist()}
+                        style={{ color: wishlist.length === data.length ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5rem' }}
+                      />
+                    </th>
                     {headerGroup.headers.map((column) => {
                       if (column.headers) {
                         // This is the year header
@@ -301,6 +312,25 @@ const GenericTable = ({
     prepareRow(row);
     return (
       <tr key={row.id} {...row.getRowProps()} onClick={() => handleRowClick(row)}>
+            <td>
+                      <FaHeart
+                      onClick={(e) => {
+                        e.stopPropagation();
+
+                        // Check if the current row's UUID exists in the wishlist
+                        if (wishlist.some(item => item.uuid === row.original.uuid)) {
+                          removeFromWishlist(row.original.uuid); // Remove by UUID
+                        } else {
+                          addToWishlist(row.original.examName, row.original); // Pass both parameters, including UUID
+                        }
+                      }}
+                      style={{
+                        color: wishlist.some(item => item.uuid === row.original.uuid) ? 'navy' : 'grey', // Check by UUID
+                        cursor: 'pointer',
+                        fontSize: '1.5rem'
+                      }}
+                    />
+                      </td>
         {row.cells.map((cell) => {
           const { key, ...rest } = cell.getCellProps();
           return (

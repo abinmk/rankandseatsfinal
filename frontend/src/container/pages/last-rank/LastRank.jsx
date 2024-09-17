@@ -5,12 +5,12 @@ import GenericTable from './GenericTable';
 import { LastRankColumns, LastRankFiltersConfig } from './lastRankConfig';
 import axiosInstance from '../../../utils/axiosInstance';
 import { UserContext } from '../../../contexts/UserContext';
+import { useOutletContext } from 'react-router-dom';
 import './LastRank.scss';
 import Modal from 'react-bootstrap/Modal';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 
-const apiUrl = import.meta.env.VITE_API_URL;
 
 const LastRank = () => {
   const [selectedRowData, setSelectedRowData] = useState(null);
@@ -25,6 +25,7 @@ const LastRank = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [filterLoading, setFilterLoading] = useState(true);
+  const [wishlist, setWishlist] = useState([]);
 
   const { user } = useContext(UserContext);
   const [countVal, setCountOf] = useState(0);
@@ -33,6 +34,7 @@ const LastRank = () => {
   const [filterCountExceeded, setFilterCountExceed] = useState(false);
 
   const apiUrl = import.meta.env.VITE_API_URL;
+  const { exam, counselingType } = useOutletContext(); 
 
   
 
@@ -45,6 +47,22 @@ const LastRank = () => {
     };
     return (filterKey) => filterMapping[filterKey] || filterKey;
   }, []);
+
+  const fetchWishlist = useCallback(async () => {
+    try {
+      const token = localStorage.getItem('token');
+      // console.log(exam);
+      const response = await axiosInstance.get(`${apiUrl}/wishlist`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: { examName: exam },
+      });
+      setWishlist(response.data.wishlist.items);
+    } catch (error) {
+      console.error('Error fetching wishlist:', error);
+    }
+  }, [apiUrl, exam,counselingType]);
 
   const buildFilterParams = (filters) => {
     const params = {};
@@ -178,6 +196,46 @@ const LastRank = () => {
     setShowRowModal(false);
   };
 
+  const generateUniqueId = (allotment) => {
+    const { collegeName, quota, courseName, allottedCategory } = allotment;
+    return `${collegeName.trim().toLowerCase()}_${quota.trim().toLowerCase()}_${courseName.trim().toLowerCase()}_${allottedCategory.trim().toLowerCase()}`;
+  };
+
+  const addToWishlist = async (examName, allotment) => {
+    try {
+      console.log(allotment);
+      const updatedAllotment = {
+        ...allotment,   // Spread the existing allotment data
+        uuid: generateUniqueId(allotment),  // Add the generated UUID
+        allottedInstitute:allotment.collegeName,
+        allottedCategory:allotment.allottedCategory,
+        course:allotment.courseName,
+        allottedQuota:allotment.quota,
+      };
+      allotment = updatedAllotment;
+      const response = await axiosInstance.post('/wishlist/add', {
+        examName,
+        allotment,
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      fetchWishlist();
+    } catch (error) {
+      console.error('Error adding to wishlist:', error.response?.data || error.message);
+    }
+  };
+
+  const removeFromWishlist = async (uuid) => {
+    try {
+      await axiosInstance.post(`${apiUrl}/wishlist/remove`, { examName: exam, uuid });
+      fetchWishlist();
+    } catch (error) {
+      console.error('Error removing from wishlist:', error);
+    }
+  };
+
   return (
     <div className={`fees-container ${showRowModal ? 'hide-filters' : ''}`}>
       <GenericTable
@@ -200,6 +258,9 @@ const LastRank = () => {
         disabled={showSubscriptionPopup && countVal > 2}
         showSubscriptionPopup={showSubscriptionPopup}
         setShowSubscriptionPopup={setShowSubscriptionPopup}
+        wishlist ={wishlist}
+        addToWishlist={addToWishlist}
+        removeFromWishlist={removeFromWishlist}
       />
 
       <Modal show={showRowModal} onHide={handleModalClose} className="custom-modal">
