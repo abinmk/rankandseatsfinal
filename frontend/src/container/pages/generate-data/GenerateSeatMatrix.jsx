@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axiosInstance from '../utils/axiosInstance';
 import './GenerateResults.css';
 
-function GenerateResults() {
+function GenerateSeatMatrix() {
   const [exam, setExam] = useState('');
   const [examType, setExamType] = useState('');
   const [availableAllotments, setAvailableAllotments] = useState([]);
@@ -17,11 +17,12 @@ function GenerateResults() {
     }
   }, [exam, examType]);
 
+
   const fetchAvailableAllotments = async (exam, type) => {
     try {
       console.log(`Fetching available allotments for exam: ${exam}, type: ${type}`);
-      const response = await axiosInstance.get(`${API_URL}/dataset/list-available-allotments`, {
-        params: { examName: `${exam}_${type}` },
+      const response = await axiosInstance.get(`${API_URL}/dataset/list-available-seatMatrix`, {
+        params: { examName: `MATRIX_${exam}_${type}` },
       });
       console.log('Available allotments response:', response.data);
       setAvailableAllotments(response.data.allotments || []);
@@ -39,7 +40,7 @@ function GenerateResults() {
 
     setIsLoading(true);
     try {
-      await axiosInstance.post(`${API_URL}/dataset/generate-combined-dataset`, {
+      await axiosInstance.post(`${API_URL}/dataset/generate-combined-matrix`, {
         examName: `EXAM:${exam}_TYPE:${examType}`,
         rounds: selectedAllotments,
       });
@@ -102,4 +103,4 @@ function GenerateResults() {
   );
 }
 
-export default GenerateResults;
+export default GenerateSeatMatrix;

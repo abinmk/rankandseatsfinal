@@ -83,6 +83,48 @@ const uploadAllotment = (req, res) => {
   });
 };
 
+const uploadSeatMatrix = (req, res) => {
+  upload(req, res, async function (err) {
+    if (err instanceof multer.MulterError || err) {
+      return res.status(500).send({ message: err.message });
+    }
+    // console.log(req.body);
+    // console.log({ round: req.body.round, year: req.body.year });
+    
+    const { examName, round, year } = req.body;
+    const filePath = path.join(__dirname, '..', 'uploads', req.file.filename);
+    // console.log({ examName,round, year }); // Check for undefined values here
+    const collectionName = `MATRIX_${examName}_${year}_${round}`;
+
+    const SeatMatrixModel = getModel(collectionName);
+
+    try {
+      const rows = await readExcelFile(filePath);
+      rows.shift(); // Remove header row
+      const results = rows.map(row => ({
+        allottedInstitute: row[0],
+        course: row[1],
+        allottedQuota: row[2],
+        allottedCategory: row[3],
+        seats: row[4],
+        virtualSeats: row[5],
+        examName,
+        year,  // Include the year
+        round  // Include the round
+      }));
+
+      // Delete existing data
+      await SeatMatrixModel.deleteMany({});
+
+      await batchInsert(SeatMatrixModel, results);
+      res.send('Allotments have been successfully saved to MongoDB.');
+    } catch (err) {
+      console.error('Error processing allotment upload:', err);
+      res.status(500).send('Failed to process allotment file.');
+    }
+  });
+};
+
 
 // Upload Colleges
 const uploadCollege = (req, res) => {
@@ -254,6 +296,212 @@ const uploadFee = (req, res) => {
     }
   });
 };
+
+const generateCombinedMatrix = async (req, res) => {
+  try {
+    const { examName, rounds, examType, counselingType } = req.body;
+
+    let combinedAllotments = [];
+
+    // Fetch and combine allotments data from all rounds
+    for (let round of rounds) {
+      const AllotmentModel = getModel(round);
+      const allotments = await AllotmentModel.find({}).lean();
+      combinedAllotments = combinedAllotments.concat(allotments);
+    }
+
+    // Sort combined allotments by year descending, round ascending, and rank ascending
+    combinedAllotments.sort((a, b) => {
+      const yearDiff = b.year - a.year;
+      if (yearDiff !== 0) return yearDiff;
+      const roundDiff = a.round.localeCompare(b.round, undefined, { numeric: true });
+      if (roundDiff !== 0) return roundDiff;
+      return a.rank - b.rank;
+    });
+
+    // Fetch related data from the database
+    const colleges = await College.find({}).lean();
+    const courses = await Course.find({}).lean();
+    const seats = await Seat.find({}).lean();
+    const fees = await Fee.find({}).lean();
+
+    // Create mapping objects for quick lookup
+    const collegeMap = colleges.reduce((acc, college) => {
+      acc[college.collegeName.trim().toLowerCase()] = college;
+      return acc;
+    }, {});
+
+    const courseMap = courses.reduce((acc, course) => {
+      acc[course.courseName.trim().toLowerCase()] = course;
+      return acc;
+    }, {});
+
+    const feeMap = fees.reduce((acc, fee) => {
+      const feeKey = `${fee.collegeName.trim().toLowerCase()}_${fee.courseName.trim().toLowerCase()}_${fee.quota.trim().toLowerCase()}`;
+      acc[feeKey] = fee;
+      return acc;
+    }, {});
+
+    // Initialize the map for storing last rank results
+    const lastRankMap = {};
+
+    // Initialize the map for storing full college results
+    const fullCollegeResultMap = {};
+
+    // Iterate over fees data to ensure all courses under each college are included
+    fees.forEach(fee => {
+      const collegeKey = fee.collegeName.trim().toLowerCase();
+      const courseKey = fee.courseName.trim().toLowerCase();
+      const quotaKey = fee.quota.trim().toLowerCase();
+
+      if (!fullCollegeResultMap[collegeKey]) {
+        const collegeDetails = collegeMap[collegeKey] || {};
+
+        fullCollegeResultMap[collegeKey] = {
+          collegeName: fee.collegeName || '',
+          state: collegeDetails.state || '',
+          instituteType: collegeDetails.instituteType || '',
+          universityName: collegeDetails.universityName || '',
+          yearOfEstablishment: collegeDetails.yearOfEstablishment || 0,
+          totalHospitalBeds: Number(collegeDetails.totalHospitalBeds) || 0,
+          locationMapLink: collegeDetails.locationMapLink || '',
+          nearestRailwayStation: collegeDetails.nearestRailwayStation || '',
+          distanceFromRailwayStation: collegeDetails.distanceFromRailwayStation || 0,
+          nearestAirport: collegeDetails.nearestAirport || '',
+          distanceFromAirport: collegeDetails.distanceFromAirport || 0,
+          phoneNumber: collegeDetails.phoneNumber || '',
+          website: collegeDetails.website || '',
+          collegeAddress: collegeDetails.collegeAddress || '',
+          courses: {},
+        };
+      }
+
+      if (!fullCollegeResultMap[collegeKey].courses[courseKey]) {
+        fullCollegeResultMap[collegeKey].courses[courseKey] = {
+          courseName: fee.courseName,
+          quotas: {},
+        };
+      }
+
+      if (!fullCollegeResultMap[collegeKey].courses[courseKey].quotas[quotaKey]) {
+        fullCollegeResultMap[collegeKey].courses[courseKey].quotas[quotaKey] = {
+          quota: fee.quota,
+          courseFee: fee.courseFee || 0,
+          nriFee: fee.nriFee || 0,
+          stipendYear1: fee.stipendYear1 || 0,
+          stipendYear2: fee.stipendYear2 || 0,
+          stipendYear3: fee.stipendYear3 || 0,
+          bondYear: fee.bondYear || 0,
+          bondPenality: fee.bondPenality || 0,
+          seatLeavingPenality: fee.seatLeavingPenality || '',
+        };
+      }
+    });
+
+    // Merge fullCollegeResultMap with allotment data for additional details like ranks
+    combinedAllotments.forEach(allotment => {
+      const collegeKey = allotment.allottedInstitute.trim().toLowerCase();
+      const courseKey = allotment.course.trim().toLowerCase();
+      const quotaKey = allotment.allottedQuota.trim().toLowerCase();
+      const allottedKey = allotment.allottedCategory.trim().toLowerCase();
+      const feeKey = `${collegeKey}_${courseKey}_${quotaKey}_${allottedKey}`;
+      const feeDataKey = `${collegeKey}_${courseKey}_${quotaKey}`;
+
+      if (!lastRankMap[feeKey]) {
+        const fee = feeMap[feeDataKey] || {};
+
+        lastRankMap[feeKey] = {
+          collegeName: allotment.allottedInstitute,
+          courseName: allotment.course,
+          quota: allotment.allottedQuota,
+          allottedCategory: allotment.allottedCategory,
+          years: {},
+          courseFee: fee.courseFee || 0,
+          nriFee: fee.nriFee || 0,
+          stipendYear1: fee.stipendYear1 || 0,
+          stipendYear2: fee.stipendYear2 || 0,
+          stipendYear3: fee.stipendYear3 || 0,
+          bondYear: fee.bondYear || 0,
+          bondPenality: fee.bondPenality || 0,
+          seatLeavingPenality: fee.seatLeavingPenality || '',
+          instituteType: collegeMap[collegeKey]?.instituteType || '',
+          universityName: collegeMap[collegeKey]?.universityName || '',
+          state: collegeMap[collegeKey]?.state || '',
+          duration: courseMap[courseKey]?.duration || '',
+          clinicalType: courseMap[courseKey]?.clinicalType || '',
+          degreeType: courseMap[courseKey]?.degreeType || '',
+          courseType: courseMap[courseKey]?.courseType || '', // Added courseType
+          totalSeatsInCollege: seats.filter(seat => seat.collegeName.trim().toLowerCase() === collegeKey).reduce((sum, seat) => sum + seat.seats, 0),
+          totalSeatsInCourse: seats.filter(seat => seat.courseName.trim().toLowerCase() === courseKey).reduce((sum, seat) => sum + seat.seats, 0),
+        };
+      }
+    });
+
+
+
+    // Generate GENERATED_EXAM dataset with the correct format
+    const generatedExamCollectionName = `MATRIX_GENERATED_${examName}`;
+    const GeneratedExamModel = getModel(generatedExamCollectionName);
+
+    // Clear existing data and insert new generated exam data
+    await GeneratedExamModel.deleteMany({});
+
+    const generateUniqueId = (allotment) => {
+      const { allottedInstitute, allottedQuota, course, allottedCategory } = allotment;
+      return `${allottedInstitute.trim().toLowerCase()}_${allottedQuota.trim().toLowerCase()}_${course.trim().toLowerCase()}_${allottedCategory.trim().toLowerCase()}`;
+    };
+
+    const generatedExamData = combinedAllotments.map(allotment => {
+      const key = `${allotment.allottedInstitute.trim().toLowerCase()}_${allotment.course.trim().toLowerCase()}_${allotment.allottedQuota.trim().toLowerCase()}_${allotment.allottedCategory.trim().toLowerCase()}`;
+      const feeKey = `${allotment.allottedInstitute.trim().toLowerCase()}_${allotment.course.trim().toLowerCase()}_${allotment.allottedQuota.trim().toLowerCase()}`;
+      const fee = feeMap[feeKey] || {};
+      const course = courseMap[allotment.course.trim().toLowerCase()] || {};
+
+      return {
+        ...allotment,
+        uuid:generateUniqueId(allotment),
+        examName: examName,
+        feeAmount: fee.courseFee || 0,
+        nriFee: fee.nriFee || 0,
+        stipendYear1: fee.stipendYear1 || 0,
+        stipendYear2: fee.stipendYear2 || 0,
+        stipendYear3: fee.stipendYear3 || 0,
+        bondYear: fee.bondYear || 0,
+        totalHospitalBeds: collegeMap[allotment.allottedInstitute.trim().toLowerCase()]?.totalHospitalBeds|| 0,
+        bondPenality: fee.bondPenality || 0,
+        seatLeavingPenality: fee.seatLeavingPenality || '',
+        instituteType: collegeMap[allotment.allottedInstitute.trim().toLowerCase()]?.instituteType || '',
+        universityName: collegeMap[allotment.allottedInstitute.trim().toLowerCase()]?.universityName || '',
+        state: collegeMap[allotment.allottedInstitute.trim().toLowerCase()]?.state || '',
+        totalSeatsInCollege: seats.filter(seat => seat.collegeName.trim().toLowerCase() === allotment.allottedInstitute.trim().toLowerCase()).reduce((sum, seat) => sum + seat.seats, 0),
+        totalSeatsInCourse: seats.filter(seat => seat.courseName.trim().toLowerCase() === allotment.course.trim().toLowerCase()).reduce((sum, seat) => sum + seat.seats, 0),
+        courseType: course.courseType || '', // Added courseType
+        degreeType: course.degreeType || ''  // Added degreeType
+      };
+    });
+
+    // Sort the generated exam data by year descending, round ascending, and rank ascending
+    generatedExamData.sort((a, b) => {
+      const yearDiff = b.year - a.year;
+      if (yearDiff !== 0) return yearDiff;
+      const roundDiff = a.round.localeCompare(b.round, undefined, { numeric: true });
+      if (roundDiff !== 0) return roundDiff;
+      return a.rank - b.rank;
+    });
+
+    await batchInsert(GeneratedExamModel, generatedExamData);
+
+    // Return all the generated data
+    res.json({
+      generatedExamData
+    });
+  } catch (error) {
+    console.error('Error generating combined dataset:', error);
+    res.status(500).send('Failed to generate combined dataset.');
+  }
+};
+
+
 
 const generateCombinedDataset = async (req, res) => {
   try {
@@ -676,7 +924,57 @@ const generateCombinedDataset = async (req, res) => {
 
 
     
+const listAvailableSeatMatrix = async (req, res) => {
+  try {
+    const { examName } = req.query;
+    const regex = new RegExp(`^${examName}_`, 'i'); // Adjusted regex to match examName only
 
+    const collections = await mongoose.connection.db.listCollections().toArray();
+    let allotments = collections
+      .map(collection => collection.name)
+      .filter(name => regex.test(name));
+
+    // Helper function to extract the numeric and alphanumeric parts
+    const extractRound = (round) => {
+      const match = round.match(/(\d+|[^\d]+)/g);
+      return match ? match.map(part => (isNaN(part) ? part : Number(part))) : [];
+    };
+
+    // Helper function to sort alphanumeric rounds
+    const sortRounds = (roundA, roundB) => {
+      const partsA = extractRound(roundA);
+      const partsB = extractRound(roundB);
+
+      for (let i = 0; i < Math.max(partsA.length, partsB.length); i++) {
+        if (partsA[i] === undefined) return -1;
+        if (partsB[i] === undefined) return 1;
+        if (partsA[i] < partsB[i]) return -1;
+        if (partsA[i] > partsB[i]) return 1;
+      }
+      return 0;
+    };
+
+    // Sort the allotments array by year (descending) and round (custom alphanumeric sorting)
+    allotments.sort((a, b) => {
+      const partsA = a.split('_');
+      const partsB = b.split('_');
+      const yearA = partsA[partsA.length - 2];
+      const yearB = partsB[partsB.length - 2];
+      const roundA = partsA[partsA.length - 1];
+      const roundB = partsB[partsB.length - 1];
+
+      if (yearA !== yearB) {
+        return yearB - yearA; // Sort by year descending
+      }
+      return sortRounds(roundA, roundB); // Sort by round custom alphanumeric
+    });
+
+    res.json({ allotments });
+  } catch (error) {
+    console.error('Error listing allotments:', error);
+    res.status(500).send('Failed to list allotments.');
+  }
+};
 
 
 // List Available Allotments
@@ -827,6 +1125,9 @@ module.exports = {
   getCoursesData,
   getCourseFilterOptions,
   uploadSeats,
+  uploadSeatMatrix,
+  listAvailableSeatMatrix,
+  generateCombinedMatrix
 };
 
 

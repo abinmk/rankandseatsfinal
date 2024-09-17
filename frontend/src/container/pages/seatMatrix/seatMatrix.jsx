@@ -110,7 +110,7 @@ const SeatMatrix = () => {
           return;
         }
   
-        const response = await axiosInstance.get(`${apiUrl}/allotments`, {
+        const response = await axiosInstance.get(`${apiUrl}/seatMatrix`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -149,7 +149,7 @@ const SeatMatrix = () => {
   const fetchFilterOptions = useCallback(async () => {
     setFilterLoading(true);
     try {
-      const response = await axiosInstance.get(`${apiUrl}/allotments/filters`, {
+      const response = await axiosInstance.get(`${apiUrl}/seatMatrix/filters`, {
         params: { counselingType },
       });
 
@@ -170,7 +170,7 @@ const SeatMatrix = () => {
     try {
       const token = localStorage.getItem('token');
       // console.log(exam);
-      const response = await axiosInstance.get(`${apiUrl}/wishlist`, {
+      const response = await axiosInstance.get(`${apiUrl}/wishlist/AIND`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -195,7 +195,7 @@ const SeatMatrix = () => {
 
   const addToWishlist = async (examName, allotment) => {
     try {
-      const response = await axiosInstance.post('/wishlist/add', {
+      const response = await axiosInstance.post('/wishlist/add-AIND', {
         examName,
         allotment,
       }, {
@@ -211,7 +211,7 @@ const SeatMatrix = () => {
 
   const removeFromWishlist = async (uuid) => {
     try {
-      await axiosInstance.post(`${apiUrl}/wishlist/remove`, { examName: exam, uuid });
+      await axiosInstance.post(`${apiUrl}/wishlist/remove-AIND`, { examName: exam, uuid });
       fetchWishlist();
     } catch (error) {
       console.error('Error removing from wishlist:', error);

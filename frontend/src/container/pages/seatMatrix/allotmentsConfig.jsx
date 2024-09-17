@@ -10,12 +10,12 @@ export const allotmentsColumns = [
     accessor: 'round',
   },
   {
-    Header: 'Rank',
-    accessor: 'rank',
-  }, 
-  {
-    Header: 'Allotted Quota',
+    Header: 'Quota',
     accessor: 'allottedQuota',
+  },
+  {
+    Header: 'Category',
+    accessor: 'allottedCategory',
   },
   {
     Header: 'State',
@@ -44,8 +44,16 @@ export const allotmentsColumns = [
     accessor: 'course',
   },
   {
-    Header: 'Allotted Category',
-    accessor: 'allottedCategory',
+    Header: 'Seats',
+    accessor: 'seats',
+  },
+  {
+    Header: 'Virtual Seats',
+    accessor: 'Virtual Seats',
+  },
+  {
+    Header: 'Beds',
+    accessor: 'totalHospitalBeds',
   },
   {
     Header: 'Fee',
@@ -67,10 +75,7 @@ export const allotmentsColumns = [
     accessor: 'bondPenality',
     Cell: ({ value }) => `₹${new Intl.NumberFormat('en-IN').format(value)}`
   },
-  {
-    Header: 'Beds',
-    accessor: 'totalHospitalBeds',
-  },
+
 ];
 
 export const allotmentsColumnsDisabled = [

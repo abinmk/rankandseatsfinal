@@ -14,5 +14,9 @@ router.post('/remove', authMiddleware, wishlistController.removeFromWishlist);
 router.get('/', authMiddleware, wishlistController.getWishlist);
 router.put('/order', authMiddleware, wishlistController.updateWishlistOrder);
 
+router.post('/add-AIND',authMiddleware,wishlistController.addToWishlistAllIndia);
+router.post('/remove-AIND', authMiddleware, wishlistController.removeFromWishlistAllIndia);
+router.get('/AIND', authMiddleware, wishlistController.getWishlistAllIndia);
+
 
 module.exports = router;
