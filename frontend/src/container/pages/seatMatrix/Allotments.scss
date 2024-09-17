@@ -987,3 +987,52 @@
     }
   }
 }
+
+
+.wishlist-header-container {
+  text-align: center !important;
+  padding: 15px;
+  border-radius: 10px; /* Rounded corners for a modern look */
+  max-width: fit-content;
+  margin: 10px auto; /* Centering the container */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.wishlist-header-container:hover {
+  transform: scale(1.02); /* Slight zoom on hover */
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+}
+
+.wishlist-header {
+  display: flex;
+  justify-content: center !important; /* Centers the content horizontally */
+  align-items: center !important; /* Aligns the content vertically */
+  gap: 10px; /* Space between text and icon */
+}
+
+.wishlist-header h5 {
+  margin: 0;
+  font-size: 1.2rem; /* Slightly larger font for prominence */
+  font-weight: 600; /* Medium weight for balance */
+  color: #333;
+}
+
+.wishlist-icon {
+  font-size: 2.6rem !important; /* Adjust the size of the heart icon */
+  cursor: pointer;
+  color: grey; /* Default color */
+  transition: color 0.3s ease, transform 0.3s ease; /* Smooth transition */
+}
+
+.wishlist-icon:hover {
+  color: rgb(192, 223, 255); /* Vibrant color on hover */
+  transform: scale(1.15); /* More pronounced zoom on hover */
+}
+
+.wishlist-active {
+  color: rgb(255, 51, 15) !important; /* Active state color */
+}
+
+.wishlist-header-container:active {
+  transform: scale(0.98); /* Slight push effect when clicked */
+}

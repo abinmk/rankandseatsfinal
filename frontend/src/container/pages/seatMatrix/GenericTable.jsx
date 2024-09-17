@@ -388,26 +388,29 @@ const GenericTable = ({
       <Modal show={showRowModal} onHide={handleModalClose} className="custom-modal">
   <Modal.Header closeButton>
     <Modal.Title>
-      <div className="college-name">
+      <div className="college-name wishlist-header"
+        onClick={(e) => {
+          e.stopPropagation();
+
+          // Check if the current row's UUID exists in the wishlist
+          if (wishlist.some(item => item.uuid === selectedRowData.uuid)) {
+            removeFromWishlist(selectedRowData.uuid); // Remove by UUID
+          } else {
+            addToWishlist(selectedRowData.examName, selectedRowData); // Pass both parameters, including UUID
+          }
+        }}
+      >
+        <FaHeart
+          className={`wishlist-icon ${wishlist.some(item => item.uuid === selectedRowData.uuid) ? 'wishlist-active' : ''}`}
+        />
         {selectedRowData?.allottedInstitute}
       </div>
     </Modal.Title>
   </Modal.Header>
   <Modal.Body>
     {selectedRowData && (
+      
       <div className="content-container">
-        <div className="section">
-          <div className="section-header">
-            <h5>General Information</h5>
-          </div>
-          <div className="section-content">
-            <p><strong>Institute Type:</strong> {selectedRowData.instituteType}</p>
-            <p><strong>University:</strong> {selectedRowData.universityName}</p>
-            <p><strong>State:</strong> {selectedRowData.state}</p>
-            <p><strong>Beds:</strong> {selectedRowData.totalHospitalBeds}</p>
-            <p><strong>PG Seats:</strong> {selectedRowData.totalSeatsInCollege}</p>
-          </div>
-        </div>
 
         <div className="section">
           <div className="section-header">
@@ -422,15 +425,15 @@ const GenericTable = ({
 
         <div className="section">
           <div className="section-header">
-            <h5>Allotment Information</h5>
+            <h5>Seat Details</h5>
           </div>
           <div className="section-content">
+            <p><strong>Seats:</strong> {selectedRowData.seats}</p>
+            <p><strong>Virtual Seats:</strong> {selectedRowData.virtualSeats}</p>
             <p><strong>Year:</strong> {selectedRowData.year}</p>
             <p><strong>Round:</strong> {selectedRowData.round}</p>
-            <p><strong>Rank:</strong> {selectedRowData.rank}</p>
-            <p><strong>Allotted Quota:</strong> {selectedRowData.allottedQuota}</p>
-            <p><strong>Allotted Category:</strong> {selectedRowData.allottedCategory}</p>
-            <p><strong>Candidate Category:</strong> {selectedRowData.candidateCategory}</p>
+            <p><strong>Quota:</strong> {selectedRowData.allottedQuota}</p>
+            <p><strong>Category:</strong> {selectedRowData.allottedCategory}</p>
           </div>
         </div>
 

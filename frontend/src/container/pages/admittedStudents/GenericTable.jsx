@@ -163,11 +163,11 @@ const GenericTable = ({
   }, [page, gotoPage]);
 
   const handleRowClick = (row) => {
-    if (!collegeLinkClicked) {
-      setSelectedRowData(row.original);
-      setShowRowModal(true);
-    }
-    setCollegeLinkClicked(false); // Reset after row click handling
+    // if (!collegeLinkClicked) {
+    //   setSelectedRowData(row.original);
+    //   setShowRowModal(true);
+    // }
+    // setCollegeLinkClicked(false); // Reset after row click handling
   };
 
   const handleCollegeClick = (row) => {
@@ -234,13 +234,6 @@ const GenericTable = ({
               <thead>
                 {headerGroups.map((headerGroup) => (
                   <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
-                    <th>
-                      <FaHeart
-                      disabled={disabled}
-                        onClick={() => toggleAllWishlist()}
-                        style={{ color: wishlist.length === data.length ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5rem' }}
-                      />
-                    </th>
                     {headerGroup.headers.map((column) => {
                       const { key, ...rest } = column.getHeaderProps(column.getSortByToggleProps());
                       return (
@@ -262,25 +255,6 @@ const GenericTable = ({
                       {...row.getRowProps()}
                       onClick={() => handleRowClick(row)}
                     >
-                      <td>
-                      <FaHeart
-                      onClick={(e) => {
-                        e.stopPropagation();
-
-                        // Check if the current row's UUID exists in the wishlist
-                        if (wishlist.some(item => item.uuid === row.original.uuid)) {
-                          removeFromWishlist(row.original.uuid); // Remove by UUID
-                        } else {
-                          addToWishlist(row.original.examName, row.original); // Pass both parameters, including UUID
-                        }
-                      }}
-                      style={{
-                        color: wishlist.some(item => item.uuid === row.original.uuid) ? 'navy' : 'grey', // Check by UUID
-                        cursor: 'pointer',
-                        fontSize: '1.5rem'
-                      }}
-                    />
-                      </td>
                       {row.cells.map((cell) => {
                         const { key, ...rest } = cell.getCellProps();
                         return (
@@ -438,12 +412,12 @@ const GenericTable = ({
         <div className="section-header">
           <h5>Fee & Stipend</h5>
         </div>
-        <div className="section-content">
+        {/* <div className="section-content">
           <p><strong>Fee Amount:</strong> {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0  }).format(selectedRowData.feeAmount)}</p>
           <p><strong>Stipend Year 1:</strong> {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0  }).format(selectedRowData.stipendYear1)}</p>
           <p><strong>Stipend Year 2:</strong> {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' ,maximumFractionDigits: 0 }).format(selectedRowData.stipendYear2)}</p>
           <p><strong>Stipend Year 3:</strong> {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0  }).format(selectedRowData.stipendYear3)}</p>
-        </div>
+        </div> */}
       </div>
 
       <div className="section">
@@ -451,10 +425,10 @@ const GenericTable = ({
           <h5>Bond and Penalty</h5>
         </div>
         <div className="section-content">
-          <p><strong>Bond (in years):</strong> {selectedRowData.bondYear}</p>
+          {/* <p><strong>Bond (in years):</strong> {selectedRowData.bondYear}</p>
           <p><strong>Bond Penalty:</strong> {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' ,maximumFractionDigits: 0 }).format(selectedRowData.bondPenality)}</p>
           <p><strong>Seat Leaving Penalty:</strong> {formatLargeNumbersInString(selectedRowData.seatLeavingPenality)}</p>
-     
+      */}
         </div>
       </div>
       </div>

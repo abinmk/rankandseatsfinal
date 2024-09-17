@@ -449,9 +449,24 @@ const GenericTable = ({
 <Modal show={showRowModal} onHide={handleModalClose} className="custom-modal" centered>
   <Modal.Header closeButton className="modal-header">
     <div className="college-header">
-      <h2 className="college-name">{selectedRowData?.collegeName}</h2>
-      <p className="college-location">{selectedRowData?.state}</p>
-    </div>
+    <div className="college-name wishlist-header"
+        onClick={(e) => {
+          e.stopPropagation();
+
+          // Check if the current row's UUID exists in the wishlist
+          if (wishlist.some(item => item.uuid === selectedRowData?.uuid)) {
+            removeFromWishlist(selectedRowData?.uuid); // Remove by UUID
+          } else {
+            addToWishlist(selectedRowData.examName, selectedRowData); // Pass both parameters, including UUID
+          }
+        }}
+      >
+        <FaHeart
+          className={`wishlist-icon ${wishlist.some(item => item.uuid === selectedRowData?.uuid) ? 'wishlist-active' : ''}`}
+        />
+        {selectedRowData?.collegeName}
+      </div>
+      </div>
   </Modal.Header>
   <Modal.Body>
     <div className="info-sections">
