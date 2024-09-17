@@ -393,15 +393,15 @@ const GenericTable = ({
           e.stopPropagation();
 
           // Check if the current row's UUID exists in the wishlist
-          if (wishlist.some(item => item.uuid === selectedRowData.uuid)) {
-            removeFromWishlist(selectedRowData.uuid); // Remove by UUID
+          if (wishlist.some(item => item.uuid === selectedRowData?.uuid)) {
+            removeFromWishlist(selectedRowData?.uuid); // Remove by UUID
           } else {
-            addToWishlist(selectedRowData.examName, selectedRowData); // Pass both parameters, including UUID
+            addToWishlist(selectedRowData?.examName, selectedRowData); // Pass both parameters, including UUID
           }
         }}
       >
         <FaHeart
-          className={`wishlist-icon ${wishlist.some(item => item.uuid === selectedRowData.uuid) ? 'wishlist-active' : ''}`}
+          className={`wishlist-icon ${wishlist.some(item => item.uuid === selectedRowData?.uuid) ? 'wishlist-active' : ''}`}
         />
         {selectedRowData?.allottedInstitute}
       </div>
