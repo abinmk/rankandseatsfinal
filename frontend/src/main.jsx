@@ -42,6 +42,8 @@ import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'; 
+import SeatMatrix from "./container/pages/seatMatrix/seatMatrix.jsx";
+import AdmittedStudents from "./container/pages/admittedStudents/admittedStudents.jsx";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -71,6 +73,8 @@ root.render(
             <Route path="lastrank" element={<ProtectedRoute><LastRank/></ProtectedRoute>} />
             <Route path="courses" element={<ProtectedRoute><Courses/></ProtectedRoute>} />
             <Route path="institutes" element={<ProtectedRoute><Colleges /></ProtectedRoute>} />
+            <Route path="seatmatrix" element={<ProtectedRoute>< SeatMatrix/></ProtectedRoute>} />
+            <Route path="admittedstudents" element={<ProtectedRoute>< AdmittedStudents/></ProtectedRoute>} />
             <Route path="fees" element={<ProtectedRoute><Fees/></ProtectedRoute>} />
             <Route path="wishlist" element={<ProtectedRoute><ChoiceList/></ProtectedRoute>} />
             <Route path="college/:collegeName" element={<CollegeDetail />} />

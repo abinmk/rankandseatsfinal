@@ -7,7 +7,9 @@ const icon3 = <i className='bx bxs-chart'></i>; // LastRank
 const icon4 = <i className='bx bx-rupee'></i>; // Fees
 const icon5 = <i className='bx bxs-school'></i>; // Institute
 const icon6 = <i className='bx bxs-graduation'></i>; // Courses
-const icon7 = <i className='bx bxs-heart'></i>; // Wishlist
+const icon7 = <i class='bx bx-chair'></i> // SeatMatrix
+const icon8 = <i className='bx bxs-group'></i>; // Admitted Students
+const icon9 = <i className='bx bxs-heart'></i>; // Wishlist
 
 const logo = (
     <div className="side-menu-logo" style={{ width: '100%' }}>
@@ -72,8 +74,26 @@ const defaultMenuItems = [
         dirchange: false,
     },
     {
-        title: "My Choice Wishlist",
+        title: "Seat Matrix",
         icon: icon7,
+        path: `${import.meta.env.BASE_URL}seatmatrix`,
+        type: "link",
+        active: false,
+        selected: false,
+        dirchange: false,
+    },
+    {
+        title: "Admitted Students",
+        icon: icon8,
+        path: `${import.meta.env.BASE_URL}admittedstudents`,
+        type: "link",
+        active: false,
+        selected: false,
+        dirchange: false,
+    },
+    {
+        title: "My Choice Wishlist",
+        icon: icon9,
         path: `${import.meta.env.BASE_URL}wishlist`,
         type: "link",
         active: false,
