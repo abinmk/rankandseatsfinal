@@ -252,7 +252,7 @@ const ChoiceList = () => {
 
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Confirm Delete</Modal.Title>
+          <Modal.Title  style={{ color: 'white' }}>Confirm Delete</Modal.Title>
         </Modal.Header>
         <Modal.Body>Are you sure you want to delete this item?</Modal.Body>
         <Modal.Footer>
