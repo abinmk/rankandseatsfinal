@@ -3,6 +3,8 @@ export const choiceListColumns = [
     { Header: 'Institute', accessor: 'allotment.allottedInstitute' },
     { Header: 'Course', accessor: 'allotment.course' },
     { Header: 'Category', accessor: 'allotment.allottedCategory' },
+    { Header: 'State', accessor: 'allotment.state' },
+ 
   ];
   
   export const choiceListFiltersConfig = [
@@ -21,6 +23,12 @@ export const choiceListColumns = [
     {
       id: 'category',
       label: 'Category',
+      type: 'select',
+      options: [],
+    },
+    {
+      id: 'state',
+      label: 'State',
       type: 'select',
       options: [],
     },

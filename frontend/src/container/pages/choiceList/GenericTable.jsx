@@ -7,18 +7,15 @@ import { FaHeart } from 'react-icons/fa';
 import axios from 'axios';
 import "./ChoiceList.scss";
 
-const GenericTable = ({
-  columns,
-  headerTitle,
-}) => {
+const GenericTable = ({ columns, headerTitle }) => {
   const [data, setData] = useState([]);
+  const [fullData, setFullData] = useState([]); // New state to hold full data
   const [filters, setFilters] = useState({});
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [pageSize, setPageSize] = useState(20);
-  const [loading, setLoading] = useState(false);
   const [filterLoading, setFilterLoading] = useState(false);
-  const [filterOptions, setFilterOptions] = useState({ institutes: [], courses: [], categories: [] });
+  const [filterOptions, setFilterOptions] = useState({ institutes: [], courses: [], categories: [] ,states:[]});
   const [wishlist, setWishlist] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
   const [showColumnModal, setShowColumnModal] = useState(false);
@@ -56,6 +53,7 @@ const GenericTable = ({
         },
       });
       setData(response.data.items);
+      setFullData(response.data.items); // Store full data
       setTotalPages(response.data.totalPages);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -85,6 +83,7 @@ const GenericTable = ({
       institute: 'allottedInstitute',
       course: 'course',
       category: 'allottedCategory',
+      state: 'state',
     };
     return filterMapping[filterKey] || filterKey;
   };
@@ -125,6 +124,27 @@ const GenericTable = ({
 
   const clearAllFilters = () => {
     setFilters({});
+  };
+
+  const addToWishlist = (item) => {
+    // Ensure item is in fullData
+    if (!wishlist.some(wish => wish.allotmentId === item._id)) {
+      setWishlist([...wishlist, item]);
+    }
+  };
+
+  const removeFromWishlist = (itemId) => {
+    setWishlist(wishlist.filter(item => item.allotmentId !== itemId));
+  };
+
+  const toggleAllWishlist = () => {
+    if (wishlist.length === fullData.length) {
+      // Remove all from wishlist
+      setWishlist([]);
+    } else {
+      // Add all data to wishlist
+      setWishlist(fullData);
+    }
   };
 
   const {
@@ -194,7 +214,7 @@ const GenericTable = ({
                     <th>
                       <FaHeart
                         onClick={() => toggleAllWishlist()}
-                        style={{ color: wishlist.length === filteredData.length ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5rem' }}
+                        style={{ color: wishlist.length === fullData.length ? 'navy' : 'grey', cursor: 'pointer', fontSize: '1.5rem' }}
                       />
                     </th>
                     {headerGroup.headers.map((column) => {
@@ -243,53 +263,59 @@ const GenericTable = ({
           </div>
           <div className="pagination-container">
             <Form.Group controlId="rowsPerPage" className="d-flex align-items-center pagination-info">
-              <Form.Label className="me-2 mb-0">Rows per page:</Form.Label>
+              <Form.Label className="me-2">Rows per page:</Form.Label>
               <Form.Control
                 as="select"
                 value={pageSize}
-                onChange={(e) => setPageSize(Number(e.target.value))}
-                className="me-3"
-                style={{ width: 'fit-content',height:'40px' }}
+                onChange={(e) => {
+                  setPageSize(Number(e.target.value));
+                  setPage(1); // Reset to first page when page size changes
+                }}
               >
-                {[10,20, 30, 50, 100].map((size) => (
-                  <option key={size} value={size}>
-                    {size}
-                  </option>
-                ))}
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={30}>30</option>
+                <option value={50}>50</option>
               </Form.Control>
             </Form.Group>
-            <Form.Group controlId="gotoPage" className="d-flex align-items-center pagination-info">
-              <Form.Label className="me-2 mb-0">Go to page:</Form.Label>
-              <Form.Control
-                type="number"
-                min="1"
-                max={pageCount}
-                value={pageIndex + 1}
-                onChange={(e) => setPage(Number(e.target.value))}
-                               className="me-3"
-                style={{ width: 'fit-content', height: '40px' }}
-              />
-            </Form.Group>
-            <div className="pagination-controls">
-              <Pagination>
-                <Pagination.First onClick={() => setPage(1)} disabled={!canPreviousPage} />
-                <Pagination.Prev onClick={() => previousPage()} disabled={!canPreviousPage} />
-                {renderPaginationItems()}
-                <Pagination.Next onClick={() => nextPage()} disabled={!canNextPage} />
-                <Pagination.Last onClick={() => setPage(pageCount)} disabled={!canNextPage} />
-              </Pagination>
-            </div>
+            <Pagination>
+              <Pagination.Prev onClick={() => canPreviousPage && previousPage()} disabled={!canPreviousPage} />
+              {renderPaginationItems()}
+              <Pagination.Next onClick={() => canNextPage && nextPage()} disabled={!canNextPage} />
+            </Pagination>
           </div>
         </div>
       </div>
 
-      {/* Column Toggle Modal */}
-      <Modal show={showColumnModal} onHide={() => setShowColumnModal(false)}>
+      <Modal show={showRowModal} onHide={() => setShowRowModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>View/Hide Columns</Modal.Title>
+          <Modal.Title>Row Details</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {allColumns.map((column) => (
+          {/* Display detailed data for the selected row */}
+          {selectedRowData ? (
+            <div>
+              {Object.entries(selectedRowData).map(([key, value]) => (
+                <p key={key}><strong>{key}:</strong> {value}</p>
+              ))}
+            </div>
+          ) : (
+            <p>No data available</p>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowRowModal(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showColumnModal} onHide={() => setShowColumnModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Column Management</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {allColumns.map(column => (
             <Form.Check
               key={column.id}
               type="checkbox"
@@ -306,32 +332,8 @@ const GenericTable = ({
           </Button>
         </Modal.Footer>
       </Modal>
-
-      {/* Row Details Modal */}
-      <Modal show={showRowModal} onHide={() => setShowRowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Row Details</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {selectedRowData && (
-            <div>
-              {Object.entries(selectedRowData).map(([key, value]) => (
-                <p key={key}>
-                  <strong>{key}:</strong> {JSON.stringify(value, null, 2)}
-                </p>
-              ))}
-            </div>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowRowModal(false)}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
     </div>
   );
 };
 
 export default GenericTable;
-

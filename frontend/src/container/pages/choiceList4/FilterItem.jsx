@@ -3,7 +3,7 @@ import { Form, Accordion, Button, Modal, Row, Col } from 'react-bootstrap';
 import Slider from '@mui/material/Slider';
 import { debounce } from 'lodash';
 
-const FilterItem = ({ title, options = {}, disabled, filterName, filters, handleFilterChange, handleRangeChange, eventKey, viewMore, appliedFiltersCount, getFilterParamName, loading, toggleFilterSection }) => {
+const FilterItem = ({ title, options = {},disabled,setShowFilters,filterName, filters, handleFilterChange, handleRangeChange, eventKey, viewMore, appliedFiltersCount, getFilterParamName, loading }) => {
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [minValue, setMinValue] = useState(options.min || 0);
@@ -34,14 +34,14 @@ const FilterItem = ({ title, options = {}, disabled, filterName, filters, handle
       option.toLowerCase().includes(searchTerm.toLowerCase())
     ) : [];
 
-  const handleModalClose = () => {
-    setShowModal(false);
-    toggleFilterSection(true); // Show filter section when modal is closed
-  };
-  const handleModalOpen = () => {
-    setShowModal(true);
-    toggleFilterSection(false); // Hide filter section when modal is open
-  };
+    const handleModalClose = () => {
+      setShowModal(false);
+      setShowFilters(true);
+    };
+    const handleModalOpen = () => {
+      setShowModal(true);
+      setShowFilters(false);
+    };
 
   const handleCheckboxChange = (option, checked) => {
     handleFilterChange(option, checked, filterName);
@@ -88,8 +88,7 @@ const FilterItem = ({ title, options = {}, disabled, filterName, filters, handle
         <Accordion.Header>
           {title} ({appliedFiltersCount})
         </Accordion.Header>
-     
-    <Accordion.Body className='sliderFilter' disabled={disabled}>
+        <Accordion.Body className='sliderFilter' disabled={disabled}>
       {isRangeFilter ? (
         <>
           <Slider
@@ -173,12 +172,12 @@ const FilterItem = ({ title, options = {}, disabled, filterName, filters, handle
       </Accordion.Item>
 
       <Modal show={showModal} onHide={handleModalClose} className='view-more-modal' centered>
-        <Modal.Header closeButton style={{ backgroundColor: '#223D6E' }}>
-          <Modal.Title style={{ color: 'white' }}>{title}</Modal.Title>
-        </Modal.Header>
+      <Modal.Header closeButton style={{ backgroundColor: '#223D6E' }}>
+      <Modal.Title style={{ color: 'white' }}>{title}</Modal.Title>
+    </Modal.Header>
         <Modal.Body>
           <Form.Control
-            disabled={disabled}
+          disabled={disabled}
             type="text"
             placeholder={`Search ${title}`}
             className="filter-search"
@@ -187,7 +186,7 @@ const FilterItem = ({ title, options = {}, disabled, filterName, filters, handle
           />
           {filteredOptions.map(option => (
             <Form.Check
-              disabled={disabled}
+            disabled={disabled}
               key={option}
               type="checkbox"
               label={option}
@@ -195,7 +194,7 @@ const FilterItem = ({ title, options = {}, disabled, filterName, filters, handle
               onChange={(e) => handleCheckboxChange(option, e.target.checked)}
             />
           ))}
-          <Button variant="link"  disabled={disabled} className="clear-category-btn" onClick={clearFilterCategory}>
+          <Button variant="link" className="clear-category-btn" onClick={clearFilterCategory}>
             Clear
           </Button>
         </Modal.Body>

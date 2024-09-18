@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Accordion, Spinner } from 'react-bootstrap';
 import FilterItem from './FilterItem';
 
-const FilterSection = ({ showFilters,showSubscriptionPopup, toggleFilters, filters, setFilters, filterOptions, loading, getFilterParamName, clearAllFilters ,disabled}) => {
+const FilterSection = ({ showFilters,disabled,setShowFilters, toggleFilters, filters, setFilters, filterOptions, loading, getFilterParamName, clearAllFilters }) => {
   const handleFilterChange = (value, checked, filterName) => {
     const filterParamName = getFilterParamName(filterName);
     setFilters((prevFilters) => {
@@ -47,7 +47,7 @@ const FilterSection = ({ showFilters,showSubscriptionPopup, toggleFilters, filte
         <Accordion defaultActiveKey={['0']} alwaysOpen>
           {Object.keys(filterOptions).map((filterName, index) => (
             <FilterItem
-              disabled={disabled}
+            disabled={disabled}
               key={filterName}
               eventKey={index.toString()}
               title={filterName.charAt(0).toUpperCase() + filterName.slice(1).replace(/([A-Z])/g, ' $1')}
@@ -60,7 +60,7 @@ const FilterSection = ({ showFilters,showSubscriptionPopup, toggleFilters, filte
               appliedFiltersCount={appliedFiltersCount(filterName)}
               getFilterParamName={getFilterParamName}
               loading={loading} // Pass the loading state
-              toggleFilterSection={toggleFilters}
+              setShowFilters={setShowFilters}
             />
           ))}
         </Accordion>

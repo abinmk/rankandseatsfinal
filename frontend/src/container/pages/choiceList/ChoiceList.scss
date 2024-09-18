@@ -19,11 +19,6 @@
     opacity: 0.5;
   }
 }
-.choicelist-header{
-  font-size: 1.8rem;
-  margin-bottom: 10px;
-  color: --text-color;
-}
 
 .choice-list-results {
   flex-grow: 1;
@@ -52,13 +47,6 @@
     width: 95% !important;
   }
 
-  .table-wrapper {
-    overflow-y: auto;
-    overflow-x: auto;
-    height: 100%;
-    width: 100%;
-  }
-
   .choice-list-table {
     width: 100%; /* Expand to full width on larger screens */
     border-collapse: collapse;
@@ -73,7 +61,7 @@
       th {
         padding: 20px !important;
         text-align: left !important;
-        color: rgb(0, 0, 0) !important;
+        color: var(--text-color) !important;
         font-weight: 600;
         border-bottom: 1px solid #ddd;
         font-size: .8rem;
@@ -98,7 +86,6 @@
       td {
         padding: 5px !important;
         border-bottom: 1px solid #b3b4b6 !important;
-        border-top: none !important;
         font-size: 0.7rem;
         font-weight: 500;
         white-space: nowrap;
@@ -109,6 +96,29 @@
   }
 }
 
+/* Choice List Header */
+.choice-header-box {
+  display: flex;
+  justify-content: space-between; /* Aligns the header title to the left and button to the right */
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+}
+
+.choicelist-header {
+  font-size: 1.8rem;
+  color: var(--primary-color); /* Adjust color as needed */
+}
+
+.print-pdf-btn {
+
+}
+
+.print-pdf-btn:hover {
+  background-color:var(--hover-color);
+}
+
+/* Show Filters Button */
 .show-filters-btn {
   position: fixed;
   left: 0px;
@@ -144,15 +154,17 @@
   top: 10px;
   left: 95vw;
   margin: 10px;
-  z-index: 1000;
+  z-index: 10 !important;
   background-color: var(--primary-color) !important;
-  color: white;
+  color: white !important;
   border: none;
   border-radius: 5px;
   padding: 5px 10px;
   width: 120px;
   font-size: 10px;
+  border-radius: 30px;
   font-weight: 400;
+  float: right;
   cursor: pointer;
 
   &:hover {
@@ -160,160 +172,118 @@
   }
 }
 
-.choice-header {
-  font-size: 28px;
-  margin-left: 10px;
-  color: #585757;
-  margin-bottom: 15px;
-}
-
-.delete-button {
-  border:#333;
-  color: var(--primary-color);
-  background-color: transparent;
-
-  &:hover {
-    background-color:rgb(209, 2, 2);
-    color: white;
-  }
-}
-
-.name-header {
-  margin-bottom: 15px;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .choice-list-container {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .choice-list-results {
-    margin-left: 0;
-    width: 100%;
-  }
-
-  .choice-list-table-wrapper {
-    padding: 10px;
-    .choice-list-table {
-      font-size: 0.7rem;
-      width: max-content;
-      th, td {
-        padding: 8px;
-        font-size: 0.7rem;
-      }
-    }
-  }
-
-  .show-filters-btn {
-    top: 85%;
-    padding: 4px 60px;
-    font-size: 0.8rem;
-  }
-
-  .column-toggle-btn {
-    width: 100px;
-    font-size: 8px;
-    padding: 4px 8px;
-  }
-
-  .choice-header {
-    font-size: 20px;
-    margin-left: 0;
-    text-align: center;
-  }
-
-  .delete-button {
-    font-size: 0.8rem;
-  }
-}
-
-@media (max-width: 576px) {
-  .choice-list-table-wrapper {
-    .choice-list-table {
-      width: max-content;
-      th, td {
-        padding: 5px;
-        font-size: 0.6rem;
-      }
-    }
-  }
-
-  .choice-list-results{
-    width: 105% !important;
-  }
-}
-
-@media (max-width: 780px) {
-  .choice-list-table-wrapper {
-    .choice-list-table {
-      width: max-content;
-      th, td {
-        padding: 5px;
-        font-size: 0.6rem;
-      }
-    }
-  }
-
-  .choice-list-results{
-    width: 105% !important;
-  }
-}
-
-
-
-/* Larger screen adjustments */
-@media (min-width: 992px) {
-  .choice-list-table-wrapper {
-    width: 100% !important;
-    padding: 30px; /* Increase padding for larger screens */
-  }
-
-  .choice-list-table {
-    width: 100% !important; /* Ensure table spans full width */
-  }
-
-  th, td {
-    padding: 15px;
-    font-size: 0.9rem; /* Increase font size for larger screens */
-  }
-}
-
-.choice-header-box {
-  display: flex;
-  justify-content: space-between; /* This will push the header to the left and button to the right */
-  align-items: center; /* Vertically center the content */
-  width: 100%;
-  padding: 10px; /* Add some padding for better spacing */
-}
-
-.choicelist-header {
-  font-size: 1.8rem;
-  color:var(--text-color); /* Adjust the color as needed */
-}
-
 .print-pdf-btn {
-  background-color: #007bff;
+  background-color: #0a417c;
   color: white;
   border: none;
   border-radius: 50%;
   width: 40px;
   height: 40px;
   display: flex;
-  justify-content: center; /* Ensure icon is centered inside the button */
+  justify-content: center;
   align-items: center;
   cursor: pointer;
   font-size: 1.5rem;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease;
-  margin-left: auto; /* Ensures the button sticks to the right */
+
+
+  position: sticky;
+  top: 5px;
+  // left: 1vw;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  float: right;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #0056b3;
+  }
 }
 
-.print-pdf-btn:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+.results-section {
+  flex-grow: 1;
+  margin-left: 280px;
+  transition: margin-left 0.3s ease;
+  text-decoration: none !important;
+
+  &.full-width {
+    margin-left: 0;
+  }
+
+  .table-container {
+    height: calc(100vh - 170px);
+    // width: 95%;
+    overflow: hidden;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+
+    .table-wrapper {
+      overflow-y: auto;
+      overflow-x: auto;
+      height: 100%;
+      width: 100%;
+    }
+
+    .tableCustom {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: auto; /* Change to auto */
+
+      thead {
+        background-color: #e1e8f5 !important;
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 10 !important;
+
+        th {
+          padding: 10px !important;
+          text-align: left !important;
+          color: rgb(0, 0, 0) !important;
+          font-weight: 600;
+          border-bottom: 1px solid #ddd;
+          font-size: 0.8rem; /* Reduced font size */
+          white-space: nowrap; /* Prevent text wrapping */
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+
+      tbody {
+        tr {
+          &:nth-child(even) {
+            background-color: #ffffff !important;
+          }
+
+          &:hover {
+            background-color: #0182be11!important;
+            cursor: pointer;
+          }
+        }
+
+        td {
+          padding: 10px !important;
+          border-bottom: 1px solid #b3b4b6 !important;
+          border-top: none !important;
+          font-size: 0.7rem; /* Reduced font size */
+          font-weight: 500;
+          white-space: nowrap; /* Prevent text wrapping */
+          overflow: hidden;
+          min-height: 100px !important;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+
+    .allotments-header {
+      font-size: 28px;
+      margin-left: 10px;
+      color: #585757;
+    }
+  }
 }
 
-.print-pdf-btn:focus {
-  outline: none;
-}
