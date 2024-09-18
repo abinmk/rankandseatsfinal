@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axiosInstance from '../../../utils/axiosInstance';
 import { Table, Button, Modal, Form } from 'react-bootstrap';
-import { FaTrash, FaArrowRight } from 'react-icons/fa';
+import { FaTrash, FaArrowRight, FaDownload } from 'react-icons/fa';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
@@ -170,18 +170,70 @@ const ChoiceList = () => {
   };
 
   // Print the current choice list to PDF
-  const printToPDF = () => {
-    const doc = new jsPDF();
-    doc.autoTable({
-      head: [['Order', 'Institute', 'Course', 'Category']],
-      body: choiceList.map((item, index) => [
-        fullChoiceList.findIndex(fullItem => fullItem.allotmentId === item.allotmentId) + 1,
-        item.allotment.allottedInstitute,
-        item.allotment.course,
-        item.allotment.allottedCategory,
-      ]),
-    });
-    doc.save('ChoiceList.pdf');
+  const printToPDF = async () => {
+    try {
+      // Get user data for the PDF (you can fetch from localStorage or an API)
+      const token = localStorage.getItem('token'); // Assuming you have the token
+      const userResponse = await axiosInstance.get(`${apiUrl}/profile`, { // Example endpoint to fetch user details
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const user = userResponse.data;
+  
+      // Get the current date and time with AM/PM format
+      const currentDateTime = new Date().toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+        hour12: true
+      });
+
+      const formattedDate = new Date().toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      }).replace(/ /g, '_');
+  
+      // Initialize jsPDF
+      const doc = new jsPDF();
+  
+      // Add "Rank and Seats" company name and support email at the top of the PDF
+      doc.setFontSize(16);
+      doc.text('Rank and Seats', 105, 14, null, null, 'center'); // Company name centered at the top
+      doc.setFontSize(10);
+      doc.text('support@rankandseats.com', 105, 20, null, null, 'center'); // Support email centered below
+  
+      // Add user details
+      doc.setFontSize(12);
+      doc.text(`Name: ${user.name}`, 14, 30); // User name
+      doc.text(`Email: ${user.email}`, 14, 36); // User email (or other data)
+      doc.text(`Generated on: ${currentDateTime}`, 14, 42); // Date and time with AM/PM
+  
+      // Add a title for the choice list
+      doc.setFontSize(16);
+      doc.text('Choice List', 105, 54, null, null, 'center'); // Centered title
+  
+      // Create the table of choices
+      doc.autoTable({
+        startY: 60, // Start after the header details
+        head: [['Order','Quota', 'Institute', 'Course', 'Category']],
+        body: choiceList.map((item, index) => [
+          fullChoiceList.findIndex(fullItem => fullItem.allotmentId === item.allotmentId) + 1,
+          item.allotment.allottedQuota,
+          item.allotment.allottedInstitute,
+          item.allotment.course,
+          item.allotment.allottedCategory,
+        ]),
+      });
+  
+      // Save the PDF with a filename
+      const fileName = `ChoiceList_${user.name}_${formattedDate}.pdf`;
+      doc.save(fileName);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+    }
   };
 
   return (
@@ -198,16 +250,22 @@ const ChoiceList = () => {
         <button className={`show-filters-btn ${showFilters ? 'hidden' : ''}`} onClick={toggleFilters}>
           <i className="bi bi-funnel"></i> All Filters
         </button>
-        <Button onClick={printToPDF} className="mb-3">Print to PDF</Button>
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="choices">
             {(provided) => (
+              <div>
               <div className="choice-list-table-wrapper" {...provided.droppableProps} ref={provided.innerRef}>
+                <div className='choice-header-box'>
+              <span className='choicelist-header'>{headerTitle}</span>
+              <button className="print-pdf-btn" onClick={printToPDF}>
+              <FaDownload />
+            </button>
+            </div>
                 <Table striped bordered hover className="choice-list-table">
                   <thead>
                     <tr>
+                    <th>Sl. No.</th>
                       <th>Order</th> {/* Displaying the order from the backend */}
-                      <th>Sl. No.</th>
                       <th>Institute</th>
                       <th>Course</th>
                       <th>Category</th>
@@ -219,8 +277,8 @@ const ChoiceList = () => {
                       <Draggable key={item.allotmentId} draggableId={item.allotmentId} index={index}>
                         {(provided) => (
                           <tr ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                            <td>{fullChoiceList.findIndex(fullItem => fullItem.allotmentId === item.allotmentId) + 1}</td>
-                            <td>{index + 1}</td>
+                             <td>{index + 1}</td>
+                             <td>{item.order}</td>
                             <td>{item.allotment.allottedInstitute}</td>
                             <td>{item.allotment.course}</td>
                             <td>{item.allotment.allottedCategory}</td>
@@ -236,6 +294,7 @@ const ChoiceList = () => {
                     {provided.placeholder}
                   </tbody>
                 </Table>
+              </div>
               </div>
             )}
           </Droppable>

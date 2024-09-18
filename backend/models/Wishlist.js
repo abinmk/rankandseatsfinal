@@ -6,6 +6,10 @@ const wishlistItemSchema = new Schema({
   allotment: {
     type: Object,
     required: true,
+  },
+  order: {
+    type: Number,
+    required: true,  // Ensure each item has an order
   }
 }, { _id: false });
 
