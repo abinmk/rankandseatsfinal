@@ -47,7 +47,7 @@ export const allotmentsColumnsDisabled = [
 ];
 
 export const allotmentsFiltersConfig = {
-  state: '',
+  admittedState: '',
   instituteName: '',
   instituteType: '',
   universityName: '',

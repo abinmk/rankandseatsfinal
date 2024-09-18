@@ -49,7 +49,7 @@ const AdmittedStudents = () => {
 
   const getFilterParamName = useMemo(() => {
     const filterMapping = {
-      state: 'state',
+      state: 'instituteState',
       institute: 'allottedInstitute',
       instituteType: 'instituteType',
       university: 'universityName',
@@ -62,7 +62,7 @@ const AdmittedStudents = () => {
       bondYear: 'bondYear',
       bondPenality: 'bondPenality',
       totalHospitalBeds: 'totalHospitalBeds',
-      rank: 'rank',
+      year: 'admittedYear',
     };
     return (filterKey) => filterMapping[filterKey] || filterKey;
   }, []);

@@ -223,8 +223,6 @@ exports.getFilterOptions = async (req, res) => {
       allottedCategory,
       bondYearRange: bondYearRange[0],
       bondPenaltyRange: bondPenaltyRange[0],
-      // totalHospitalBedsRange: totalHospitalBedsRange[0],
-      rankRange: rankRange[0],
     };
 
     // Encrypt the response data
