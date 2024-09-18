@@ -180,7 +180,7 @@ exports.getWishlist = async (req, res) => {
       }
   
       // Extract filters from query parameters
-      const { institutes = [], courses = [], categories = [] } = req.query;
+      const { institutes = [], courses = [], categories = [] ,states =[]} = req.query;
   
       // Filter wishlist items based on filters
       let filteredItems = wishlist.items;
@@ -200,6 +200,12 @@ exports.getWishlist = async (req, res) => {
       if (categories.length > 0) {
         filteredItems = filteredItems.filter(item =>
           categories.includes(item.allotment.allottedCategory)
+        );
+      }
+
+      if (states.length > 0) {
+        filteredItems = filteredItems.filter(item =>
+          states.includes(item.allotment.state)
         );
       }
   
@@ -536,12 +542,14 @@ exports.getWishlist = async (req, res) => {
       const institutesSet = new Set();
       const coursesSet = new Set();
       const categoriesSet = new Set();
+      const statesSet = new Set();
   
       wishlist.items.forEach(item => {
         if (item.allotment) {
           institutesSet.add(item.allotment.allottedInstitute);
           coursesSet.add(item.allotment.course);
           categoriesSet.add(item.allotment.allottedCategory);
+          statesSet.add(item.allotment.state);
         }
       });
   
@@ -549,12 +557,14 @@ exports.getWishlist = async (req, res) => {
       const institutes = Array.from(institutesSet);
       const courses = Array.from(coursesSet);
       const categories = Array.from(categoriesSet);
+      const states = Array.from(statesSet);
   
       // Return the filter options
       res.status(200).json({
         institutes,
         courses,
         categories,
+        states
       });
     } catch (error) {
       console.error('Error fetching filter options:', error);
