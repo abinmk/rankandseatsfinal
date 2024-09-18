@@ -206,37 +206,16 @@ const ChoiceList = () => {
       // Add logo and header
       doc.addImage(watermarkBase64, 'PNG', 80, 10, 50, 10, undefined, 'FAST'); // Align logo
       doc.setFontSize(10);
-      doc.setTextColor(0, 0, 0);
-      doc.text('support@rankandseats.com', 105, 25, null, null, 'center');
+      doc.setTextColor(23, 52, 92); // Set blue color for the website link
+      doc.textWithLink('www.rankandseats.com', 86, 25, { url: 'https://www.rankandseats.com' }, null, 'center'); // Centered website link
   
       // Define total number of choices for the first page
       const totalChoices = choiceList.length;
   
-      // Define a function to add the header and footer on each page
-      const addHeaderAndFooter = (pageNumber, totalPages) => {
-        // Add the header with more spacing
-        doc.setFontSize(10);
-        doc.setTextColor(0, 0, 0);
-  
-        // Add footer with centered page number
-        doc.setFontSize(10);
-        doc.text(`Page ${pageNumber} of ${totalPages}`, 105, 290, null, null, 'center');
-      };
-  
-      // Add watermark with lower opacity for every page
-      const addWatermark = () => {
-        const totalPages = doc.internal.getNumberOfPages();
-        doc.setFontSize(60);
-        doc.setTextColor(200, 200, 200);
-        for (let i = 1; i <= totalPages; i++) {
-          doc.setPage(i);
-          doc.text('Rank and Seats', 105, 220, { align: 'center', angle: 0 });
-        }
-      };
-  
       // Add user details, total count of choices, and generated date (only on the first page)
       doc.setFontSize(12);
-      doc.text(`Name: ${user.name}`, 14, 35); // Added padding to align the text better
+      doc.setTextColor(0, 0, 0); // Reset text color to black for user details
+      doc.text(`Name: ${user.name}`, 14, 35);
       doc.text(`Email: ${user.email}`, 14, 42);
       doc.text(`Generated on: ${currentDateTime}`, 14, 50);
       doc.text(`Total Choices: ${totalChoices}`, 14, 58); // Display the total number of choices
@@ -244,13 +223,13 @@ const ChoiceList = () => {
       // Add the title for the choice list with more spacing
       doc.setFontSize(16);
       doc.text(`CHOICE LIST: ${formattedExam} - ${formattedCounselingType}`, 105, 68, null, null, 'center');
-
+  
       // Create the table of choices
       doc.autoTable({
         startY: 75, // Increased padding before the table starts
         margin: { top: 10, bottom: 10 }, // Padding around the table
         headStyles: {
-          fillColor: [41, 128, 185], // Blue color for the header
+          fillColor: [23, 52, 92], // Set header color to #17345c
           textColor: [255, 255, 255], // White text color for the header
           fontSize: 11,
           halign: 'center', // Center align the header text
@@ -273,18 +252,16 @@ const ChoiceList = () => {
           item.allotment.course,
           item.allotment.allottedQuota,
         ]),
-        didDrawPage: function (data) {
-          // Get the current page number
-          const pageNumber = doc.internal.getCurrentPageInfo().pageNumber;
-          const totalPages = doc.internal.getNumberOfPages();
-  
-          // Add header and footer on every page
-          addHeaderAndFooter(pageNumber, totalPages);
-        },
       });
   
-      // Add the watermark after the table is drawn
-      
+      // Add total number of pages to the footer after the content is drawn
+      const totalPages = doc.internal.getNumberOfPages();
+  
+      for (let i = 1; i <= totalPages; i++) {
+        doc.setPage(i);
+        doc.setFontSize(10);
+        doc.text(`Page ${i} of ${totalPages}`, 105, 290, null, null, 'center'); // Correct page number display
+      }
   
       // Save the PDF with a filename
       const fileName = `ChoiceList_${user.name}_${formattedDate}.pdf`;
