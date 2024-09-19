@@ -277,7 +277,7 @@ exports.getWishlist = async (req, res) => {
 
 
   exports.updateWishlist = async (req, res) => {
-    const { reorderedItems } = req.body;
+    const { reorderedItems } = req.body; // The new order of items
     const userId = req.user.userId;
   
     try {
@@ -304,7 +304,7 @@ exports.getWishlist = async (req, res) => {
         return res.status(400).json({ message: 'Invalid input data.' });
       }
   
-      // Update the items in the wishlist
+      // Update the items in the wishlist based on the new order
       reorderedItems.forEach((reorderedItem) => {
         const itemIndex = user.wishlist[wishlistIndex].items.findIndex(item => item.uuid === reorderedItem.id);
         if (itemIndex !== -1) {
@@ -313,8 +313,12 @@ exports.getWishlist = async (req, res) => {
         }
       });
   
-      // Sort the items based on the updated order
-      user.wishlist[wishlistIndex].items.sort((a, b) => a.order - b.order);
+      // Re-sequence the order numbers for all items from 1 upwards
+      user.wishlist[wishlistIndex].items.sort((a, b) => a.order - b.order); // Sort by order first
+      user.wishlist[wishlistIndex].items.forEach((item, index) => {
+        item.order = index + 1; // Set the order to be continuous from 1, 2, 3, etc.
+        item.allotment.order = index + 1; // Update order inside allotment object as well
+      });
   
       // Save the updated user document
       await user.save();
