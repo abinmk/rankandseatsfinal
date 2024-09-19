@@ -31,45 +31,22 @@ function GenerateCollege() {
     }
   };
 
-  // const onGenerateResults = async () => {
-  //   setIsLoading(true);
-  //   try {
-  //     await axiosInstance.post(`${API_URL}/dataset/generate-combined-college`, {
-  //       examName: `EXAM:${exam}_TYPE:${examType}`,
-  //       rounds: selectedAllotments,
-  //     });
-  //     alert('Combined results generated successfully');
-  //   } catch (error) {
-  //     alert('Error generating combined results');
-  //     console.error(error);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
   const onGenerateResults = async () => {
     setIsLoading(true);
     try {
-      console.log("Starting data generation...");
-      const response = await axiosInstance.post(`${API_URL}/dataset/generate-combined-college`, {
+      await axiosInstance.post(`${API_URL}/dataset/generate-combined-college`, {
         examName: `EXAM:${exam}_TYPE:${examType}`,
         rounds: selectedAllotments,
       });
-  
-      if (response.status === 200) {
-        console.log('Response:', response.data);
-        alert('Combined results generated successfully');
-      } else {
-        alert('Data generation failed');
-        console.error('Error:', response);
-      }
+      alert('Combined results generated successfully');
     } catch (error) {
       alert('Error generating combined results');
-      console.error('Error:', error);
+      console.error(error);
     } finally {
-      setIsLoading(false);  // Ensure the loading state is reset after the API call finishes
-      console.log("Finished data generation.");
+      setIsLoading(false);
     }
   };
+
   return (
     <form className="generate-results-container">
       <button className="generate-results-button" type="button" onClick={onGenerateResults} disabled={isLoading}>
