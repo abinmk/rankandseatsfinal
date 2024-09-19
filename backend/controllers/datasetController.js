@@ -8,7 +8,7 @@ const Seat = require('../models/Seats'); // Adjust the path if needed
 const AdmittedStudents = require('../models/AdmittedStudents'); // Adjust the path if needed
 
 
-
+let clients = [];
 // Define Mongoose models (replace with your actual model definitions)
 const Allotment = require('../models/Allotment');
 const College = require('../models/College');
@@ -185,9 +185,9 @@ const uploadCollege = (req, res) => {
 };
 
 const uploadAdmittedStudents = (req, res) => {
-  upload(req, res, async function (err) {
+  upload(req, res, async (err) => {
     if (err instanceof multer.MulterError || err) {
-      return res.status(500).send({ message: err.message });
+      return res.status(500).json({ message: err.message });
     }
 
     const filePath = path.join(__dirname, '..', 'uploads', req.file.filename);
@@ -209,23 +209,54 @@ const uploadAdmittedStudents = (req, res) => {
       // Optional: Delete existing data if needed
       await AdmittedStudents.deleteMany({});
 
-      // Insert new data
-      await batchInsert(AdmittedStudents, seatsData);
+      // Batch insert data with progress updates
+      const batchInsert = async (data, batchSize = 1000) => {
+        const totalBatches = Math.ceil(data.length / batchSize);
+        let progress = 0;
 
-      // Delete the uploaded file from the server
-      fs.unlink(filePath, (unlinkErr) => {
-        if (unlinkErr) {
-          console.error('Failed to delete uploaded file:', unlinkErr);
+        for (let i = 0; i < totalBatches; i++) {
+          const batch = data.slice(i * batchSize, (i + 1) * batchSize);
+          await AdmittedStudents.insertMany(batch);
+
+          // Update progress
+          progress = Math.round(((i + 1) / totalBatches) * 100);
+
+          // Log progress in backend for debugging
+          console.log(`Batch ${i + 1} of ${totalBatches} inserted. Progress: ${progress}%`);
+
+          // Send progress update to all connected clients
+          clients.forEach(client => client.write(`data: ${JSON.stringify({ progress })}\n\n`));
         }
-      });
 
-      res.send('Seats data has been successfully saved to MongoDB.');
-    } catch (err) {
-      console.error('Error processing seats upload:', err);
+        // Complete processing, inform clients and clean up
+        clients.forEach(client => {
+          client.write(`data: ${JSON.stringify({ progress: 100 })}\n\n`);
+          client.write(`event: end\ndata: "complete"\n\n`); // Notify completion
+          client.end();
+        });
+        clients = [];
+
+        // Delete the uploaded file from the server
+        fs.unlink(filePath, (unlinkErr) => {
+          if (unlinkErr) {
+            console.error('Failed to delete uploaded file:', unlinkErr);
+          }
+        });
+      };
+
+      // Perform batch insertion
+      await batchInsert(seatsData);
+
+      res.status(200).send('Seats data has been successfully uploaded and saved to MongoDB.');
+    } catch (error) {
+      console.error('Error processing seats upload:', error);
       res.status(500).send('Failed to process seats file.');
     }
   });
 };
+
+// SSE route to send progress updates
+
 
 
 const uploadSeats = (req, res) => {
@@ -1347,7 +1378,7 @@ module.exports = {
   listAvailableSeatMatrix,
   generateCombinedMatrix,
   uploadAdmittedStudents,
-  generateFullCollegeResult
+  generateFullCollegeResult,
 };
 
 

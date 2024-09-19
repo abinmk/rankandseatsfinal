@@ -5,6 +5,7 @@ import axiosInstance from '../utils/axiosInstance';
 const UploadAdmittedStudents = () => {
   const [file, setFile] = useState(null);
   const API_URL = import.meta.env.VITE_API_URL; // Access the environment variable
+  const [isLoading, setIsLoading] = useState(false);
 
   const onFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -20,6 +21,7 @@ const UploadAdmittedStudents = () => {
     formData.append('file', file);
 
     try {
+      setIsLoading(true);
       await axiosInstance.post(`${API_URL}/dataset/upload-admittedstudents`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -27,9 +29,11 @@ const UploadAdmittedStudents = () => {
       });
       alert('Admitted Student data uploaded successfully');
       setFile(null);
+      setIsLoading(false);
     } catch (error) {
       console.error('Error uploading seats data', error);
       alert('Error uploading seats data');
+      setIsLoading(false); // Reset loading state in case of error
     }
   };
 
@@ -45,8 +49,8 @@ const UploadAdmittedStudents = () => {
           onChange={onFileChange}
         />
       </div>
-      <button className="upload-seats-button" onClick={onUpload}>
-        Upload
+      <button className="generate-results-button" type="button" onClick={onUpload} disabled={isLoading}>
+        {isLoading ? 'Uploading Admitted students...' : 'Upload'}
       </button>
     </div>
   );
