@@ -17,6 +17,7 @@ const columns =choiceListColumns;
 
 const ChoiceList = () => {
   const [fullChoiceList, setFullChoiceList] = useState([]); // Full list of items
+  const [fullChoiceListFull, setFullChoiceListFull] = useState([]); // Full list of items
   const [choiceList, setChoiceList] = useState([]); // Filtered list for display
   const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState({});
@@ -123,6 +124,27 @@ const [selectedItemId, setSelectedItemId] = useState(null); // Track the item to
     usePagination,
     useColumnOrder
   );
+
+  const fetchChoiceListFull = useCallback(async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      const examName = await generateExamName();
+      if (examName) {
+        const response = await axiosInstance.get(`${apiUrl}/wishlist`, {
+          headers: { Authorization: `Bearer ${token}` },
+          params: { examName, },
+        });
+        const fullList = response.data.wishlist.items;
+        setFullChoiceListFull(fullList);
+      } else {
+        console.error('No exam name found.');
+      }
+    } catch (error) {
+      console.error('Error fetching choice list:', error);
+    }
+    setLoading(false);
+  }, [filters, generateExamName]);
   
 
   const fetchChoiceList = useCallback(async () => {
@@ -201,6 +223,10 @@ const [selectedItemId, setSelectedItemId] = useState(null); // Track the item to
   useEffect(() => {
     fetchChoiceList();
   }, [fetchChoiceList]);
+
+  useEffect(() => {
+    fetchChoiceListFull();
+  }, [fetchChoiceListFull]);
 
   useEffect(() => {
     fetchFilterOptions();
@@ -603,19 +629,19 @@ const watermarkBase64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAABCC
       <Form.Group controlId="targetPosition">
         <Form.Label>Enter the target position:</Form.Label>
         <Form.Text className="text-muted">
-          Position must be between 1 and {choiceList.length}
+          Position must be between 1 and {fullChoiceListFull.length}
         </Form.Text>
         <Form.Control
           type="number"
           value={targetPosition || ''} // Allow the value to be an empty string
           onChange={(e) => {
             const value = e.target.value;
-            if (value === '' || (Number(value) >= 1 && Number(value) <= choiceList.length)) {
+            if (value === '' || (Number(value) >= 1 && Number(value) <= fullChoiceListFull.length)) {
               setTargetPosition(value); // Only set valid numbers or an empty string
             }
           }}
           min="1"
-          max={choiceList.length}
+          max={fullChoiceListFull.length}
         />
       </Form.Group>
     </Form>
@@ -626,7 +652,7 @@ const watermarkBase64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAABCC
     </Button>
     <Button variant="primary" onClick={() => {
       // Ensure the entered value is within the valid range when submitting
-      const validPosition = Math.max(1, Math.min(choiceList.length, Number(targetPosition)));
+      const validPosition = Math.max(1, Math.min(fullChoiceListFull.length, Number(targetPosition)));
       setTargetPosition(validPosition);
       handleMoveToPosition(); // Proceed with the move
     }}>
