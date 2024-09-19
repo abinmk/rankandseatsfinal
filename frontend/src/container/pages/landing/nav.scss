@@ -330,3 +330,17 @@ ul.feature-list li i {
 .content-text i {
   color: #28a745 !important; /* Success green */
 }
+
+
+.section-style::after {
+  content: "";
+  background: transparent;
+  width: 0px;
+  height: 0px;
+  border-radius: 50% 10px 10px;
+  position: absolute;
+  inset-inline-end: 0rem;
+  inset-block-end: 0rem;
+  opacity: 0.05;
+  border: 20px solid var(--primary-color);
+}

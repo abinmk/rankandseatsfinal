@@ -306,7 +306,7 @@ const watermarkBase64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAABCC
         year: 'numeric',
         month: 'long',
         day: 'numeric'
-      }).replace(/ /g, '_');
+      }).replace(/ /g, '_').toUpperCase();
   
       const formattedExam = user.selectedExams[0].exam.replace(/_/g, ' ').toUpperCase();
       const formattedCounselingType = user.selectedExams[0].counselingType.replace(/_/g, ' ').toUpperCase();
@@ -367,8 +367,9 @@ const watermarkBase64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAABCC
         doc.setFontSize(10);
         doc.text(`Page ${i} of ${totalPages}`, 105, 290, null, null, 'center');
       }
+      const username =user.name.toUpperCase();
   
-      const fileName = `ChoiceList_${user.name}_${formattedDate}.pdf`;
+      const fileName = `CHOICE-LIST_${formattedCounselingType}_${username}_${formattedDate}.pdf`;
       doc.save(fileName);
     } catch (error) {
       console.error('Error generating PDF:', error);

@@ -728,8 +728,8 @@ const [showProfileModal, setShowProfileModal] = useState(false);
   {[
     "Up-to-date Info on 2024 NEET PG Counselling (AIQ, DNB, Deemed & All States)",
     "Institute Details - Contact, Infrastructure & Connectivity",
-    "Previous Year Allotments - (2021, 2022 & 2023)",
-    "Details of Admitted Students - (2021, 2022 & 2023)",
+    "Previous Year Allotments",
+    "Details of Admitted Students",
     "Previous Years’ Last Ranks",
     "Latest Fee Structure",
     "Latest Stipend Information",
