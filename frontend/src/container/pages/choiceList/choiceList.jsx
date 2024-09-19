@@ -34,24 +34,6 @@ const ChoiceList = () => {
 const [targetPosition, setTargetPosition] = useState(null); // Track the target position
 const [selectedItemId, setSelectedItemId] = useState(null); // Track the item to move
 
-  const generateExamName = useCallback(async () => {
-    const token = localStorage.getItem('token');
-    const response = await axiosInstance.get(`${apiUrl}/users/exams`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const user = response.data;
-
-    if (user && user.selectedExams && user.selectedExams.length > 0) {
-      const { exam, counselingType } = user.selectedExams[0];
-      const formattedExam = exam.replace(/\s+/g, '_');
-      const formattedCounselingType = counselingType.replace(/\s+/g, '_');
-      return `EXAM:${formattedExam}_TYPE:${formattedCounselingType}`;
-    }
-    return null;
-  }, []);
-
   const handleMoveUp = async (uuid, index) => {
     if (index === 0) return; // Can't move if already at the top
     const targetItemId = choiceList[index - 1].uuid; // Get the item above
@@ -69,8 +51,7 @@ const [selectedItemId, setSelectedItemId] = useState(null); // Track the item to
   const moveItem = async (draggedItemId, targetItemId, direction) => {
     try {
       const token = localStorage.getItem('token');
-      const examName = await generateExamName();
-      if (examName) {
+      if (token) {
         await axiosInstance.post(`${apiUrl}/wishlist/updateOrder`, {
           draggedItemId,
           targetItemId,
@@ -129,11 +110,10 @@ const [selectedItemId, setSelectedItemId] = useState(null); // Track the item to
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const examName = await generateExamName();
-      if (examName) {
+      if (token) {
         const response = await axiosInstance.get(`${apiUrl}/wishlist`, {
           headers: { Authorization: `Bearer ${token}` },
-          params: { examName, },
+          params: {},
         });
         const fullList = response.data.wishlist.items;
         setFullChoiceListFull(fullList);
@@ -144,18 +124,17 @@ const [selectedItemId, setSelectedItemId] = useState(null); // Track the item to
       console.error('Error fetching choice list:', error);
     }
     setLoading(false);
-  }, [filters, generateExamName]);
+  }, [filters]);
   
 
   const fetchChoiceList = useCallback(async () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const examName = await generateExamName();
-      if (examName) {
+      if (token) {
         const response = await axiosInstance.get(`${apiUrl}/wishlist`, {
           headers: { Authorization: `Bearer ${token}` },
-          params: { examName, ...filters },
+          params: { ...filters },
         });
         const fullList = response.data.wishlist.items;
         setFullChoiceList(fullList); // Store full list
@@ -167,7 +146,7 @@ const [selectedItemId, setSelectedItemId] = useState(null); // Track the item to
       console.error('Error fetching choice list:', error);
     }
     setLoading(false);
-  }, [filters, generateExamName]);
+  }, [filters]);
 
   const getFilterParamName = (filterKey) => {
     const filterMapping = {
@@ -207,18 +186,17 @@ const [selectedItemId, setSelectedItemId] = useState(null); // Track the item to
   const fetchFilterOptions = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
-      const examName = await generateExamName();
-      if (examName) {
+      if (token) {
         const response = await axiosInstance.get(`${apiUrl}/wishlist/filters`, {
           headers: { Authorization: `Bearer ${token}` },
-          params: { examName },
+          params: {},
         });
         setFilterOptions(response.data);
       }
     } catch (error) {
       console.error('Error fetching filter options:', error);
     }
-  }, [generateExamName]);
+  }, []);
 
   useEffect(() => {
     fetchChoiceList();
@@ -258,7 +236,7 @@ const [selectedItemId, setSelectedItemId] = useState(null); // Track the item to
 // Function to execute the move after confirmation
 const handleMoveToPosition = async () => {
   if (selectedItemId && targetPosition) {
-    const currentIndex = choiceList.findIndex((item) => item.uuid === selectedItemId);
+    const currentIndex = fullChoiceListFull.findIndex((item) => item.uuid === selectedItemId);
     const newPosition = parseInt(targetPosition) - 1; // Convert to zero-based index
 
     if (newPosition === currentIndex) {
@@ -266,32 +244,35 @@ const handleMoveToPosition = async () => {
       return;
     }
 
-    const direction = newPosition > currentIndex ? 'down' : 'up';
-    const steps = Math.abs(newPosition - currentIndex); // Number of steps to move
-
     try {
+      // 1. Update the order in-memory
+      const updatedList = [...fullChoiceListFull];
+      const [movedItem] = updatedList.splice(currentIndex, 1); // Remove the selected item
+      updatedList.splice(newPosition, 0, movedItem); // Insert it at the new position
+
+      // 2. Map the new order for each item
+      const reorderedItems = updatedList.map((item, index) => ({
+        id: item.uuid,
+        newOrder: index + 1,
+      }));
+
+      // 3. Make a single API call to update the new order
       const token = localStorage.getItem('token');
-      const examName = await generateExamName();
 
-      for (let i = 0; i < steps; i++) {
-        const targetItemId = direction === 'down'
-          ? choiceList[currentIndex + i + 1].uuid // Move down, get the next item
-          : choiceList[currentIndex - i - 1].uuid; // Move up, get the previous item
-
-        if (examName) {
-          await axiosInstance.post(`${apiUrl}/wishlist/updateOrder`, {
-            draggedItemId: selectedItemId,
-            targetItemId,
-            direction
-          }, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-        }
+      if (token) {
+        await axiosInstance.post(`${apiUrl}/wishlist/updatePositions`, {
+          reorderedItems,
+        }, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
       }
 
-      fetchChoiceList(); // Refresh the list after moving the item
-      setShowPositionModal(false);
+      // 4. Update the UI and close the modal
+      setFullChoiceListFull(updatedList); // Update the state with the new order
+      fetchChoiceList(); // Optionally refetch the list if needed
+      setShowPositionModal(false); // Close the modal
       setSelectedItemId(null); // Clear the selected item
+
     } catch (error) {
       console.error('Error moving item to position:', error);
     }
@@ -318,8 +299,7 @@ const confirmMoveToPosition = (uuid) => {
   
     try {
       const token = localStorage.getItem('token');
-      const examName = await generateExamName();
-      if (examName) {
+      if (token) {
         await axiosInstance.post(`${apiUrl}/wishlist/updateOrder`, {
           draggedItemId,
           targetItemId,
@@ -361,11 +341,9 @@ const confirmMoveToPosition = (uuid) => {
   const confirmDelete = async () => {
     try {
       const token = localStorage.getItem('token');
-      const examName = await generateExamName();
-      if (examName) {
+      if (token) {
         await axiosInstance.post(`${apiUrl}/wishlist/remove`, {
           uuid: deleteItemId,
-          examName,
         }, {
           headers: { Authorization: `Bearer ${token}` },
         });
