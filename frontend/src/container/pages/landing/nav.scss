@@ -334,13 +334,13 @@ ul.feature-list li i {
 
 .section-style::after {
   content: "";
+  display: none !important;
   background: transparent;
   width: 0px;
   height: 0px;
-  border-radius: 50% 10px 10px;
+  border-radius: 50% 0px 0px;
   position: absolute;
   inset-inline-end: 0rem;
   inset-block-end: 0rem;
-  opacity: 0.05;
-  border: 20px solid var(--primary-color);
+  border: 0px solid var(--primary-color);
 }
