@@ -262,11 +262,17 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
               <select value={exam} onChange={handleExamChange} className="form-select me-2" id="exam-name">
                 <option value="NEET_PG">NEET PG</option>
               </select>
-              <select value={counselingType} onChange={handleCounselingTypeChange} className="form-select" id="counseling">
-                {availableCounselingTypes.map((type, index) => (
-                  <option key={index} value={type}>{type}</option>
-                ))}
-              </select>
+              <select 
+              value={counselingType} 
+              onChange={handleCounselingTypeChange} 
+              className="form-select" 
+              id="counseling"
+            >
+              {/* Sorting the types alphabetically and placing "ALL INDIA" at the top */}
+              {['ALL INDIA', ...availableCounselingTypes.filter(type => type !== 'ALL INDIA').sort()].map((type, index) => (
+                <option key={index} value={type}>{type}</option>
+              ))}
+            </select>
             </div>
           </div>
           <div className="header-container">
