@@ -13,6 +13,7 @@ router.post('/upload-seats',authMiddleware, datasetController.uploadSeats);
 router.get('/list-available-allotments',authMiddleware, datasetController.listAvailableAllotments);
 router.get('/list-available-seatMatrix',authMiddleware, datasetController.listAvailableSeatMatrix);
 router.post('/generate-combined-dataset',authMiddleware, datasetController.generateCombinedDataset);
+router.post('/generate-combined-college',authMiddleware, datasetController.generateFullCollegeResult);
 router.post('/generate-combined-matrix',authMiddleware, datasetController.generateCombinedMatrix);
 router.get('/list-generated-datasets',authMiddleware, datasetController.getGeneratedData); // New route
 

@@ -864,46 +864,46 @@ const generateCombinedDataset = async (req, res) => {
     await batchInsert(CourseResultModel, courseResultData);
 
     // Generate FULL_COLLEGE_RESULT dataset
-    const fullCollegeResultData = Object.values(fullCollegeResultMap).map(college => {
-      return {
-        collegeName: college.collegeName,
-        collegeAddress:college.collegeAddress,
-        state: college.state,
-        instituteType: college.instituteType,
-        universityName: college.universityName,
-        yearOfEstablishment: college.yearOfEstablishment,
-        totalHospitalBeds: Number(college.totalHospitalBeds),
-        locationMapLink: college.locationMapLink,
-        nearestRailwayStation: college.nearestRailwayStation,
-        distanceFromRailwayStation: college.distanceFromRailwayStation,
-        nearestAirport: college.nearestAirport,
-        distanceFromAirport: college.distanceFromAirport,
-        phoneNumber: college.phoneNumber,
-        website: college.website,
+    // const fullCollegeResultData = Object.values(fullCollegeResultMap).map(college => {
+    //   return {
+    //     collegeName: college.collegeName,
+    //     collegeAddress:college.collegeAddress,
+    //     state: college.state,
+    //     instituteType: college.instituteType,
+    //     universityName: college.universityName,
+    //     yearOfEstablishment: college.yearOfEstablishment,
+    //     totalHospitalBeds: Number(college.totalHospitalBeds),
+    //     locationMapLink: college.locationMapLink,
+    //     nearestRailwayStation: college.nearestRailwayStation,
+    //     distanceFromRailwayStation: college.distanceFromRailwayStation,
+    //     nearestAirport: college.nearestAirport,
+    //     distanceFromAirport: college.distanceFromAirport,
+    //     phoneNumber: college.phoneNumber,
+    //     website: college.website,
 
-        courses: Object.values(college.courses)
-        .sort((a, b) => a.courseName.localeCompare(b.courseName)) // Sort courses alphabetically
-        .map(course => {
-          const matchingSeats = seats.find(seat => 
-            seat.collegeName === college.collegeName && 
-            seat.courseName === course.courseName
-          );
+    //     courses: Object.values(college.courses)
+    //     .sort((a, b) => a.courseName.localeCompare(b.courseName)) // Sort courses alphabetically
+    //     .map(course => {
+    //       const matchingSeats = seats.find(seat => 
+    //         seat.collegeName === college.collegeName && 
+    //         seat.courseName === course.courseName
+    //       );
 
-          return {
-            courseName: course.courseName,
-            quotas: Object.values(course.quotas),
-            totalSeatsInCourse: matchingSeats ? matchingSeats.seats : 0
-          };
-        })
-      };
-    });
+    //       return {
+    //         courseName: course.courseName,
+    //         quotas: Object.values(course.quotas),
+    //         totalSeatsInCourse: matchingSeats ? matchingSeats.seats : 0
+    //       };
+    //     })
+    //   };
+    // });
 
-    const fullCollegeResultCollectionName = 'FULL_COLLEGE_RESULT';
-    const FullCollegeResultModel = getModel(fullCollegeResultCollectionName);
+    // const fullCollegeResultCollectionName = 'FULL_COLLEGE_RESULT';
+    // const FullCollegeResultModel = getModel(fullCollegeResultCollectionName);
 
-    // Clear existing data and insert new full college result data
-    await FullCollegeResultModel.deleteMany({});
-    await batchInsert(FullCollegeResultModel, fullCollegeResultData);
+    // // Clear existing data and insert new full college result data
+    // await FullCollegeResultModel.deleteMany({});
+    // await batchInsert(FullCollegeResultModel, fullCollegeResultData);
 
     // Generate GENERATED_EXAM dataset with the correct format
     const generatedExamCollectionName = `GENERATED_${examName}`;
@@ -963,7 +963,7 @@ const generateCombinedDataset = async (req, res) => {
       feeResultData,
       collegeResultData,
       courseResultData,
-      fullCollegeResultData,
+      // fullCollegeResultData,
       generatedExamData,
     });
   } catch (error) {
@@ -973,6 +973,172 @@ const generateCombinedDataset = async (req, res) => {
 };
 
 
+
+
+const generateFullCollegeResult = async (req,res) => {
+  try {
+    console.time("Full College Result Generation");
+    console.log("Starting full college result generation...");
+
+    // Fetch data in parallel using Promise.all
+    console.log("Fetching colleges, courses, seats, and fees data...");
+    const [colleges, courses, seats, fees] = await Promise.all([
+      College.find({}).lean(),
+      Course.find({}).lean(),
+      Seat.find({}).lean(),
+      Fee.find({}).lean(),
+    ]);
+
+    console.log(`Fetched ${colleges.length} colleges, ${courses.length} courses, ${seats.length} seats, and ${fees.length} fees.`);
+
+    // Create lookup maps for fast access
+    console.log("Creating lookup maps...");
+    const collegeMap = new Map(
+      colleges.map(college => [college.collegeName.trim().toLowerCase(), college])
+    );
+    const courseMap = new Map(
+      courses.map(course => [course.courseName.trim().toLowerCase(), course])
+    );
+    const feeMap = new Map(
+      fees.map(fee => [
+        `${fee.collegeName.trim().toLowerCase()}_${fee.courseName.trim().toLowerCase()}_${fee.quota.trim().toLowerCase()}`,
+        fee,
+      ])
+    );
+    console.log("Lookup maps created.");
+
+    // Group seats by college and course for fast lookup
+    console.log("Grouping seats by college and course...");
+    const seatsMap = new Map();
+    seats.forEach(seat => {
+      const key = `${seat.collegeName.trim().toLowerCase()}_${seat.courseName.trim().toLowerCase()}`;
+      if (!seatsMap.has(key)) {
+        seatsMap.set(key, 0);
+      }
+      seatsMap.set(key, seatsMap.get(key) + seat.seats);
+    });
+    console.log("Seats grouped.");
+
+    // Initialize the map for storing full college results
+    console.log("Processing fees and generating full college results...");
+    const fullCollegeResultMap = {};
+
+    // Ensure all colleges are added, even if they don't have fees
+    colleges.forEach(college => {
+      const collegeKey = college.collegeName.trim().toLowerCase();
+      if (!fullCollegeResultMap[collegeKey]) {
+        fullCollegeResultMap[collegeKey] = {
+          collegeName: college.collegeName || '',
+          state: college.state || '',
+          instituteType: college.instituteType || '',
+          universityName: college.universityName || '',
+          yearOfEstablishment: college.yearOfEstablishment || 0,
+          totalHospitalBeds: Number(college.totalHospitalBeds) || 0,
+          locationMapLink: college.locationMapLink || '',
+          nearestRailwayStation: college.nearestRailwayStation || '',
+          distanceFromRailwayStation: college.distanceFromRailwayStation || 0,
+          nearestAirport: college.nearestAirport || '',
+          distanceFromAirport: college.distanceFromAirport || 0,
+          phoneNumber: college.phoneNumber || '',
+          website: college.website || '',
+          collegeAddress: college.collegeAddress || '',
+          courses: {},
+        };
+      }
+    });
+
+    // Process fees data
+    fees.forEach(fee => {
+      const collegeKey = fee.collegeName.trim().toLowerCase();
+      const courseKey = fee.courseName.trim().toLowerCase();
+      const quotaKey = fee.quota.trim().toLowerCase();
+
+      if (!fullCollegeResultMap[collegeKey].courses[courseKey]) {
+        fullCollegeResultMap[collegeKey].courses[courseKey] = {
+          courseName: fee.courseName,
+          quotas: {},
+        };
+      }
+
+      if (!fullCollegeResultMap[collegeKey].courses[courseKey].quotas[quotaKey]) {
+        fullCollegeResultMap[collegeKey].courses[courseKey].quotas[quotaKey] = {
+          quota: fee.quota,
+          courseFee: fee.courseFee || 0,
+          nriFee: fee.nriFee || 0,
+          stipendYear1: fee.stipendYear1 || 0,
+          stipendYear2: fee.stipendYear2 || 0,
+          stipendYear3: fee.stipendYear3 || 0,
+          bondYear: fee.bondYear || 0,
+          bondPenality: fee.bondPenality || 0,
+          seatLeavingPenality: fee.seatLeavingPenality || '',
+        };
+      }
+    });
+    console.log("Full college result map generated.");
+
+    // Final transformation into array format
+    console.log("Transforming full college result map into an array...");
+    const fullCollegeResultData = Object.values(fullCollegeResultMap).map(college => {
+      return {
+        collegeName: college.collegeName,
+        collegeAddress: college.collegeAddress,
+        state: college.state,
+        instituteType: college.instituteType,
+        universityName: college.universityName,
+        yearOfEstablishment: college.yearOfEstablishment,
+        totalHospitalBeds: college.totalHospitalBeds,
+        locationMapLink: college.locationMapLink,
+        nearestRailwayStation: college.nearestRailwayStation,
+        distanceFromRailwayStation: college.distanceFromRailwayStation,
+        nearestAirport: college.nearestAirport,
+        distanceFromAirport: college.distanceFromAirport,
+        phoneNumber: college.phoneNumber,
+        website: college.website,
+
+        // For each course, list the details and quotas
+        courses: Object.values(college.courses)
+          .sort((a, b) => a.courseName.localeCompare(b.courseName)) // Sort courses alphabetically
+          .map(course => {
+            const key = `${college.collegeName.trim().toLowerCase()}_${course.courseName.trim().toLowerCase()}`;
+            const totalSeatsInCourse = seatsMap.get(key) || 0;
+            return {
+              courseName: course.courseName,
+              quotas: Object.values(course.quotas),
+              totalSeatsInCourse,
+            };
+          }),
+      };
+    });
+
+    console.log(`Total colleges being inserted: ${fullCollegeResultData.length}`);
+    const fullCollegeResultCollectionName = 'FULL_COLLEGE_RESULT';
+    const FullCollegeResultModel = getModel(fullCollegeResultCollectionName);
+
+    // Clear existing data and insert new full college result data in batches
+    console.log("Inserting full college result data into the database...");
+    await FullCollegeResultModel.deleteMany({});
+    for (let i = 0; i < fullCollegeResultData.length; i += 500) {
+      const batch = fullCollegeResultData.slice(i, i + 500);
+      try {
+        const result = await FullCollegeResultModel.insertMany(batch, { ordered: false });
+        console.log(`Inserted batch ${i / 500 + 1}: ${result.length} records`);
+      } catch (err) {
+        console.error(`Error inserting batch ${i / 500 + 1}:`, err.writeErrors);
+        err.writeErrors.forEach(error => {
+          console.log("Failed document:", error.err.op);  // Log the rejected document
+        });
+      }
+    }
+    console.log("Full college result data inserted successfully.");
+
+    console.timeEnd("Full College Result Generation");
+    res.json({
+      fullCollegeResultData
+    });
+  } catch (error) {
+    console.error('Error generating full college result:', error);
+  }
+};
 
 
     
@@ -1180,7 +1346,8 @@ module.exports = {
   uploadSeatMatrix,
   listAvailableSeatMatrix,
   generateCombinedMatrix,
-  uploadAdmittedStudents
+  uploadAdmittedStudents,
+  generateFullCollegeResult
 };
 
 

@@ -10,6 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import UploadSeatMatrix from './UploadSeatMatrix';
 import UploadAdmittedStudents from './UploadAdmittedStudents';
 import GenerateSeatMatrix from './GenerateSeatMatrix';
+import GenerateCollege from './GenerateCollege';
 
 const Upload = () => {
   return (
@@ -39,6 +40,8 @@ const Upload = () => {
         </Tab>
         <Tab eventKey="generate" title="Generate Data">
           <GenerateResults />
+          <br/>
+          <GenerateCollege />
         </Tab>
         <Tab eventKey="generateseatmatrix" title="Generate Seat Matrix">
           <GenerateSeatMatrix />
