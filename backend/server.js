@@ -26,6 +26,7 @@ const profileRoutes = require('./routes/profileRoutes');
 const admittedStudentsRoutes = require('./routes/admittedStudentsRoutes');
 
 const app = express();
+const server = require('http').createServer(app);
 const port = process.env.PORT || 5001;
 
 
@@ -376,9 +377,11 @@ app.use((err, req, res, next) => {
   res.status(500).send('Something broke!');
 });
 
+server.setTimeout(30 * 60 * 1000);
+
 // Start the server
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+server.listen(5001, () => {
+  console.log('Server is running on port 5001');
 });
 
 

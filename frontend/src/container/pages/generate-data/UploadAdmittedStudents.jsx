@@ -31,8 +31,8 @@ const UploadAdmittedStudents = () => {
       setFile(null);
       setIsLoading(false);
     } catch (error) {
-      console.error('Error uploading seats data', error);
-      alert('Error uploading seats data');
+      console.error('Error uploading  Admitted students data', error);
+      alert('Error uploading Admitted Students data');
       setIsLoading(false); // Reset loading state in case of error
     }
   };

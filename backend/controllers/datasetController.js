@@ -28,7 +28,7 @@ const storage = multer.diskStorage({
 });
 
 
-const upload = multer({ storage: storage }).single('file');
+const upload = multer({ storage: storage ,limits: { fileSize: 100 * 1024 * 1024 }, }).single('file');
 
 // Function to dynamically get or create a model
 const getModel = (modelName) => {
@@ -212,30 +212,12 @@ const uploadAdmittedStudents = (req, res) => {
       // Batch insert data with progress updates
       const batchInsert = async (data, batchSize = 1000) => {
         const totalBatches = Math.ceil(data.length / batchSize);
-        let progress = 0;
+
 
         for (let i = 0; i < totalBatches; i++) {
           const batch = data.slice(i * batchSize, (i + 1) * batchSize);
           await AdmittedStudents.insertMany(batch);
-
-          // Update progress
-          progress = Math.round(((i + 1) / totalBatches) * 100);
-
-          // Log progress in backend for debugging
-          console.log(`Batch ${i + 1} of ${totalBatches} inserted. Progress: ${progress}%`);
-
-          // Send progress update to all connected clients
-          clients.forEach(client => client.write(`data: ${JSON.stringify({ progress })}\n\n`));
         }
-
-        // Complete processing, inform clients and clean up
-        clients.forEach(client => {
-          client.write(`data: ${JSON.stringify({ progress: 100 })}\n\n`);
-          client.write(`event: end\ndata: "complete"\n\n`); // Notify completion
-          client.end();
-        });
-        clients = [];
-
         // Delete the uploaded file from the server
         fs.unlink(filePath, (unlinkErr) => {
           if (unlinkErr) {
