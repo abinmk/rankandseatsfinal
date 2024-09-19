@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axiosInstance from '../../../utils/axiosInstance';
 import { useTable, usePagination, useSortBy, useFilters, useColumnOrder } from 'react-table';
 import { Table, Button, Modal ,Form} from 'react-bootstrap';
-import { FaTrash, FaDownload } from 'react-icons/fa';
+import { FaTrash, FaDownload,FaArrowDown,FaArrowUp } from 'react-icons/fa';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
@@ -29,6 +29,9 @@ const ChoiceList = () => {
   const [deleteItemId, setDeleteItemId] = useState(null);
   const headerTitle = "ChoiceList";
   const [filterLoading, setFilterLoading] = useState(false);
+  const [showPositionModal, setShowPositionModal] = useState(false);
+const [targetPosition, setTargetPosition] = useState(null); // Track the target position
+const [selectedItemId, setSelectedItemId] = useState(null); // Track the item to move
 
   const generateExamName = useCallback(async () => {
     const token = localStorage.getItem('token');
@@ -47,6 +50,39 @@ const ChoiceList = () => {
     }
     return null;
   }, []);
+
+  const handleMoveUp = async (uuid, index) => {
+    if (index === 0) return; // Can't move if already at the top
+    const targetItemId = choiceList[index - 1].uuid; // Get the item above
+    await moveItem(uuid, targetItemId, 'up');
+  };
+  
+  // Move item down
+  const handleMoveDown = async (uuid, index) => {
+    if (index === choiceList.length - 1) return; // Can't move if already at the bottom
+    const targetItemId = choiceList[index + 1].uuid; // Get the item below
+    await moveItem(uuid, targetItemId, 'down');
+  };
+  
+  // API call to move item
+  const moveItem = async (draggedItemId, targetItemId, direction) => {
+    try {
+      const token = localStorage.getItem('token');
+      const examName = await generateExamName();
+      if (examName) {
+        await axiosInstance.post(`${apiUrl}/wishlist/updateOrder`, {
+          draggedItemId,
+          targetItemId,
+          direction
+        }, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        fetchChoiceList(); // Refresh the list after reordering
+      }
+    } catch (error) {
+      console.error('Error moving item:', error);
+    }
+  };
 
   
 
@@ -189,6 +225,58 @@ const ChoiceList = () => {
       return matchInstitute && matchCourse && matchCategory && matchState;
     });
   }, [fullChoiceList, filters]);
+  const [moveToPosition, setMoveToPosition] = useState(null);
+
+// Function to handle confirming position change
+
+// Function to execute the move after confirmation
+const handleMoveToPosition = async () => {
+  if (selectedItemId && targetPosition) {
+    const currentIndex = choiceList.findIndex((item) => item.uuid === selectedItemId);
+    const newPosition = parseInt(targetPosition) - 1; // Convert to zero-based index
+
+    if (newPosition === currentIndex) {
+      setShowPositionModal(false); // No movement needed
+      return;
+    }
+
+    const direction = newPosition > currentIndex ? 'down' : 'up';
+    const steps = Math.abs(newPosition - currentIndex); // Number of steps to move
+
+    try {
+      const token = localStorage.getItem('token');
+      const examName = await generateExamName();
+
+      for (let i = 0; i < steps; i++) {
+        const targetItemId = direction === 'down'
+          ? choiceList[currentIndex + i + 1].uuid // Move down, get the next item
+          : choiceList[currentIndex - i - 1].uuid; // Move up, get the previous item
+
+        if (examName) {
+          await axiosInstance.post(`${apiUrl}/wishlist/updateOrder`, {
+            draggedItemId: selectedItemId,
+            targetItemId,
+            direction
+          }, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+        }
+      }
+
+      fetchChoiceList(); // Refresh the list after moving the item
+      setShowPositionModal(false);
+      setSelectedItemId(null); // Clear the selected item
+    } catch (error) {
+      console.error('Error moving item to position:', error);
+    }
+  }
+};
+
+// Function to handle opening the modal with the correct item UUID
+const confirmMoveToPosition = (uuid) => {
+  setSelectedItemId(uuid); // Store the selected item UUID
+  setShowPositionModal(true); // Open the modal to enter the target position
+};
 
   // Handle drag-and-drop functionality
   const onDragEnd = async (result) => {
@@ -200,6 +288,7 @@ const ChoiceList = () => {
     const draggedItemId = choiceList[sourceIndex].uuid;
     const targetItemId = choiceList[destinationIndex].uuid;
     const direction = destinationIndex > sourceIndex ? 'down' : 'up'; // Determine drag direction
+    
   
     try {
       const token = localStorage.getItem('token');
@@ -411,13 +500,13 @@ const watermarkBase64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAABCC
                       <thead>
                         <tr>
                           <th>Sl. No.</th>
-                          <th>Order</th>
+                          <th>Choice No.</th>
                           <th>State</th>
                           <th>Institute</th>
                           <th>Course</th>
                           <th>Category</th>
-                          {/* <th>Fee</th> */}
-                          <th>Remove</th>
+                          <th>Move</th>
+                          <th>Delete</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -431,9 +520,30 @@ const watermarkBase64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAABCC
                                 <td>{item.allotment.allottedInstitute}</td>
                                 <td>{item.allotment.course}</td>
                                 <td>{item.allotment.allottedCategory}</td>
-                                {/* <td>{item.allotment.feeAmount}</td> */}
                                 <td>
-                                  <Button variant="outline-danger" onClick={() => handleDelete(item.uuid)}>
+                                <Button
+                                  variant="outline-secondary"
+                                  onClick={() => handleMoveUp(item.uuid, index)}
+                                  disabled={index === 0} // Disable if the item is already at the top
+                                >
+                                  <FaArrowUp />
+                                </Button>
+                                <Button className='btn-move-to-position'
+                                variant="outline-primary"
+                                onClick={() => confirmMoveToPosition(item.uuid)}
+                              >
+                                Position
+                              </Button>
+                                <Button
+                                  variant="outline-secondary"
+                                  onClick={() => handleMoveDown(item.uuid, index)}
+                                  disabled={index === choiceList.length - 1} // Disable if the item is already at the bottom
+                                >
+                                  <FaArrowDown />
+                                </Button>
+                              </td>
+                                <td>
+                                  <Button variant="outline-danger" className="btn-remove" onClick={() => handleDelete(item.uuid)}>
                                     <FaTrash />
                                   </Button>
                                 </td>
@@ -453,7 +563,7 @@ const watermarkBase64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAABCC
       </div>
       <Modal show={showColumnModal} onHide={() => setShowColumnModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Column Management</Modal.Title>
+          <Modal.Title  style={{ color: 'white' }}>Column Management</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {allColumns.map(column => (
@@ -484,6 +594,47 @@ const watermarkBase64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAABCC
           <Button variant="danger" onClick={confirmDelete}>Delete</Button>
         </Modal.Footer>
       </Modal>
+      <Modal show={showPositionModal} onHide={() => setShowPositionModal(false)}>
+  <Modal.Header closeButton>
+    <Modal.Title style={{ color: 'white' }}>Move to Position</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    <Form>
+      <Form.Group controlId="targetPosition">
+        <Form.Label>Enter the target position:</Form.Label>
+        <Form.Text className="text-muted">
+          Position must be between 1 and {choiceList.length}
+        </Form.Text>
+        <Form.Control
+          type="number"
+          value={targetPosition || ''} // Allow the value to be an empty string
+          onChange={(e) => {
+            const value = e.target.value;
+            if (value === '' || (Number(value) >= 1 && Number(value) <= choiceList.length)) {
+              setTargetPosition(value); // Only set valid numbers or an empty string
+            }
+          }}
+          min="1"
+          max={choiceList.length}
+        />
+      </Form.Group>
+    </Form>
+  </Modal.Body>
+  <Modal.Footer>
+    <Button variant="secondary" onClick={() => setShowPositionModal(false)}>
+      Cancel
+    </Button>
+    <Button variant="primary" onClick={() => {
+      // Ensure the entered value is within the valid range when submitting
+      const validPosition = Math.max(1, Math.min(choiceList.length, Number(targetPosition)));
+      setTargetPosition(validPosition);
+      handleMoveToPosition(); // Proceed with the move
+    }}>
+      Move
+    </Button>
+  </Modal.Footer>
+</Modal>
+
     </div>
 
     

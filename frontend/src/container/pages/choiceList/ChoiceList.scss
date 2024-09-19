@@ -283,3 +283,83 @@
   }
 }
 
+
+/* ChoiceList.scss or Allotments.scss */
+
+/* Common Button Styles */
+.tableCustom button {
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Up/Down Button Styles */
+.tableCustom button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.tableCustom .btn-move-up {
+  background-color: #28a745;
+  color: white;
+  margin-right: 4px;
+
+  &:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+  }
+
+  &:disabled {
+    background-color: #ccc;
+  }
+}
+
+.tableCustom .btn-move-down {
+  background-color: #007bff;
+  color: white;
+  margin-right: 4px;
+
+  &:hover {
+    background-color: #0056b3;
+    transform: translateY(2px);
+  }
+
+  &:disabled {
+    background-color: #ccc;
+  }
+}
+
+/* Move to Position Button Styles */
+.tableCustom .btn-move-to-position {
+  background-color: #17345c;
+  margin: 8px !important;
+  border: white;
+  color: rgb(255, 255, 255) !important;
+
+  &:hover {
+    background-color: #0084ff;
+    transform: scale(1.04);
+  }
+}
+
+/* Remove Button Styles */
+.tableCustom .btn-remove {
+  background-color: #dc3545;
+  color: white !important;
+
+  &:hover {
+    background-color: #c82333;
+    transform: scale(1.05) !important;
+  }
+}
+
+/* Responsive and transition effects for better interaction */
+.tableCustom button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
