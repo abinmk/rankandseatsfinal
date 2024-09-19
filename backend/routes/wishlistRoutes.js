@@ -7,6 +7,7 @@ const authMiddleware = require('../middlewares/authMiddleware');
 // router.post('/remove', wishlistController.removeFromWishlist);
 // router.get('/', wishlistController.getWishlist);
 router.post('/updateOrder',authMiddleware, wishlistController.updateWishlistOrder);
+router.post('/updatePositions', authMiddleware, wishlistController.updateWishlist);
 router.get('/filters', authMiddleware,wishlistController.getFilterOptions);
 
 router.post('/add',authMiddleware,wishlistController.addToWishlist);

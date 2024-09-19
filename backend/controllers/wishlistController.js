@@ -274,7 +274,59 @@ exports.getWishlist = async (req, res) => {
       return res.status(500).json({ message: 'Failed to fetch wishlist.', error: error.message });
     }
   };
+
+
+  exports.updateWishlist = async (req, res) => {
+    const { reorderedItems } = req.body;
+    const userId = req.user.userId;
   
+    try {
+      // Find the user
+      const user = await User.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      const { exam, counselingType } = user.selectedExams[0];
+      const formattedExam = exam.replace(/\s+/g, '_');
+      const formattedCounselingType = counselingType.replace(/\s+/g, '_');
+      const examName = `EXAM:${formattedExam}_TYPE:${formattedCounselingType}`;
+  
+      // Find the specific wishlist for this exam
+      const wishlistIndex = user.wishlist.findIndex(w => w.examName === examName);
+  
+      if (wishlistIndex === -1) {
+        return res.status(404).json({ message: 'Wishlist not found for this exam' });
+      }
+  
+      if (!reorderedItems || !Array.isArray(reorderedItems)) {
+        return res.status(400).json({ message: 'Invalid input data.' });
+      }
+  
+      // Update the items in the wishlist
+      reorderedItems.forEach((reorderedItem) => {
+        const itemIndex = user.wishlist[wishlistIndex].items.findIndex(item => item.uuid === reorderedItem.id);
+        if (itemIndex !== -1) {
+          user.wishlist[wishlistIndex].items[itemIndex].order = reorderedItem.newOrder;
+          user.wishlist[wishlistIndex].items[itemIndex].allotment.order = reorderedItem.newOrder; // Update order in the allotment object as well
+        }
+      });
+  
+      // Sort the items based on the updated order
+      user.wishlist[wishlistIndex].items.sort((a, b) => a.order - b.order);
+  
+      // Save the updated user document
+      await user.save();
+  
+      // Return the updated wishlist
+      res.status(200).json({ message: 'Order updated successfully.', wishlist: user.wishlist[wishlistIndex].items });
+  
+    } catch (error) {
+      console.error('Error updating wishlist order:', error);
+      return res.status(500).json({ message: 'Internal server error.' });
+    }
+  };
   
   
 
