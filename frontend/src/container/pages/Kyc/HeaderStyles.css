@@ -57,3 +57,51 @@
     }
   }
   
+
+  /* Custom styles for the header */
+.header {
+  background-color: #f8f9fa; /* Customize the header background */
+}
+
+.nav-link {
+  color: #333 !important;  /* Override Bootstrap link color */
+  font-weight: bold;  /* Make links bold */
+  padding: 10px 15px; /* Add some padding */
+  text-transform: uppercase; /* Make all letters uppercase */
+  transition: color 0.3s ease; /* Add a transition effect */
+}
+
+.nav-link:hover {
+  color: #ffffff !important; /* Change link color on hover */
+}
+
+.navbar-brand img {
+  height: 60px;  /* Customize the logo height */
+}
+
+.dropdown-menu {
+  background-color: #ffffff;  /* Customize dropdown background */
+  border: 1px solid #ddd;     /* Add border to dropdown */
+  border-radius: 5px;         /* Rounded corners for the dropdown */
+}
+
+.dropdown-item {
+  color: #333 !important; /* Customize dropdown item color */
+  padding: 10px 15px;     /* Add padding */
+}
+
+.dropdown-item:hover {
+  background-color: #007bff;  /* Background color on hover */
+  color: #063268 !important;  /* Text color on hover */
+}
+
+/* Media query for mobile responsiveness */
+@media (max-width: 768px) {
+  .header {
+    padding: 10px;
+  }
+  
+  .nav-link {
+    padding: 5px 10px;
+  }
+}
