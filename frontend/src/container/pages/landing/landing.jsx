@@ -21,6 +21,7 @@ import { UserContext } from "../../../contexts/UserContext";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { Margin } from "@mui/icons-material";
 
 
 const Landing = () => {
@@ -484,7 +485,9 @@ const [showProfileModal, setShowProfileModal] = useState(false);
                             <i className="bx bx-book fs-24 text-primary animate__animated animate__bounce"></i>
                         </div>
                         <h6 className="fw-semibold">NEET PG</h6>
+                   
                         <p className="text-muted">All the information you need to navigate the NEET PG counselling, under one roof.</p>
+                        <br></br>
 						<Link to={`${import.meta.env.BASE_URL}allotments/`}>
 						<Button variant="primary" size="lg" className="w-100 animate__animated animate__pulse">
 							Explore Now
@@ -496,24 +499,10 @@ const [showProfileModal, setShowProfileModal] = useState(false);
             <Col xl={3} lg={4} md={6} sm={12} className="mb-3">
                 <div className="card custom-card text-center border">
                     <Card.Body>
-                        <div className="features-icon mb-2 m-auto bg-success-transparent">
-                            <i className="bx bx-medal fs-24 text-success animate__animated animate__shakeY"></i>
-                        </div>
-                        <h6 className="fw-semibold">NEET SS</h6>
-                        <p className="text-muted">Everything you need to know to navigate the NEET SS, all in one platform.</p>
-						<Link to={`${import.meta.env.BASE_URL}allotments/`}>
-                        <Button variant="success" size="lg" className="w-100 animate__animated animate__pulse">Explore Now</Button>
-						</Link>
-                    </Card.Body>
-                </div>
-            </Col>
-            <Col xl={3} lg={4} md={6} sm={12} className="mb-3">
-                <div className="card custom-card text-center border">
-                    <Card.Body>
                         <div className="features-icon mb-2 m-auto bg-info-transparent">
                             <i className="bx bx-trophy fs-24 text-info animate__animated animate__rubberBand"></i>
                         </div>
-                        <h6 className="fw-semibold">INICET</h6>
+                        <h6 className="fw-semibold" style={{ marginBottom: '12px' }}>INICET</h6>
                         <p className="text-muted">INICET counselling made easier by bringing together everything you need to know to navigage the process.</p>
 						<Link to={`${import.meta.env.BASE_URL}allotments/`}>
                         <Button variant="info" size="lg" className="w-100 animate__animated animate__pulse">Explore Now</Button>
@@ -521,6 +510,22 @@ const [showProfileModal, setShowProfileModal] = useState(false);
                     </Card.Body>
                 </div>
             </Col>
+            <Col xl={3} lg={4} md={6} sm={12} className="mb-3">
+                <div className="card custom-card text-center border">
+                    <Card.Body>
+                        <div className="features-icon mb-2 m-auto bg-success-transparent">
+                            <i className="bx bx-medal fs-24 text-success animate__animated animate__shakeY"></i>
+                        </div>
+                        <h6 className="fw-semibold">NEET SS</h6>
+                        <p className="text-muted">Everything you need to know to navigate the NEET SS, all in one platform.</p>
+                        <br></br>
+						<Link to={`${import.meta.env.BASE_URL}allotments/`}>
+                        <Button variant="success" size="lg" className="w-100 animate__animated animate__pulse">Explore Now</Button>
+						</Link>
+                    </Card.Body>
+                </div>
+            </Col>
+          
         </div>
     </div>
 </section>
