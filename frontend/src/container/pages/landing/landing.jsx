@@ -502,7 +502,7 @@ const [showProfileModal, setShowProfileModal] = useState(false);
                         <div className="features-icon mb-2 m-auto bg-info-transparent">
                             <i className="bx bx-trophy fs-24 text-info animate__animated animate__rubberBand"></i>
                         </div>
-                        <h6 className="fw-semibold" style={{ marginBottom: '12px' }}>INICET</h6>
+                        <h6 className="fw-semibold" >INICET</h6>
                         <p className="text-muted">INICET counselling made easier by bringing together everything you need to know to navigage the process.</p>
 						<Link to={`${import.meta.env.BASE_URL}allotments/`}>
                         <Button variant="info" size="lg" className="w-100 animate__animated animate__pulse">Explore Now</Button>
