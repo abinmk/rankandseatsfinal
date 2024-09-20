@@ -183,6 +183,7 @@ exports.getFilterOptions = async (req, res) => {
     const institute = await AllotmentModel.distinct('allottedInstitute');
     const course = await AllotmentModel.distinct('course');
     const state = await AllotmentModel.distinct('instituteState');
+    const studentState = await AllotmentModel.distinct('studentState');
     const year = await AllotmentModel.distinct('admittedYear');
 
 
@@ -191,6 +192,7 @@ exports.getFilterOptions = async (req, res) => {
       year,
       institute,
       course,
+      studentState
     };
 
     // Encrypt the response data

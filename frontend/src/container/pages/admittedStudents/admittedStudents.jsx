@@ -63,6 +63,7 @@ const AdmittedStudents = () => {
       bondPenality: 'bondPenality',
       totalHospitalBeds: 'totalHospitalBeds',
       year: 'admittedYear',
+      studentState:'studentState'
     };
     return (filterKey) => filterMapping[filterKey] || filterKey;
   }, []);
