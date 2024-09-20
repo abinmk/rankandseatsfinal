@@ -40,7 +40,8 @@
 .pricing-btn {
   width: 100%;
   padding: 10px;
-  font-size: 18px;
+  z-index: 1050 !important;
+  font-size: 20px;
   animation: pulse 1.5s infinite;
   cursor: pointer;
 }
