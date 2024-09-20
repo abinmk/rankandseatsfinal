@@ -39,6 +39,21 @@ const getLastRanks = async (req, res) => {
       query.quota = Array.isArray(quotaOptions) ? { $in: quotaOptions } : quotaOptions;
     }
 
+    // Apply bond penalty range filter
+    if (bondPenaltyRange && bondPenaltyRange.min !== undefined && bondPenaltyRange.max !== undefined) {
+      query.bondPenality = {
+        $gte: Number(bondPenaltyRange.min),
+        $lte: Number(bondPenaltyRange.max)
+      };
+    }
+
+    // Apply other filters from the query params
+    for (const key in filters) {
+      if (filters[key] && filters[key].length > 0) {
+        query[key] = { $in: Array.isArray(filters[key]) ? filters[key] : [filters[key]] };
+      }
+    }
+
     // Ensure 'year' and 'round' are arrays, even if only one value is passed
     year = Array.isArray(year) ? year : [year];
     round = Array.isArray(round) ? round : [round];
