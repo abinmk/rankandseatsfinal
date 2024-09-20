@@ -484,7 +484,7 @@ const [showProfileModal, setShowProfileModal] = useState(false);
                             <i className="bx bx-book fs-24 text-primary animate__animated animate__bounce"></i>
                         </div>
                         <h6 className="fw-semibold">NEET PG</h6>
-                        <p className="text-muted">Benefit from our expert support and guidance tailored for NEET PG aspirants.</p>
+                        <p className="text-muted">All the information you need to navigate the NEET PG counselling, under one roof.</p>
 						<Link to={`${import.meta.env.BASE_URL}allotments/`}>
 						<Button variant="primary" size="lg" className="w-100 animate__animated animate__pulse">
 							Explore Now
@@ -500,9 +500,9 @@ const [showProfileModal, setShowProfileModal] = useState(false);
                             <i className="bx bx-medal fs-24 text-success animate__animated animate__shakeY"></i>
                         </div>
                         <h6 className="fw-semibold">NEET SS</h6>
-                        <p className="text-muted">Get the right support and guidance you need to succeed in NEET SS.</p>
+                        <p className="text-muted">Everything you need to know to navigate the NEET SS, all in one platform.</p>
 						<Link to={`${import.meta.env.BASE_URL}allotments/`}>
-                        <Button variant="success" size="lg" className="w-100 animate__animated animate__pulse">Get Support for NEET SS</Button>
+                        <Button variant="success" size="lg" className="w-100 animate__animated animate__pulse">Explore Now</Button>
 						</Link>
                     </Card.Body>
                 </div>
@@ -513,10 +513,10 @@ const [showProfileModal, setShowProfileModal] = useState(false);
                         <div className="features-icon mb-2 m-auto bg-info-transparent">
                             <i className="bx bx-trophy fs-24 text-info animate__animated animate__rubberBand"></i>
                         </div>
-                        <h6 className="fw-semibold">INI CET</h6>
-                        <p className="text-muted">Leverage our expertise to navigate your INI CET preparations with confidence.</p>
+                        <h6 className="fw-semibold">INICET</h6>
+                        <p className="text-muted">INICET counselling made easier by bringing together everything you need to know to navigage the process.</p>
 						<Link to={`${import.meta.env.BASE_URL}allotments/`}>
-                        <Button variant="info" size="lg" className="w-100 animate__animated animate__pulse">Get Support for INI CET</Button>
+                        <Button variant="info" size="lg" className="w-100 animate__animated animate__pulse">Explore Now</Button>
 						</Link>
                     </Card.Body>
                 </div>
@@ -570,7 +570,7 @@ const [showProfileModal, setShowProfileModal] = useState(false);
             </div>
             <h6 className="fw-semibold mx-1">Previous Year Allotments</h6>
             <p className="text-muted mb-2 mx-1 text-justify">
-              Tailored guidance to ensure you navigate through your educational journey efficiently.
+            All India and state allotment details of the last 3 years listed for you in a comprehensible manner. Alloted quota, candidate category or seat type- you name it and we have it.
             </p>
             <Link className="fs-12 mt-auto text-primary" to={`${import.meta.env.BASE_URL}allotments/`}>
               Read More<i className="ri-arrow-right-s-line align-middle"></i>
@@ -626,7 +626,7 @@ const [showProfileModal, setShowProfileModal] = useState(false);
             </div>
             <h6 className="fw-semibold mx-1">Info on Institutes</h6>
             <p className="text-muted mb-2 mx-1 text-justify">
-			Get a look into all the participating insitutes of All India and State counsellings. Bed strength, nearest railway stations, and airports are important information that will impact your choice and do not want to miss out on.
+			Get a look into all the participating insitute of All India and State counsellings. Bed strength, nearest railway stations, and airports are important information that will impact your choice and do not want to miss out on.
             </p>
             <Link className="fs-12 mt-auto text-primary" to={`${import.meta.env.BASE_URL}allotments/`}>
               Read More<i className="ri-arrow-right-s-line align-middle"></i>
@@ -680,7 +680,7 @@ const [showProfileModal, setShowProfileModal] = useState(false);
             </div>
             <h6 className="fw-semibold mx-1">Your Choice Wishlist</h6>
             <p className="text-muted mb-2 mx-1 text-justify">
-			8. List your favourite course in your preferred colleges and let the confusion end. Sort through them as you wish and have your choice list ready for the real choice filling.
+			List your favourite course in your preferred colleges and let the confusion end. Sort through them as you wish and have your choice list ready for the real choice filling.
             </p>
             <Link className="fs-12 mt-auto text-primary" to={`${import.meta.env.BASE_URL}allotments/`}>
               Read More<i className="ri-arrow-right-s-line align-middle"></i>

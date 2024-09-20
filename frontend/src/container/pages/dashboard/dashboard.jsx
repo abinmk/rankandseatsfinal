@@ -10,12 +10,12 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 // Sample data for Cards section
 const Cardsdata = [
-  { title: "Institutes", text1: "1753", icon1: "fe fe-home", color1: "primary", color2: "primary", text2: "View More" },
-  { title: "MD/MS Seats", text1: "45866", icon1: "fe fe-book-open", color1: "success", color2: "success", text2: "View More" },
-  { title: "DNB Seats", text1: "5275", icon1: "fe fe-book", color1: "info", color2: "info", text2: "View More" },
-  { title: "Diploma Seats", text1: "3890", icon1: "fe fe-award", color1: "warning", color2: "warning", text2: "View More" },
-  { title: "Govt MD/MS Seats", text1: "25218", icon1: "fe fe-shield", color1: "danger", color2: "danger", text2: "View More" },
-  { title: "Deemed Seats", text1: "5536", icon1: "fe fe-briefcase", color1: "secondary", color2: "secondary", text2: "View More" },
+  { title: "Institutes", text1: "1753", icon1: "fe fe-home", color1: "primary",color2: "success"  },
+  { title: "MD/MS Seats", text1: "45866", icon1: "fe fe-book-open", color1: "success", color2: "success",},
+  { title: "DNB Seats", text1: "5275", icon1: "fe fe-book", color1: "info", color2: "info", },
+  { title: "Diploma Seats", text1: "3890", icon1: "fe fe-award", color1: "warning", color2: "warning", },
+  { title: "Govt MD/MS Seats", text1: "25218", icon1: "fe fe-shield", color1: "danger", color2: "danger", },
+  { title: "Deemed Seats", text1: "5536", icon1: "fe fe-briefcase", color1: "secondary", color2: "secondary",  },
 ];
 
 const Sales = () => {
@@ -219,7 +219,7 @@ const Sales = () => {
                   </div>
                   <div className="d-flex mt-2">
                     <span className={`badge bg-${card.color2}-transparent rounded-pill`}>{card.text2}</span>
-                    <Link to="#" className="text-muted fs-11 ms-auto text-decoration-underline mt-auto">view more</Link>
+                    {/* <Link to="#" className="text-muted fs-11 ms-auto text-decoration-underline mt-auto">view more</Link> */}
                   </div>
                 </Card.Body>
               </Card>

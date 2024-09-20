@@ -20,7 +20,7 @@ const logo = (
 // Default Menu Items without the logo
 const defaultMenuItems = [
     {
-        title: "Dashboards",
+        title: "Dashboard",
         icon: icon1,
         path: `${import.meta.env.BASE_URL}dashboards`,
         type: "link",
