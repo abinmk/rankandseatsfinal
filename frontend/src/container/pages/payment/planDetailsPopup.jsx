@@ -5,7 +5,7 @@ import './PlanDetailsPopup.scss';
 const PlanDetailsPopup = ({ show, handleClose, handlePaymentProceed }) => {
   return (
     <Modal show={show} onHide={handleClose} centered fullscreen="md-down" className="plan-details-popup">
-      <Modal.Header closeButton className="modal-header-custom">
+      <Modal.Header closeButton className="modal-header-custom btn-closenew">
         <Modal.Title className="fw-semibold text-white">NEET PG 2024 Plan Details</Modal.Title>
       </Modal.Header>
       <Modal.Body className="modal-body-custom p-4">
