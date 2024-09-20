@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import { Link } from 'react-router-dom';
+import "./nav.scss";
 
 const Navbar1 = () => {
 	const onScroll = () => {
@@ -73,18 +75,8 @@ const Navbar1 = () => {
 					</a>
 				</li>
 				<li className="slide">
-					<a href="#about" className="side-menu__item">
-						<span className="side-menu__label">About Us</span>
-					</a>
-				</li>
-				<li className="slide">
 					<a href="#pricing" className="side-menu__item">
 						<span className="side-menu__label">Pricing</span>
-					</a>
-				</li>
-				<li className="slide">
-					<a href="#contact" className="side-menu__item">
-						<span className="side-menu__label">Contact Us</span>
 					</a>
 				</li>
 			</ul>
