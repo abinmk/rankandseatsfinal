@@ -44,6 +44,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'; 
 import SeatMatrix from "./container/pages/seatMatrix/seatMatrix.jsx";
 import AdmittedStudents from "./container/pages/admittedStudents/admittedStudents.jsx";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
