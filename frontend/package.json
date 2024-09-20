@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build --emptyOutDir",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "postcss": "sass ./src/assets/scss/styles.scss ./src/assets/css/styles.css && postcss ./src/assets/css/styles.css -o ./src/assets/css/styles.css",

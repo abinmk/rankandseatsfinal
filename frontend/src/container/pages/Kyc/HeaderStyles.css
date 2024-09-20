@@ -66,7 +66,7 @@
 .nav-link {
   color: #333 !important;  /* Override Bootstrap link color */
   font-weight: bold;  /* Make links bold */
-  padding: 10px 15px; /* Add some padding */
+  padding: 10px 15px !important; /* Add some padding */
   text-transform: uppercase; /* Make all letters uppercase */
   transition: color 0.3s ease; /* Add a transition effect */
 }
@@ -87,7 +87,7 @@
 
 .dropdown-item {
   color: #333 !important; /* Customize dropdown item color */
-  padding: 10px 15px;     /* Add padding */
+  padding: 10px 15px !important;     /* Add padding */
 }
 
 .dropdown-item:hover {
