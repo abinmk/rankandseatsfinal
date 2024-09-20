@@ -5,7 +5,7 @@ const AdmittedStudentsSchema = new mongoose.Schema({
     instituteState: { type: String, required: true },
     allottedInstitute: { type: String, required: true },
     course: { type: String, required: true },
-    studentName: { type: String, required: true },
+    studentName: { type: String, required: false },
     studentState: { type: String, required: true },
     admittedBy: { type: String, required: true },
 });

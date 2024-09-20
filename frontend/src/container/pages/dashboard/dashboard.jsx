@@ -5,6 +5,7 @@ import axiosInstance from '../utils/axiosInstance'; // Assuming axiosInstance is
 import { FaTrash } from 'react-icons/fa';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import axios from "axios";
+import './Dashboard.css';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -42,31 +43,35 @@ const Sales = () => {
     fetchEvents();
   }, []);
 
-  const filterEvents = useCallback(
-    (filterType) => {
-      const now = new Date();
-      let filtered;
-      if (filterType === "today") {
-        filtered = events.filter((event) => {
-          const eventDate = new Date(event.date);
-          return (
-            eventDate.getDate() === now.getDate() &&
-            eventDate.getMonth() === now.getMonth() &&
-            eventDate.getFullYear() === now.getFullYear()
-          );
+  const filterEvents = (filterType) => {
+    let filteredList = [];
+  
+    switch (filterType) {
+      case "today":
+        filteredList = events.filter(event => {
+          const eventDate = new Date(event.date).setHours(0, 0, 0, 0);
+          const today = new Date().setHours(0, 0, 0, 0);
+          return eventDate === today;
         });
-      } else if (filterType === "upcoming") {
-        filtered = events.filter((event) => new Date(event.date) > now);
-      } else if (filterType === "past") {
-        filtered = events.filter((event) => new Date(event.date) < now);
-      } else {
-        filtered = events;
-      }
-      setFilteredEvents(filtered);
-      setFilter(filterType);
-    },
-    [events]
-  );
+        break;
+      case "upcoming":
+        filteredList = events.filter(event => new Date(event.date) >= new Date());
+        break;
+      case "past":
+        filteredList = events.filter(event => new Date(event.date) < new Date());
+        break;
+      case "all":
+      default:
+        filteredList = events;
+        break;
+    }
+  
+    // Sort events by date, latest first
+    filteredList.sort((a, b) => new Date(b.date) - new Date(a.date));
+  
+    setFilteredEvents(filteredList);
+    setFilter(filterType);
+  };
 
   useEffect(() => {
     filterEvents(filter);
@@ -230,185 +235,197 @@ const Sales = () => {
         <Row>
           {/* Information Alert Section */}
           <Col xl={6} lg={12} className="mb-4">
-            <Card className="custom-card h-100 shadow-sm">
-              <Card.Header className="text-start">
-                <Card.Title>Information Alert</Card.Title>
-              </Card.Header>
-              <Card.Body className="overflow-auto" style={{ maxHeight: "300px" }}>
-                <div dangerouslySetInnerHTML={{ __html: informationAlert }} />
-              </Card.Body>
-            </Card>
-          </Col>
+  <Card className="custom-card h-100 shadow-sm">
+    <Card.Header className="custom-card-header text-start">
+      <Card.Title className="custom-card-title"> 📢 Information Alert</Card.Title>
+    </Card.Header>
+    <Card.Body className="overflow-auto" style={{ maxHeight: "300px" }}>
+      <div dangerouslySetInnerHTML={{ __html: informationAlert }} />
+    </Card.Body>
+  </Card>
+</Col>
 
-          {/* My Choice Wishlist Section */}
-          <Col xl={6} lg={12} className="mb-4">
-            <Card className="custom-card h-100 shadow-sm">
-              <Card.Header className="text-start">
-                <Card.Title>My Choice Wishlist</Card.Title>
-              </Card.Header>
-              <Card.Body className="overflow-auto" style={{ maxHeight: "300px" }}>
-                {loading ? (
-                  <div className="text-center">
-                    <Spinner animation="border" />
-                  </div>
-                ) : (
-                  <DragDropContext onDragEnd={onDragEnd}>
-                    <Droppable droppableId="choices">
-                      {(provided) => (
-                        <div
-                          className="choice-list-table-wrapper"
-                          {...provided.droppableProps}
-                          ref={provided.innerRef}
-                        >
-                          <Table striped bordered hover className="choice-list-table">
-                            <thead style={{ backgroundColor: "#f8f9fa" }}>
-                              <tr>
-                                <th className="text-start">Sl. No.</th>
-                                <th className="text-start">Institute</th>
-                                <th className="text-start">Course</th>
-                                <th className="text-start">Category</th>
-                                <th className="text-start">Remove</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {choiceList.map((item, index) => (
-                                <Draggable
-                                  key={item.allotmentId}
-                                  draggableId={item.allotmentId}
-                                  index={index}
-                                >
-                                  {(provided) => (
-                                    <tr
-                                      ref={provided.innerRef}
-                                      {...provided.draggableProps}
-                                      {...provided.dragHandleProps}
-                                      style={{
-                                        ...provided.draggableProps.style,
-                                        backgroundColor: index % 2 === 0 ? "#f2f2f2" : "#ffffff",
-                                      }}
-                                    >
-                                      <td className="text-start">{index + 1}</td>
-                                      <td className="text-start">{item.allotment.allottedInstitute}</td>
-                                      <td className="text-start">{item.allotment.course}</td>
-                                      <td className="text-start">{item.allotment.allottedCategory}</td>
-                                      <td className="text-start">
-                                        <Button
-                                          variant="outline-danger"
-                                          className="delete-button"
-                                          onClick={() => handleDelete(item.allotmentId)}
-                                        >
-                                          <FaTrash />
-                                        </Button>
-                                      </td>
-                                    </tr>
-                                  )}
-                                </Draggable>
-                              ))}
-                              {provided.placeholder}
-                            </tbody>
-                          </Table>
-                        </div>
-                      )}
-                    </Droppable>
-                  </DragDropContext>
-                )}
-              </Card.Body>
-            </Card>
-          </Col>
-
-          {/* Alerts & Announcements Section */}
-          <Col xl={6} lg={12} className="mb-4">
-            <Card className="custom-card h-100 shadow-sm">
-              <Card.Header className="text-start">
-                <Card.Title>Alerts & Announcements</Card.Title>
-              </Card.Header>
-              <Card.Body className="overflow-auto" style={{ maxHeight: "300px" }}>
-                <Table responsive className="table-striped table-hover text-nowrap mb-0">
-                  <thead className="thead-dark" style={{ backgroundColor: "#343a40", color: "#fff" }}>
+{/* My Choice Wishlist Section */}
+<Col xl={6} lg={12} className="mb-4">
+  <Card className="custom-card h-100 shadow-sm">
+    <Card.Header className="custom-card-header text-start">
+      <Card.Title className="custom-card-title"> ❤️ My Choice Wishlist</Card.Title>
+    </Card.Header>
+    <Card.Body className="overflow-auto" style={{ maxHeight: "300px" }}>
+      {loading ? (
+        <div className="text-center">
+          <Spinner animation="border" />
+        </div>
+      ) : (
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="choices">
+            {(provided) => (
+              <div
+                className="choice-list-table-wrapper"
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+              >
+                <Table striped bordered hover className="choice-list-table">
+                  <thead className="thead-dark custom-thead">
                     <tr>
-                      <th className="text-start">Date</th>
-                      <th className="text-start">Counseling Type</th>
-                      <th className="text-start">Title</th>
-                      <th className="text-start">Details</th>
-                      <th className="text-start">Call to Action</th>
+                      <th className="text-start">Sl. No.</th>
+                      <th className="text-start">Institute</th>
+                      <th className="text-start">Course</th>
+                      <th className="text-start">Category</th>
+                      <th className="text-start">Remove</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {alerts.map((alert, index) => (
-                      <tr
-                        key={index}
-                        style={{
-                          backgroundColor: index % 2 === 0 ? "#f8f9fa" : "#ffffff",
-                        }}
+                    {choiceList.map((item, index) => (
+                      <Draggable
+                        key={item.allotmentId}
+                        draggableId={item.allotmentId}
+                        index={index}
                       >
-                        <td className="text-start">{new Date(alert.date).toLocaleDateString()}</td>
-                        <td className="text-start">{alert.counselingType}</td>
-                        <td className="text-start">{alert.title}</td>
-                        <td className="text-start">{alert.details}</td>
-                        <td className="text-start">
-                        <a href={alert.callToAction} target="_blank" rel="noopener noreferrer">
-                          {alert.callToActionText || 'Click Here'}
-                        </a>
-                      </td>
-                      </tr>
+                        {(provided) => (
+                          <tr
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            style={{
+                              ...provided.draggableProps.style,
+                              backgroundColor: index % 2 === 0 ? "#f2f2f2" : "#ffffff",
+                            }}
+                          >
+                            <td className="text-start">{index + 1}</td>
+                            <td className="text-start">{item.allotment.allottedInstitute}</td>
+                            <td className="text-start">{item.allotment.course}</td>
+                            <td className="text-start">{item.allotment.allottedCategory}</td>
+                            <td className="text-start">
+                              <Button
+                                variant="outline-danger"
+                                className="delete-button"
+                                onClick={() => handleDelete(item.allotmentId)}
+                              >
+                                <FaTrash />
+                              </Button>
+                            </td>
+                          </tr>
+                        )}
+                      </Draggable>
                     ))}
+                    {provided.placeholder}
                   </tbody>
                 </Table>
-              </Card.Body>
-            </Card>
-          </Col>
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+      )}
+    </Card.Body>
+  </Card>
+</Col>
 
-          {/* Events Section */}
           <Col xl={6} lg={12} className="mb-4">
-            <Card className="custom-card h-100 shadow-sm">
-              <Card.Header className="text-start">
-                <Card.Title>Events</Card.Title>
-              </Card.Header>
-              <Card.Body className="overflow-auto" style={{ maxHeight: "300px" }}>
-                <div className="d-flex justify-content-start mb-3">
-                  <Button variant={filter === "today" ? "primary" : "outline-primary"} onClick={() => filterEvents("today")}>
-                    Today
-                  </Button>
-                  <Button variant={filter === "upcoming" ? "primary" : "outline-primary"} className="ms-2" onClick={() => filterEvents("upcoming")}>
-                    Upcoming
-                  </Button>
-                  <Button variant={filter === "past" ? "primary" : "outline-primary"} className="ms-2" onClick={() => filterEvents("past")}>
-                    Past
-                  </Button>
-                  <Button variant={filter === "all" ? "primary" : "outline-primary"} className="ms-2" onClick={() => filterEvents("all")}>
-                    All
-                  </Button>
-                </div>
-                {filteredEvents.length > 0 ? (
-                  <Table responsive striped bordered hover>
-                    <thead style={{ backgroundColor: "red" }}>
-                      <tr>
-                        <th className="text-start">Date</th>
-                        <th className="text-start">Counseling Type</th>
-                        <th className="text-start">Title</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {filteredEvents.map((event, index) => (
-                        <tr
-                          key={index}
-                          style={{
-                            backgroundColor: index % 2 === 0 ? "#f2f2f2" : "#ffffff",
-                          }}
-                        >
-                          <td className="text-start">{new Date(event.date).toLocaleDateString()}</td>
-                          <td className="text-start">{event.counselingType}</td>
-                          <td className="text-start">{event.title}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                ) : (
-                  <p>No events available.</p>
-                )}
-              </Card.Body>
-            </Card>
-          </Col>
+  <Card className="custom-card h-100 shadow-sm custom-alerts-card">
+    <Card.Header className="text-start custom-card-header">
+      <Card.Title className="custom-card-title">🚨 Alerts & Announcements</Card.Title>
+    </Card.Header>
+    <Card.Body className="overflow-auto" style={{ maxHeight: "300px" }}>
+      <Table responsive className="table-striped table-hover text-nowrap mb-0">
+        <thead className="thead-dark custom-thead">
+          <tr>
+            <th className="text-start">📅 Date</th>
+            <th className="text-start">📝 Counseling Type</th>
+            <th className="text-start">🔔 Title</th>
+            <th className="text-start">📝 Details</th>
+            <th className="text-start">🔗 Call to Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {alerts
+            .sort((a, b) => new Date(b.date) - new Date(a.date))
+            .map((alert, index) => (
+              <tr
+                key={index}
+                className={`custom-alert-row ${index % 2 === 0 ? "even-row" : "odd-row"}`}
+              >
+                <td className="text-start">{new Date(alert.date).toLocaleDateString()}</td>
+                <td className="text-start">{alert.counselingType}</td>
+                <td className="text-start">{alert.title}</td>
+                <td className="text-start">{alert.details}</td>
+                <td className="text-start">
+                  <a href={alert.callToAction} target="_blank" rel="noopener noreferrer" className="custom-link">
+                    {alert.callToActionText || 'Click Here'}
+                  </a>
+                </td>
+              </tr>
+            ))}
+        </tbody>
+      </Table>
+    </Card.Body>
+  </Card>
+</Col>
+
+<Col xl={6} lg={12} className="mb-4">
+  <Card className="custom-card h-100 shadow-sm custom-events-card">
+    <Card.Header className="text-start custom-card-header">
+      <Card.Title className="custom-card-title">📅 Events</Card.Title>
+    </Card.Header>
+    <Card.Body className="overflow-auto" style={{ maxHeight: "350px" }}>
+      <div className="d-flex justify-content-start mb-3">
+        <Button
+          variant={filter === "today" ? "primary" : "outline-primary"}
+          className="custom-filter-btn"
+          onClick={() => filterEvents("today")}
+        >
+          Today
+        </Button>
+        <Button
+          variant={filter === "upcoming" ? "primary" : "outline-primary"}
+          className="ms-2 custom-filter-btn"
+          onClick={() => filterEvents("upcoming")}
+        >
+          Upcoming
+        </Button>
+        <Button
+          variant={filter === "past" ? "primary" : "outline-primary"}
+          className="ms-2 custom-filter-btn"
+          onClick={() => filterEvents("past")}
+        >
+          Past
+        </Button>
+        <Button
+          variant={filter === "all" ? "primary" : "outline-primary"}
+          className="ms-2 custom-filter-btn"
+          onClick={() => filterEvents("all")}
+        >
+          All
+        </Button>
+      </div>
+      {filteredEvents.length > 0 ? (
+        <Table responsive striped bordered hover className="custom-event-table">
+          <thead className="custom-thead">
+            <tr>
+              <th className="text-start">📅 Date</th>
+              <th className="text-start">📝 Counseling Type</th>
+              <th className="text-start">🔔 Title</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredEvents.map((event, index) => (
+              <tr
+                key={index}
+                className={`event-row ${index % 2 === 0 ? "even-row" : "odd-row"}`}
+              >
+                <td className="text-start">{new Date(event.date).toLocaleDateString()}</td>
+                <td className="text-start">{event.counselingType}</td>
+                <td className="text-start">{event.title}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      ) : (
+        <p className="text-center text-muted">No events available.</p>
+      )}
+    </Card.Body>
+  </Card>
+</Col>
         </Row>
       </Container>
 

@@ -1,102 +1,97 @@
-/* Global Styles */
-body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #f5f6fa;
-    color: #333;
-    margin: 0;
-    padding: 0;
-  }
-  
-  /* Cards */
-  .custom-card {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border: none;
-    transition: box-shadow 0.3s ease;
-  }
-  
-  .custom-card:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-  }
-  
-  .custom-card h3 {
-    font-size: 24px;
-    margin-bottom: 10px;
-  }
-  
-  /* Buttons */
-  button {
-    border-radius: 4px;
-    padding: 10px 20px;
-    font-size: 14px;
-    border: none;
-    transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #007bff;
-    color: #fff;
-  }
-  
-  /* Tables */
-  .table {
-    border-collapse: separate;
-    border-spacing: 0 15px;
-    margin: 20px 0;
-  }
-  
-  .table thead th {
-    background-color: #007bff;
-    color: #fff;
-    padding: 12px;
-    border: none;
-  }
-  
-  .table tbody tr {
-    background-color: #fff;
-    border-radius: 8px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .table tbody tr:hover {
-    background-color: #f1f1f1;
-  }
-  
-  .table td {
-    padding: 12px;
-    border-top: 1px solid #e9ecef;
-  }
-  
-  /* Modals */
-  .modal-header {
-    border-bottom: none;
-    padding-bottom: 10px;
-  }
-  
-  .modal-footer {
-    border-top: none;
-    padding-top: 10px;
-  }
-  
-  .modal-body {
-    padding-top: 0;
-  }
-  
-  /* Alerts */
-  .alert {
-    background-color: #007bff;
-    color: #fff;
-    border-radius: 4px;
-    padding: 15px;
-    margin-bottom: 20px;
-  }
-  
-  /* Forms */
-  .form-control {
-    border-radius: 4px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-  }
-  
+/* General Card Styles */
+.custom-card {
+  background-color: white !important;
+  border-radius: 12px !important;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.custom-card:hover {
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2) !important;
+}
+
+.custom-card-header {
+  background-color: #2a557c !important;
+  color: white !important;
+  border-bottom: 3px solid #fff !important;
+  padding: 1rem !important;
+}
+
+.custom-card-title {
+  font-size: 1.5rem !important;
+  font-weight: bold !important;
+  letter-spacing: 1px !important;
+  color: rgb(12, 38, 99) !important;
+}
+
+/* Table Header Styling */
+.thead-dark {
+  background-color: #2a557c !important;
+  color: white !important;
+  font-weight: bold !important;
+  padding: 10px !important;
+}
+
+.custom-thead {
+  background-color: #2a557c !important;
+  color: white !important;
+  font-weight: bold !important;
+}
+
+/* Row Styling */
+tbody tr:nth-of-type(odd) {
+  background-color: rgba(23, 52, 92, 0.05) !important;
+}
+
+tbody tr:nth-of-type(even) {
+  background-color: rgba(23, 52, 92, 0.1) !important;
+}
+
+tbody tr:hover {
+  background-color: rgba(23, 52, 92, 0.2) !important;
+}
+
+/* Custom Button for Remove */
+.delete-button {
+  color: #ff4d4d !important;
+}
+
+.delete-button:hover {
+  background-color: #ff4d4d !important;
+  color: white !important;
+}
+
+/* Drag and Drop Effects */
+.choice-list-table-wrapper {
+  margin-top: 15px !important;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(23, 52, 92, 0.2) !important;
+}
+
+/* Spinners */
+.spinner-border {
+  width: 2rem !important;
+  height: 2rem !important;
+  color: #2a557c !important;
+}
+
+/* Adjust Scroll Bar */
+.overflow-auto {
+  max-height: 300px !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: #2a557c #f2f2f2 !important;
+}
+
+.overflow-auto::-webkit-scrollbar {
+  width: 8px;
+}
+
+.overflow-auto::-webkit-scrollbar-track {
+  background-color: #f2f2f2;
+}
+
+.overflow-auto::-webkit-scrollbar-thumb {
+  background-color: #2a557c;
+  border-radius: 4px;
+}
