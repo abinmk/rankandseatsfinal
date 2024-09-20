@@ -66,8 +66,11 @@ const LastRank = () => {
 
   const buildFilterParams = (filters) => {
     const params = {};
+  
     Object.keys(filters).forEach((filterKey) => {
       const filterValue = filters[filterKey];
+  
+      // Handle filters for range (min/max)
       if (typeof filterValue === 'object' && filterValue !== null && !Array.isArray(filterValue)) {
         if (filterValue.min !== undefined) {
           params[`${getFilterParamName(filterKey)}[min]`] = filterValue.min;
@@ -75,12 +78,23 @@ const LastRank = () => {
         if (filterValue.max !== undefined) {
           params[`${getFilterParamName(filterKey)}[max]`] = filterValue.max;
         }
-      } else if (Array.isArray(filterValue) && filterValue.length > 0) {
-        params[getFilterParamName(filterKey)] = filterValue;
-      } else if (filterValue !== undefined && filterValue !== null && filterValue !== '') {
+      } 
+      // Handle array filters (year, round) by appending multiple values
+      else if (Array.isArray(filterValue) && filterValue.length > 0) {
+        // Create multiple key-value pairs for array items (e.g., year=2022&year=2023)
+        filterValue.forEach((value) => {
+          if (!params[getFilterParamName(filterKey)]) {
+            params[getFilterParamName(filterKey)] = [];
+          }
+          params[getFilterParamName(filterKey)].push(value);  // Append each value to the array
+        });
+      } 
+      // Handle other filters
+      else if (filterValue !== undefined && filterValue !== null && filterValue !== '') {
         params[getFilterParamName(filterKey)] = filterValue;
       }
     });
+  
     return params;
   };
 

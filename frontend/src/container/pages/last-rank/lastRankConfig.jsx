@@ -1,6 +1,6 @@
 export const LastRankColumns = (data, handleDetailClick) => {
   const years = Object.keys(data[0]?.years || {}).sort((a, b) => b - a).slice(0, 3); // Get the latest 3 years
-  const rounds = ['1', '2', '3', '4'];
+  const rounds = ['1', '2', '3', '4','5'];
 
   const columns = [
     { Header: 'Alloted Quota', accessor: 'quota' },

@@ -6,6 +6,7 @@ const { MongoClient } = require('mongodb');
 const fs = require('fs');
 const Seat = require('../models/Seats'); // Adjust the path if needed
 const AdmittedStudents = require('../models/AdmittedStudents'); // Adjust the path if needed
+const AvailableFilters = require('../models/AvailableFilters'); // Adjust the path if needed
 
 
 let clients = [];
@@ -566,6 +567,8 @@ const generateCombinedDataset = async (req, res) => {
     const { examName, rounds, examType, counselingType } = req.body;
 
     let combinedAllotments = [];
+    let availableYears = new Set();  // To store available years
+    let availableRounds = new Set(); // To store available rounds
 
     // Fetch and combine allotments data from all rounds
     for (let round of rounds) {
@@ -675,6 +678,9 @@ const generateCombinedDataset = async (req, res) => {
       const allottedKey = allotment.allottedCategory.trim().toLowerCase();
       const feeKey = `${collegeKey}_${courseKey}_${quotaKey}_${allottedKey}`;
       const feeDataKey = `${collegeKey}_${courseKey}_${quotaKey}`;
+
+      availableYears.add(allotment.year); // Track available years
+      availableRounds.add(allotment.round); // Track available rounds
 
       if (!lastRankMap[feeKey]) {
         const fee = feeMap[feeDataKey] || {};
@@ -970,13 +976,29 @@ const generateCombinedDataset = async (req, res) => {
 
     await batchInsert(GeneratedExamModel, generatedExamData);
 
+    const availableYearArray = Array.from(availableYears).sort((a, b) => b - a);
+    const availableRoundArray = Array.from(availableRounds).sort((a, b) => a - b);
+
+    const filterData = {
+      examName: examName,
+      availableYears: availableYearArray,
+      availableRounds: availableRoundArray,
+    };
+    
+    await AvailableFilters.findOneAndUpdate(
+      { examName: examName }, // Find the document with the same examName
+      filterData,             // Update the years and rounds
+      { upsert: true, new: true }  // If no document is found, insert a new one (upsert)
+    );
+
     // Return all the generated data
     res.json({
       lastRankResult,
       feeResultData,
       collegeResultData,
       courseResultData,
-      // fullCollegeResultData,
+      availableYearArray,
+      availableRoundArray,
       generatedExamData,
     });
   } catch (error) {
