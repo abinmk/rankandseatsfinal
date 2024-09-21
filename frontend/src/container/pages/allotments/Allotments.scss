@@ -1024,31 +1024,31 @@
 /* Modal container */
 .view-more-modal .modal-content {
   border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
 }
 
 /* Search box */
 .filter-search {
-  width: 100%;
-  padding: 10px 15px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  transition: border-color 0.2s ease;
+  width: 100% !important;
+  padding: 10px 15px !important;
+  border: 1px solid #ccc !important;
+  border-radius: 8px !important;
+  transition: border-color 0.2s ease !important;
 }
 
 .filter-search:focus {
-  border-color: #17345c;
-  outline: none;
-  box-shadow: 0 0 5px rgba(23, 52, 92, 0.2);
+  border-color: #17345c !important;
+  outline: none !important;
+  box-shadow: 0 0 5px rgba(23, 52, 92, 0.2) !important;
 }
 
 /* Options list container */
 .filter-options-list {
-  max-height: 300px;
-  overflow-y: auto;
-  padding: 0;
-  margin: 0;
-  list-style: none;
+  max-height: 300px !important;
+  overflow-y: auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  list-style: none !important;
 }
 
 /* Each option item */
@@ -1065,7 +1065,6 @@
 
 .filter-option:hover {
   background-color: #e6ecf2;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
 .filter-option.selected {
@@ -1073,53 +1072,49 @@
   border-left: 4px solid #17345c;
 }
 
-.filter-option.selected:hover {
-  background-color: #bbc7db;
-}
-
 /* Checkbox styling */
 .form-check-input {
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
-  border-radius: 50%;
-  transition: all 0.2s ease;
+  width: 20px !important;
+  height: 20px !important;
+  margin-right: 10px !important;
+  // border-radius: 50% !important;
+  transition: all 0.2s ease !important;
 }
 
 .form-check-input:checked {
-  background-color: #17345c;
-  border-color: #17345c;
+  background-color: #17345c !important;
+  border-color: #17345c !important;
 }
 
 .form-check-label {
-  font-size: 16px;
-  margin-left: 10px;
+  font-size: 16px !important;
+  margin-left: 10px !important;
 }
 
 /* Clear button */
 .clear-category-btn {
-  margin-top: 20px;
-  font-weight: bold;
-  color: #17345c;
-  text-decoration: none;
-  padding-left: 0;
-  transition: color 0.2s ease;
+  margin-top: 20px !important;
+  font-weight: bold !important;
+  color: #17345c !important;
+  text-decoration: none !important;
+  padding-left: 0 !important;
+  transition: color 0.2s ease !important;
 }
 
 .clear-category-btn:hover {
-  color: #0e2544;
+  color: #0e2544 !important;
 }
 
 /* Modal Footer Button */
 .modal-footer .btn-secondary {
-  background-color: #17345c;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  transition: background-color 0.2s ease;
-  color: white;
+  background-color: #17345c !important;
+  border: none !important;
+  padding: 10px 20px !important;
+  border-radius: 8px !important;
+  transition: background-color 0.2s ease !important;
+  color: white !important;
 }
 
 .modal-footer .btn-secondary:hover {
-  background-color: #0e2544;
+  background-color: #0e2544 !important;
 }
