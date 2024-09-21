@@ -488,9 +488,6 @@ const watermarkBase64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAABCC
         <div className={`table-container ${showResult ? "" : ""}`} >
           <div>
             <span className='allotments-header'>{headerTitle}</span>
-            {/* <Button variant="primary" className="column-toggle-btn" onClick={() => setShowColumnModal(true)}>
-              View/Hide Columns
-            </Button> */}
             <button className="print-pdf-btn" onClick={printToPDF}>
               <FaDownload />
             </button>

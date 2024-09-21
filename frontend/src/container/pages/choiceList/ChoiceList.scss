@@ -363,3 +363,13 @@
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
 }
 
+@media only screen and (max-width: 768px) {
+  .print-pdf-btn {
+    font-size: 14px !important; /* Ensure a smaller but visible font size */
+    padding: 6px;
+  }
+
+  .print-pdf-btn svg {
+    font-size: 18px; /* Adjust icon size for smaller screens */
+  }
+}
