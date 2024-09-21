@@ -1,9 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const AdminBro = require('admin-bro');
-const AdminBroExpress = require('@admin-bro/express');
-const AdminBroMongoose = require('@admin-bro/mongoose');
 const path = require('path');
 const bodyParser = require('body-parser');
 require('dotenv').config();
@@ -71,8 +68,6 @@ mongoose.connect(db, {
 .then(async () => {
   console.log('MongoDB connected');
 
-  // AdminJS (formerly AdminBro) setup
-  AdminBro.registerAdapter(AdminBroMongoose);
 
   const userSchema = new mongoose.Schema({
     name: { type: String, required: true },
@@ -158,84 +153,6 @@ mongoose.connect(db, {
   }
 
   const collections = await mongoose.connection.db.listCollections().toArray();
-  const roundResources = collections.filter(col => col.name.match(/^\w+_\w+_\d{4}_\w+$/)).map(col => {
-    const [exam, examType, year, round] = col.name.split('_');
-    const schema = new mongoose.Schema({
-      examName: String,
-      year: String,
-      round: String,
-      rank: Number,
-      allottedQuota: String,
-      allottedInstitute: String,
-      course: String,
-      allottedCategory: String,
-      candidateCategory: String
-    }, { strict: false });
-
-    let model;
-    try {
-      model = mongoose.model(col.name);
-    } catch (error) {
-      if (error.name === 'MissingSchemaError') {
-        model = mongoose.model(col.name, schema, col.name);
-      } else {
-        throw error;
-      }
-    }
-
-    let parentCategory;
-    if (exam === 'NEET' && examType === 'PG') {
-      if (col.name.includes('ALL_INDIA')) {
-        parentCategory = 'NEET_PG_ALL_INDIA';
-      } else if (col.name.includes('STATE')) {
-        parentCategory = 'NEET_PG_STATE';
-      }
-    } else if (exam === 'NEET' && examType === 'SS') {
-      parentCategory = 'NEET_SS';
-    } else if (exam === 'INI' && examType === 'CET') {
-      parentCategory = 'INI_CET';
-    } else {
-      parentCategory = `${exam}_${examType}`;
-    }
-
-    return {
-      resource: model,
-      options: {
-        navigation: {
-          name: parentCategory,
-          icon: 'Document'
-        },
-        properties: { _id: { isVisible: false } },
-        actions: {
-          deleteByCategory: {
-            actionType: 'resource',
-            icon: 'Delete',
-            handler: async (request, response, context) => {
-              const { category } = request.payload;
-              if (category) {
-                await model.deleteMany({ category });
-                return {
-                  redirectUrl: context.h.resourceUrl(),
-                  notice: {
-                    message: `All records with category ${category} have been deleted.`,
-                    type: 'success'
-                  }
-                };
-              } else {
-                return {
-                  notice: {
-                    message: 'Category is required to delete records.',
-                    type: 'error'
-                  }
-                };
-              }
-            },
-            component: AdminBro.bundle(path.join(__dirname, 'components/DeleteByCategory')),
-          }
-        }
-      }
-    };
-  });
 
   const generatedResultResources = collections.filter(col => col.name.startsWith('GENERATED_')).map(col => {
     const [_, exam, resultName] = col.name.split('_');
@@ -305,42 +222,6 @@ mongoose.connect(db, {
       }
     };
   });
-
-  const resources = [
-    { resource: User, options: { properties: { _id: { isVisible: false } } } },
-    { resource: Course, options: { properties: { _id: { isVisible: false } } } },
-    { resource: College, options: { properties: { _id: { isVisible: false } } } },
-    ...roundResources,
-    ...generatedResultResources
-  ];
-
-  const adminBro = new AdminBro({
-    resources,
-    rootPath: '/admin',
-    branding: {
-      companyName: 'Rank and Seats',
-      logo: '/static/logo.png',
-      softwareBrothers: false,
-    },
-  });
-
-  const ADMIN = {
-    email: process.env.ADMIN_EMAIL || 'admin@rankandseats.com',
-    password: process.env.ADMIN_PASSWORD || '100200@admin',
-  };
-
-  const router = AdminBroExpress.buildAuthenticatedRouter(adminBro, {
-    authenticate: async (email, password) => {
-      if (email === ADMIN.email && password === ADMIN.password) {
-        return ADMIN;
-      }
-      return null;
-    },
-    cookieName: 'adminbro',
-    cookiePassword: 'somepassword',
-  });
-
-  app.use(adminBro.options.rootPath, router);
 })
 .catch(err => console.error('MongoDB connection error:', err));
 
