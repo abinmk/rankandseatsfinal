@@ -1095,7 +1095,7 @@
 .clear-category-btn {
   margin-top: 20px !important;
   font-weight: bold !important;
-  color: #17345c !important;
+  color: #1260ce !important;
   text-decoration: none !important;
   padding-left: 0 !important;
   transition: color 0.2s ease !important;
@@ -1107,14 +1107,14 @@
 
 /* Modal Footer Button */
 .modal-footer .btn-secondary {
-  background-color: #17345c !important;
+  background-color: #ff6700 !important; /* Bright orange */
   border: none !important;
   padding: 10px 20px !important;
   border-radius: 8px !important;
   transition: background-color 0.2s ease !important;
-  color: white !important;
+  color: white !important; /* White text */
 }
 
 .modal-footer .btn-secondary:hover {
-  background-color: #0e2544 !important;
+  background-color: #e65c00 !important; /* Darker orange on hover */
 }

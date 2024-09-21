@@ -170,7 +170,7 @@ const FilterItem = ({ title, options = {},disabled,setShowFilters, filterName, f
       )}
     </Accordion.Body>
       </Accordion.Item>
-
+      
       <Modal show={showModal} onHide={handleModalClose} className='view-more-modal' centered>
   <Modal.Header closeButton style={{ backgroundColor: '#17345c', padding: '15px' }}>
     <Modal.Title style={{ color: 'white', fontWeight: 'bold' }}>{title}</Modal.Title>
@@ -193,15 +193,23 @@ const FilterItem = ({ title, options = {},disabled,setShowFilters, filterName, f
           key={option}
           className={`filter-option ${filters[filterParamName]?.includes(option) ? 'selected' : ''}`}
           onClick={() => handleCheckboxChange(option, !filters[filterParamName]?.includes(option))}
+          style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', padding: '10px', borderRadius: '8px', backgroundColor: '#f8f9fa', marginBottom: '8px' }}
         >
           <Form.Check
             disabled={disabled}
             type="checkbox"
             id={`checkbox-${option}`}
-            label={option}
             checked={filters[filterParamName]?.includes(option)}
             onChange={(e) => handleCheckboxChange(option, e.target.checked)}
+            onClick={(e) => e.stopPropagation()} // Prevent double event when clicking checkbox
           />
+          <label
+            htmlFor={`checkbox-${option}`}
+            onClick={(e) => e.stopPropagation()}
+            style={{ marginLeft: '10px', cursor: 'pointer', fontWeight: filters[filterParamName]?.includes(option) ? 'bold' : 'normal', color: filters[filterParamName]?.includes(option) ? '#17345c' : 'black' }}
+          >
+            {option}
+          </label>
         </div>
       ))}
     </div>
