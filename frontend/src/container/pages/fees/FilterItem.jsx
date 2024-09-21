@@ -172,38 +172,50 @@ const FilterItem = ({ title, options = {},disabled,setShowFilters,filterName, fi
       </Accordion.Item>
 
       <Modal show={showModal} onHide={handleModalClose} className='view-more-modal' centered>
-      <Modal.Header closeButton style={{ backgroundColor: '#223D6E' }}>
-      <Modal.Title style={{ color: 'white' }}>{title}</Modal.Title>
-    </Modal.Header>
-        <Modal.Body>
-          <Form.Control
-          disabled={disabled}
-            type="text"
-            placeholder={`Search ${title}`}
-            className="filter-search"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          {filteredOptions.map(option => (
-            <Form.Check
+  <Modal.Header closeButton style={{ backgroundColor: '#17345c', padding: '15px' }}>
+    <Modal.Title style={{ color: 'white', fontWeight: 'bold' }}>{title}</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    <Form.Control
+      disabled={disabled}
+      type="text"
+      placeholder={`Search ${title}`}
+      className="filter-search"
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      style={{ marginBottom: '15px', borderRadius: '8px', padding: '12px' }}
+    />
+
+    {/* Enhanced list UI */}
+    <div className="filter-options-list">
+      {filteredOptions.map(option => (
+        <div
+          key={option}
+          className={`filter-option ${filters[filterParamName]?.includes(option) ? 'selected' : ''}`}
+          onClick={() => handleCheckboxChange(option, !filters[filterParamName]?.includes(option))}
+        >
+          <Form.Check
             disabled={disabled}
-              key={option}
-              type="checkbox"
-              label={option}
-              checked={filters[filterParamName]?.includes(option)}
-              onChange={(e) => handleCheckboxChange(option, e.target.checked)}
-            />
-          ))}
-          <Button variant="link" className="clear-category-btn" onClick={clearFilterCategory}>
-            Clear
-          </Button>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleModalClose}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+            type="checkbox"
+            id={`checkbox-${option}`}
+            label={option}
+            checked={filters[filterParamName]?.includes(option)}
+            onChange={(e) => handleCheckboxChange(option, e.target.checked)}
+          />
+        </div>
+      ))}
+    </div>
+
+    <Button variant="link" disabled={disabled} className="clear-category-btn" onClick={clearFilterCategory}>
+      Clear All
+    </Button>
+  </Modal.Body>
+  <Modal.Footer>
+    <Button variant="secondary" onClick={handleModalClose}>
+      Close
+    </Button>
+  </Modal.Footer>
+</Modal>
     </>
   );
 };
