@@ -41,18 +41,16 @@ app.use('/static', express.static(path.join(__dirname, 'static')));
 app.use(cors({
   origin: [
     'http://localhost:3000',
-    'https://ec2-13-235-33-60.ap-south-1.compute.amazonaws.com:5001', 
     'http://localhost:5173',
-    'https://rankandseats.com:5001',
+    'https://loadbalancerrankandseats-1684408748.ap-south-1.elb.amazonaws.com',
     'https://www.rankandseats.com',
-    'http://localhost:5001',
+    'https://rankandseats.com',
     'http://rankseatsbucket.s3-website-ap-southeast-2.amazonaws.com', 
     'https://rankseatsbucket.s3-website-ap-southeast-2.amazonaws.com'
   ],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true
 }));
-
 
 // MongoDB connection setup
 const db = process.env.MONGO_URI;
