@@ -651,7 +651,7 @@
   background-color: #ffa500; /* Bright orange for a vibrant look */
   color: #ffffff !important; /* White text for strong contrast */
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25), 0 4px 8px rgba(0, 0, 0, 0.15); /* Deeper shadow for more depth */
-  transform: translateY(-3px) scale(1.07); /* Slightly larger scale on hover */
+  // transform: translateY(-3px) scale(1.07); /* Slightly larger scale on hover */
   cursor: pointer !important;
 }
 /* Profile Data Button */
@@ -670,7 +670,7 @@
   background-color: #08509c !important;
   color: #f8f8f8 !important; /* Lighter text color */
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.15); /* Softer shadow */
-  transform: translateY(-3px) scale(1.05); /* Lift and slight scale */
+  // transform: translateY(-3px) scale(1.05); /* Lift and slight scale */
   cursor: pointer !important;
 }
 

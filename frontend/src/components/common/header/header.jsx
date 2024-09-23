@@ -175,6 +175,8 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
   const handleLogout = () => {
     // Perform your logout operations here
     logout();
+    setShowConfirmModal(false);
+    
 
     // Redirect to the home page after logout
     navigate('/home');

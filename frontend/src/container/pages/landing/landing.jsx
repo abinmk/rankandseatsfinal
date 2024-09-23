@@ -102,6 +102,7 @@ const [showConfirmModal, setShowConfirmModal] = useState(false);
     const handleLogout = () => {
       // Perform your logout operations here
       logout();
+      setShowConfirmModal(false);
   
       // Redirect to the home page after logout
       navigate('/home');
