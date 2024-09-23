@@ -28,6 +28,7 @@ const Landing = () => {
 
 const {user,logout} = useContext(UserContext);
 const [showProfileModal, setShowProfileModal] = useState(false);
+const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [profileData, setProfileData] = useState({
     name: '',
     email: '',
@@ -98,6 +99,26 @@ const [showProfileModal, setShowProfileModal] = useState(false);
 		}
 	  };
 
+    const handleLogout = () => {
+      // Perform your logout operations here
+      logout();
+  
+      // Redirect to the home page after logout
+      navigate('/home');
+    };
+  
+    const confirmLogout = () => {
+      // Show the confirmation modal
+      setShowConfirmModal(true);
+    };
+  
+    const cancelLogout = () => {
+      // Close the modal without logging out
+      setShowConfirmModal(false);
+    };
+  
+    
+
 	const handleSave = async () => {
 		try {
 		  setShowConfirmation(true);
@@ -111,26 +132,6 @@ const [showProfileModal, setShowProfileModal] = useState(false);
 	
 	  const handleClose = () => setShowProfileModal(false);
 	const handleShow = () => setShowProfileModal(true);
-
-
-	const handleLogout = () => {
-		// Perform your logout operations here, e.g., clearing tokens, user data, etc.
-		logout();
-	
-		// Redirect to the home page after logout
-		navigate('/home');
-	  };
-
-
-	const Switchericon = () => {
-		document.querySelector(".offcanvas-end")?.classList.toggle("show");
-		const Rightside = document.querySelector(".offcanvas-end");
-		Rightside.style.insetInlineEnd = "0px";
-		if (document.querySelector(".switcher-backdrop")?.classList.contains("d-none")) {
-			document.querySelector(".switcher-backdrop")?.classList.add("d-block");
-			document.querySelector(".switcher-backdrop")?.classList.remove("d-none");
-		}
-	};
 
 	const Topup = () => {
 		const scrollY = window.scrollY;
@@ -261,18 +262,19 @@ const [showProfileModal, setShowProfileModal] = useState(false);
               </Dropdown.Toggle>
 
               {user && (
-         <Dropdown.Menu as="ul" className="dropdown-menu border-0 main-header-dropdown overflow-hidden header-profile-dropdown" aria-labelledby="mainHeaderProfile">
-         <Dropdown.Item as="li" className="border-0" onClick={handleShow}>
-         <button type="button" className="btn btn-link p-0 m-0 d-flex align-items-center" onClick={handleShow} style={{ color: 'inherit', textDecoration: 'none' }}>
-           <i className="fs-13 me-2 bx bx-user"></i>Profile
-         </button>
-         </Dropdown.Item>
-         <Dropdown.Item as="li" className="border-0">
-           <button type="button" className="btn btn-link p-0 m-0 d-flex align-items-center" onClick={handleLogout} style={{ color: 'inherit', textDecoration: 'none' }}>
-             <i className="fs-13 me-2 bx bx-arrow-to-right"></i>Log Out
-           </button>
-         </Dropdown.Item>
-       </Dropdown.Menu>
+              <Dropdown.Menu as="ul" className="dropdown-menu border-0 main-header-dropdown overflow-hidden header-profile-dropdown" aria-labelledby="mainHeaderProfile">
+              <Dropdown.Item as="li" className="border-0" onClick={handleShow}>
+                <button type="button" className="btn-profile-data w-100" onClick={handleShow} style={{ color: 'inherit', textDecoration: 'none' }}>
+                  <i className="fs-13 me-2 bx bx-user"></i>Profile
+                </button>
+              </Dropdown.Item>
+              <Dropdown.Item as="li" className="border-0">
+                <button type="button" className="btn-profile-logout w-100" onClick={confirmLogout} style={{ color: 'inherit', textDecoration: 'none' }}>
+                  <i className="fs-13 me-2 bx bx-arrow-to-right"></i>Log Out
+                </button>
+              </Dropdown.Item>
+            </Dropdown.Menu>
+       
               )}
             </Dropdown>
 								{/* <Link onclick={logout} to={`${import.meta.env.BASE_URL}home/`} className="btn btn-wave btn-danger">
@@ -339,18 +341,18 @@ const [showProfileModal, setShowProfileModal] = useState(false);
               </Dropdown.Toggle>
 
               {user && (
-         <Dropdown.Menu as="ul" className="dropdown-menu border-0 main-header-dropdown overflow-hidden header-profile-dropdown" aria-labelledby="mainHeaderProfile">
-         <Dropdown.Item as="li" className="border-0" onClick={handleShow}>
-         <button type="button" className="btn btn-link p-0 m-0 d-flex align-items-center" onClick={handleShow} style={{ color: 'inherit', textDecoration: 'none' }}>
-           <i className="fs-13 me-2 bx bx-user"></i>Profile
-         </button>
-         </Dropdown.Item>
-         <Dropdown.Item as="li" className="border-0">
-           <button type="button" className="btn btn-link p-0 m-0 d-flex align-items-center" onClick={handleLogout} style={{ color: 'inherit', textDecoration: 'none' }}>
-             <i className="fs-13 me-2 bx bx-arrow-to-right"></i>Log Out
-           </button>
-         </Dropdown.Item>
-       </Dropdown.Menu>
+              <Dropdown.Menu as="ul" className="dropdown-menu border-0 main-header-dropdown overflow-hidden header-profile-dropdown" aria-labelledby="mainHeaderProfile">
+              <Dropdown.Item as="li" className="border-0" onClick={handleShow}>
+                <button type="button" className="btn-profile-data w-100" onClick={handleShow} style={{ color: 'inherit', textDecoration: 'none' }}>
+                  <i className="fs-13 me-2 bx bx-user"></i>Profile
+                </button>
+              </Dropdown.Item>
+              <Dropdown.Item as="li" className="border-0">
+                <button type="button" className="btn-profile-logout w-100" onClick={confirmLogout} style={{ color: 'inherit', textDecoration: 'none' }}>
+                  <i className="fs-13 me-2 bx bx-arrow-to-right"></i>Log Out
+                </button>
+              </Dropdown.Item>
+            </Dropdown.Menu>
               )}
             </Dropdown>
 							</>
@@ -458,6 +460,20 @@ const [showProfileModal, setShowProfileModal] = useState(false);
                 </Button>
               </Modal.Footer>
             </Modal>
+            <Modal show={showConfirmModal} onHide={cancelLogout}>
+        <Modal.Header closeButton>
+          <Modal.Title style={{ display: 'flex', alignItems: 'center', color: 'white'}} >Confirm Logout</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to log out?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={cancelLogout}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleLogout}>
+            Logout
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
 				<div className="main-content landing-main">
 					<div className="landing-banner" id="home">
@@ -809,7 +825,7 @@ const [showProfileModal, setShowProfileModal] = useState(false);
           <Link to="#" className="text-fixed-white op-6"><i className="ri-mail-line me-1 align-middle"></i> support@rankandseats.com</Link>
         </li>
         <li>
-          <Link to="#" className="text-fixed-white op-6"><i className="ri-phone-line me-1 align-middle"></i> +91 89 21 35 03 51</Link>
+          <Link to="#" className="text-fixed-white op-6"><i className="ri-phone-line me-1 align-middle"></i> +91 89 21 35 03 52</Link>
         </li>
         <li className="mt-3">
           <p className="mb-2 fw-semibold op-8">FOLLOW US ON :</p>

@@ -159,7 +159,7 @@ const Sales = () => {
       const examName = await generateExamName();
       if (examName) {
         await axiosInstance.post(`${apiUrl}/wishlist/remove`, {
-          allotmentId: deleteItemId,
+          uuid: deleteItemId,
           examName,
         }, {
           headers: {
@@ -249,7 +249,10 @@ const Sales = () => {
 <Col xl={6} lg={12} className="mb-4">
   <Card className="custom-card h-100 shadow-sm">
     <Card.Header className="custom-card-header text-start">
-      <Card.Title className="custom-card-title"> ❤️ My Choice Wishlist</Card.Title>
+    <Card.Title className="custom-card-title">
+  <span className="icon-heart"><i className="fas fa-heart m-1"></i></span>
+  My Choice Wishlist
+</Card.Title>
     </Card.Header>
     <Card.Body className="overflow-auto" style={{ maxHeight: "300px" }}>
       {loading ? (
@@ -265,53 +268,41 @@ const Sales = () => {
                 {...provided.droppableProps}
                 ref={provided.innerRef}
               >
-                <Table striped bordered hover className="choice-list-table">
-                  <thead className="thead-dark custom-thead">
-                    <tr>
-                      <th className="text-start">Sl. No.</th>
-                      <th className="text-start">Institute</th>
-                      <th className="text-start">Course</th>
-                      <th className="text-start">Category</th>
-                      <th className="text-start">Remove</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {choiceList.map((item, index) => (
-                      <Draggable
-                        key={item.allotmentId}
-                        draggableId={item.allotmentId}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <tr
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            style={{
-                              ...provided.draggableProps.style,
-                              backgroundColor: index % 2 === 0 ? "#f2f2f2" : "#ffffff",
-                            }}
-                          >
-                            <td className="text-start">{index + 1}</td>
-                            <td className="text-start">{item.allotment.allottedInstitute}</td>
-                            <td className="text-start">{item.allotment.course}</td>
-                            <td className="text-start">{item.allotment.allottedCategory}</td>
-                            <td className="text-start">
-                              <Button
-                                variant="outline-danger"
-                                className="delete-button"
-                                onClick={() => handleDelete(item.allotmentId)}
-                              >
-                                <FaTrash />
-                              </Button>
-                            </td>
-                          </tr>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </tbody>
-                </Table>
+          <Table striped bordered hover className="choice-list-table">
+  <thead className="thead-dark custom-thead">
+    <tr>
+      <th className="text-start">Choice</th>
+      <th className="text-start">Institute</th>
+      <th className="text-start">Course</th>
+      <th className="text-start">Category</th>
+      <th className="text-start">Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    {choiceList.map((item, index) => (
+      <tr
+        key={item.allotmentId}
+        style={{
+          backgroundColor: index % 2 === 0 ? "#f2f2f2" : "#ffffff", // Alternate row background color
+        }}
+      >
+        <td className="text-start">{item.allotment.order}</td>
+        <td className="text-start">{item.allotment.allottedInstitute}</td>
+        <td className="text-start">{item.allotment.course}</td>
+        <td className="text-start">{item.allotment.allottedCategory}</td>
+        <td className="text-start">
+          <Button
+            variant="outline-danger"
+            className="delete-button"
+            onClick={() => handleDelete(item.uuid)}
+          >
+            <FaTrash />
+          </Button>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</Table>
               </div>
             )}
           </Droppable>
@@ -432,7 +423,7 @@ const Sales = () => {
       {/* Modal for Delete Confirmation */}
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Confirm Delete</Modal.Title>
+          <Modal.Title style={{ color: 'white' }}>Confirm Delete</Modal.Title>
         </Modal.Header>
         <Modal.Body>Are you sure you want to delete this item?</Modal.Body>
         <Modal.Footer>

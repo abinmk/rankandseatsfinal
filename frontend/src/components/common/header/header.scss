@@ -623,3 +623,65 @@
     padding: 0% !important;
   }
 }
+
+/* General Button Styling */
+/* General Button Styling */
+// button {
+//   border: none;
+//   padding: 10px 16px; /* Slightly larger for better touch experience */
+//   font-size: 14px;
+//   border-radius: 25px !important; /* Larger radius for a more pill-like appearance */
+//   transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease, color 0.3s ease;
+//   font-weight: 600;
+//   cursor: pointer !important;
+// }
+
+/* Logout Button */
+.btn-profile-logout {
+  padding: 5px 8px; /* Slightly larger for better touch experience */
+  font-size: 14px;
+  border-radius: 25px !important; 
+  background-color: #ddd;
+  color: #333;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.2); /* Deeper shadow */
+  border: 1px solid transparent;
+}
+
+.btn-profile-logout:hover {
+  background-color: #ffa500; /* Bright orange for a vibrant look */
+  color: #ffffff !important; /* White text for strong contrast */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25), 0 4px 8px rgba(0, 0, 0, 0.15); /* Deeper shadow for more depth */
+  transform: translateY(-3px) scale(1.07); /* Slightly larger scale on hover */
+  cursor: pointer !important;
+}
+/* Profile Data Button */
+.btn-profile-data {
+  padding: 5px 8px; /* Slightly larger for better touch experience */
+  font-size: 14px;
+  border-radius: 25px !important; 
+  background-color: #0a4995;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.2); /* Deeper shadow */
+  border: 1px solid #0a4995;
+}
+
+.btn-profile-data:hover {
+  background-color: #08509c !important;
+  color: #f8f8f8 !important; /* Lighter text color */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.15); /* Softer shadow */
+  transform: translateY(-3px) scale(1.05); /* Lift and slight scale */
+  cursor: pointer !important;
+}
+
+/* Focused or Active Button */
+button:focus, button:active {
+  outline: none;
+  box-shadow: 0 0 0 5px rgba(10, 73, 149, 0.25), 0 0 15px rgba(10, 73, 149, 0.5); /* More noticeable glow effect */
+  transform: translateY(-1px); /* Slight tap effect */
+}
+
+/* Active state for consistent visual feedback */
+button:active {
+  transform: translateY(-1px) scale(0.98);
+}

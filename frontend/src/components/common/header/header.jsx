@@ -40,6 +40,7 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
   ]);
 
   const { user, logout } = useContext(UserContext);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -172,11 +173,21 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
   const navigate = useNavigate(); // Hook from react-router-dom to programmatically navigate
 
   const handleLogout = () => {
-    // Perform your logout operations here, e.g., clearing tokens, user data, etc.
+    // Perform your logout operations here
     logout();
 
     // Redirect to the home page after logout
     navigate('/home');
+  };
+
+  const confirmLogout = () => {
+    // Show the confirmation modal
+    setShowConfirmModal(true);
+  };
+
+  const cancelLogout = () => {
+    // Close the modal without logging out
+    setShowConfirmModal(false);
   };
 
   const saveUserSelection = async (exam, counselingType) => {
@@ -348,18 +359,18 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
               </Dropdown.Toggle>
 
               {user && (
-         <Dropdown.Menu as="ul" className="dropdown-menu border-0 main-header-dropdown overflow-hidden header-profile-dropdown" aria-labelledby="mainHeaderProfile">
-         <Dropdown.Item as="li" className="border-0" onClick={handleShow}>
-         <button type="button" className="btn btn-link p-0 m-0 d-flex align-items-center" onClick={handleShow} style={{ color: 'inherit', textDecoration: 'none' }}>
-           <i className="fs-13 me-2 bx bx-user"></i>Profile
-         </button>
-         </Dropdown.Item>
-         <Dropdown.Item as="li" className="border-0">
-           <button type="button" className="btn btn-link p-0 m-0 d-flex align-items-center" onClick={handleLogout} style={{ color: 'inherit', textDecoration: 'none' }}>
-             <i className="fs-13 me-2 bx bx-arrow-to-right"></i>Log Out
-           </button>
-         </Dropdown.Item>
-       </Dropdown.Menu>
+                <Dropdown.Menu as="ul" className="dropdown-menu border-0 main-header-dropdown overflow-hidden header-profile-dropdown" aria-labelledby="mainHeaderProfile">
+  <Dropdown.Item as="li" className="border-0" onClick={handleShow}>
+    <button type="button" className="btn-profile-data w-100" onClick={handleShow} style={{ color: 'inherit', textDecoration: 'none' }}>
+      <i className="fs-13 me-2 bx bx-user"></i>Profile
+    </button>
+  </Dropdown.Item>
+  <Dropdown.Item as="li" className="border-0">
+    <button type="button" className="btn-profile-logout w-100" onClick={confirmLogout} style={{ color: 'inherit', textDecoration: 'none' }}>
+      <i className="fs-13 me-2 bx bx-arrow-to-right"></i>Log Out
+    </button>
+  </Dropdown.Item>
+</Dropdown.Menu>
               )}
             </Dropdown>
 
@@ -455,6 +466,20 @@ const Header = ({ local_varaiable, ThemeChanger }) => {
                 </Button>
               </Modal.Footer>
             </Modal>
+            <Modal show={showConfirmModal} onHide={cancelLogout}>
+        <Modal.Header closeButton>
+          <Modal.Title style={{ display: 'flex', alignItems: 'center', color: 'white'}} >Confirm Logout</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to log out?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={cancelLogout}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleLogout}>
+            Logout
+          </Button>
+        </Modal.Footer>
+      </Modal>
           </div>
         </div>
       </header>

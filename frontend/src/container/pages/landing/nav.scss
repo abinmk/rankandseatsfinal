@@ -355,3 +355,11 @@ ul.feature-list li i {
   align-items: center !important;
   text-decoration: none !important;
 }
+
+.modal-header .btn-close {
+  background-color: #ffffff !important; /* White background */
+  border-radius: 50%; /* Circular shape */
+  color: #223D6E !important; /* Blue color for the icon */
+  opacity: 1; /* Remove opacity */
+  padding: 5px; /* Slight padding */
+}
