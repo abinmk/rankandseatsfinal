@@ -12,7 +12,7 @@ const FilterItem = ({ title, options = {},disabled,setShowFilters, filterName, f
 
   useEffect(() => {
     setSearchTerm('');
-  }, [showModal]);
+  }, []);
 
   useEffect(() => {
     if (filters[filterParamName]?.min !== undefined) {
@@ -170,7 +170,7 @@ const FilterItem = ({ title, options = {},disabled,setShowFilters, filterName, f
       )}
     </Accordion.Body>
       </Accordion.Item>
-      
+
       <Modal show={showModal} onHide={handleModalClose} className='view-more-modal' centered>
   <Modal.Header closeButton style={{ backgroundColor: '#17345c', padding: '15px' }}>
     <Modal.Title style={{ color: 'white', fontWeight: 'bold' }}>{title}</Modal.Title>

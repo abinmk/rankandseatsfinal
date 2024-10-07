@@ -12,7 +12,7 @@ const FilterItem = ({ title, options = {}, disabled, filterName, filters, handle
 
   useEffect(() => {
     setSearchTerm('');
-  }, [showModal]);
+  }, []);
 
   useEffect(() => {
     if (filters[filterParamName]?.min !== undefined) {
@@ -180,7 +180,7 @@ const FilterItem = ({ title, options = {}, disabled, filterName, filters, handle
     <Form.Control
       disabled={disabled}
       type="text"
-      placeholder={`Search ${title}`}
+      placeholder={`Search ${title} ${searchTerm}`}
       className="filter-search"
       value={searchTerm}
       onChange={(e) => setSearchTerm(e.target.value)}

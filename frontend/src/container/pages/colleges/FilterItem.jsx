@@ -16,7 +16,7 @@ const FilterItem = ({ title, options = {}, disabled,setShowFilters, filterName, 
 
   useEffect(() => {
     setSearchTerm('');
-  }, [showModal]);
+  }, []);
 
   useEffect(() => {
     if (filters[filterParamName]?.min !== undefined) {

@@ -12,7 +12,7 @@ const FilterItem = ({ title, options = {},disabled,setShowFilters,filterName, fi
 
   useEffect(() => {
     setSearchTerm('');
-  }, [showModal]);
+  }, []);
 
   useEffect(() => {
     if (filters[filterParamName]?.min !== undefined) {
